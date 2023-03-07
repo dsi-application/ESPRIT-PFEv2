@@ -1,0 +1,430 @@
+
+@import "~@coreui/coreui/scss/coreui";
+
+/******************************************************************************************** Template Styles *****/
+// If you want to override variables do it here
+@import "variables";
+
+// Import CoreUI styles
+@import "~@coreui/coreui/scss/coreui.scss";
+
+// If you want to add something do it here
+@import "custom";
+
+@media screen and (min-width: 10em){
+  html { font-size: 14px; }
+}
+
+/******************************************************************************************** Logo *****/
+.circleLogo {
+  border-radius: 50%;
+  padding: 7px;
+  width: 70px;
+  height: 50px;
+  border: 1px solid darkred;
+  cursor: pointer;
+}
+
+.connectedUserStyle
+{
+  color: #b30000;
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size: 14px;
+}
+
+.pageTitle
+{
+  color: darkred !important;
+  font-weight: bold;
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size: 19px;
+}
+
+.breadcrumb-item.active {
+  color: #cc0000;
+}
+
+.c-sidebar .c-sidebar-nav-link:hover, .c-sidebar .c-sidebar-nav-dropdown-toggle:hover {
+  color: #fff;
+  background: #cc0000;
+}
+
+.c-header-nav .dropdown-item:hover {
+  color: #e6e6e6;
+  background: #cc0000;
+}
+
+.userIcon{
+  background: url('https://api.iconify.design/vs/user-waiter.svg?color=%23c00') no-repeat center center / contain;  display: flex;
+  width: 25px;
+  height: 25px;
+  text-align: center;
+  margin-left: -2px;
+}
+
+.profilIcon{
+  background: url('https://api.iconify.design/icomoon-free/profile.svg?color=%23c00') no-repeat center center / contain;
+  display: flex;
+  width: 18px;
+  height: 20px;
+  margin-left: 2px;
+}
+
+.waitIcon{
+  background: url('https://api.iconify.design/eos-icons/bubble-loading.svg?color=%23c00') no-repeat center center / contain;
+  display: flex;
+  width: 50px;
+  height: 50px;
+}
+
+.idIcon{
+  background: url('https://api.iconify.design/bx/bxs-user.svg?color=%23c00') no-repeat center center / contain;
+  display: flex;
+  width: 22px;
+  height: 25px;
+}
+
+.mapIcon {
+  background: url('https://api.iconify.design/clarity/map-marker-solid-badged.svg?color=%23c00') no-repeat center center / contain;
+  display: flex;
+  width: 22px;
+  height: 25px;
+}
+
+.mapLightBlueIcon{
+    background: url('https://api.iconify.design/clarity/map-marker-solid-badged.svg?color=%2309f') no-repeat center center / contain;
+    display: flex;
+    width: 22px;
+    height: 25px;
+  }
+
+.mapBlueIcon{
+    background: url('https://api.iconify.design/clarity/map-marker-solid-badged.svg?color=blue') no-repeat center center / contain;
+    display: flex;
+    width: 22px;
+    height: 25px;
+  }
+
+.dateLightBlueIcon{
+  background: url('https://api.iconify.design/clarity/date-solid-badged.svg?color=%2309f') no-repeat center center / contain;
+  display: flex;
+  width: 22px;
+  height: 25px;
+}
+
+.dateBlueIcon{
+  background: url('https://api.iconify.design/clarity/date-solid-badged.svg?color=blue') no-repeat center center / contain;
+  display: flex;
+  width: 22px;
+  height: 25px;
+}
+
+.hourLightBlueIcon{
+  background: url('https://api.iconify.design/clarity/hourglass-solid-badged.svg?color=%2309f') no-repeat center center / contain;
+  display: flex;
+  width: 22px;
+  height: 25px;
+}
+
+.hourBlueIcon{
+  background: url('https://api.iconify.design/clarity/hourglass-solid-badged.svg?color=blue') no-repeat center center / contain;
+  display: flex;
+  width: 22px;
+  height: 25px;
+}
+
+.noteIcon{
+  background: url('https://api.iconify.design/emojione-v1/note-pad.svg?color=%2309f') no-repeat center center / contain;
+  display: flex;
+  width: 22px;
+  height: 25px;
+}
+
+.hourIcon{
+  background: url('https://api.iconify.design/noto-v1/hourglass-not-done.svg?color=%2309f') no-repeat center center / contain;
+  display: flex;
+  width: 22px;
+  height: 25px;
+}
+
+.schoolIcon
+{
+  background: url('https://api.iconify.design/mdi/school.svg?color=%23c00') no-repeat center center / contain;
+  display: flex;
+  width: 22px;
+  height: 25px;
+}
+
+.readMeIcon
+{
+  background: url('https://api.iconify.design/mdi/idea.svg?color=fuchsia') no-repeat center center / contain;
+  animation: clignote 2s linear infinite;
+  display: flex;
+  width: 45px;
+  height: 45px;
+  cursor: pointer;
+}
+
+.downloadRedIcon
+{
+  background: url('https://api.iconify.design/eva/cloud-download-fill.svg?color=%23c00') no-repeat center center / contain;
+  display: flex;
+  width: 45px;
+  height: 45px;
+  cursor: pointer;
+}
+
+.downloadGreenIcon
+{
+  background: url('https://api.iconify.design/eva/cloud-download-fill.svg?color=green') no-repeat center center / contain;
+  display: flex;
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+}
+
+.downloadPurpleIcon
+{
+  background: url('https://api.iconify.design/eva/cloud-download-fill.svg?color=purple') no-repeat center center / contain;
+  display: flex;
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+}
+
+.downloadGrayIcon
+{
+  background: url('https://api.iconify.design/eva/cloud-download-fill.svg?color=grey') no-repeat center center / contain;
+  display: flex;
+  width: 45px;
+  height: 45px;
+  cursor: pointer;
+}
+
+.cancelAgreeIcon
+{
+  background: url('https://api.iconify.design/emojione/file-folder.svg') no-repeat center center / contain;
+  display: flex;
+  width: 30px;
+  height: 35px;
+  cursor: pointer;
+}
+
+.downloadGreyIcon
+{
+  background: url('https://api.iconify.design/eva/cloud-download-fill.svg?color=grey') no-repeat center center / contain;
+  display: flex;
+  width: 45px;
+  height: 45px;
+  cursor: pointer;
+}
+
+.breakLine
+{
+  white-space: pre-wrap;
+}
+
+.warningIcon
+{
+  background: url('https://api.iconify.design/fluent/warning-12-filled.svg?color=%23006') no-repeat center center / contain;
+  display: flex;
+  width: 20px;
+  height: 20px;
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size: 14px;
+  color: #000066;
+}
+
+.warningRedIcon
+{
+  background: url('https://api.iconify.design/fluent/warning-12-filled.svg?color=red') no-repeat center center / contain;
+  display: flex;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  color: #cc0000;
+  animation: clignote 2s linear infinite;
+  font-family: "Lucida Console", Courier, monospace;
+  font-size: 11px;
+  font-style: italic;
+}
+
+.warningBlueIcon
+{
+  background: url('https://api.iconify.design/fluent/warning-12-filled.svg?color=blue') no-repeat center center / contain;
+  display: flex;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  color: darkblue;
+  animation: clignote 2s linear infinite;
+  font-family: "Lucida Console", Courier, monospace;
+  font-size: 11px;
+  font-style: italic;
+}
+
+.warningRedIconOnly
+{
+  background: url('https://api.iconify.design/fluent/warning-12-filled.svg?color=red')  no-repeat bottom / contain;
+  display: inline-block;  //or display: inline-flex;
+  width: 20px;
+  height: 20px;
+  animation: clignote 2s linear infinite;
+  // border: 1px dashed #333333;
+}
+
+.alertRedText
+{
+  color: #cc0000;
+  font-family: "Lucida Console", Courier, monospace;
+  font-size: 11px;
+  font-style: italic;
+}
+
+.warningOrangeIcon
+{
+  background: url('https://api.iconify.design/fluent/warning-12-filled.svg?color=%23f60') no-repeat center center / contain;
+  display: flex;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size: 13px;
+}
+
+.warningBigIcon
+{
+  background: url('https://api.iconify.design/fluent/warning-12-filled.svg?color=white') no-repeat center center / contain;
+  display: flex;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+}
+
+.warningGreyBigIcon
+{
+  background: url('https://api.iconify.design/fluent/warning-12-filled.svg?color=grey') no-repeat center center / contain;
+  display: flex;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+}
+
+.mailIcon
+{
+  background: url('https://api.iconify.design/fluent/mail-48-filled.svg?color=%23c00') no-repeat center center / contain;
+  display: flex;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.phoneIconify
+{
+  background: url('https://api.iconify.design/el/phone-alt.svg?color=%23c00') no-repeat center center / contain;
+  display: flex;
+  width: 17px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.faxIconify
+{
+  background: url('https://api.iconify.design/fluent/fax-20-filled.svg?color=%23c00') no-repeat center center / contain;
+  display: flex;
+  width: 30px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.mapIconify
+{
+  background: url('https://api.iconify.design/clarity/map-marker-solid-badged.svg?color=%23c00') no-repeat center center / contain;
+  display: flex;
+  width: 22px;
+  height: 20px;
+}
+
+.refuseIcon
+{
+  background: url('https://api.iconify.design/emojione-v1/no-entry.svg') no-repeat center center / contain;
+  display: flex;
+  width: 22px;
+  height: 20px;
+}
+
+.acceptIcon
+{
+  background: url('https://api.iconify.design/el/ok-sign.svg?color=green') no-repeat center center / contain;
+  display: flex;
+  width: 22px;
+  height: 20px;
+}
+
+.historyIcon
+{
+  background: url('https://api.iconify.design/icon-park-outline/history-query.svg?color=fuchsia') no-repeat center center / contain;
+  display: flex;
+  width: 22px;
+  height: 20px;
+}
+
+.calendarIcon
+{
+  background: url('https://api.iconify.design/bx/bxs-calendar.svg?color=%23666') no-repeat center center / contain;
+  display: flex;
+  width: 22px;
+  height: 20px;
+}
+
+.expertRequestIcon
+{
+  background: url('https://api.iconify.design/subway/admin-1.svg?color=%23c00') no-repeat center center / contain;
+  display: flex;
+  width: 22px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.errorAlert
+{
+  color: red;
+  font-family: Arial, monospace;
+  font-size: 12px;
+  font-style: italic;
+}
+
+.errorMarkCourrierSmalLabel
+{
+  color: red;
+  font-size: 11px;
+  font-style: italic;
+  font-family: "Lucida Console", Courier, monospace;
+}
+
+.downloadGreenIconSmall
+{
+  background: url('https://api.iconify.design/eva/cloud-download-fill.svg?color=green') no-repeat center center / contain;
+  display: flex;
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+}
+
+.bellRedIconSmall
+{
+  background: url('https://api.iconify.design/mdi/bell-circle.svg?color=%23c00') no-repeat center center / contain;
+  display: flex;
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+}
+
+.penRedIcon
+{
+  background: url('https://api.iconify.design/ri/quill-pen-fill.svg?color=%23c00') no-repeat center center / contain;  display: flex;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+

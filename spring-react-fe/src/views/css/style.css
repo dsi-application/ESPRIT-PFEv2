@@ -1,0 +1,1813 @@
+/******************************************************************************************** My Styles *****/
+@media screen and (min-width: 10em)
+{
+  html { font-size: 14px; }
+}
+
+.stepTitle
+{
+  color: #cc0000;
+  font-family: "Lucida Console", Courier, monospace;
+  font-size: 14px;
+}
+
+.statusUnity
+{
+  color: #000066;
+  font-weight: bold;
+  font-family: "Lucida Console", Courier, monospace;
+  font-size: 13px;
+  text-align: left;
+}
+
+.alertSession
+{
+  color: #000066;
+  font-weight: bold;
+  font-family: "Lucida Console", Courier, monospace;
+  font-size: 15px;
+  text-align: left;
+}
+
+.statusUnityDepot
+{
+  color: #000000;
+  font-weight: bold;
+  font-family: "Lucida Console", Courier, monospace;
+  font-size: 13px;
+  text-align: left;
+}
+
+.statusUnityConv
+{
+  color: #0099ff;
+  font-weight: bold;
+  font-family: "Lucida Console", Courier, monospace;
+  font-size: 13px;
+  text-align: left;
+}
+
+.statusUnityConvSubTitle
+{
+  color: #0099ff;
+  font-family: "Lucida Console", Courier, monospace;
+  font-size: 11px;
+  text-align: left;
+}
+
+.statusUnityConvSubTitleAvn
+{
+  color: #000066;
+  font-family: "Lucida Console", Courier, monospace;
+  font-size: 11px;
+  text-align: left;
+}
+
+.menuTitleNet
+{
+  color: blue;
+  font-weight: bold;
+  font-family: "Lucida Console", Courier, monospace;
+  font-size: 19px;
+}
+
+.stuProfileLabel
+{
+  color: #595959;
+  font-weight: bold;
+  font-family: 'Trebuchet MS', sans-serif; /*"Lucida Console", Courier, monospace;*/
+  font-size: 13px;
+}
+
+.stuProfileNote
+{
+  color: #595959;
+  font-weight: bold;
+  font-family: "Lucida Console", Courier, monospace;
+  font-size: 11px;
+}
+
+.stuProfileInfo
+{
+  color: #737373;
+  font-family: 'Trebuchet MS', sans-serif;  /*"Lucida Console", Courier, monospace;*/
+  font-size: 13px;
+}
+
+.stuProfileNoteInfo
+{
+  color: #737373;
+  font-family: "Lucida Console", Courier, monospace;
+  font-size: 10px;
+}
+
+.stuProfileInfoMail
+{
+  color: #3366ff;
+  font-family: "Lucida Console", Courier, monospace;
+  font-size: 12px;
+}
+
+.popupInfo
+{
+  color: #33adff;
+  font-size: 14px;
+}
+
+.popupInfoConf
+{
+   color: #000066;
+   font-size: 14px;
+}
+
+.signature
+{
+  font-size: 11px;
+  color: white;
+  font-family: "Courier New", monospace;
+}
+
+.cardTitle
+{
+  font-size: 20px;
+  color: #b30000;
+  font-weight: bold;
+  font-family: "Courier New", monospace;
+}
+
+.littleCardTitle
+{
+  font-size: 16px;
+  color: #b30000;
+  font-weight: bold;
+  font-family: "Courier New", monospace;
+}
+
+.miLittleCardTitle
+{
+  font-size: 15px;
+  color: #b30000;
+  font-weight: bold;
+  font-family: "Courier New", monospace;
+}
+
+.platformTitle
+{
+  color: #e60000;
+  font-size: 35px;
+  font-weight: bold;
+  font-family: 'Trebuchet MS', sans-serif;
+}
+
+.platformCardTitle
+{
+  color: #e60000;
+  font-size: 28px;
+  font-weight: bold;
+  font-family: 'Trebuchet MS', sans-serif;
+}
+
+.menuTitleRedNet
+{
+  color: #cc0000;
+  font-weight: bold;
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size: 22px;
+}
+
+.pdfTitle
+{
+  color: #cc0000;
+  font-weight: bold;
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size: 16px;
+}
+
+.pdfSubTitle
+{
+  color: #cc0000;
+  font-weight: bold;
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size: 15px;
+}
+
+.menuTitleDashboard
+{
+  color: #808080;
+  font-weight: bold;
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size: 15px;
+  text-align: center;
+}
+
+.menuTitleBleuReport
+{
+  color: blue;
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size: 14px;
+}
+
+.menuTitleGreyReport
+{
+  color: grey;
+  font-weight: bold;
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size: 13px;
+}
+
+.subTitleDegree1
+{
+  color: blue;
+  font-family: Arial, monospace;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.subTitleDegree2
+{
+  color: blue;
+  font-family: Arial, monospace;
+  font-size: 15px;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.infoInDivDegree1
+{
+  color: black;
+  font-family: Arial, monospace;
+  font-size: 18px;
+  font-style: italic;
+}
+
+.infoInDivDegree2
+{
+  color: blue;
+  font-family: Arial, monospace;
+  font-size: 16px;
+  font-style: italic;
+}
+
+.titleModal
+{
+  color: blue;
+  font-family: Arial, monospace;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.labelModal
+{
+  color: blue;
+  font-family: Arial, monospace;
+  font-size: 14px;
+}
+
+.blackLabelModal
+{
+  color: #666666;
+  font-family: Arial, monospace;
+  font-size: 14px;
+}
+
+.note
+{
+  color: #999999;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  font-style: italic;
+}
+
+.noteFichePFE
+{
+  color: #999999;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  font-style: italic;
+}
+
+.noteGrilleEval
+{
+  color: #999999;
+  font-family: Arial, monospace;
+  font-size: 12px;
+  font-style: italic;
+}
+
+.noteDepotJournal
+{
+  color: darkorange;
+  font-family: Arial, monospace;
+  font-size: 12px;
+  font-style: italic;
+}
+
+.noteDepotBilan
+{
+  color: #e60000;
+  font-family: Arial, monospace;
+  font-size: 12px;
+  font-style: italic;
+}
+
+.noteCancelConvToo
+{
+  color: #e60000;
+  font-family: Arial, monospace;
+  font-size: 11px;
+  font-style: italic;
+}
+
+.noteDepotReport
+{
+  color: #0000ff;
+  font-family: Arial, monospace;
+  font-size: 12px;
+  font-style: italic;
+}
+
+.leftNote
+{
+  color: #595959;
+  font-family: Arial, monospace;
+  font-size: 14px;
+  font-style: italic;
+  text-align: left;
+}
+
+.greyNote
+{
+  color: #404040;
+  font-family: Arial, monospace;
+  font-size: 12px;
+  font-style: italic;
+  text-align: left;
+}
+
+.leftNumNote
+{
+  color: #cc0000;
+  font-family: Arial, monospace;
+  font-size: 14px;
+  font-style: italic;
+  text-align: left;
+}
+
+.greenBtnNote
+{
+  color: green;
+  font-family: Arial, monospace;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.noteMail
+{
+  color: #0099ff;
+  font-family: Arial, monospace;
+  font-size: 11px;
+  font-style: italic;
+}
+
+.redNote
+{
+  color: #cc0000;
+  font-family: Arial, monospace;
+  font-size: 11px;
+  font-style: italic;
+}
+
+.noteDivGrey
+{
+  color: #a6a6a6;
+  font-family: Arial, monospace;
+  font-size: 12px;
+}
+
+.noteDiv
+{
+  color: black;
+  font-family: Arial, monospace;
+  font-size: 10px;
+}
+
+.remainingNbrChar
+{
+  color: #999999;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  margin-left: 357px;
+  font-style: italic;
+}
+
+.simpleLabel
+{
+  color: black;
+  font-family: Arial, monospace;
+  font-size: 12px;
+}
+
+.upNote
+{
+  color: #999999;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  font-style: italic;
+}
+
+.space
+{
+  color: red;
+  font-family: Arial, monospace;
+  font-size: 16px;
+}
+
+.dialogMessage
+{
+  color: black;
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size: 14px;
+}
+
+.fieldLibelle
+{
+  color: black;
+  font-family: Arial, monospace;
+  font-size: 15px;
+}
+
+.convFieldLibelle
+{
+  color: grey;
+  font-family: Arial, monospace;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.blueFieldLibelleCard
+{
+  color: black;
+  font-family: Arial, monospace;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.blackFieldLibelleNote
+{
+  color: black;
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.blackFieldLibelleNote
+{
+  color: black;
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.blueFieldLibelleCardPDF
+{
+  color: grey;
+  font-family: Arial, monospace;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+
+.labelModal
+{
+  color: blue;
+  font-family: Arial, monospace;
+  font-size: 14px;
+}
+
+.blackFieldLibelleCardPDF
+{
+  color: grey;
+  font-family: Arial, monospace;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.blueFieldLibelleCardSmallPDF
+{
+  color: grey;
+  font-family: Arial, monospace;
+  font-size: 12px;
+}
+
+.blueFieldLibelleCardSmall
+{
+  color: black;
+  font-family: Arial, monospace;
+  font-size: 13px;
+}
+
+.greyFullNameCard
+{
+  color: #595959;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.greyFieldLibelleCard
+{
+  color: #b3b3b3;
+  font-family: Arial, monospace;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.greyFieldLibelleCardSmall
+{
+  color: #737373;
+  font-family: Arial, monospace;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.greyFieldLibelleReport
+{
+  color: #404040;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.advancedPlanifPolyCriteria
+{
+  color: #808080;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.greyFieldLibelleCardPDF
+{
+  color: #737373;
+  font-family: Arial, monospace;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+
+.greyFieldLibelleCardPDF1
+{
+  color: #737373;
+  font-family: Arial, monospace;
+  font-size: 10px;
+  font-weight: bold;
+  margin-right: 20px;
+}
+
+
+.greyFieldLibelleCardPDF2
+{
+  color: #737373;
+  font-family: Arial, monospace;
+  font-size: 10px;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.redSubTitleCard
+{
+  color: #cc0000;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.infoMarkPopup
+{
+  color: #33adff;
+  font-size: 13px;
+}
+
+.redMarkAlert
+{
+  color: #cc0000;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.pinkMark
+{
+  color: #ff0066;
+  font-family: Arial, monospace;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.lightPinkMark
+{
+  color: #ff66ff;
+  font-family: Arial, monospace;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.greyMark
+{
+  color: #666666;
+  font-family: Arial, monospace;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.redMark {
+  color: #cc0000;
+  font-family: Arial, monospace;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.redMark13
+{
+  color: #cc0000;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.greenMark
+{
+  color: #009900;
+  font-family: Arial, monospace;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.blueMark
+{
+  color: #005ce6;
+  font-family: Arial, monospace;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.purpleMark
+{
+  color: #ac00e6;
+  font-family: Arial, monospace;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.greyMarkCourrier
+{
+  color: #808080;
+  font-size: 12px;
+  font-weight: bold;
+  font-family: "Lucida Console", Courier, monospace;
+}
+
+.modelDoc
+{
+  color: #808080;
+  font-size: 10px;
+  font-family: "Lucida Console", Courier, monospace;
+}
+
+.greyMarkCourrierHst
+{
+  color: #808080;
+  font-size: 12px;
+  font-weight: bold;
+  font-family: "Lucida Console", Courier, monospace;
+}
+
+.greyMarkItalic
+{
+  color: #999999;
+  font-family: Arial, monospace;
+  font-size: 11px;
+  font-style: italic;
+}
+
+.greyMark11
+{
+  color: #999999;
+  font-family: Arial, monospace;
+  font-size: 11px;
+}
+
+.greyMarkCourrierSmalLabel
+{
+  color: #808080;
+  font-size: 11px;
+  font-style: italic;
+  font-family: "Lucida Console", Courier, monospace;
+}
+
+.greyMarkForSelectComp
+{
+  color: #808080;
+  font-size: 12px;
+  font-family: "Lucida Console", Courier, monospace;
+  margin-bottom: 10px !important;
+  text-align: center;
+}
+
+.blueMarkCourrierSmalLabel
+{
+  color: blue;
+  font-size: 11px;
+  font-style: italic;
+  font-family: "Lucida Console", Courier, monospace;
+}
+
+.redMarkCourrierSmalLabel
+{
+  color: #cc0000;
+  font-size: 11px;
+  font-style: italic;
+  font-family: "Lucida Console", Courier, monospace;
+}
+
+.greyMarkCourrierPlusSmalLab
+{
+  color: #808080;
+  font-size: 12px;
+  font-style: italic;
+  font-family: "Lucida Console", Courier, monospace;
+}
+
+.secondaryMark
+{
+  color: #737373;
+  font-family: Arial, monospace;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.darkMark
+{
+  color: #333333;
+  font-family: Arial, monospace;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.lightMark
+{
+  color: #b3b3b3;
+  font-family: Arial, monospace;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.infoMark
+{
+  color: #0099ff;
+  font-family: Arial, monospace;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.primaryMark
+{
+  color: #0033cc;
+  font-family: Arial, monospace;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.orangeMark
+{
+  color: #ff8533;
+  font-family: Arial, monospace;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.redSubTitleCardTwo
+{
+  color: red;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.infoField
+{
+  color: #666666;
+  font-size: 12px;
+}
+
+.orangeSubTitleCard
+{
+  color: orange;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.orangeTitleModal
+{
+  color: orange;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.redFieldCard
+{
+  color: #595959;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.pinkAlert
+{
+  color: fuchsia;
+  font-family: Arial, monospace;
+  font-size: 15px;
+}
+
+.pinkAlertNormal
+{
+  color: fuchsia;
+  font-family: Arial, monospace;
+  font-size: 12px;
+}
+
+.pinkAlertBold
+{
+  color: fuchsia;
+  font-weight: bold;
+  font-family: Arial, monospace;
+  font-size: 15px;
+}
+
+.redFieldCardPDF
+{
+  color: black;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.requiredStar
+{
+  color: #cc0000;
+  font-family: Arial, monospace;
+  font-size: 14px;
+}
+
+.noticeForAP
+{
+  color: #a6a6a6;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  font-style: italic;
+}
+
+.alertConvDuration
+{
+  color: black;
+  font-family: Arial, monospace;
+  font-size: 11px;
+  font-style: italic;
+}
+
+.pairFullName
+{
+  color: blue;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  font-style: italic;
+}
+
+.errorS1
+{
+  color: red;
+  font-family: Arial, monospace;
+  font-size: 12px;
+  font-style: italic;
+  font-weight: bold;
+}
+.errorS2
+{
+  color: red;
+  font-family: Arial, monospace;
+  font-size: 12px;
+  font-style: italic;
+}
+
+.confirmPasswordsFail
+{
+  color: red;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  font-style: italic;
+  text-align: left;
+  /*margin-left: 620px;*/
+}
+
+.confirmPasswordsSuccess
+{
+  color: green;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  font-style: italic;
+  text-align: left;
+  /*margin-left: 620px;*/
+}
+
+.userSpace
+{
+  color: black;
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.currentYear
+{
+  color: black;
+  font-family: Roman, monospace;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.myModalTitle
+{
+  color: #cc0000;
+  font-family: Arial, monospace;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.myModalTitleMarginTop
+{
+  color: #cc0000;
+  font-family: Arial, monospace;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 100px;
+}
+
+.myModalSubTitleBold
+{
+  color: #cc0000;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  font-weight: bold;
+  margin-top: 500px !important;
+}
+
+.myModalSubTitle
+{
+  color: #cc0000;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  margin-top: 500px !important;
+}
+
+.myModalSubTitleHistoric
+{
+  color: #4d4d4d;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.convHistoricBlackField
+{
+  color: #000000;
+  font-family: Arial, monospace;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.blackField
+{
+  color: #000000;
+  font-family: Arial, monospace;
+  font-size: 11px;
+  text-align: center;
+}
+
+.subTitleRedField
+{
+  color: #b30000;
+  font-family: "Courier New", monospace;
+  font-size: 14px;
+}
+
+.subTitleBlackField
+{
+  color: #000000;
+  font-family: "Courier New", monospace;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.convHistoricGreyField
+{
+  color: #8c8c8c;
+  font-family: Arial, monospace;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.convHistoricDeepGreyField
+{
+  color: #666666;
+  font-family: Arial, monospace;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.trtHistoricDeepGreyField
+{
+  color: #666666;
+  font-family: Arial, monospace;
+  font-weight: bold;
+  font-size: 11px;
+}
+
+.trtHistoricDateBlackField
+{
+  color: #000000;
+  font-family: Arial, monospace;
+  font-size: 11px;
+}
+
+.compSupervHistoricPurpleTitle
+{
+  color: #5900b3;
+  font-family: Arial, monospace;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.myDivMarginTop
+{
+  margin-top: 6px !important;
+  text-align: left;
+}
+
+.myModalField
+{
+  color: #808080;
+  font-family: Arial, monospace;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.myModalFieldCr
+{
+  color: #808080;
+  font-weight: bold;
+  font-size: 12px;
+  font-family: "Lucida Console", Courier, monospace;
+}
+
+.myModalDetailCr
+{
+  color: #0000ff;
+  font-weight: bold;
+  font-size: 13px;
+  font-family: "Lucida Console", Courier, monospace;
+}
+
+.twoHorizontalParts
+{
+  margin: 20px;
+  display: flex;
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+.twoHorizontalPartsLeft
+{
+  margin: 20px;
+  display: flex;
+  text-align: left;
+}
+
+.cursorPointer
+{
+  cursor: pointer;
+}
+
+.heading
+{
+  font-size: 14px;
+  color: #4d4d4d;
+  font-family: 'Trebuchet MS', sans-serif;
+  font-weight: bold;
+}
+
+.secondaryHeading
+{
+  font-size: 1px;
+  color: #cccccc;
+  font-family: "Comic Sans MS", cursive, sans-serif;
+}
+
+.actionTableColumn
+{
+  text-align: right;
+  width: 14%;
+}
+
+.tdAlign {
+  overflow: hidden;
+  width: 600px;
+}
+
+.tableAlign{
+  width: 100%;
+  table-layout:fixed;
+}
+
+.contentTableColumn
+{
+  width: 610px;
+  text-align: left;
+}
+
+.textBoxStyle
+{
+  width: 1000px;
+  position: relative;
+  font-size: 14px;
+}
+
+.textBoxStylePays
+{
+  width: 500px;
+  height: 50px;
+  position: relative;
+  font-size: 14px;
+}
+
+.redTableTitle
+{
+  color: darkred;
+  font-family: Arial, monospace;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.redTableSubTitle
+{
+  color: blue;
+  font-family: Arial, monospace;
+  font-size: 16px;
+}
+
+.centerProbTableTitle
+{
+  color: red;
+  font-family: Arial, monospace;
+  font-size: 16px;
+  margin-left: 260px;
+  font-weight: bold;
+}
+
+.centerFuncTableTitle
+{
+  color: red;
+  font-family: Arial, monospace;
+  font-size: 16px;
+  margin-left: 230px;
+  font-weight: bold;
+}
+
+.hi123 {
+  border: 1px dashed red;
+  margin-top: 80px !important;
+
+}
+
+.lol3009
+{
+  /*height: 200px;
+  width: 1000px; //*50%;
+  background-color: powderblue;*/
+}
+
+.centerTechTableTitle
+{
+  color: red;
+  font-family: Arial, monospace;
+  font-size: 15px;
+  margin-left: 95px;
+  font-weight: bold;
+}
+
+.badgeStyle
+{
+  width: 200px;
+  height: 25px;
+  position: relative;
+  font-size: 14px;
+}
+
+.colPadding
+{
+  padding-right:0;
+  padding-left:0;
+}
+
+.colPaddingRight
+{
+  padding-right:0;
+}
+
+.colPaddingLeft
+{
+  padding-left:0;
+}
+
+.colCentering
+{
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.lol111
+{
+  height: 100%;
+}
+
+
+.gmailIcon{
+  /*background-image: url(images/logo.png);*/
+  background: url('https://api.iconify.design/logos/google-gmail.svg') no-repeat center center / contain;
+  display: flex;
+  width: 18px;
+  height: 20px;
+  margin-left: 2px;
+}
+
+.homeIcon{
+  /*background-image: url(images/logo.png);*/
+  background: url('https://api.iconify.design/flat-color-icons/home.svg') no-repeat center center / contain;
+  display: flex;
+  width: 25px;
+  height: 25px;
+}
+
+.phoneIcon{
+  background: url('https://api.iconify.design/wpf/iphone.svg?color=%23c00') no-repeat center center / contain;
+  display: flex;
+  width: 25px;
+  height: 25px;
+  text-align: center;
+  margin-left: -2px;
+}
+
+
+/******************************************************************************************** Installed Styles *****/
+.select {
+  width: 100%;
+  min-width: 15ch;
+  max-width: 35ch;
+  border: 0.5px solid;
+  /*border-radius: 0.25em;*/
+  padding: 0.25em 0.5em;
+  font-size: 1rem;
+  cursor: pointer;
+  line-height: 1.1;
+  background-color: #f9f9f9;
+  background-image: linear-gradient(to top, #f9f9f9, #fff 33%);
+}
+
+
+
+/******************************************************************************************** Radio *****/
+.radio-toolbar label {
+  padding: 4px 11px;
+  font-family: Arial;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+
+
+/******************************************************************************************** Phone *****/
+.react-tel-input
+{
+  font-size: 0.9rem !important;
+}
+
+.react-tel-input .form-control
+{
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  /**height: 3.5rem !important;**/
+  position: relative;
+  letter-spacing: .01rem;
+  border-radius: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  /*width: 50px !important;*/
+  /** background-color: #ff00ff !important; **/
+  /** background-color: rgb(253, 214, 214) !important; **/
+  font-size: 0.8rem !important;
+  width : 100% !important;
+  box-sizing: border-box;
+}
+
+/******************************************************************************************** DatePicker *****/
+.react-datepicker__input-container {
+  width: inherit;
+}
+
+.react-datepicker-wrapper {
+  width: 100%;
+}
+
+/*
+
+<div class="blink">
+                                            Hello the World
+                                        </div>
+
+
+.blink {
+  padding:30px;
+  border-radius:50%;
+  display:table-cell;
+  vertical-align:middle;
+  text-align:center;
+
+  color:red;
+  background-color:pink;
+  animation: allblink 2s infinite;
+}
+@keyframes allblink {
+  0% { }
+  50% { color:green; background-color:lightgreen; }
+}
+*/
+
+/******************************************************************************************** Clignoting *****/
+.clignoteTitlePlatform {
+  color: #e60000;
+  font-size: 28px;
+  font-weight: bold;
+  font-family: 'Trebuchet MS', sans-serif;
+  animation: clignote 2s linear infinite;
+}
+
+.clignotePurple {
+  color: #800080;
+  font-family: Arial, monospace;
+  font-size: 12px;
+  animation: clignote 2s linear infinite;
+}
+
+.clignoteBlue {
+  color: #0040ff;
+  font-family: Arial, monospace;
+  font-size: 12px;
+  animation: clignote 2s linear infinite;
+}
+
+.clignoteBlack {
+  color: #000000;
+  animation: clignote 2s linear infinite;
+  font-weight: bold;
+  font-family: "Lucida Console", Courier, monospace;
+  font-size: 13px;
+  text-align: left;
+}
+
+.clignoteRedAlert {
+  color: #cc0000;
+  animation: clignote 2s linear infinite;
+  font-family: "Lucida Console", Courier, monospace;
+  font-size: 11px;
+  font-style: italic;
+}
+
+.journalMark {
+  color: #ff6600;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.synopsisField{
+  color: #595959;
+  font-size: 11px;
+  font-weight: bold
+}
+
+.journalClignoteMark {
+  color: #ff6600;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  font-weight: bold;
+  animation: clignote 2s linear infinite;
+}
+
+.bilanMark {
+  color: #ff0066;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.titleBalanceSheet {
+  color: #CC0000;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.titleReport {
+  color: #0000ff;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.bilanClignoteMark {
+  color: #ff0066;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  font-weight: bold;
+  animation: clignote 2s linear infinite;
+}
+
+.reportMark {
+  color: #990099;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.reportClignoteMark {
+  color: #990099;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  font-weight: bold;
+  animation: clignote 2s linear infinite;
+}
+
+.clignoteSchoolIconRed {
+  animation: clignote 2s linear infinite;
+  background: url('https://api.iconify.design/mdi/school.svg?color=%23c00') no-repeat center center / contain;
+  display: flex;
+  width: 22px;
+  height: 25px;
+}
+
+.clignoteRed {
+  color: #cc0000;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  font-weight: bold;
+  animation: clignote 2s linear infinite;
+}
+
+.clignoteRed12 {
+  color: #cc0000;
+  font-family: Arial, monospace;
+  font-size: 12px;
+  font-weight: bold;
+  animation: clignote 2s linear infinite;
+}
+
+.clignotePurple {
+  color: #660066;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  font-weight: bold;
+  animation: clignote 2s linear infinite;
+}
+
+.clignoteModeleStudentDocs {
+  color: #808080;
+  font-size: 13px;
+  font-weight: bold;
+  font-family: "Lucida Console", Courier, monospace;
+  animation: clignote 2s linear infinite;
+}
+
+.clignoteRedAD {
+  color: #cc0000;
+  font-family: Arial, monospace;
+  font-size: 12px;
+  font-weight: bold;
+  animation: clignote 2s linear infinite;
+}
+
+.clignoteBoldGrey {
+  color: grey;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  font-weight: bold;
+  animation: clignote 2s linear infinite;
+}
+
+.clignoteRedStepTitle
+{
+  color: #cc0000;
+  font-family: "Lucida Console", Courier, monospace;
+  font-size: 14px;
+  font-weight: bold;
+  animation: clignote 2s linear infinite;
+}
+
+.clignoteWhite {
+  color: #ffffff;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  font-weight: bold;
+  animation: clignote 2s linear infinite;
+}
+
+.clignotePrimary {
+  color: #0000e6;
+  font-family: Arial, monospace;
+  font-size: 12px;
+  font-weight: bold;
+  animation: clignote 2s linear infinite;
+}
+
+.clignoteGreen {
+  color: #008000;
+  font-family: Arial, monospace;
+  font-size: 12px;
+  font-weight: bold;
+  animation: clignote 2s linear infinite;
+}
+
+.clignoteOrange {
+  color: #ff6600;
+  font-family: Arial, monospace;
+  font-size: 12px;
+  font-weight: bold;
+  animation: clignote 2s linear infinite;
+}
+
+.clignoteGrey {
+  animation: clignote 2s linear infinite;
+}
+
+@keyframes clignote {
+  70% { opacity: 0; }
+}
+
+
+/******************************************************************************************** Background Styling *****/
+.video-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.video-container video {
+  /* Make video to at least 100% wide and tall */
+  min-width: 100%;
+  min-height: 100%;
+
+  /* Setting width & height to auto prevents the browser from stretching or squishing the video */
+  width: auto;
+  height: auto;
+
+  /* Center the video */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+.blackBackDeg1 {
+  background: rgba(0, 0, 0, 0.5);
+  color: #000000;
+}
+
+.pinkBackDeg1 {
+  background: rgba(255, 153, 255, 0.5);
+  color: #ff33ff;
+}
+
+.pinkBackDeg2 {
+  background: rgba(255, 26, 255, 0.5);
+  color: #800080;
+}
+
+.lightPurpleBackDeg1 {
+  background: rgba(255, 153, 255, 0.5);
+  color: #b300b3;
+}
+
+.purpleBackDeg1 {
+  background: rgba(153, 0, 153, 0.5);
+  color: #ffe6ff;
+}
+
+.purpleBackDeg2 {
+  background: rgba(153, 0, 153);
+  color: #ff99ff;
+}
+
+/* Add some content at the bottom of the video/page */
+.footerContent {
+  position: fixed;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  color: #cc0000;
+  width: 110%;
+  padding: 70px;
+}
+
+.headerContent {
+  position: fixed;
+  top:0%;
+  bottom: 85%;
+  background: rgba(0, 0, 0, 0.5);
+  color: #f1f1f1;
+  width: 110%;
+  padding: 30px;
+}
+
+/* Style the button used to pause/play the video */
+.myBtn {
+  width: 200px;
+  font-size: 18px;
+  padding: 10px;
+  border: none;
+  background: #000;
+  color: #fff;
+  cursor: pointer;
+}
+
+.myBtn:hover {
+  background: #ddd;
+  color: black;
+}
+
+.centeringBackground {
+  display: table-cell;
+  vertical-align: middle;
+  width: 100%;
+  height: 100%;
+}
+/******************************************************************************************** Congrat ******/
+.congrat-container {
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+
+/******************************************************************************************** CKEditor *****/
+.ck-editor__editable_inline {
+  min-height: 100px;
+}
+
+.svg_icons {
+  transform: scale(1.2);
+}
+
+.pinkBorder
+{
+  border: 0.5mm ridge rgba(255, 0, 255, .6);
+}
+
+.darkBorder
+{
+  border: 0.5mm ridge rgba(102, 102, 102, .6);
+}
+
+.orangeBorder
+{
+  border: 0.5mm ridge rgba(255, 102, 0, .6);
+}
+
+.pink13
+{
+  color: #ff00ff;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.grey13
+{
+  color: #666666;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.orange13
+{
+  color: #ff6600;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.goldMark
+{
+  color: #cc9900;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.goldMarkSmall
+{
+  color: #cc9900;
+  font-family: Arial, monospace;
+  font-size: 13px;
+}
+
+.imgCont {
+  position: relative;
+  text-align: center;
+  color: white;
+}
+
+.imgCentPendingGrad {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.imgCentDoneGrad {
+  position: absolute;
+  top: 80%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.imgCentNotYetGrad {
+  position: absolute;
+  width: 100%;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.clignoteRedAlert10S
+{
+  color: #cc0000;
+  animation: clignote 10s linear infinite;
+  font-family: "Lucida Console", Courier, monospace;
+  font-size: 11px;
+  font-style: italic;
+}
+
+.redAlert
+{
+  color: red;
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size: 14px;
+}
+
+.greenAlert
+{
+  color: green;
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size: 14px;
+}
+
+.purpleMarkCourrier
+{
+  color: rebeccapurple;
+  font-weight: bold;
+  font-size: 12px;
+  font-family: "Lucida Console", Courier, monospace;
+
+}
+
+.dimGreyNote
+{
+  color: dimgrey;
+  font-size: 11px;
+  font-family: "Lucida Console", Courier, monospace;
+}
+
+.dimRedNote
+{
+  color: red;
+  font-size: 11px;
+  font-family: "Lucida Console", Courier, monospace;
+}
+
+.clignoteGreyNew {
+  color: #808080;
+  font-family: "Lucida Console", Courier, monospace;
+  font-size: 12px;
+  font-weight: bold;
+  animation: clignote 2s linear infinite;
+}

@@ -1,0 +1,11 @@
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+# Eclipse artifacts, including WTP generated manifests
+.classpath
+.project
+.settings
+# Maven artifacts
+target/
