@@ -199,7 +199,7 @@ class AuthService
       siegeSocial,
     });
   }
-  
+
   modifyProjectCompany(
 	      designation,
 	      lol,
@@ -346,7 +346,7 @@ class AuthService
         }
     );
   }
-  
+
   createFichePFEP1(studentId, otherMail, adresse, numTel) {
     // console.log('-------------------------> createFichePFE - P1: ' + JSON.parse(sessionStorage.getItem('student')).id + " - " + otherMail + " - " + adresse + " - "+ numTel);
 
@@ -519,7 +519,7 @@ class AuthService
     // console.log('----------------24.08--------> Got File.');
     return axios.get(API_URL + "/evaluationStageING/" + studentCode);
   }
-  
+
   getGanttDiagram(studentCode) {
     return axios.get(API_URL + "/ganttDiagram/" + studentCode);
   }
@@ -1251,21 +1251,26 @@ uploadSupplement(file, currentUserCode, checked, onUploadProgress) {
     return axios.get(API_URL + "/listStudentsByClassAndYearForExp/" + codeClass + "/" + pcMail);
   }
 
+  gotListStudentsByClassAndYearForExpPARAM(year, codeClass, pcMail)
+  {
+    return axios.get(API_URL + "/listStudentsByClassAndYearForExpPARAM/" + year + "/"+ codeClass + "/" + pcMail);
+  }
+
   findAllAffectedStudentsToAE(idAE)
   {
     return axios.get(API_URL + "/findAllAffectedStudentsToAE/" + idAE);
   }
-  
+
   findAllAffectedStudentsToAEByYear(idAE, year)
   {
     return axios.get(API_URL + "/findAllAffectedStudentsToAEByYear/" + idAE + "/" + year);
   }
-  
+
   findAllAffectedStudentsToAExp(idAExp)
   {
     return axios.get(API_URL + "/findAllAffectedStudentsToAExp/" + idAExp);
   }
-  
+
 
   getJournalStageINGFile(studentCode) {
 	// console.log('----------------24.08--------> Got File.');
@@ -1289,7 +1294,7 @@ uploadSupplement(file, currentUserCode, checked, onUploadProgress) {
         idStudent
     );
   }
-  
+
   uploadJournalStageINGFile(file, currentUserCode, onUploadProgress) {
 	 console.log('----------------24.08--------> Upload: ' + file.name);
 	 let formData = new FormData();
@@ -1323,7 +1328,7 @@ uploadSupplement(file, currentUserCode, checked, onUploadProgress) {
         idStudent
     );
   }
-  
+
   uploadAttestationStageINGFile(file, currentUserCode, onUploadProgress) {
 	    console.log('----------------24.08--------> Upload: ' + file.name);
 	    let formData = new FormData();
@@ -1341,7 +1346,7 @@ uploadSupplement(file, currentUserCode, checked, onUploadProgress) {
 	        }
 	    );
 	  }
-  
+
   uploadRapportStageINGFile(file, currentUserCode, onUploadProgress) {
 	    console.log('----------------24.08--------> Upload: ' + file.name);
 	    let formData = new FormData();
@@ -1359,7 +1364,7 @@ uploadSupplement(file, currentUserCode, checked, onUploadProgress) {
 	        }
 	    );
 	  }
-  
+
 
   findAllAffectedStudentsToAExpByYear(idAExp, year)
   {
@@ -1385,7 +1390,7 @@ uploadSupplement(file, currentUserCode, checked, onUploadProgress) {
     //console.log('Service --------------------PIKOOO-----> Forgot-Pwd Teacher: ' + token + " - " + password);
     return axios.get(API_URL + "resetMyStudentPassword/" + token + "/" + password );
   }
-  
+
   applyToInitializeMyCDCPSPassword(email) {
 	// console.log('Service -------------------------> Forgot-Pwd Teacher: ' + id + " - " + password);
 	return axios.post(API_URL + "applyToInitializeMyCDCPSPassword", { email });
@@ -1443,6 +1448,11 @@ uploadSupplement(file, currentUserCode, checked, onUploadProgress) {
   notifyAEToFillGrille(idEt)
   {
     return axios.get(API_URL + "/notifyAEToFillGrille/" + idEt);
+  }
+
+  listClassesByOptionAndByYear(idTea, year)
+  {
+    return axios.get(API_URL + "/listClassesByOptionAndByYear/" + idTea + "/" + year);
   }
 
 }

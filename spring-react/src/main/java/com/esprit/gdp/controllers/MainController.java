@@ -7829,21 +7829,26 @@ public class MainController {
 
 	// PARAMSARIA
 	@GetMapping("/listClassesByOptionAndByYear/{pcMail}/{year}")
-	public List<String> listClassesByOptionAndByYear(@PathVariable String pcMail, @PathVariable String year) {
-
+	public List<String> listClassesByOptionAndByYear(@PathVariable String pcMail, @PathVariable String year)
+	{
+		System.out.println("-------- pcMail: " + pcMail);
 		String idPC = pedagogicalCoordinatorRepository.gotIdPedagogicalCoordinator(pcMail).get(0);
+		System.out.println("-------- idPC: " + idPC);
 		List<String> options = pedagogicalCoordinatorRepository.listOptionsByPedagogicalCoordinator(idPC);
 
 		List<String> lclasses = new ArrayList<String>();
-		for (String opt : options) {
-			System.out.println("--PC-------------------------------> Option: " + opt);
+		for(String opt : options)
+		{
+			System.out.println("==> Opt: " + opt);
 			lclasses.addAll(utilServices.findClassesByYearAndOption(year, opt.toLowerCase()));
 
-			if (opt.equalsIgnoreCase("ARCTIC") || opt.equalsIgnoreCase("DS") || opt.equalsIgnoreCase("SAE")
-					|| opt.equalsIgnoreCase("TWIN") || opt.equalsIgnoreCase("ALINFO") || opt.equalsIgnoreCase("NIDS")
-					|| opt.equalsIgnoreCase("ALINFO") || opt.equalsIgnoreCase("ERP-BI")
+			if(
+					opt.equalsIgnoreCase("ARCTIC") || opt.equalsIgnoreCase("DS") ||
+							opt.equalsIgnoreCase("SAE") ||opt.equalsIgnoreCase("TWIN") || opt.equalsIgnoreCase("ALINFO") ||
+							opt.equalsIgnoreCase("NIDS") || opt.equalsIgnoreCase("ALINFO") || opt.equalsIgnoreCase("ERP-BI")
 
-			) {
+			)
+			{
 				System.out.println("---> HERE ...");
 				lclasses.addAll(inscriptionRepository.findALTClassesByYear(year));
 			}
@@ -7854,7 +7859,8 @@ public class MainController {
 		unikClasses.sort(Comparator.naturalOrder());
 		// lclasses.stream().sorted().collect(Collectors.toList());
 
-		for (String s : unikClasses) {
+		for(String s : unikClasses)
+		{
 			System.out.println("---------> Class: " + s);
 		}
 
@@ -8295,6 +8301,160 @@ public class MainController {
 		lStudents.sort(Comparator.comparing(StudentFullNameMailTelDto::getFullName));
 		return lStudents;
 	
+	}
+
+	@GetMapping("/listStudentsByClassAndYearForExpPARAM/{year}/{codeClass}/{pcMail}")
+	public List<StudentFullNameMailTelDto> listStudentsByClassAndYearForExpPARAM(@PathVariable String year, @PathVariable String codeClass, @PathVariable String pcMail)
+	{
+		{
+
+			System.out.println("--PC----------------> class . pcMail: " + codeClass + " . " + pcMail);
+
+			List<StudentFullNameMailTelDto> lStudents = new ArrayList<StudentFullNameMailTelDto>();
+			if(!codeClass.contains("4ALINFO"))
+			{
+				System.out.println("------------------------> NOT ALINFO : " + codeClass);
+
+				lStudents = utilServices.findStudentsFullNameMailTelByYearAndClass(year, codeClass);
+
+				for(StudentFullNameMailTelDto s : lStudents)
+				{
+					// Note Expert (Note Restitution)
+					String idExpert = utilServices.findIdExpertByStudent(s.getId());
+					if(noteRestitutionRepository.findNoteRestitutionMarkByAEandStu(idExpert, s.getId(), year) != null)
+					{
+						System.out.println("-$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$> idExpert : " + idExpert + " - " + noteRestitutionRepository.findNoteRestitutionMarkByAEandStu(idExpert, s.getId(), year).toString());
+						s.setNoteRestitution(noteRestitutionRepository.findNoteRestitutionMarkByAEandStu(idExpert, s.getId(), year).toString());
+					}
+					else
+					{
+						s.setNoteRestitution("--");
+					}
+
+					//s.setOption(utilServices.findOptionByClass(s.getId(), optionRepository.listOptionsByYear(year)).replace("_01", ""));
+					if(codeClass.contains("4ALINFO"))
+					{
+						s.setOption(optionStudentALTRepository.findOptionByStudentALTAndYear(s.getId(), year));
+						System.out.println("--> 2.1");
+					}
+					else
+					{
+						s.setOption(utilServices.findOptionByClass(codeClass, optionRepository.listOptionsByYear(year)).replace("_01", ""));
+						System.out.println("--> 2.2");
+					}
+					if(utilServices.findIdExpertByStudentAndYear(s.getId(), year) != null)
+					{
+						s.setAffected("AFFECTEE");
+					}
+				}
+			}
+
+			if(codeClass.contains("4ALINFO"))
+			{
+				if(pcMail.equalsIgnoreCase("CD-Alt@esprit.tn") || pcMail.equalsIgnoreCase("CPS-Alt@esprit.tn"))
+				{
+					System.out.println("------------------------> IS ALINFO CD");
+
+					List<String> stuALINFOs = optionStudentALTRepository.findStudentsALTByYearAndClasse(year, codeClass);
+
+					System.out.println("----> Size ùùùù: " + stuALINFOs.size());
+
+					for(String s : stuALINFOs)
+					{
+						System.out.println("----> " + codeClass + ": " + utilServices.findStudentFullNameById(s) + " - " + s);
+						lStudents.addAll(utilServices.findStudentsFullNameMailTelByIdEtAndYear(s, year));
+					}
+
+					for(StudentFullNameMailTelDto s : lStudents)
+					{
+						// Note Expert (Note Restitution)
+						String idExpert = utilServices.findIdExpertByStudent(s.getId());
+						if(noteRestitutionRepository.findNoteRestitutionMarkByAEandStu(idExpert, s.getId(), year) != null)
+						{
+							System.out.println("-$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$> idExpert : " + idExpert + " - " + noteRestitutionRepository.findNoteRestitutionMarkByAEandStu(idExpert, s.getId(), year).toString());
+							s.setNoteRestitution(noteRestitutionRepository.findNoteRestitutionMarkByAEandStu(idExpert, s.getId(), year).toString());
+						}
+						else
+						{
+							s.setNoteRestitution("--");
+						}
+
+						//s.setOption(optionStudentALTRepository.findOptionByStudentALTAndYear(s.getId(), year));
+						if(codeClass.contains("4ALINFO"))
+						{
+							s.setOption(optionStudentALTRepository.findOptionByStudentALTAndYear(s.getId(), year));
+							System.out.println("--> 2.1");
+						}
+						else
+						{
+							s.setOption(utilServices.findOptionByClass(codeClass, optionRepository.listOptionsByYear(year)).replace("_01", ""));
+							System.out.println("--> 2.2");
+						}
+						if(utilServices.findIdExpertByStudentAndYear(s.getId(), year) != null)
+						{
+							s.setAffected("AFFECTEE");
+						}
+					}
+				}
+				else
+				{
+					System.out.println("------------------------> IS ALINFO CPS");
+
+					String idPC = pedagogicalCoordinatorRepository.gotIdPedagogicalCoordinator(pcMail).get(0);
+					System.out.println("------------------------> idPC: " + idPC);
+					List<String> options = pedagogicalCoordinatorRepository.listOptionsByPedagogicalCoordinator(idPC);
+					System.out.println("------------------------> options: " + options.size());
+
+					List<String> stuALINFOs = new ArrayList<String>();
+					for(String opt : options)
+					{
+						System.out.println("UNIT -------> opt . " + "class = " + opt + " . " + codeClass);
+						stuALINFOs.addAll(optionStudentALTRepository.findStudentsALTByYearAndOptionAndClasse(year, opt, codeClass));
+					}
+
+					for(String s : stuALINFOs)
+					{
+						System.out.println(s + "----> " + codeClass + ": " + utilServices.findStudentFullNameById(s));
+						lStudents.addAll(utilServices.findStudentsFullNameMailTelByIdEtAndYear(s, year));
+					}
+
+					for(StudentFullNameMailTelDto s : lStudents)
+					{
+						// Note Expert (Note Restitution)
+						String idExpert = utilServices.findIdExpertByStudent(s.getId());
+						if(noteRestitutionRepository.findNoteRestitutionMarkByAEandStu(idExpert, s.getId(), year) != null)
+						{
+							System.out.println("-$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$> idExpert : " + idExpert + " - " + noteRestitutionRepository.findNoteRestitutionMarkByAEandStu(idExpert, s.getId(), year).toString());
+							s.setNoteRestitution(noteRestitutionRepository.findNoteRestitutionMarkByAEandStu(idExpert, s.getId(), year).toString());
+						}
+						else
+						{
+							s.setNoteRestitution("--");
+						}
+
+						//s.setOption(optionStudentALTRepository.findOptionByStudentALTAndYear(s.getId(), year));
+						if(codeClass.contains("4ALINFO"))
+						{
+							s.setOption(optionStudentALTRepository.findOptionByStudentALTAndYear(s.getId(), year));
+							System.out.println("--> 2.1");
+						}
+						else
+						{
+							s.setOption(utilServices.findOptionByClass(codeClass, optionRepository.listOptionsByYear(year)).replace("_01", ""));
+							System.out.println("--> 2.2");
+						}
+						if(utilServices.findIdExpertByStudentAndYear(s.getId(), year) != null)
+						{
+							s.setAffected("AFFECTEE");
+						}
+					}
+				}
+
+			}
+
+			lStudents.sort(Comparator.comparing(StudentFullNameMailTelDto::getFullName));
+			return lStudents;
+		}
 	}
 
 	// @GetMapping("/sars")

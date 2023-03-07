@@ -122,5 +122,14 @@ public interface OptionStudentALTRepository extends JpaRepository<OptionStudentA
 			+ "and y.saisonClasse.id.anneeDeb = '2021' "
 			+ "and lower(y.saisonClasse.id.codeCl) like CONCAT('4alinfo%')")
 	List<ExpertiseStatusExcelDto> findExpertiseStatusCJALT();
-	
+
+
+	@Query("Select new com.esprit.gdp.dto.ExpertiseStatusExcelDto(u.idEt, CONCAT(trim(u.prenomet), ' ',  trim(u.nomet)), u.telet, u.adressemailesp, y.saisonClasse.id.codeCl, y.pedagogicalExpertCJ.idEns, '') "
+			+ "from StudentCJ u, InscriptionCJ y, OptionStudentALT o "
+			+ "where u.idEt = y.id.idEt and u.idEt = o.idOptStuALT.idEt "
+			//+ "and y.encadrantPedagogique.idEns = t.idEns "
+			+ "and y.saisonClasse.id.anneeDeb =?1 "
+			+ "and lower(y.saisonClasse.id.codeCl) like CONCAT('4alinfo%')")
+	List<ExpertiseStatusExcelDto> findExpertiseStatusCJALTAndYear(String selectedYear);
+
 }

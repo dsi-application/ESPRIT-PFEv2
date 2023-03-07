@@ -706,5 +706,22 @@ public interface StudentRepository extends JpaRepository<StudentCJ, String>
 			+ "y.saisonClasse.id.codeCl like '4%' and "
 			+ "y.saisonClasse.id.anneeDeb =?1")
 	List<StudentConfigDto> findStudentsCSConfigByYear(String year);
-	
+
+
+	@Query("Select new com.esprit.gdp.dto.ExpertiseStatusExcelDto(u.idEt, CONCAT(trim(u.prenomet), ' ',  trim(u.nomet)), u.telet, u.adressemailesp, y.saisonClasse.id.codeCl, y.pedagogicalExpertCJ.idEns, '') "
+			+ "from StudentCJ u, InscriptionCJ y "
+			+ "where u.idEt = y.id.idEt "
+			//+ "and y.encadrantPedagogique.idEns = t.idEns "
+			+ "and y.saisonClasse.id.anneeDeb =?1 "
+			+ "and lower(y.saisonClasse.id.codeCl) like CONCAT('5', ?2, '%')")
+	List<ExpertiseStatusExcelDto> findExpertisetatusCJByYearAndOption(String selectedYear, String optionlabel);
+
+	@Query("Select new com.esprit.gdp.dto.ExpertiseStatusExcelDto(u.idEt, CONCAT(trim(u.prenomet), ' ',  trim(u.nomet)), u.telet, u.adressemailesp, y.saisonClasse.id.codeCl, y.pedagogicalExpertCS.idEns, '') "
+			+ "from StudentCS u, InscriptionCS y "
+			+ "where u.idEt = y.id.idEt "
+			//+ "and y.encadrantPedagogiqueCS.idEns = t.idEns "
+			+ "and y.saisonClasse.id.anneeDeb =?1 "
+			+ "and lower(y.saisonClasse.id.codeCl) like CONCAT('4', ?2, '%')")
+	List<ExpertiseStatusExcelDto> findExpertiseStatusCSByYearAndOption(String selectedYear, String optionlabel);
+
 }

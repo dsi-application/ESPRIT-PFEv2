@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import AuthService from "../../services/auth.service";
 import PedagogicalCoordinatorService from "../../services/pedagogicalCoordinator.service";
 import {
   CBadge,
@@ -40,11 +39,14 @@ import excelBlueIcon from "../../images/excelBlueIcon.jpg";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 
+import PCService from "../../services/pedagogicalCoordinator.service";
+import AuthService from "../../services/auth.service";
+
 const API_URL_MESP = process.env.REACT_APP_API_URL_MESP;
 const API_URL_PC = process.env.REACT_APP_API_URL_PC;
 
 const currentPedagogicalCoordinator =
-    AuthService.getCurrentPedagogicalCoordinator();
+  AuthService.getCurrentPedagogicalCoordinator();
 
 const animatedComponents = makeAnimated();
 
@@ -90,12 +92,12 @@ const studentsByClassFields = [
     show: true
   },
   {
-	key: 'noteRestitution',
-	label: 'Note Restitution',
-	_style: {width: '14%'},
-	sorter: true,
-	filter: true,
-	show: true
+    key: 'noteRestitution',
+    label: 'Note Restitution',
+    _style: {width: '14%'},
+    sorter: true,
+    filter: true,
+    show: true
   },
   {
     key: 'affected',
@@ -221,7 +223,9 @@ export default class AffectExpertComponent extends Component {
       openPopupJustifyCancelAffectation: false,
       loadCancelAffectation: false,
       allLabelCEP: [],
-      openPopupVerifAffectEXP: false
+      openPopupVerifAffectEXP: false,
+      allSessionsLabel: [],
+      selectedYear: "2021"
     }
 
     let pcMail = currentPedagogicalCoordinator.id;
@@ -235,11 +239,12 @@ export default class AffectExpertComponent extends Component {
       this.state.privilegeKind = "Département";
     }
 
+    // Load Classes of 2021
     let requestb = new XMLHttpRequest();
     requestb.open(
-        "GET",
-        API_URL_MESP + "listClassesByOption/" + currentPedagogicalCoordinator.id,
-        false
+      "GET",
+      API_URL_MESP + "listClassesByOptionAndByYear/" + currentPedagogicalCoordinator.id + "/" + this.state.selectedYear,
+      false
     ); // return axios.get(API_URL_MESP + 'user/' + code);
     requestb.send(null);
     let result = JSON.parse(requestb.responseText);
@@ -254,24 +259,24 @@ export default class AffectExpertComponent extends Component {
       });
     }
 
-    // Load CEP
-    let strIntoObjComp = [];
-    var requestComp = new XMLHttpRequest();
-    requestComp.open(
-        "GET",
-        API_URL_PC + "listLibCEPByYear",
-        false
-    ); // `false` makes the request synchronous
-    requestComp.send(null);
-    strIntoObjComp = JSON.parse(requestComp.responseText);
-    strIntoObjComp.forEach((comp) => {
-      // console.log('-------------- Verify companies: ' + comp);
-      this.state.allLabelCEP.push({
-        value: comp,
-        label: comp,
+    let requestSessions = new XMLHttpRequest();
+    requestSessions.open(
+      "GET",
+      API_URL_PC + "findAllSessions",
+      false
+    ); // return axios.get(API_URL_MESP + 'user/' + code);
+    requestSessions.send(null);
+    let resultSession = JSON.parse(requestSessions.responseText);
+    // console.log('-------------------> >sars 1110: ' + result);
+
+    for (let cls of resultSession) {
+      // console.log('----sars 1110---------- unit cls: ' + cls);
+      this.state.allSessionsLabel.push({
+        value: cls,
+        label: cls,
         color: "#00B8D9",
       });
-    });
+    }
 
   }
 
@@ -286,27 +291,27 @@ export default class AffectExpertComponent extends Component {
 
     // console.log('---------lol123-------> 1.2: ' + this.state.checked + "_" + iCLS + " - " + optionCLS);
 
-    AuthService.gotListSudentsByClassAndYearForExp(optionCLS, currentPedagogicalCoordinator.id).then(
-        (response) => {
-          this.setState({
-            studentsByClass: []
-          });
+    AuthService.gotListStudentsByClassAndYearForExpPARAM(this.state.selectedYear, optionCLS, currentPedagogicalCoordinator.id).then(
+      (response) => {
+        this.setState({
+          studentsByClass: []
+        });
 
-          let stuList = this.state.studentsByClass.slice();
-          for (let stu of response.data) {
-            // console.log('----------------lol123--------> Students : ', stu);
-            const studentObj = stu;
-            stuList.push(stu);
-          }
-
-          this.setState({
-            loadStudentsByClass: false,
-            studentsByClass: stuList
-          });
-
-        },
-        (error) => {
+        let stuList = this.state.studentsByClass.slice();
+        for (let stu of response.data) {
+          // console.log('----------------lol123--------> Students : ', stu);
+          const studentObj = stu;
+          stuList.push(stu);
         }
+
+        this.setState({
+          loadStudentsByClass: false,
+          studentsByClass: stuList
+        });
+
+      },
+      (error) => {
+      }
     );
 
     // console.log(' 1 ---**************** Clear: ' + this.state.checked + ' - ' + val + ' - ' + this.state.trtType);
@@ -325,24 +330,24 @@ export default class AffectExpertComponent extends Component {
       experts: []
     });
 
-    PedagogicalCoordinatorService.gotListExperts(encodeURIComponent(cepLabel)).then(
-        (response) => {
+    PedagogicalCoordinatorService.gotListExpertsByCEPAndYear(encodeURIComponent(cepLabel), this.state.selectedYear).then(
+      (response) => {
 
-          let aeList = this.state.experts.slice();
-          for (let ae of response.data)
-          {
-            aeList.push(ae);
-          }
-
-          this.setState({
-            loadExperts: false,
-            experts: aeList,
-            openPopupAffectAE: true
-          });
-
-        },
-        (error) => {
+        let aeList = this.state.experts.slice();
+        for (let ae of response.data)
+        {
+          aeList.push(ae);
         }
+
+        this.setState({
+          loadExperts: false,
+          experts: aeList,
+          openPopupAffectAE: true
+        });
+
+      },
+      (error) => {
+      }
     );
 
   };
@@ -351,25 +356,25 @@ export default class AffectExpertComponent extends Component {
   {
     this.setState({showLoadingExcelIcon: true})
 
-    PedagogicalCoordinatorService.downloadExpertiseStatusByOption(currentPedagogicalCoordinator.id).then(
-        (response) => {
-          this.setState({showLoadingExcelIcon: false})
+    PedagogicalCoordinatorService.downloadExpertiseStatusByOptionAndYear(currentPedagogicalCoordinator.id, this.state.selectedYear).then(
+      (response) => {
+        this.setState({showLoadingExcelIcon: false})
 
-          const contentDispo = response.headers['content-disposition'];
-          const fileName = contentDispo.substring(21);
+        const contentDispo = response.headers['content-disposition'];
+        const fileName = contentDispo.substring(21);
 
-          const file = new File([response.data], fileName);
-          const fileURL = URL.createObjectURL(file);
-          // console.log("Check Disponibility ------------- DONE EX ", response.data);
-          let a = document.createElement('a');
-          a.href = fileURL;
-          a.download = fileName;
-          a.click();
-          // window.open(fileURL);
-        },
-        (error) => {
-          // console.log("Check Disponibility --------cr----- FAIL");
-        }
+        const file = new File([response.data], fileName);
+        const fileURL = URL.createObjectURL(file);
+        // console.log("Check Disponibility ------------- DONE EX ", response.data);
+        let a = document.createElement('a');
+        a.href = fileURL;
+        a.download = fileName;
+        a.click();
+        // window.open(fileURL);
+      },
+      (error) => {
+        // console.log("Check Disponibility --------cr----- FAIL");
+      }
     );
   }
 
@@ -377,9 +382,9 @@ export default class AffectExpertComponent extends Component {
   {
     let requestAE = new XMLHttpRequest();
     requestAE.open(
-        "GET",
-        API_URL_PC + "findPedagogicalEncadrantByStudentOptimized/" + idEt,
-        false
+      "GET",
+      API_URL_PC + "findPedagogicalEncadrantByStudentAndYearOptimized/" + idEt + "/" + this.state.selectedYear,
+      false
     ); // return axios.get(API_URL_MESP + 'user/' + code);
     requestAE.send(null);
     let resultAE = JSON.parse(requestAE.responseText);
@@ -394,9 +399,9 @@ export default class AffectExpertComponent extends Component {
 
     let requestb = new XMLHttpRequest();
     requestb.open(
-        "GET",
-        API_URL_PC + "findExpertByStudent/" + idEt,
-        false
+      "GET",
+      API_URL_PC + "findExpertByStudentAndyear/" + idEt + "/" + this.state.selectedYear,
+      false
     ); // return axios.get(API_URL_MESP + 'user/' + code);
     requestb.send(null);
     let result = JSON.parse(requestb.responseText);
@@ -441,11 +446,55 @@ export default class AffectExpertComponent extends Component {
 
   handleGotListCEPs(idEt, fullName)
   {
+    console.log('-------------- selectedYear 1702: ' + this.state.selectedYear);
+    this.setState({
+      allLabelCEP: [],
+    });
+
+    PedagogicalCoordinatorService.gotListLibCEPByYearPARAM(this.state.selectedYear).then(
+      (response) => {
+
+        let aeList = this.state.experts.slice();
+        for (let comp of response.data)
+        {
+          console.log('-------------- SARS1702: ' , comp);
+          aeList.push({value: comp, label: comp, color: "#00B8D9"});
+        }
+
+        this.setState({
+          allLabelCEP: aeList
+        });
+
+      },
+      (error) => {
+      }
+    );
+
+    // Load CEP
+    /*let strIntoObjComp = [];
+    var requestComp = new XMLHttpRequest();
+    requestComp.open(
+        "GET",
+        API_URL_PC + "listLibCEPByYearPARAM/" + this.state.selectedYear,
+        false
+    ); // `false` makes the request synchronous
+    requestComp.send(null);
+    strIntoObjComp = JSON.parse(requestComp.responseText);
+    strIntoObjComp.forEach((comp) => {
+      // console.log('-------------- Verify companies: ' + comp);
+      this.state.allLabelCEP.push({
+        value: comp,
+        label: comp,
+        color: "#00B8D9",
+      });
+    });*/
+
+
     let requestb = new XMLHttpRequest();
     requestb.open(
-        "GET",
-        API_URL_PC + "findPedagogicalEncadrantByStudentOptimized/" + idEt,
-        false
+      "GET",
+      API_URL_PC + "findPedagogicalEncadrantByStudentOptimized/" + idEt,
+      false
     ); // return axios.get(API_URL_MESP + 'user/' + code);
     requestb.send(null);
     let result = JSON.parse(requestb.responseText);
@@ -472,10 +521,30 @@ export default class AffectExpertComponent extends Component {
 
     this.setState({
       experts: [],
+      allLabelCEP: [],
       noteNotCompleteSend: "",
       openPopupAffectAE: true,
       openPopupShowAEDetails: false
     });
+
+    PedagogicalCoordinatorService.gotListLibCEPByYearPARAM(this.state.selectedYear).then(
+      (response) => {
+
+        let aeList = this.state.experts.slice();
+        for (let comp of response.data)
+        {
+          console.log('-------------- SARS1702: ' , comp);
+          aeList.push({value: comp, label: comp, color: "#00B8D9"});
+        }
+
+        this.setState({
+          allLabelCEP: aeList
+        });
+
+      },
+      (error) => {
+      }
+    );
 
   }
 
@@ -485,39 +554,39 @@ export default class AffectExpertComponent extends Component {
     });
 
     PedagogicalCoordinatorService.affectExpertToStudent(this.state.selectedExpertId, this.state.selectedStudentId, currentPedagogicalCoordinator.id).then(
-        (response) => {
+      (response) => {
 
-          let result = response.data;
-          // console.log('---------------- RES: ', response.data)
-          let affected = "AFFECTEE";
-          let id = this.state.selectedStudentId;
-          //let nbrExpertises = Number(nbrEncs+1);
+        let result = response.data;
+        // console.log('---------------- RES: ', response.data)
+        let affected = "AFFECTEE";
+        let id = this.state.selectedStudentId;
+        //let nbrExpertises = Number(nbrEncs+1);
 
-          if(result === "NO-AEEXP")
-          {
-            this.setState({noteNotCompleteSend: "les E-Mails Expert et Encadrant Académique sont inexistant(s) ou avec format incorrecte."});
-          }
-          if(result === "NO-AE")
-          {
-            this.setState({noteNotCompleteSend: "E-Mail Encadrant Académique est inexistant ou avec format incorrecte."});
-          }
-          if(result === "NO-EXP")
-          {
-            this.setState({noteNotCompleteSend: "E-Mail Expert est inexistant ou avec format incorrecte."});
-          }
-
-          this.setState({
-            openPopupShowAEDetails: false,
-            openPopupAffectAE: false,
-            openPopupSuccessAffectAE: true,
-            loadAffectation: false,
-            openPopupVerifAffectEXP: false,
-            studentsByClass: this.state.studentsByClass.map(el => (el.id === id ? {...el, affected } : el))
-            //experts: this.state.experts.map(el => (el.id === id ? {...el, nbrExpertises } : el))
-          });
-        },
-        (error) => {
+        if(result === "NO-AEEXP")
+        {
+          this.setState({noteNotCompleteSend: "les E-Mails Expert et Encadrant Académique sont inexistant(s) ou avec format incorrecte."});
         }
+        if(result === "NO-AE")
+        {
+          this.setState({noteNotCompleteSend: "E-Mail Encadrant Académique est inexistant ou avec format incorrecte."});
+        }
+        if(result === "NO-EXP")
+        {
+          this.setState({noteNotCompleteSend: "E-Mail Expert est inexistant ou avec format incorrecte."});
+        }
+
+        this.setState({
+          openPopupShowAEDetails: false,
+          openPopupAffectAE: false,
+          openPopupSuccessAffectAE: true,
+          loadAffectation: false,
+          openPopupVerifAffectEXP: false,
+          studentsByClass: this.state.studentsByClass.map(el => (el.id === id ? {...el, affected } : el))
+          //experts: this.state.experts.map(el => (el.id === id ? {...el, nbrExpertises } : el))
+        });
+      },
+      (error) => {
+      }
     );
   }
 
@@ -530,22 +599,22 @@ export default class AffectExpertComponent extends Component {
     });
 
     PedagogicalCoordinatorService.gotListExperts().then(
-        (response) => {
+      (response) => {
 
-          let aeList = this.state.experts.slice();
-          for (let ae of response.data)
-          {
-            aeList.push(ae);
-          }
-
-          this.setState({
-            loadExpertsForModif: false,
-            experts: aeList
-          });
-
-        },
-        (error) => {
+        let aeList = this.state.experts.slice();
+        for (let ae of response.data)
+        {
+          aeList.push(ae);
         }
+
+        this.setState({
+          loadExpertsForModif: false,
+          experts: aeList
+        });
+
+      },
+      (error) => {
+      }
     );
   }
 
@@ -575,36 +644,36 @@ export default class AffectExpertComponent extends Component {
     });
 
     PedagogicalCoordinatorService.cancelAffectExpertToStudent(this.state.expert.identifiant, this.state.selectedStudentId, currentPedagogicalCoordinator.id, this.state.justifCancelAffectation).then(
-        (response) => {
-          let result = response.data;
-          // console.log('---------------- RES: ', response.data)
-          let affected = "PAS ENCORE";
-          let id = this.state.selectedStudentId;
-          //let nbrExpertises = Number(nbrEncs+1);
+      (response) => {
+        let result = response.data;
+        // console.log('---------------- RES: ', response.data)
+        let affected = "PAS ENCORE";
+        let id = this.state.selectedStudentId;
+        //let nbrExpertises = Number(nbrEncs+1);
 
-          if(result === "NO-AEEXP")
-          {
-            this.setState({noteNotCompleteSend: "les E-Mails Expert et Encadrant Académique sont inexistant(s) ou avec format incorrecte."});
-          }
-          if(result === "NO-AE")
-          {
-            this.setState({noteNotCompleteSend: "E-Mail Encadrant Académique est inexistant ou avec format incorrecte."});
-          }
-          if(result === "NO-EXP")
-          {
-            this.setState({noteNotCompleteSend: "E-Mail Expert est inexistant ou avec format incorrecte."});
-          }
-
-          this.setState({
-            openPopupJustifyCancelAffectation: false,
-            openPopupSuccessCancelAffectAE: true,
-            loadCancelAffectation: false,
-            studentsByClass: this.state.studentsByClass.map(el => (el.id === id ? {...el, affected } : el))
-            //experts: this.state.experts.map(el => (el.id === id ? {...el, nbrExpertises } : el))
-          });
-        },
-        (error) => {
+        if(result === "NO-AEEXP")
+        {
+          this.setState({noteNotCompleteSend: "les E-Mails Expert et Encadrant Académique sont inexistant(s) ou avec format incorrecte."});
         }
+        if(result === "NO-AE")
+        {
+          this.setState({noteNotCompleteSend: "E-Mail Encadrant Académique est inexistant ou avec format incorrecte."});
+        }
+        if(result === "NO-EXP")
+        {
+          this.setState({noteNotCompleteSend: "E-Mail Expert est inexistant ou avec format incorrecte."});
+        }
+
+        this.setState({
+          openPopupJustifyCancelAffectation: false,
+          openPopupSuccessCancelAffectAE: true,
+          loadCancelAffectation: false,
+          studentsByClass: this.state.studentsByClass.map(el => (el.id === id ? {...el, affected } : el))
+          //experts: this.state.experts.map(el => (el.id === id ? {...el, nbrExpertises } : el))
+        });
+      },
+      (error) => {
+      }
     );
   }
 
@@ -623,9 +692,73 @@ export default class AffectExpertComponent extends Component {
       openPopupVerifAffectEXP: true,
       openPopupAffectAE: false
     });
-
   }
 
+
+  loadClassesByPCEAndYear = (selectedYearObject) => {
+    console.log('------------------dd------> ESSID1702 - 0');
+    this.setState({
+      loadList: true,
+      selectedYear: selectedYearObject.label,
+      studentsByClass: [],
+      checked: null
+    });
+
+    AuthService.listClassesByOptionAndByYear(currentPedagogicalCoordinator.id, selectedYearObject.label).then(
+      (response) => {
+        console.log('------------------------> ESSID1702 - 1: ' + new Date() + " - " + this.state.loadList);
+        // console.log('--------------opt----------> TREATMENT 2: ' +currentTeacher.codeOptions);
+        this.setState({
+          myClasses: []
+        });
+        let stuList = this.state.myClasses.slice();
+        for (let cls of response.data)
+        {
+          console.log('------------------dd------> ESSID1702 - 2: ', cls);
+          stuList.push({value: cls, label: cls, color: "#00B8D9"});
+        }
+
+        this.setState({
+          loadList: false,
+          myClasses: stuList
+        });
+
+      },
+      (error) => {
+      }
+    );
+
+
+    /*
+
+
+    PCService.studentsTrainedByPCEAndYear(currentPedagogicalCoordinator.id, selectedYearObject.label).then(
+        (response) => {
+          // console.log('------------------------> TREATMENT 2: ' + new Date() + " - " + this.state.loadList);
+          // console.log('--------------opt----------> TREATMENT 2: ' +currentTeacher.codeOptions);
+          this.setState({
+            listOfStudentsTrainedByPE: []
+          });
+          let stuList = this.state.listOfStudentsTrainedByPE.slice();
+          for (let stu of response.data)
+          {
+            // console.log('------------------dd------> TREATMENT 2.1 : ', stu);
+            const studentObj = stu;
+            stuList.push(stu);
+          }
+
+          this.setState({
+            loadList: false,
+            listOfStudentsTrainedByPE: stuList
+          });
+          // console.log('------------------------> TREATMENT 3: ' + new Date() + " - " + this.state.loadList);
+
+        },
+        (error) => {
+        }
+    );
+     */
+  }
 
   render() {
 
@@ -660,10 +793,26 @@ export default class AffectExpertComponent extends Component {
       openPopupCancelAffectAE,
       openPopupSuccessCancelAffectAE,
       allLabelCEP,
-      openPopupVerifAffectEXP
+      openPopupVerifAffectEXP,
+      allSessionsLabel
     } = this.state;
 
     return (
+      <>
+        <CRow>
+          <CCol md="4"/>
+          <CCol md="4">
+            <p className="greyMarkForSelectComp">Merci de choisir une Année pour consulter la résultante</p>
+            <Select  placeholder="Please Select an Academic Year"
+                     defaultValue={{value: '2021', label: '2021', color: "#00B8D9"}}
+                     value={allSessionsLabel.value}
+                     components={animatedComponents}
+                     options={allSessionsLabel}
+                     onChange={this.loadClassesByPCEAndYear}/>
+          </CCol>
+          <CCol md="4"/>
+        </CRow>
+        <br/>
         <CCard accentColor="danger">
           <CCardBody>
             {
@@ -689,16 +838,16 @@ export default class AffectExpertComponent extends Component {
                       <br/><br/>
                       {
                         myClasses.map(
-                            (optionCLS, iCLS) => {
-                              return (
-                                  <CFormGroup id="grRDV1" variant="custom-radio" inline>
-                                    <CInputRadio custom id={iCLS}
-                                                 checked={checked === iCLS ? true : false}
-                                                 onChange={this.onChangeClass.bind(this, iCLS, optionCLS.label)}/>
-                                    <CLabel variant="custom-checkbox" htmlFor={iCLS}>{optionCLS.label}</CLabel>
-                                  </CFormGroup>
-                              );
-                            }
+                          (optionCLS, iCLS) => {
+                            return (
+                              <CFormGroup id="grRDV1" variant="custom-radio" inline>
+                                <CInputRadio custom id={iCLS}
+                                             checked={checked === iCLS ? true : false}
+                                             onChange={this.onChangeClass.bind(this, iCLS, optionCLS.label)}/>
+                                <CLabel variant="custom-checkbox" htmlFor={iCLS}>{optionCLS.label}</CLabel>
+                              </CFormGroup>
+                            );
+                          }
                         )}
                       <br/><br/>
                     </center>
@@ -723,92 +872,92 @@ export default class AffectExpertComponent extends Component {
                 </CRow>
                 {
                   loadStudentsByClass === true ?
-                      <center>
-                        <br/><br/><br/>
-                        <span className="waitIcon"/>
-                        <br/><br/><br/><br/><br/>
-                      </center>
-                      :
-                      <>
-                        {
-                          selectedClass && studentsByClass.length !== 0 &&
-                          <>
-                            <hr/>
-                            <span className="redMark">Liste des Étudiants de la Classe</span>
+                    <center>
+                      <br/><br/><br/>
+                      <span className="waitIcon"/>
+                      <br/><br/><br/><br/><br/>
+                    </center>
+                    :
+                    <>
+                      {
+                        selectedClass && studentsByClass.length !== 0 &&
+                        <>
+                          <hr/>
+                          <span className="redMark">Liste des Étudiants de la Classe</span>
+                          <br/>
+                          <span className="greyMarkCourrier">{selectedClass}
                             <br/>
-                            <span className="greyMarkCourrier">{selectedClass}
-                              <br/>
-                              {studentsByClass.length}
+                            {studentsByClass.length}
                               </span>&nbsp;
-                            <span className="greyMarkCourrierSmalLabel">étudiants</span>
+                          <span className="greyMarkCourrierSmalLabel">étudiants</span>
 
-                            <br/><br/><br/>
+                          <br/><br/><br/>
 
-                            <CDataTable items={studentsByClass}
-                                        fields={studentsByClassFields}
-                                        tableFilter
-                                        columnFilter
-                                        itemsPerPageSelect
-                                        hover
-                                        sorter
-                                        striped
-                                        bordered
-                                        size="sm"
-                                        itemsPerPage={10}
-                                        pagination
-                                        noItemsContent='azerty'
-                                        scopedSlots={{
-                                          affected: (item) => (
-                                              <td>
-                                                <CBadge color={getBadgeAffectAE(item.affected)}>{item.affected}</CBadge>
-                                              </td>
-                                          ),
-                                          action: (item) => (
-                                              <td>
-                                                <center>
-                                                  {
-                                                    item.affected === "AFFECTEE" ?
+                          <CDataTable items={studentsByClass}
+                                      fields={studentsByClassFields}
+                                      tableFilter
+                                      columnFilter
+                                      itemsPerPageSelect
+                                      hover
+                                      sorter
+                                      striped
+                                      bordered
+                                      size="sm"
+                                      itemsPerPage={10}
+                                      pagination
+                                      noItemsContent='azerty'
+                                      scopedSlots={{
+                                        affected: (item) => (
+                                          <td>
+                                            <CBadge color={getBadgeAffectAE(item.affected)}>{item.affected}</CBadge>
+                                          </td>
+                                        ),
+                                        action: (item) => (
+                                          <td>
+                                            <center>
+                                              {
+                                                item.affected === "AFFECTEE" ?
+                                                  <CButton shape="pill"
+                                                           color="success"
+                                                           size="sm"
+                                                           aria-expanded="true"
+                                                           onClick={() => this.handleConsultDetailsExpert(item.id, item.fullName)}>
+                                                    <CTooltip content="Consulter Coordonnées Expert"
+                                                              placement="top">
+                                                      <CIcon content={freeSet.cilClipboard}/>
+                                                    </CTooltip>
+                                                  </CButton>
+                                                  :
+                                                  <>
+                                                    {
+                                                      (
+                                                        (selectedStudentId !== item.id && loadExperts === true)
+                                                        ||
+                                                        loadExperts === false
+                                                      ) &&
+                                                      <>
                                                         <CButton shape="pill"
-                                                                 color="success"
+                                                                 color="dark"
                                                                  size="sm"
                                                                  aria-expanded="true"
-                                                                 onClick={() => this.handleConsultDetailsExpert(item.id, item.fullName)}>
-                                                          <CTooltip content="Consulter Coordonnées Expert"
-                                                                    placement="top">
-                                                            <CIcon content={freeSet.cilClipboard}/>
+                                                                 onClick={() => this.handleGotListCEPs(item.id, item.fullName)}>
+                                                          <CTooltip content="Affecter Expert" placement="top">
+                                                            <CIcon content={freeSet.cilUser}/>
                                                           </CTooltip>
                                                         </CButton>
-                                                        :
-                                                        <>
-                                                          {
-                                                            (
-                                                                (selectedStudentId !== item.id && loadExperts === true)
-                                                                ||
-                                                                loadExperts === false
-                                                            ) &&
-                                                            <>
-                                                              <CButton shape="pill"
-                                                                       color="dark"
-                                                                       size="sm"
-                                                                       aria-expanded="true"
-                                                                       onClick={() => this.handleGotListCEPs(item.id, item.fullName)}>
-                                                                <CTooltip content="Affecter Expert" placement="top">
-                                                                  <CIcon content={freeSet.cilUser}/>
-                                                                </CTooltip>
-                                                              </CButton>
-                                                            </>
+                                                      </>
 
-                                                          }
-                                                        </>
-                                                  }
-                                                </center>
-                                              </td>
-                                          ),
-                                        }}
-                            />
-                          </>
-                        }
-                      </>
+                                                    }
+                                                  </>
+                                              }
+                                            </center>
+                                          </td>
+                                        ),
+                                      }}
+                          />
+                        </>
+                      }
+                    </>
                 }
                 <br/><br/>
               </>
@@ -872,19 +1021,19 @@ export default class AffectExpertComponent extends Component {
                       </CCol>
                     </CRow>
                     <CRow>
-                       <CCol xs="5">
+                      <CCol xs="5">
                          <span className="myModalFieldCr">
                             Unité Pédagogique:
                          </span>
-                       </CCol>
-                       <CCol xs="7">
-                       {
-                         expert.up ?
-                         <>{expert.up}</>
-                         :
-                         <>--</>
-                       }
-                       </CCol>
+                      </CCol>
+                      <CCol xs="7">
+                        {
+                          expert.up ?
+                            <>{expert.up}</>
+                            :
+                            <>--</>
+                        }
+                      </CCol>
                     </CRow>
                     <CRow>
                       <CCol xs="5">
@@ -895,9 +1044,9 @@ export default class AffectExpertComponent extends Component {
                       <CCol xs="7">
                         {
                           expert.mail ?
-                          <>{expert.mail}</>
-                          :
-                          <>--</>
+                            <>{expert.mail}</>
+                            :
+                            <>--</>
                         }
                       </CCol>
                     </CRow>
@@ -910,9 +1059,9 @@ export default class AffectExpertComponent extends Component {
                       <CCol xs="7">
                         {
                           expert.téléphone ?
-                              <>{expert.téléphone}</>
-                              :
-                              <>--</>
+                            <>{expert.téléphone}</>
+                            :
+                            <>--</>
                         }
                       </CCol>
                     </CRow>
@@ -972,9 +1121,9 @@ export default class AffectExpertComponent extends Component {
                           <CCol xs="7">
                             {
                               academicEncadrant.up ?
-                                  <>{academicEncadrant.up}</>
-                                  :
-                                  <>--</>
+                                <>{academicEncadrant.up}</>
+                                :
+                                <>--</>
                             }
                           </CCol>
                         </CRow>
@@ -987,9 +1136,9 @@ export default class AffectExpertComponent extends Component {
                           <CCol xs="7">
                             {
                               academicEncadrant.mail ?
-                                  <>{academicEncadrant.mail}</>
-                                  :
-                                  <>--</>
+                                <>{academicEncadrant.mail}</>
+                                :
+                                <>--</>
                             }
                           </CCol>
                         </CRow>
@@ -1002,9 +1151,9 @@ export default class AffectExpertComponent extends Component {
                           <CCol xs="7">
                             {
                               academicEncadrant.téléphone ?
-                                  <>{academicEncadrant.téléphone}</>
-                                  :
-                                  <>--</>
+                                <>{academicEncadrant.téléphone}</>
+                                :
+                                <>--</>
                             }
                           </CCol>
                         </CRow>
@@ -1080,7 +1229,7 @@ export default class AffectExpertComponent extends Component {
                 </CCol>
                 <CCol md="1">
                   <CButton onClick={this.handleClosePopupAffectAE} size="sm" className="float-right">
-                      <CIcon content={freeSet.cilX}/>
+                    <CIcon content={freeSet.cilX}/>
                   </CButton>
                 </CCol>
               </CRow>
@@ -1088,103 +1237,103 @@ export default class AffectExpertComponent extends Component {
 
             </DialogTitle>
             <DialogContent style={{ overflowY: 'visible' }}>
-                {
-                  academicEncadrant.identifiant === null &&
-                    <CRow>
-                      <CCol md="3"/>
-                      <CCol md="6">
-                        <CAlert color="info">
-                          <center>
-                            <span className="warningBlueIconOnly"/>
-                            &nbsp;&nbsp;
-                            <span className="blueAlertlignote"><strong>Encadrant Académique&nbsp;</strong> pas encore affecté(e) .</span>
-                            <br/>
-                          </center>
-                        </CAlert>
-                      </CCol>
-                      <CCol md="3"/>
-                    </CRow>
-                }
+              {
+                academicEncadrant.identifiant === null &&
+                <CRow>
+                  <CCol md="3"/>
+                  <CCol md="6">
+                    <CAlert color="info">
+                      <center>
+                        <span className="warningBlueIconOnly"/>
+                        &nbsp;&nbsp;
+                        <span className="blueAlertlignote"><strong>Encadrant Académique&nbsp;</strong> pas encore affecté(e) .</span>
+                        <br/>
+                      </center>
+                    </CAlert>
+                  </CCol>
+                  <CCol md="3"/>
+                </CRow>
+              }
 
-                {
-                  academicEncadrant.identifiant !== null &&
-                  <CAlert color="info">
-                    <strong>Encadrant Académique</strong>
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    <span className="clignoteBlue">{academicEncadrant.nom}</span>
-                    <hr/>
-                    <CRow>
-                      <CCol md="1">
-                        <CTooltip content={tooltipNbrEncadrements} placement="bottom">
-                          <Badge badgeContent={academicEncadrant.nbrEncadrements} showZero
-                                 color="secondary" style={{marginTop: "12px"}}>
-                            <PersonIcon/>
-                          </Badge>
-                        </CTooltip>
-                      </CCol>
-                      <CCol md="5" className="colPadding">
-                        <CRow>
-                          <CCol xs="5">
+              {
+                academicEncadrant.identifiant !== null &&
+                <CAlert color="info">
+                  <strong>Encadrant Académique</strong>
+                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <span className="clignoteBlue">{academicEncadrant.nom}</span>
+                  <hr/>
+                  <CRow>
+                    <CCol md="1">
+                      <CTooltip content={tooltipNbrEncadrements} placement="bottom">
+                        <Badge badgeContent={academicEncadrant.nbrEncadrements} showZero
+                               color="secondary" style={{marginTop: "12px"}}>
+                          <PersonIcon/>
+                        </Badge>
+                      </CTooltip>
+                    </CCol>
+                    <CCol md="5" className="colPadding">
+                      <CRow>
+                        <CCol xs="5">
                             <span className="myModalFieldCr">
                               Identifiant:
                             </span>
-                          </CCol>
-                          <CCol xs="7">
-                            {academicEncadrant.identifiant}
-                          </CCol>
-                        </CRow>
-                        <CRow>
+                        </CCol>
+                        <CCol xs="7">
+                          {academicEncadrant.identifiant}
+                        </CCol>
+                      </CRow>
+                      <CRow>
 
-                          <CCol xs="5">
+                        <CCol xs="5">
                             <span className="myModalFieldCr">
                               Unité Pédagogique:
                             </span>
-                          </CCol>
-                          <CCol xs="7">
-                            {
-                              academicEncadrant.up ?
-                                  <>{academicEncadrant.up}</>
-                                  :
-                                  <>--</>
-                            }
-                          </CCol>
-                        </CRow>
-                      </CCol>
-                      <CCol md="6" className="colPadding">
-                        <CRow>
-                          <CCol xs="5">
+                        </CCol>
+                        <CCol xs="7">
+                          {
+                            academicEncadrant.up ?
+                              <>{academicEncadrant.up}</>
+                              :
+                              <>--</>
+                          }
+                        </CCol>
+                      </CRow>
+                    </CCol>
+                    <CCol md="6" className="colPadding">
+                      <CRow>
+                        <CCol xs="5">
                             <span className="myModalFieldCr">
                               E-Mail:
                             </span>
-                          </CCol>
-                          <CCol xs="7">
-                            {
-                              academicEncadrant.mail ?
-                                  <>{academicEncadrant.mail}</>
-                                  :
-                                  <>--</>
-                            }
-                          </CCol>
-                        </CRow>
-                        <CRow>
-                          <CCol xs="5">
+                        </CCol>
+                        <CCol xs="7">
+                          {
+                            academicEncadrant.mail ?
+                              <>{academicEncadrant.mail}</>
+                              :
+                              <>--</>
+                          }
+                        </CCol>
+                      </CRow>
+                      <CRow>
+                        <CCol xs="5">
                             <span className="myModalFieldCr">
                               Numéro Téléphone:
                             </span>
-                          </CCol>
-                          <CCol xs="7">
-                            {
-                              academicEncadrant.téléphone ?
-                                  <>{academicEncadrant.téléphone}</>
-                                  :
-                                  <>--</>
-                            }
-                          </CCol>
-                        </CRow>
-                      </CCol>
-                    </CRow>
-                  </CAlert>
-                }
+                        </CCol>
+                        <CCol xs="7">
+                          {
+                            academicEncadrant.téléphone ?
+                              <>{academicEncadrant.téléphone}</>
+                              :
+                              <>--</>
+                          }
+                        </CCol>
+                      </CRow>
+                    </CCol>
+                  </CRow>
+                </CAlert>
+              }
 
               <br/>
               <CRow>
@@ -1203,56 +1352,56 @@ export default class AffectExpertComponent extends Component {
 
               {
                 loadExperts === true ?
-                    <center>
-                      <br/><br/><br/>
-                      <span className="waitIcon"/>
-                      <br/><br/><br/><br/><br/>
-                    </center>
-                    :
-                    <>
-                      {
-                        experts.length !== 0 &&
-                        <CDataTable items={experts}
-                                    fields={expertsFields}
-                                    tableFilter
-                                    columnFilter
-                                    itemsPerPageSelect
-                                    hover
-                                    sorter
-                                    striped
-                                    bordered
-                                    size="sm"
-                                    itemsPerPage={5}
-                                    pagination
-                                    noItemsContent='azerty'
-                                    scopedSlots={{
-                                      action: (item) => (
-                                          <td>
-                                            <center>
-                                              {
-                                                (
-                                                    (loadVerifAffectation === false)
-                                                    ||
-                                                    (item.identifiant !== selectedExpertId && loadVerifAffectation === true)
-                                                ) &&
-                                                <CButton shape="pill"
-                                                         color="primary"
-                                                         size="sm"
-                                                         aria-expanded="true"
-                                                         onClick={() => this.handleAffectExpert(item.identifiant, item.nom)}>
-                                                  <CTooltip content="Confirmer l'affectation"
-                                                            placement="top">
-                                                    <CIcon content={freeSet.cilBadge}/>
-                                                  </CTooltip>
-                                                </CButton>
-                                              }
-                                            </center>
-                                          </td>
-                                      ),
-                                    }}
-                        />
-                      }
-                    </>
+                  <center>
+                    <br/><br/><br/>
+                    <span className="waitIcon"/>
+                    <br/><br/><br/><br/><br/>
+                  </center>
+                  :
+                  <>
+                    {
+                      experts.length !== 0 &&
+                      <CDataTable items={experts}
+                                  fields={expertsFields}
+                                  tableFilter
+                                  columnFilter
+                                  itemsPerPageSelect
+                                  hover
+                                  sorter
+                                  striped
+                                  bordered
+                                  size="sm"
+                                  itemsPerPage={5}
+                                  pagination
+                                  noItemsContent='azerty'
+                                  scopedSlots={{
+                                    action: (item) => (
+                                      <td>
+                                        <center>
+                                          {
+                                            (
+                                              (loadVerifAffectation === false)
+                                              ||
+                                              (item.identifiant !== selectedExpertId && loadVerifAffectation === true)
+                                            ) &&
+                                            <CButton shape="pill"
+                                                     color="primary"
+                                                     size="sm"
+                                                     aria-expanded="true"
+                                                     onClick={() => this.handleAffectExpert(item.identifiant, item.nom)}>
+                                              <CTooltip content="Confirmer l'affectation"
+                                                        placement="top">
+                                                <CIcon content={freeSet.cilBadge}/>
+                                              </CTooltip>
+                                            </CButton>
+                                          }
+                                        </center>
+                                      </td>
+                                    ),
+                                  }}
+                      />
+                    }
+                  </>
               }
             </DialogContent>
             <DialogActions>
@@ -1286,11 +1435,11 @@ export default class AffectExpertComponent extends Component {
 
               {
                 loadAffectation === true ?
-                    <Spinner animation="grow" variant="primary"/>
-                    :
-                    <Button onClick={this.handleConfirmAffectEXPtoET} color="primary">
-                      Oui
-                    </Button>
+                  <Spinner animation="grow" variant="primary"/>
+                  :
+                  <Button onClick={this.handleConfirmAffectEXPtoET} color="primary">
+                    Oui
+                  </Button>
               }
               &nbsp;&nbsp;
               <Button onClick={this.handleClosePopupOKAffectExpert} color="primary">
@@ -1363,14 +1512,14 @@ export default class AffectExpertComponent extends Component {
                 Merci de préciser le <span className="redMarkAlert">Motif Annulation</span> :
                 <br/><br/>
                 <textarea
-                    className="form-control"
-                    style={{ height: 75 }}
-                    placeholder="Présenter le Motif d'Annulation de l'affectation ..."
-                    value={justifCancelAffectation}
-                    onChange={(e) =>
-                        this.onChangeJustifCancelAffectation(e)
-                    }
-                    maxLength="200"
+                  className="form-control"
+                  style={{ height: 75 }}
+                  placeholder="Présenter le Motif d'Annulation de l'affectation ..."
+                  value={justifCancelAffectation}
+                  onChange={(e) =>
+                    this.onChangeJustifCancelAffectation(e)
+                  }
+                  maxLength="200"
                 />
                 <br/>
               </center>
@@ -1425,6 +1574,7 @@ export default class AffectExpertComponent extends Component {
             </DialogActions>
           </Dialog>
         </CCard>
+      </>
     );
   }
 }

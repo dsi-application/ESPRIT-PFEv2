@@ -21,6 +21,11 @@ class PedagogicalCoordinatorService
     return axios.get(API_URL + "/downloadEncadrementStatusByOptionAndYear/" + mailPC + "/" + year, {responseType: 'blob'});
   }
 
+  downloadExpertiseStatusByOptionAndYear(mailPC, selectedYear)
+  {
+    return axios.get(API_URL + "/downloadExpertiseStatusByOptionAndYear/" + mailPC + "/" + selectedYear, {responseType: 'blob'});
+  }
+
   downloadExpertiseStatusByOption(mailPC)
   {
     return axios.get(API_URL + "/downloadExpertiseStatusByOption/" + mailPC, {responseType: 'blob'});
@@ -66,6 +71,11 @@ class PedagogicalCoordinatorService
     return axios.get(API_URL + "/findAllExperts/" + encodeURIComponent(labelCEP));
   }
 
+  gotListExpertsByCEPAndYear(labelCEP, selectedYear)
+  {
+    return axios.get(API_URL + "/findAllExpertsByCEPAndYear/" + encodeURIComponent(labelCEP) + "/" + selectedYear);
+  }
+
   gotListSessions(labelSession)
   {
     return axios.get(API_URL + "/findAllSessions/" + encodeURIComponent(labelSession));
@@ -96,7 +106,12 @@ class PedagogicalCoordinatorService
     return axios.get(API_URL + "/findAllTeachersForPresidenceAndMembreByYear/" + year);
   }
 
-  
+  gotListLibCEPByYearPARAM(year)
+  {
+    return axios.get(API_URL + "/listLibCEPByYearPARAM/" + year);
+  }
+
+
 }
 
 export default new PedagogicalCoordinatorService();

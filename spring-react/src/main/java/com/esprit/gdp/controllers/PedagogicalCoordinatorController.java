@@ -536,7 +536,7 @@ public class PedagogicalCoordinatorController {
 		String PSName = "État Expertise - " + optDept + ".xls";
 		String PSFile = PSPath + PSName;
 		
-		new EtatExpertiseByOption_Excel(ess, optDept, PSFile);
+		new EtatExpertiseByOption_Excel(ess, optDept, PSFile, "");
 		
 		File file = new File(PSFile);
 
@@ -559,6 +559,195 @@ public class PedagogicalCoordinatorController {
                 .body(resource);
 	
 	
+	}
+
+	@GetMapping("/downloadExpertiseStatusByOptionAndYear/{pcMail}/{selectedYear}")
+	public ResponseEntity downloadExpertiseStatusByOptionAndYear(@PathVariable String pcMail, @PathVariable String selectedYear) throws IOException
+	{
+
+		String optDept = "";
+
+		if(pcMail.contains("CPS_"))
+		{
+			optDept = "Option " + pcMail.substring(4, pcMail.lastIndexOf("@esprit.tn"));
+		}
+
+		if(pcMail.contains("CD_INF"))
+		{
+			optDept = "Département Informatique";
+		}
+
+		if(pcMail.contains("CD_TEL"))
+		{
+			optDept = "Département Télécommunications";
+		}
+
+		if(pcMail.contains("CD_EM"))
+		{
+			optDept = "Département Électromécanique";
+		}
+
+		if(pcMail.contains("CD_GC"))
+		{
+			optDept = "Département Génie Civil";
+		}
+
+		if(pcMail.contains("CD-S-Tic"))
+		{
+			optDept = "Département Informatique & Télécommunications";
+		}
+
+		if(pcMail.contains("CD-S-GC-EM"))
+		{
+			optDept = "Département Électromécanique & Génie Civil";
+		}
+
+		if(pcMail.contains("CD-Alt"))
+		{
+			optDept = "Département Alternances";
+		}
+
+		List<ExpertiseStatusExcelDto> ess = new ArrayList<ExpertiseStatusExcelDto>();
+
+		if(pcMail.equalsIgnoreCase("CD-Alt@esprit.tn") || pcMail.equalsIgnoreCase("CPS-Alt@esprit.tn"))
+		{
+			ess.addAll(optionStudentALTRepository.findExpertiseStatusCJALTAndYear(selectedYear));
+			for(ExpertiseStatusExcelDto es : ess)
+			{
+				es.setExpertMail(teacherRepository.findTeacherMailById(es.getExpertFullName()));
+				es.setExpertFullName(teacherRepository.findTeacherFullNameById(es.getExpertFullName()));
+
+				String StuPhone = "--";
+				if(es.getStudentPhone() != null)
+				{
+					StuPhone = es.getStudentPhone().trim();
+				}
+				es.setStudentPhone(StuPhone);
+
+				String markRest1 = "--";
+				if(noteRestitutionRepository.findNoteRestitutionByStu(es.getStudentId(), selectedYear) != null)
+				{
+					markRest1 = noteRestitutionRepository.findNoteRestitutionByStu(es.getStudentId(), selectedYear).toString();
+					// System.out.println("---r---2-----> markRest1: " + es.getStudentId() + " : " + es.getStudentFullName() + " --> " + markRest1);
+				}
+				es.setRest1MarkByExpert(markRest1);
+
+				if(es.getStudentClasse().contains("4ALINFO"))
+				{
+					es.setStudentOption(optionStudentALTRepository.findOptionByStudentALTAndYear(es.getStudentId(), selectedYear));
+					System.out.println("--> 2.1");
+				}
+				else
+				{
+					es.setStudentOption(utilServices.findOptionByClass(es.getStudentClasse(), optionRepository.listOptionsByYear(selectedYear)).replace("_01", ""));
+					System.out.println("--> 2.2");
+				}
+
+			}
+		}
+		else
+		{
+			String idPC = pedagogicalCoordinatorRepository.gotIdPedagogicalCoordinator(pcMail).get(0);
+			List<String> options = pedagogicalCoordinatorRepository.listLowerOptionsByPedagogicalCoordinator(idPC);
+
+			for(String opt : options)
+			{
+
+				System.out.println("-------------------------------> OPT: " + opt);
+
+				ess.addAll(studentRepository.findExpertisetatusCJByYearAndOption(selectedYear, opt));
+				ess.addAll(studentRepository.findExpertiseStatusCSByYearAndOption(selectedYear, opt));
+
+//				if(opt.equalsIgnoreCase("alinfo"))
+//				{
+//					ess.addAll(studentRepository.findEncadrementStatusCJALTByOption());
+//				}
+
+				if(
+						opt.equalsIgnoreCase("arctic") || opt.equalsIgnoreCase("ds") ||
+								opt.equalsIgnoreCase("sae") ||opt.equalsIgnoreCase("twin")
+				)
+				{
+					System.out.println("------------> OPT *: "  + optionStudentALTRepository.findExpertiseStatusCJALTByYearAndOption(selectedYear, opt.toLowerCase()).size());
+					//ess.addAll(studentRepository.findEncadrementStatusCJALTByOption());
+					ess.addAll(optionStudentALTRepository.findExpertiseStatusCJALTByYearAndOption(selectedYear, opt.toLowerCase()));
+				}
+			}
+
+			System.out.println("---> ***** Download ExcelFile Expertise " + optDept);
+
+			for(ExpertiseStatusExcelDto es : ess)
+			{
+				es.setExpertMail(teacherRepository.findTeacherMailById(es.getExpertFullName()));
+				es.setExpertFullName(teacherRepository.findTeacherFullNameById(es.getExpertFullName()));
+
+				// String hi = noteRestitutionRepository.findNoteRestitutionByStu("171JMT1971", "1988").toString();
+
+				String StuPhone = "--";
+				if(es.getStudentPhone() != null)
+				{
+					StuPhone = es.getStudentPhone().trim();
+				}
+				es.setStudentPhone(StuPhone);
+
+				// System.out.println("---r---2-----> StuPhone: " + es.getStudentPhone().trim() + "." + StuPhone + ".");
+
+				String markRest1 = "--";
+				if(noteRestitutionRepository.findNoteRestitutionByStu(es.getStudentId(), selectedYear) != null)
+				{
+					markRest1 = noteRestitutionRepository.findNoteRestitutionByStu(es.getStudentId(), selectedYear).toString();
+					// System.out.println("---r---2-----> markRest1: " + es.getStudentId() + " : " + es.getStudentFullName() + " --> " + markRest1);
+				}
+				es.setRest1MarkByExpert(markRest1);
+
+
+				if(es.getStudentClasse().contains("4ALINFO"))
+				{
+					es.setStudentOption(optionStudentALTRepository.findOptionByStudentALTAndYear(es.getStudentId(), selectedYear));
+					System.out.println("--> 2.1");
+				}
+				else
+				{
+					es.setStudentOption(utilServices.findOptionByClass(es.getStudentClasse(), optionRepository.listOptionsByYear(selectedYear)).replace("_01", ""));
+					System.out.println("--> 2.2");
+				}
+
+
+			}
+
+		}
+
+		ess.sort(Comparator.comparing(ExpertiseStatusExcelDto::getStudentClasse).thenComparing(ExpertiseStatusExcelDto::getStudentFullName));
+
+
+		/************************************************************************************/
+
+		String PSPath = "C:\\ESP-DOCS\\";
+		String PSName = "État Expertise - " + optDept + ".xls";
+		String PSFile = PSPath + PSName;
+
+		new EtatExpertiseByOption_Excel(ess, optDept, selectedYear, PSFile);
+
+		File file = new File(PSFile);
+
+		HttpHeaders header = new HttpHeaders();
+		header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + PSName);
+		header.add("Cache-Control", "no-cache, no-store, must-revalidate");
+		header.add("Pragma", "no-cache");
+		header.add("Expires", "0");
+
+		// To Got Name Of File With Synchro
+		header.add(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
+
+		Path path = Paths.get(file.getAbsolutePath());
+		ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+
+		return ResponseEntity.ok()
+				.headers(header)
+				.contentLength(file.length())
+				.contentType(MediaType.parseMediaType("application/octet-stream"))
+				.body(resource);
+
 	}
 
 	@GetMapping("/findAllAcademicEncadrants")
@@ -675,6 +864,24 @@ public class PedagogicalCoordinatorController {
 		return tad;
 	}
 
+	@GetMapping("/findPedagogicalEncadrantByStudentAndYearOptimized/{idEt}/{selectedYear}")
+	public TeacherAffectationAcademicEncadrantDto findPedagogicalEncadrantByStudentAndYearOptimized(@PathVariable String idEt, @PathVariable String selectedYear)
+	{
+		System.out.println("--PC---------18.08-------> pcMail: " + idEt);
+		String idAE = utilServices.findIdEncadrantPedagogiqueByStudent(idEt);
+
+		// System.out.println("--PC------18.08----------> idAE: " + idAE);
+
+		TeacherAffectationAcademicEncadrantDto tad = new TeacherAffectationAcademicEncadrantDto();
+		if(teacherRepository.getTeacherAffectationAcademicEncadrantDetails(idAE) != null)
+		{
+			tad = teacherRepository.getTeacherAffectationAcademicEncadrantDetails(idAE);
+			tad.setNbrEncadrements(utilServices.findNbrStudentsTrainedByPEAndYear(idAE, selectedYear));
+		}
+
+		return tad;
+	}
+
 	@GetMapping("/findAllSessions")
 	public List<String> findAllSessions() {
 		List<String> activatedYears = settingsRepository.findActivatedYears();
@@ -705,6 +912,31 @@ public class PedagogicalCoordinatorController {
 
 	}
 
+	@GetMapping("/findAllExpertsByCEPAndYear/{labelCEP}/{selectedYear}")
+	public List<ExpertDto> findAllExpertsByCEPAndYear(@PathVariable String labelCEP, @PathVariable String selectedYear)
+	{
+		System.out.println("-------------- ENCODED: " +  labelCEP);
+		String decodedLabelCEP = utilServices.decodeEncodedValue(labelCEP);
+		System.out.println("-------------- DECODED: " +  decodedLabelCEP);
+
+		System.out.println("-------------- START Treatment État Experts: " +  new Date());
+
+		// List<String> experts = teacherRepository.allExperts("1988");
+		List<ExpertDto> experts = teacherRepository.allExperts(selectedYear, decodedLabelCEP);
+
+		for(ExpertDto exp : experts)
+		{
+			exp.setNom(teacherRepository.findTeacherFullNameById(exp.getIdentifiant()));
+			exp.setNbrExpertises(utilServices.findNbrStudentsTrainedByEXPAndYear(exp.getIdentifiant(), selectedYear));
+		}
+
+		experts.sort(Comparator.comparing(ExpertDto::getNom));
+
+		System.out.println("---------nn----- End Treatment État Experts: " + new Date());
+		return experts;
+
+	}
+
 	@GetMapping("/findExpertByStudent/{idEt}")
 	public TeacherAffectationExpertDto findExpertByStudent(@PathVariable String idEt) {
 		TeacherAffectationExpertDto tad = null; // new TeacherAffectationExpertDto();
@@ -715,6 +947,23 @@ public class PedagogicalCoordinatorController {
 		if (teacherRepository.getTeacherAffectationExpertDetails(idExp) != null) {
 			tad = teacherRepository.getTeacherAffectationExpertDetails(idExp);
 			tad.setNbrExpertises(utilServices.findNbrStudentsTrainedByEXP(idExp));
+		}
+
+		return tad;
+	}
+
+	@GetMapping("/findExpertByStudentAndyear/{idEt}/{selectedYear}")
+	public TeacherAffectationExpertDto findExpertByStudent(@PathVariable String idEt, @PathVariable String selectedYear)
+	{
+		TeacherAffectationExpertDto tad = null; //new TeacherAffectationExpertDto();
+		System.out.println("--EXP----------------> pcMail: " + idEt);
+		String idExp = utilServices.findIdExpertByStudent(idEt);
+
+		System.out.println("--EXP----------------> idAE: " + idExp);
+		if(teacherRepository.getTeacherAffectationExpertDetails(idExp) != null)
+		{
+			tad = teacherRepository.getTeacherAffectationExpertDetails(idExp);
+			tad.setNbrExpertises(utilServices.findNbrStudentsTrainedByEXPAndYear(idExp, selectedYear));
 		}
 
 		return tad;
@@ -1109,6 +1358,13 @@ public class PedagogicalCoordinatorController {
 	@GetMapping("/listLibCEPByYear")
 	public List<String> listLibCEPByYear() throws IOException {
 		List<String> libCEPs = strNomeCEPRepository.listLibCEPByYear("2021");
+		return libCEPs;
+	}
+
+	@GetMapping("/listLibCEPByYearPARAM/{year}")
+	public List<String> listLibCEPByYearPARAM(@PathVariable String year) throws IOException
+	{
+		List<String> libCEPs = strNomeCEPRepository.listLibCEPByYear(year);
 		return libCEPs;
 	}
 
