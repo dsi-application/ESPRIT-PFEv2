@@ -21,6 +21,44 @@
 		<java.version>1.8</java.version>
 	</properties>
 
+	<profiles>
+		<profile>
+			<id>target-dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<env.profile>dev</env.profile>
+			</properties>
+		</profile>
+		<profile>
+			<id>target-qa</id>
+			<properties>
+				<env.profile>qa</env.profile>
+			</properties>
+			<distributionManagement>
+				<repository>
+					<id>nexus-mvn-qa</id>
+					<name>Nexus Maven Releases</name>
+					<url>http://192.168.3.12:8061/repository/maven-releases/</url>
+				</repository>
+			</distributionManagement>
+		</profile>
+		<profile>
+			<id>target-prod</id>
+			<properties>
+				<env.profile>prod</env.profile>
+			</properties>
+			<distributionManagement>
+				<repository>
+					<id>nexus-mvn-prod</id>
+					<name>Nexus Maven Releases</name>
+					<url>http://192.168.3.12:9061/repository/maven-releases/</url>
+				</repository>
+			</distributionManagement>
+		</profile>
+	</profiles>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.devk.spring.react.fe</groupId>

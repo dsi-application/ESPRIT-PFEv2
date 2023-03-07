@@ -10,6 +10,63 @@
 	<modules>
         <module>spring-react-fe</module>
         <module>spring-react</module>
-  </modules>
+    </modules>
+
+    <profiles>
+        <profile>
+            <id>target-dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <env.profile>dev</env.profile>
+            </properties>
+        </profile>
+        <profile>
+            <id>target-qa</id>
+            <properties>
+                <env.profile>qa</env.profile>
+            </properties>
+            <distributionManagement>
+                <repository>
+                    <id>nexus-mvn-qa</id>
+                    <name>Nexus Maven Releases</name>
+                    <url>http://192.168.3.12:8061/repository/maven-releases/</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+        <profile>
+            <id>target-prod</id>
+            <properties>
+                <env.profile>prod</env.profile>
+            </properties>
+            <distributionManagement>
+                <repository>
+                    <id>nexus-mvn-prod</id>
+                    <name>Nexus Maven Releases</name>
+                    <url>http://192.168.3.12:9061/repository/maven-releases/</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+    </profiles>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.8.2</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
 
 </project>
