@@ -46,7 +46,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 //@CrossOrigin(origins = "*", allowedHeaders = "*")
 //@CrossOrigin(origins = "https://pfe.esprit.tn")
 //@CrossOrigin(origins = "https://pfe.esprit.tn", allowedHeaders = "*")
-@CrossOrigin(origins = "https://pfe.esprit.tn")
+//@CrossOrigin(origins = "https://pfe.esprit.tn")
+@CrossOrigin(origins = "*")
 @RequestMapping(value = "/api/responsableStage")
 public class ResponsableStageController {
 

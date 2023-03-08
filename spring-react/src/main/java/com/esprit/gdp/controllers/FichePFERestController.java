@@ -66,7 +66,8 @@ import com.esprit.gdp.services.UtilServices;
 @RestController
 //@CrossOrigin(origins = "*", allowedHeaders = "*")
 //@CrossOrigin(origins = "https://pfe.esprit.tn")
-@CrossOrigin(origins = "https://pfe.esprit.tn")
+//@CrossOrigin(origins = "https://pfe.esprit.tn")
+@CrossOrigin(origins = "*")
 @RequestMapping(value = "/api/encadrement")
 public class FichePFERestController {
 

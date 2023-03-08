@@ -199,7 +199,8 @@ import com.google.common.collect.Sets;
 //@CrossOrigin(origins = "*", allowedHeaders = "*")
 //@CrossOrigin(origins = "https://pfe.esprit.tn")
 //@CrossOrigin(origins = "https://pfe.esprit.tn", allowedHeaders = "*")
-@CrossOrigin(origins = "https://pfe.esprit.tn")
+//@CrossOrigin(origins = "https://pfe.esprit.tn")
+@CrossOrigin(origins = "*")
 @RequestMapping(value = "/api/auth")
 public class MainController {
 

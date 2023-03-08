@@ -46,7 +46,8 @@ import com.esprit.gdp.services.UtilServices;
 //@CrossOrigin(origins = "*", allowedHeaders = "*")
 //@CrossOrigin(origins = "https://pfe.esprit.tn")
 //@CrossOrigin(origins = "https://pfe.esprit.tn", allowedHeaders = "*")
-@CrossOrigin(origins = "https://pfe.esprit.tn")
+//@CrossOrigin(origins = "https://pfe.esprit.tn")
+@CrossOrigin(origins = "*")
 @RequestMapping(value = "/api/respServStg")
 public class ResponsableServiceStageController {
 

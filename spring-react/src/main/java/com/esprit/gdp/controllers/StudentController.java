@@ -103,7 +103,8 @@ import com.esprit.gdp.services.UtilServices;
 //@CrossOrigin(origins = "https://pfe.esprit.tn")
 //@CrossOrigin(origins = "*", allowedHeaders = "*")
 //@CrossOrigin(origins = "https://pfe.esprit.tn", allowedHeaders = "*")
-@CrossOrigin(origins = "https://pfe.esprit.tn")
+//@CrossOrigin(origins = "https://pfe.esprit.tn")
+@CrossOrigin(origins = "*")
 @RequestMapping(value = "/api/student")
 public class StudentController {
 

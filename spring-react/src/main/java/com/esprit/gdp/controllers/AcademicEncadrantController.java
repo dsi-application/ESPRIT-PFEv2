@@ -85,7 +85,8 @@ import com.esprit.gdp.services.UtilServices;
 //@CrossOrigin(origins = "https://pfe.esprit.tn")
 //@CrossOrigin(origins = "https://pfe.esprit.tn", allowedHeaders = "*")
 //@CrossOrigin(origins = "192.168.3.11:8081", allowedHeaders = "*")
-@CrossOrigin(origins = "https://pfe.esprit.tn")
+//@CrossOrigin(origins = "https://pfe.esprit.tn")
+@CrossOrigin(origins = "*")
 @RequestMapping(value = "/api/academicEncadrant")
 public class AcademicEncadrantController
 {
