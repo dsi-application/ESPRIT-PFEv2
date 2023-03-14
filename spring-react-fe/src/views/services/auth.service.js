@@ -1295,22 +1295,23 @@ uploadSupplement(file, currentUserCode, checked, onUploadProgress) {
     );
   }
 
-  uploadJournalStageINGFile(file, currentUserCode, onUploadProgress) {
-	 console.log('----------------24.08--------> Upload: ' + file.name);
-	 let formData = new FormData();
+  uploadJournalStageINGFile(fileBase64, currentUserCode, fileName, onUploadProgress) {
+    console.log('-----------------------lolm---- PHONE - B : ' , fileName);
+    let formData = new FormData();
 
-	 formData.append("file", file);
+    formData.append("fileBase64", fileBase64);
 
-	 return axios.post(
-	    API_URL + "/upload/journalStageING/" + currentUserCode,
-	    formData,
-	    {
-	       headers: {
-	          "Content-Type": "multipart/form-data",
-	       },
-	       onUploadProgress,
-	    }
-	 );
+    return axios.post(
+      API_URL + "/upload/journalStageING/" + currentUserCode + "/" + encodeURIComponent(fileName),
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: 'Bearer ' + student.accessToken
+        },
+        onUploadProgress,
+      }
+    );
   }
 
   applyForUpdatingMyDepot(idStudent) {

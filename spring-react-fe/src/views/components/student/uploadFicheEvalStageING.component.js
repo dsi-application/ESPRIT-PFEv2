@@ -204,7 +204,32 @@ export default class UploadFicheEvalStageING extends Component
         this.setState({showPopupSuccessUploadJournal: false,});
     }
 
-    demanderMAJDepot()
+  uploadFileToServer(event) {
+    var file = event.srcElement.files[0];
+    console.log(file);
+    var reader = new FileReader();
+    reader.readAsBinaryString(file);
+
+    reader.onload = function() {
+      console.log(btoa(reader.result));
+    };
+    reader.onerror = function() {
+      console.log('there are some problems');
+    };
+  }
+
+  async readFileAsDataURL(file) {
+    let result_base64 = await new Promise((resolve) => {
+      let fileReader = new FileReader();
+      fileReader.onload = (e) => resolve(fileReader.result);
+      fileReader.readAsDataURL(file);
+    });
+
+    console.log(result_base64); // aGV5IHRoZXJl...
+
+    return result_base64;
+  }
+  demanderMAJDepot()
     {
         this.setState({
             loadSpinnerApplyForMAJDepot: true
@@ -226,50 +251,88 @@ export default class UploadFicheEvalStageING extends Component
 
     }
 
-    uploadJournal()
-    {
-        let currentFileJournal = this.state.selectedFilesJournal[0];
+  uploadJournal()
+  {
+    let currentFileJournal = this.state.selectedFilesJournal[0];
 
+    this.setState({
+      progressJournal: 0,
+      currentFileJournal: currentFileJournal,
+    });
+
+    /********************************************* Encode File ***/
+    var reader = new FileReader();
+    console.log('--------------------------- lolm-1' , currentFileJournal);
+
+    //var file = event.srcElement.files[0];
+    /*console.log('--------------------------- AZERTY-1' , currentFileJournal);
+    var reader = new FileReader();
+    reader.readAsDataURL(currentFileJournal);
+
+    console.log('--------------------------- AZERTY-2.1: ' , btoa(reader.result));
+    reader.onload = function() {
+      console.log('--------------------------- AZERTY-2.2: ' , btoa(reader.result));
+    };
+    reader.onerror = function() {
+      console.log('--------------------------- AZERTY-there are some problems');
+    };*/
+
+    var base64 = "--";
+    reader.readAsDataURL(currentFileJournal);
+    reader.onload = function (evt) {
+      base64 = evt.target.result;
+      console.log('--------------------------- PHONE - 1: ' , base64);
+      return base64;
+    }
+    console.log('--------------------------- PHONE - 2.1 : ' , base64);
+
+    let fileName = encodeURIComponent(currentFileJournal.name);
+
+    console.log('-----------------------lolm---- PHONE - A : ' , fileName);
+
+    this.readFileAsDataURL(currentFileJournal).then(dataURL => {
+      console.log('--------------------------- pika - a: ' , fileName); // aGV5IHRoZXJl...
+      console.log('--------------------------- pika - z: ' , dataURL);
+      AuthService.uploadJournalStageINGFile(dataURL, currentStudent.id, fileName , (event) => {
         this.setState({
+          showUploadReportButton: false,
+          progressJournal: Math.round((100 * event.loaded) / event.total),
+          primaryUploadJournal: true
+        });
+      })
+        .then((response) => {
+          console.log('-----------SARS--------------> DONE 1', response);
+          this.setState({
+            primaryUploadJournal: false,
+            messageJournal: response.data.message,
+            showPopupSuccessUploadJournal: true
+          });
+          return AuthService.getJournalStageINGFile(currentStudent.id);
+        })
+        .then((files) => {
+          this.setState({fileInfosJournal: files.data});
+          if( files.data.length !== 0 && this.state.fileInfosAttestation.length !== 0 && this.state.fileInfosRapport.length !== 0 )
+          {
+            this.setState({etatDepot: "01"});
+          }
+        })
+        .catch(() => {
+          // console.log('-----------24.08.22--------------> messageJournal');
+          this.setState({
             progressJournal: 0,
-            currentFileJournal: currentFileJournal,
+            messageJournal: "Could not upload the file !.",
+            currentFileJournal: undefined
+          });
         });
 
-        AuthService.uploadJournalStageINGFile(currentFileJournal, currentStudent.id, (event) => {
-            this.setState({
-                showUploadReportButton: false,
-                progressJournal: Math.round((100 * event.loaded) / event.total),
-                primaryUploadJournal: true
-            });
-        })
-            .then((response) => {
-                console.log('-----------SARS--------------> DONE 1', response);
-                this.setState({
-                    primaryUploadJournal: false,
-                    messageJournal: response.data.message,
-                    showPopupSuccessUploadJournal: true
-                });
-                return AuthService.getJournalStageINGFile(currentStudent.id);
-            })
-            .then((files) => {
-                this.setState({fileInfosJournal: files.data});
-                if( files.data.length !== 0 && this.state.fileInfosAttestation.length !== 0 && this.state.fileInfosRapport.length !== 0 )
-                {
-                    this.setState({etatDepot: "01"});
-                }
-            })
-            .catch(() => {
-                // console.log('-----------24.08.22--------------> messageJournal');
-                this.setState({
-                    progressJournal: 0,
-                    messageJournal: "Could not upload the file !.",
-                    currentFileJournal: undefined
-                });
-            });
+      this.setState({selectedFilesJournal: undefined});
+      console.log('-----------LOL-------------> messageJournal');
+    });
 
-        this.setState({selectedFilesJournal: undefined});
-        console.log('-----------LOL-------------> messageJournal');
-    }
+    /*************************************************************/
+
+
+  }
 
     selectFileAttestation(event)
     {
