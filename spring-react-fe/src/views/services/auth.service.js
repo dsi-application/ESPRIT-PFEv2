@@ -1306,8 +1306,7 @@ uploadSupplement(file, currentUserCode, checked, onUploadProgress) {
       formData,
       {
         headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: 'Bearer ' + student.accessToken
+          "Content-Type": "multipart/form-data"
         },
         onUploadProgress,
       }
