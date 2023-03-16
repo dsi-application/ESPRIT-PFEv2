@@ -2466,31 +2466,35 @@ File file = new File(path);*/
 	@GetMapping("/journalStageING/{currentUserCode}")
 	public ResponseEntity<List<String>> getJournalStageING(@PathVariable String currentUserCode) {
 
+		// NEW VERSION
+		List<DepotRapportINGDto> files = evaluationEngTrRepository.findRapportStageINGByStudent(currentUserCode);
+
+		/*
+		// OLD VERSION
 		Integer index = 1;
-		List<DepotJournalINGDto> files = storageService.getJournalStageINGDto(currentUserCode).map(report -> {
-			String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/journalStageING/")
+		List<DepotRapportINGDto> files = storageService.getRapportStageINGDto(currentUserCode).map(report -> {
+			String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/rapportStageING/")
 					.path(index.toString()).toUriString();
 
 			System.out.println(
-					"---------------------***----------------------> SARS-journalStageING: " + fileDownloadUri);
+					"---------------------***----------------------> SARS-rapportStageING: " + fileDownloadUri);
 
 			return report;
 		}).collect(Collectors.toList());
 
 		System.out.println("---------------------***----------------------> Size: " + files.size());
+		*/
 
-		// fp.pathRapportVersion1, fp.pathRapportVersion2, fp.dateDepotRapportVersion1,
-		// fp.dateDepotRapportVersion2, fp.pathPlagiat, fp.dateDepotPlagiat,
-		// fp.confidentiel
+		/****************************************************************************************************************************/
 		List<String> lss = new ArrayList<>();
-		for (DepotJournalINGDto dbd : files) {
+		for (DepotRapportINGDto dbd : files) {
 			String esING = null;
 
-			String pathEvaluationStageING = dbd.getPathJournalStageING();
+			String pathEvaluationStageING = dbd.getPathRapportStageING();
 			String nameEvaluationStageING = null;
-			String dateEvaluationStageING = dbd.getDateDepotJournalStageING();
+			String dateEvaluationStageING = dbd.getDateDepotRapportStageING();
 
-			if (dbd.getPathJournalStageING() != null) {
+			if (dbd.getPathRapportStageING() != null) {
 				nameEvaluationStageING = pathEvaluationStageING.substring(pathEvaluationStageING.indexOf("uploads") + 8,
 						pathEvaluationStageING.indexOf("espdsi2020"));
 				esING = nameEvaluationStageING + "UNITR1" + dateEvaluationStageING;
