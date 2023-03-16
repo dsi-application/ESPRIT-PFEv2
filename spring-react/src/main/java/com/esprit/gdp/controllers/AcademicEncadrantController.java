@@ -2903,8 +2903,9 @@ public class AcademicEncadrantController
     	// ********************** Exceptional Case where same CPS has 2 Units : just for Current University year
     	    	String mailCPS = "saria.essid@esprit.tn";
     	    	if(
-    	    			studentOption.toUpperCase().contains("SIM") || studentOption.toUpperCase().contains("GAMIX") ||
-    	    			studentOption.toUpperCase().contains("WIN") || studentOption.toUpperCase().contains("IOSYS")
+						studentOption.toUpperCase().contains("SIM") || studentOption.toUpperCase().contains("GAMIX")
+						|| (studentOption.toUpperCase().contains("WIN") && studentClasse.toUpperCase().contains("5WIN"))
+						|| studentOption.toUpperCase().contains("IOSYS")
     	    	  )
     	    	{
     	    		if(studentOption.toUpperCase().contains("SIM"))

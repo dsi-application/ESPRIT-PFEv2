@@ -144,13 +144,15 @@ public class PlanTravail_PDF
             cp1cellq_11.setBorder(Rectangle.NO_BORDER);cp1cellq_12.setBorder(Rectangle.NO_BORDER);
             
             contentPart455.addCell(cp1cellq_11);contentPart455.addCell(cp1cellq_12);
-            
-            
-            if(!fd.getDescription().equalsIgnoreCase("null"))
-        	{
-            	cp1cellq_21.setBorder(Rectangle.NO_BORDER);cp1cellq_22.setBorder(Rectangle.NO_BORDER);
-            	contentPart455.addCell(cp1cellq_21);contentPart455.addCell(cp1cellq_22);
-        	}
+
+            if(fd.getDescription() != null)
+            {
+                if(!fd.getDescription().equalsIgnoreCase("null"))
+                {
+                    cp1cellq_21.setBorder(Rectangle.NO_BORDER);cp1cellq_22.setBorder(Rectangle.NO_BORDER);
+                    contentPart455.addCell(cp1cellq_21);contentPart455.addCell(cp1cellq_22);
+                }
+            }
             
             document.add(contentPart455);
             
