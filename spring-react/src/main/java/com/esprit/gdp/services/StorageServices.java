@@ -1,6 +1,7 @@
 package com.esprit.gdp.services;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -24,7 +25,6 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import javax.xml.bind.DatatypeConverter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -603,62 +603,33 @@ public class StorageServices {
 		}
 	}
 
-	public void storeJournalStageING(String fileBase64, String fileName, String currentUserCode)
-	{
+	public void storeJournalStageING(MultipartFile file, String currentUserCode) {
 		System.out.println("----------------------------- SAVE");
-		try
-		{
-			System.out.println("-------------------------------------------------------> A" + currentUserCode);
+		try {
+			System.out.println("----------------------------- SAVE-YES");
+
+			String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+			System.out.println("-------------------------------------------------------> A: " + currentUserCode);
 			String fileNameExtention = fileName.substring(fileName.lastIndexOf("."));
 			System.out.println("-------------------------------------------------------> B");
-			String fileNameLabel = fileName.substring(0,fileName.lastIndexOf("."));
+			String fileNameLabel = fileName.substring(0, fileName.lastIndexOf("."));
 			System.out.println("-------------------------------------------------------> C");
 			String formedNameFile = fileNameLabel + "espdsi2020" + new Date().getTime() + fileNameExtention;
 			System.out.println("-------------------------------------------------------> D");
+			Files.copy(file.getInputStream(), this.rootLocation.resolve(formedNameFile));
+			System.out.println("-------------------------------------------------------> E");
 			String fullPath = dbadd + formedNameFile;
-
-			byte[] data = DatatypeConverter.parseBase64Binary(fileBase64);
-// String path = dbadd + decodedFileName;  // C:/ESP/uploads/"
-			File file = new File(fullPath);
-			OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file));
-			outputStream.write(data);
-
-			System.out.println("----------------------------- SAVE-YES");
-
-
-
-			System.out.println("-------------------------------------------------------> E: " + fullPath);
-
-
-
-
-/*
-//Path copied = Paths.get("C:\\ESP\\uploads\\" + formedNameFile);  // Paths.get("C:\\ESP\\uploads\\")
-//Path originalPath = original.toPath();
-
-// Files.copy(file.getInputStream(), this.rootLocation.resolve(formedNameFile));
-//Files.copy(Paths.get(fullPath), this.rootLocation.resolve(formedNameFile));
-
-//InputStream input = new FileInputStream("C:\\ESP\\uploads\\" + formedNameFile);
-
-//File copied = new File(file);
-InputStream in = new BufferedInputStream(new FileInputStream(file));
-
-Files.copy(in, this.rootLocation.resolve(formedNameFile));
-//System.out.println("-------------------------------------------------------> F: " + );
-*/
+			System.out.println("-------------------------------------------------------> F");
 
 			EvaluationEngineeringTraining evaluationStageIngenieur = new EvaluationEngineeringTraining();
-			if(evaluationEngTrRepository.findEvaluationStageIngenieurByStudent(currentUserCode) == null)
-			{
+			if (evaluationEngTrRepository.findEvaluationStageIngenieurByStudent(currentUserCode) == null) {
 				evaluationStageIngenieur = new EvaluationEngineeringTraining(currentUserCode);
 				evaluationStageIngenieur.setPathJournal(fullPath);
 				evaluationStageIngenieur.setDateUploadJournal(new Date());
 				evaluationStageIngenieur.setEtatDepot("01");
-			}
-			else
-			{
-				evaluationStageIngenieur = evaluationEngTrRepository.findEvaluationStageIngenieurByStudent(currentUserCode);
+			} else {
+				evaluationStageIngenieur = evaluationEngTrRepository
+						.findEvaluationStageIngenieurByStudent(currentUserCode);
 				evaluationStageIngenieur.setPathJournal(fullPath);
 				evaluationStageIngenieur.setDateUploadJournal(new Date());
 				evaluationStageIngenieur.setEtatDepot("01");
@@ -666,15 +637,15 @@ Files.copy(in, this.rootLocation.resolve(formedNameFile));
 
 			System.out.println("-------------------------------------------------------> G");
 
-			System.out.println("-------------------------------------------------------> H DONE SAVE Journal Stage ING File : " + fullPath);
+			System.out.println(
+					"-------------------------------------------------------> H DONE SAVE Journal Stage ING File : "
+							+ fullPath);
 			evaluationEngTrRepository.save(evaluationStageIngenieur);
 			System.out.println("-------------------------------------------------------> I");
 
 			System.out.println("------------> DONE SAVE Journal Stage ING File.");
-		}
-		catch (Exception e)
-		{
-// // System.out.println("----------------------------- SAVE-NO");
+		} catch (Exception e) {
+			// // System.out.println("----------------------------- SAVE-NO");
 			throw new RuntimeException("FAIL!");
 		}
 	}
