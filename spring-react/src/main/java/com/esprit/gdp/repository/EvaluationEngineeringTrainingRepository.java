@@ -3,6 +3,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import com.esprit.gdp.dto.DepotRapportINGDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -33,11 +34,15 @@ public interface EvaluationEngineeringTrainingRepository extends JpaRepository<E
 
 	@Query("select es.dateUploadAttestation from EvaluationEngineeringTraining es where es.studentId=?1")
 	Date findUploadAttestationStageINGDate(String idEt);
-	
-	
+
 	@Query("select es.pathRapport, FUNCTION('to_char', es.dateUploadRapport, 'dd-mm-yyyy HH24:MI:SS')"
 		+ " from EvaluationEngineeringTraining es where es.studentId=?1")
 	List<Object[]> findRapportStageING(String idEt);
+
+
+	@Query("select new com.esprit.gdp.dto.DepotRapportINGDto(es.pathRapport, FUNCTION('to_char', es.dateUploadRapport, 'dd-mm-yyyy HH24:MI:SS')) "
+			+ "from EvaluationEngineeringTraining es where es.studentId=?1")
+	List<DepotRapportINGDto> findRapportStageINGByStudent(String idEt);
 
 	@Query("select es.pathRapport from EvaluationEngineeringTraining es where es.studentId =?1")
 	String findPathRapportStageING(String idEt);
