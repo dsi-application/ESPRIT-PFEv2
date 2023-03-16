@@ -2461,7 +2461,7 @@ public class MainController {
 	public ResponseEntity<List<String>> getJournalStageING(@PathVariable String currentUserCode) {
 
 		// NEW VERSION
-		List<DepotRapportINGDto> files = evaluationEngTrRepository.findRapportStageINGByStudent(currentUserCode);
+		List<DepotJournalINGDto> files = evaluationEngTrRepository.findJournalStageINGByStudent(currentUserCode);
 
 		/*
 		// OLD VERSION
@@ -2481,14 +2481,14 @@ public class MainController {
 
 		/****************************************************************************************************************************/
 		List<String> lss = new ArrayList<>();
-		for (DepotRapportINGDto dbd : files) {
+		for (DepotJournalINGDto dbd : files) {
 			String esING = null;
 
-			String pathEvaluationStageING = dbd.getPathRapportStageING();
+			String pathEvaluationStageING = dbd.getPathJournalStageING();
 			String nameEvaluationStageING = null;
-			String dateEvaluationStageING = dbd.getDateDepotRapportStageING();
+			String dateEvaluationStageING = dbd.getDateDepotJournalStageING();
 
-			if (dbd.getPathRapportStageING() != null) {
+			if (dbd.getPathJournalStageING() != null) {
 				nameEvaluationStageING = pathEvaluationStageING.substring(pathEvaluationStageING.indexOf("uploads") + 8,
 						pathEvaluationStageING.indexOf("espdsi2020"));
 				esING = nameEvaluationStageING + "UNITR1" + dateEvaluationStageING;
