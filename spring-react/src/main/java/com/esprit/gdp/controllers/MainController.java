@@ -1858,57 +1858,51 @@ public class MainController {
 		}
 	}
 
-	@PostMapping("/upload/journalStageING/{currentUserCode}/{encodedFileName}")
-	public ResponseEntity<MessageResponse> uploadJournalStageIngenieur(@PathVariable String currentUserCode, @PathVariable String encodedFileName, @RequestParam("fileBase64") String fileBase64)
-	{
+	@PostMapping("/upload/journalStageING/{currentUserCode}")
+	public ResponseEntity<MessageResponse> uploadJournalStageIngenieur(@PathVariable String currentUserCode,
+			@RequestParam("file") MultipartFile file) {
 
-		String decodedFileName = utilServices.decodeEncodedValue(encodedFileName);
-		System.out.println("------------------------------------------------------------------------------------------------------------PIKATCHO----------------A: " + currentUserCode);
-		System.out.println("----------------" + fileBase64);
-		System.out.println("----------------" + encodedFileName);
-		System.out.println("----------------" + decodedFileName);
-		System.out.println("------------------------------------------------------------------------------------------------------------PIKATCHO----------------A: " + currentUserCode);
-
-/*byte[] data = DatatypeConverter.parseBase64Binary(fileBase64);
-String path = "C:/ESP/uploads/" + decodedFileName;
-File file = new File(path);*/
-
+		System.out.println("-----------------------------A: " + currentUserCode);
 		String message = "";
-		try
-		{
-
-			String fileBase64_PART = fileBase64.substring(28, fileBase64.length());
-
+		try {
 			System.out.println("-----------------------------1.1");
-			storageService.storeJournalStageING(fileBase64_PART, decodedFileName, currentUserCode);
+			storageService.storeJournalStageING(file, currentUserCode);
 			System.out.println("-----------------------------1.2");
-			message = "Votre Journal de Stage Ingénieur " + decodedFileName + " a été bien déposé.";
+			message = "Votre Journal de Stage Ingénieur " + file.getOriginalFilename() + " a été bien déposé.";
 
-/***************************************** Notification By Mail *****************************************/
-//         DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-//         String dateDepot = dateFormata.format(new Date());
+			/*****************************************
+			 * Notification By Mail
+			 *****************************************/
+//			DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+//			String dateDepot = dateFormata.format(new Date());
 //
-//       String subject = "Dépôt Journal Stage Ingénieur";
+//			String subject = "Dépôt Journal Stage Ingénieur";
 //
-//         String studentMail = utilServices.findStudentMailById(currentUserCode).substring(0, utilServices.findStudentMailById(currentUserCode).lastIndexOf("@")) + "@mail.tn";
-//         String academicEncMail = utilServices.findMailPedagogicalEncadrant(currentUserCode).substring(0, utilServices.findMailPedagogicalEncadrant(currentUserCode).lastIndexOf("@")) + "@mail.tn";
+//			// String studentMail =
+//			// utilServices.findStudentMailById(currentUserCode).substring(0,
+//			// utilServices.findStudentMailById(currentUserCode).lastIndexOf("@")) +
+//			// "@mail.tn";
+//			// String academicEncMail =
+//			// utilServices.findMailPedagogicalEncadrant(currentUserCode).substring(0,
+//			// utilServices.findMailPedagogicalEncadrant(currentUserCode).lastIndexOf("@"))
+//			// + "@mail.tn";
 //
-//         String content = "Nous voulons vous informer par le présent mail que vous avez déposé"
-//           + " votre <strong><font color=grey> Journal Stage Ingénieur </font></strong> "
-//           + "le <font color=blue> " + dateDepot + " </font>.";
+//			String studentMail = utilServices.findStudentMailById(currentUserCode);
+//			String academicEncMail = utilServices.findMailPedagogicalEncadrant(currentUserCode);
 //
-//       utilServices.sendMailWithCC(subject, studentMail, academicEncMail, content);
-/********************************************************************************************************/
+//			String content = "Nous voulons vous informer par le présent mail que vous avez déposé"
+//					+ " votre <strong><font color=grey> Journal Stage Ingénieur </font></strong> "
+//					+ "le <font color=blue> " + dateDepot + " </font>.";
+//
+//			utilServices.sendMailWithCC(subject, studentMail, academicEncMail, content);
+			/********************************************************************************************************/
 
 			return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse(message));
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			System.out.println("----------------------------- CATCH");
-			message = "Erreur de téléchargement de votre Fiche Evaluation Stage " + decodedFileName;
+			message = "Erreur de téléchargement de votre Fiche Evaluation Stage " + file.getOriginalFilename();
 			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new MessageResponse(message));
 		}
-
 	}
 
 	@PostMapping("/upload/attestationStageING/{currentUserCode}")
