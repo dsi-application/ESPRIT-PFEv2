@@ -299,7 +299,7 @@ public class MainController {
 
 	@Autowired
 	NoteRestitutionRepository noteRestitutionRepository;
-	
+
 	/******************************************************
 	 * Convention
 	 ******************************************************/
@@ -398,7 +398,7 @@ public class MainController {
 
 	@PostMapping("/modifyConvention/{idEt}")
 	public void modifyConvention(@Valid @RequestBody AddConventionRequest addConventionRequest,
-			@PathVariable String idEt) throws UnsupportedEncodingException {
+								 @PathVariable String idEt) throws UnsupportedEncodingException {
 
 		System.out.println("-----> NomSociete: " + addConventionRequest.getNomSociete() + " - "
 				+ utilServices.decodeEncodedValue(addConventionRequest.getNomSociete()));
@@ -428,7 +428,7 @@ public class MainController {
 		/*
 		 * ConventionPK conventionPK = new ConventionPK(idEt, new
 		 * Timestamp(System.currentTimeMillis()));
-		 * 
+		 *
 		 * Convention conv = new Convention(conventionPK, ea.getAddressMail(),
 		 * addConventionRequest.getDateDebut(), addConventionRequest.getDateFin(),
 		 * utilServices.decodeEncodedValue(addConventionRequest.getAddress()),
@@ -472,22 +472,22 @@ public class MainController {
 
 	}
 
-	
+
 	@PostMapping("/modifyConventionByStudent/{idEt}")
 	public void modifyConventionByStudent(@Valid @RequestBody AddConventionRequest addConventionRequest, @PathVariable String idEt) throws UnsupportedEncodingException
 	{
-		
+
 		System.out.println("--MODIF STU---> NomSociete: " + addConventionRequest.getNomSociete() + " - " + utilServices.decodeEncodedValue(addConventionRequest.getNomSociete()));
 		System.out.println("--MODIF STU---> getMail: " + addConventionRequest.getMail() + " - " + utilServices.decodeEncodedValue(addConventionRequest.getMail()));
 		System.out.println("--MODIF STU---> getAddress: " + addConventionRequest.getAddress() + " - " + utilServices.decodeEncodedValue(addConventionRequest.getAddress()));
 		System.out.println("--MODIF STU---> getTelephone: " + addConventionRequest.getTelephone() + " - " + utilServices.decodeEncodedValue(addConventionRequest.getTelephone()));
 		System.out.println("--MODIF STU---> getResponsable: " + addConventionRequest.getResponsable() + " - " + utilServices.decodeEncodedValue(addConventionRequest.getResponsable()));
-			
-		
+
+
 		Convention convention = conventionRepository.findConventionByIdEt(idEt).get(0);
 		EntrepriseAccueil ea = new EntrepriseAccueil();
 		ea = entrepriseAccueilRepository.findByDesignation(utilServices.decodeEncodedValue(addConventionRequest.getNomSociete()));
-		
+
 		convention.setAddress(utilServices.decodeEncodedValue(addConventionRequest.getAddress()));
 		convention.setTelephone(ea.getTelephone());
 		convention.setResponsable(utilServices.decodeEncodedValue(addConventionRequest.getResponsable()));
@@ -496,59 +496,59 @@ public class MainController {
 		convention.setMail(ea.getAddressMail());
 		convention.setDateModifConvRSS(new Timestamp(System.currentTimeMillis()));
 		convention.setTraiter("01");
-		
+
 		/**************************************************************/
 		/*
 		ConventionPK conventionPK = new ConventionPK(idEt, new Timestamp(System.currentTimeMillis()));
-		
-		Convention conv = new Convention(conventionPK, 
-										 ea.getAddressMail(), 
-										 addConventionRequest.getDateDebut(), 
-										 addConventionRequest.getDateFin(), 
-										 utilServices.decodeEncodedValue(addConventionRequest.getAddress()), 
-										 utilServices.decodeEncodedValue(addConventionRequest.getTelephone()), 
-										 utilServices.decodeEncodedValue(addConventionRequest.getResponsable()), 
+
+		Convention conv = new Convention(conventionPK,
+										 ea.getAddressMail(),
+										 addConventionRequest.getDateDebut(),
+										 addConventionRequest.getDateFin(),
+										 utilServices.decodeEncodedValue(addConventionRequest.getAddress()),
+										 utilServices.decodeEncodedValue(addConventionRequest.getTelephone()),
+										 utilServices.decodeEncodedValue(addConventionRequest.getResponsable()),
 										 "01"
 										 //, ea
 										 );
 		*/
 		convention.setEntrepriseAccueilConvention(ea);
-		
+
 		String currentClass = utilServices.findCurrentClassByIdEt(idEt);
 		ResponsableServiceStage respServStage = null;
-		
+
 		respServStage = utilServices.findResponsableServiceStageByClass(currentClass);
-		
+
 		// System.out.println("-------------------------------> Class: " + currentClass + " Service: " + respServStage.getNomUserSce());
-		
+
 		convention.setResponsableServiceStage(respServStage);
-		
+
 		conventionRepository.save(convention);
-		
-		DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");  
+
+		DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		String dateConvention = dateFormata.format(new Date());
-		
+
 		String subject = "Modification Convention";
-		
+
 		String studentMail = utilServices.findStudentMailById(idEt);
-	    String rssMail = responsableServiceStageRepository.findRespServStgMailById("SR-STG-IT");
-		
+		String rssMail = responsableServiceStageRepository.findRespServStgMailById("SR-STG-IT");
+
 		// Local
 //		String studentMail = "no_reply@esprit.tn";
 //		String rssMail = "raml.benouirane@mail.com";
-		
-				
+
+
 		String content = "Nous voulons vous informer par le présent mail que Vous avez "
-					   + "modifié quelques informations concernant <strong><font color=grey>votre Convention</font></strong> "
-					   + "et c'est le <font color=blue> " + dateConvention + " </font>."
-				       + "<br/>Une fois validée, vous pouvez consulter "
-				       + "<strong><font color=grey>votre Nouvelle Convention</font></strong> via votre espace (Menu : Mes Documents).";
-        
+				+ "modifié quelques informations concernant <strong><font color=grey>votre Convention</font></strong> "
+				+ "et c'est le <font color=blue> " + dateConvention + " </font>."
+				+ "<br/>Une fois validée, vous pouvez consulter "
+				+ "<strong><font color=grey>votre Nouvelle Convention</font></strong> via votre espace (Menu : Mes Documents).";
+
 		utilServices.sendMailWithCC(subject, studentMail, rssMail, content);
-			
+
 	}
 
-	
+
 	@GetMapping("/convention/{idEt}")
 	public Integer findConventionByStudent(@PathVariable String idEt) {
 		Integer result = null;
@@ -795,7 +795,7 @@ public class MainController {
 
 	/******************************************************
 	 * Avenant
-	 * 
+	 *
 	 * @throws UnsupportedEncodingException
 	 ******************************************************/
 	@PostMapping("/addAvenant/{idEt}")
@@ -982,20 +982,20 @@ public class MainController {
 
 		return companyDto;
 	}
-	
+
 
 	@PostMapping("/modifyProjectCompany")
 	public CompanyDto modifyProjectCompany(@Valid @RequestBody AddCompanyRequest addCompanyRequest) throws UnsupportedEncodingException
 	{
 		// // System.out.println("---------------- add a new Company: " + addCompanyRequest.getDesignation() + " - "
-//                												  + addCompanyRequest.getLol() + " - " 
-//	                                                              + addCompanyRequest.getAddressMail() + " - " 
+//                												  + addCompanyRequest.getLol() + " - "
+//	                                                              + addCompanyRequest.getAddressMail() + " - "
 //	                                                              + addCompanyRequest.getTelephone()
-//	                                                              + addCompanyRequest.getFax() + " - " 
-//	                                                              + addCompanyRequest.getPaysLibelle() + " - " 
+//	                                                              + addCompanyRequest.getFax() + " - "
+//	                                                              + addCompanyRequest.getPaysLibelle() + " - "
 //	                                                              + addCompanyRequest.getSectorEntrepriseLibelle() + " - "
 //	                                                              + addCompanyRequest.getSiegeSocial());
-		
+
 		System.out.println("-----------> Designation: " + addCompanyRequest.getDesignation() + " - " + utilServices.decodeEncodedValue(addCompanyRequest.getDesignation()));
 		System.out.println("-----------> Lol: " + addCompanyRequest.getLol() + " - " + utilServices.decodeEncodedValue(addCompanyRequest.getLol()));
 		System.out.println("-----------> AddressMail: " + addCompanyRequest.getAddressMail() + " - " + utilServices.decodeEncodedValue(addCompanyRequest.getAddressMail()));
@@ -1004,17 +1004,17 @@ public class MainController {
 		System.out.println("-----------> PaysLibelle: " + addCompanyRequest.getPaysLibelle() + " - " + utilServices.decodeEncodedValue(addCompanyRequest.getPaysLibelle()));
 		System.out.println("-----------> SectorEntrepriseLibelle: " + addCompanyRequest.getSectorEntrepriseLibelle() + " - " + utilServices.decodeEncodedValue(addCompanyRequest.getSectorEntrepriseLibelle()));
 		System.out.println("-----------> SiegeSocial: " + addCompanyRequest.getSiegeSocial() + " - " + utilServices.decodeEncodedValue(addCompanyRequest.getSiegeSocial()));
-		
-		
-		
+
+
+
 		Pays pays = paysRepository.findPaysByNamePays(utilServices.decodeEncodedValue(addCompanyRequest.getPaysLibelle()));
 		SecteurEntreprise secteurEntreprise = sectorEntrepriseRepository.findSecorEntrepriseByLibelleSecteur(utilServices.decodeEncodedValue(addCompanyRequest.getSectorEntrepriseLibelle()));
-		
+
 		System.out.println("Sector --------------> 1. Get Sector Entity: " + pays.getIdPays());
 		// SectorEntrepriseDto sectorEntrepriseDto = new SectorEntrepriseDto(se.getIdSecteur(), se.getLibelleSecteur());
-		
+
 		EntrepriseAccueil entrepriseAccueil = entrepriseAccueilRepository.findByDesignation(utilServices.decodeEncodedValue(addCompanyRequest.getDesignation()));
-		
+
 		entrepriseAccueil.setAddressMail(utilServices.decodeEncodedValue(addCompanyRequest.getAddressMail()));
 		entrepriseAccueil.setAddress(utilServices.decodeEncodedValue(addCompanyRequest.getLol()));
 		entrepriseAccueil.setTelephone(utilServices.decodeEncodedValue(addCompanyRequest.getTelephone()));
@@ -1022,17 +1022,17 @@ public class MainController {
 		entrepriseAccueil.setPays(pays);
 		entrepriseAccueil.setSecteurEntreprise(secteurEntreprise);
 		entrepriseAccueil.setSiegeSocial(utilServices.decodeEncodedValue(addCompanyRequest.getSiegeSocial()));
-		
+
 		entrepriseAccueilRepository.save(entrepriseAccueil);
-		
+
 		// CompanyDto companyDto = new CompanyDto(addCompanyRequest.getDesignation(), addCompanyRequest.getAddressMail(), addCompanyRequest.getLol(), addCompanyRequest.getTelephone(), addCompanyRequest.getFax(), pays);
 		CompanyDto companyDto = new CompanyDto(entrepriseAccueil.getIdEntreprise(), entrepriseAccueil.getDesignation());
-		
+
 		// // System.out.println("---------------- Added Company is with id : " + entrepriseAccueil.getIdEntreprise());
-		
+
 		return companyDto;
 	}
-	
+
 
 	@GetMapping("/companyByName/{designation}")
 	public CompanyDto findFicheSocieteByName(@PathVariable String designation) {
@@ -1305,7 +1305,7 @@ public class MainController {
 
 	@PostMapping("/updateStudent/{idEt}/{otherEmailet}/{otherAdresseet}/{othertelet}")
 	public void updateStudent(@PathVariable String idEt, @PathVariable String otherEmailet,
-			@PathVariable String otherAdresseet, @PathVariable String othertelet) {
+							  @PathVariable String otherAdresseet, @PathVariable String othertelet) {
 		List<String> activatedYears = settingsRepository.findActivatedYears();
 		List<String> studentsCJandALT = studentRepository.findStudentsFullNameCJandALT(idEt, activatedYears);
 		List<String> studentsCS = studentRepository.findStudentsFullNameCS(idEt, activatedYears);
@@ -1382,8 +1382,8 @@ public class MainController {
 	// @PathVariable String projectSupervisorEmail)
 	@PostMapping("/addProjectSupervisor/{idEt}/{projectSupervisorFirstName}/{projectSupervisorLastName}/{projectSupervisorPhoneNumber}/{projectSupervisorEmail}")
 	public void addCompanySupervisor(@PathVariable String idEt, @PathVariable String projectSupervisorFirstName,
-			@PathVariable String projectSupervisorLastName, @PathVariable String projectSupervisorPhoneNumber,
-			@PathVariable String projectSupervisorEmail) {
+									 @PathVariable String projectSupervisorLastName, @PathVariable String projectSupervisorPhoneNumber,
+									 @PathVariable String projectSupervisorEmail) {
 		System.out.println("---------------- add a new Supervisor: " + projectSupervisorFirstName + " - "
 				+ projectSupervisorLastName + " - " + projectSupervisorPhoneNumber + " - " + projectSupervisorEmail
 				+ " - " + idEt);
@@ -1449,8 +1449,8 @@ public class MainController {
 
 	@PostMapping("/updateCompanySupervisor/{idEt}/{oldSupervMail}/{newSupervFirstName}/{newSupervLastName}/{newSupervPhoneNumber}/{newSupervEmail}")
 	public ResponseEntity<?> updateCompanySupervisor(@PathVariable String idEt, @PathVariable String oldSupervMail,
-			@PathVariable String newSupervFirstName, @PathVariable String newSupervLastName,
-			@PathVariable String newSupervPhoneNumber, @PathVariable String newSupervEmail) {
+													 @PathVariable String newSupervFirstName, @PathVariable String newSupervLastName,
+													 @PathVariable String newSupervPhoneNumber, @PathVariable String newSupervEmail) {
 		System.out.println("---------------- update Company Supervisor Profile with mail: " + oldSupervMail + " - "
 				+ utilServices.decodeEncodedValue(oldSupervMail));
 		System.out.println("---------------- update 1: " + newSupervFirstName + " - "
@@ -1608,7 +1608,7 @@ public class MainController {
 
 	@PostMapping("/upload/ganttDiagram/{currentUserCode}")
 	public ResponseEntity<MessageResponse> uploadGanttDiagram(@PathVariable String currentUserCode,
-			@RequestParam("file") MultipartFile file) {
+															  @RequestParam("file") MultipartFile file) {
 
 		// // System.out.println("-----------------------------A: " + currentUserCode);
 		String message = "";
@@ -1651,7 +1651,7 @@ public class MainController {
 	 ******************************************************/
 	@PostMapping("/upload/reportv1/{currentUserCode}/{checked}")
 	public ResponseEntity<MessageResponse> uploadReportV1(@PathVariable String currentUserCode,
-			@RequestParam("file") MultipartFile file, @PathVariable Boolean checked) {
+														  @RequestParam("file") MultipartFile file, @PathVariable Boolean checked) {
 
 		// // System.out.println("-----------------------------A: " + currentUserCode +
 		// " - " + checked);
@@ -1709,7 +1709,7 @@ public class MainController {
 
 	@PostMapping("/upload/reportv2/{currentUserCode}/{traineeKind}/{checked}")
 	public ResponseEntity<MessageResponse> uploadReportV2(@PathVariable String currentUserCode,
-			@PathVariable String traineeKind, @RequestParam("file") MultipartFile file, @PathVariable Boolean checked) {
+														  @PathVariable String traineeKind, @RequestParam("file") MultipartFile file, @PathVariable Boolean checked) {
 
 		// System.out.println("-----------------------------A: " + currentUserCode + " -
 		// " + traineeKind);
@@ -1733,7 +1733,7 @@ public class MainController {
 
 	@PostMapping("/upload/plagiat/{currentUserCode}/{checked}")
 	public ResponseEntity<MessageResponse> uploadPlagiat(@PathVariable String currentUserCode,
-			@RequestParam("file") MultipartFile file, @PathVariable Boolean checked) {
+														 @RequestParam("file") MultipartFile file, @PathVariable Boolean checked) {
 
 		// // System.out.println("-----------------------------A: " + currentUserCode);
 		String message = "";
@@ -1753,7 +1753,7 @@ public class MainController {
 
 	@PostMapping("/upload/supplement/{currentUserCode}/{checked}")
 	public ResponseEntity<MessageResponse> uploadSupplement(@PathVariable String currentUserCode,
-			@RequestParam("file") MultipartFile file, @PathVariable Boolean checked) {
+															@RequestParam("file") MultipartFile file, @PathVariable Boolean checked) {
 
 		// // System.out.println("-----------------------------A: " + currentUserCode);
 		String message = "";
@@ -1773,7 +1773,7 @@ public class MainController {
 
 	@PostMapping("/upload/internshipCertificate/{currentUserCode}/{checked}")
 	public ResponseEntity<MessageResponse> uploadInternshipCertificate(@PathVariable String currentUserCode,
-			@RequestParam("file") MultipartFile file, @PathVariable Boolean checked) {
+																	   @RequestParam("file") MultipartFile file, @PathVariable Boolean checked) {
 		// System.out.println("-----------------------------A: " + currentUserCode + " -
 		// " + checked);
 		String message = "";
@@ -1795,7 +1795,7 @@ public class MainController {
 
 	@PostMapping("/upload/rapportStageING/{currentUserCode}")
 	public ResponseEntity<MessageResponse> uploadRapportStageIngenieur(@PathVariable String currentUserCode,
-			@RequestParam("file") MultipartFile file) {
+																	   @RequestParam("file") MultipartFile file) {
 
 		System.out.println("-----------------------------A: " + currentUserCode);
 		String message = "";
@@ -1842,7 +1842,7 @@ public class MainController {
 
 	@PostMapping("/upload/journalStageING/{currentUserCode}")
 	public ResponseEntity<MessageResponse> uploadJournalStageIngenieur(@PathVariable String currentUserCode,
-			@RequestParam("file") MultipartFile file) {
+																	   @RequestParam("file") MultipartFile file) {
 
 		System.out.println("-----------------------------A: " + currentUserCode);
 		String message = "";
@@ -1889,7 +1889,7 @@ public class MainController {
 
 	@PostMapping("/upload/attestationStageING/{currentUserCode}")
 	public ResponseEntity<MessageResponse> uploadAttestationStageIngenieur(@PathVariable String currentUserCode,
-			@RequestParam("file") MultipartFile file) {
+																		   @RequestParam("file") MultipartFile file) {
 
 		System.out.println("-----------------------------A: " + currentUserCode);
 		String message = "";
@@ -2134,37 +2134,37 @@ public class MainController {
 
 		return result;
 	}
-	
+
 
 	@GetMapping("/encryptedPWDJWTByMailId/{mailEns}/{idEns}")
 	public String findEncryptedPWDJWTByMailId(@PathVariable String mailEns, @PathVariable String idEns)
 	{
 		System.out.println("---------------- Get Company with designation : jwt");
-		String pwd = teacherRepository.findTeacherPWDJWTByMailAndId(utilServices.decodeEncodedValue(mailEns), utilServices.decodeEncodedValue(idEns)); 
+		String pwd = teacherRepository.findTeacherPWDJWTByMailAndId(utilServices.decodeEncodedValue(mailEns), utilServices.decodeEncodedValue(idEns));
 		System.out.println("----- 1 " + pwd);
 		String pwdJWT = pwd.substring(0, pwd.lastIndexOf("$$$$$"));
 		System.out.println(".................... 1 " + pwdJWT);
 		return pwdJWT;
 	}
-	
+
 	@GetMapping("/encryptedPWDByMailId/{mailEns}/{idEns}")
 	public String findEncryptedPWDByMailId(@PathVariable String mailEns, @PathVariable String idEns)
 	{
 		System.out.println("---------------- Get Company with designation : kkkk");
-		String pwd = teacherRepository.findTeacherPWDByMailAndId(utilServices.decodeEncodedValue(mailEns), utilServices.decodeEncodedValue(idEns)); 
+		String pwd = teacherRepository.findTeacherPWDByMailAndId(utilServices.decodeEncodedValue(mailEns), utilServices.decodeEncodedValue(idEns));
 		System.out.println("---------------- Get Company with designation : " + pwd);
 		return pwd;
 	}
-	
+
 	@GetMapping("/encryptedPWDByMailIdPwd/{mailEns}/{idEns}/{pwdEns}")
 	public String findEncryptedPWDByMailIdPwd(@PathVariable String mailEns, @PathVariable String idEns, @PathVariable String pwdEns)
 	{
 		System.out.println("---------------- Get Company with designation : kkkk");
-		String pwd = teacherRepository.findTeacherPWDByMailAndIdAndPwd(utilServices.decodeEncodedValue(mailEns), utilServices.decodeEncodedValue(idEns), utilServices.decodeEncodedValue(pwdEns)); 
+		String pwd = teacherRepository.findTeacherPWDByMailAndIdAndPwd(utilServices.decodeEncodedValue(mailEns), utilServices.decodeEncodedValue(idEns), utilServices.decodeEncodedValue(pwdEns));
 		System.out.println("---------------- Get Company with designation : " + pwd);
 		return pwd;
 	}
-	
+
 
 	@GetMapping("/sars2022/{studentId}")
 	public void lol(@PathVariable String studentId) {
@@ -2209,7 +2209,7 @@ public class MainController {
 	 ******************************************************/
 	@PostMapping("/upload/balanceSheetv1/{currentUserCode}")
 	public ResponseEntity<MessageResponse> uploadBilanV1(@PathVariable String currentUserCode,
-			@RequestParam("file") MultipartFile file) {
+														 @RequestParam("file") MultipartFile file) {
 
 		// // System.out.println("-----------------------------A: " + currentUserCode);
 		String message = "";
@@ -2257,7 +2257,7 @@ public class MainController {
 
 	@PostMapping("/upload/balanceSheetv2/{currentUserCode}")
 	public ResponseEntity<MessageResponse> uploadBilanV2(@PathVariable String currentUserCode,
-			@RequestParam("file") MultipartFile file) {
+														 @RequestParam("file") MultipartFile file) {
 
 		// // System.out.println("-----------------------------A: " + currentUserCode);
 		String message = "";
@@ -2304,7 +2304,7 @@ public class MainController {
 
 	@PostMapping("/upload/balanceSheetv3/{currentUserCode}")
 	public ResponseEntity<MessageResponse> uploadBilanV3(@PathVariable String currentUserCode,
-			@RequestParam("file") MultipartFile file) {
+														 @RequestParam("file") MultipartFile file) {
 
 		// // System.out.println("-----------------------------A: " + currentUserCode);
 		String message = "";
@@ -2488,15 +2488,25 @@ public class MainController {
 		return ResponseEntity.status(HttpStatus.OK).body(lss);
 	}
 
-	@PostMapping("/journalStageINGOFF")
-	public ResponseEntity<List<String>> getJournalStageINGOFF(@RequestBody StudentCodeRequest studentCodeReq)
+	@PostMapping("/jstging")
+	public ResponseEntity<List<String>> sampledsi(@RequestBody StudentCodeRequest studentCodeReq)
 	{
-		System.out.println("-----------------Encoded : " + studentCodeReq.getStudentCode());
 
+		System.out.println("ENCODED id Student : " + studentCodeReq.getStudentCode());
+
+		/*
+		// decrypt Base64
 		byte[] decodedBytes = Base64.getDecoder().decode(studentCodeReq.getStudentCode());
 		String decodedString = new String(decodedBytes);
+		*/
 
-		System.out.println("-----------------Decoded : " + decodedString);
+		String mpCryptoPassword = "SALT";
+		StandardPBEStringEncryptor decryptor = new StandardPBEStringEncryptor();
+		decryptor.setPassword(mpCryptoPassword);
+
+		String decodedString = decryptor.decrypt(studentCodeReq.getStudentCode());
+		System.out.println("DECODED id Student : " + studentCodeReq.getStudentCode());
+
 
 		List<DepotJournalINGDto> files = evaluationEngTrRepository.findJournalStageINGByStudent(decodedString);
 
@@ -2624,7 +2634,7 @@ public class MainController {
 	 ******************************************************/
 	@PostMapping("/upload/newspaper/{currentUserCode}")
 	public ResponseEntity<MessageResponse> uploadJournal(@PathVariable String currentUserCode,
-			@RequestParam("file") MultipartFile file) {
+														 @RequestParam("file") MultipartFile file) {
 
 		// // System.out.println("-----------------------------A: " + currentUserCode);
 		String message = "";
@@ -2886,7 +2896,7 @@ public class MainController {
 
 	@GetMapping("/affectStartHourSoutenanceMPWithInit/{studentId}/{startHourSoutenance}")
 	public void affectStartHourSoutenanceMPWithInit(@PathVariable String studentId,
-			@PathVariable String startHourSoutenance) throws ParseException {
+													@PathVariable String startHourSoutenance) throws ParseException {
 		FichePFE fichePFE = fichePFERepository.findFichePFEByStudent(studentId).get(0);
 		fichePFE.setHeureDebut(null);
 		fichePFE.setHeureFin(null);
@@ -2943,7 +2953,7 @@ public class MainController {
 
 	@GetMapping("/disponibility/teachers/{selectedDate}/{selectedStartHour}/{selectedEndHour}/{idPE}")
 	public List<TeacherDtoSTN> findTeachersDisponibility(@PathVariable String selectedDate,
-			@PathVariable String selectedStartHour, @PathVariable String selectedEndHour, @PathVariable String idPE) {
+														 @PathVariable String selectedStartHour, @PathVariable String selectedEndHour, @PathVariable String idPE) {
 		List<String> seances = new ArrayList<String>();
 
 		checkDisponibilityByUnit(false, seances, selectedStartHour, selectedEndHour);
@@ -3027,8 +3037,8 @@ public class MainController {
 
 	@GetMapping("/teachersDisponibilityForAdvancedPlanifStep1/{selectedDate}/{selectedStartHour}/{selectedEndHour}/{checkedStudents}")
 	public List<TeacherDtoSTN> findTeachersDisponibilityForAdvancedPlanifStep1(@PathVariable String selectedDate,
-			@PathVariable String selectedStartHour, @PathVariable String selectedEndHour,
-			@PathVariable List<String> checkedStudents) {
+																			   @PathVariable String selectedStartHour, @PathVariable String selectedEndHour,
+																			   @PathVariable List<String> checkedStudents) {
 		List<String> seances = new ArrayList<String>();
 
 		checkDisponibilityByUnit(false, seances, selectedStartHour, selectedEndHour);
@@ -3107,8 +3117,8 @@ public class MainController {
 
 	@GetMapping("/teachersDisponibilityForAP/{selectedDate}/{selectedStartHour}/{selectedEndHour}/{checkedStudents}")
 	public List<TeacherDtoSTN> findTeachersDisponibilityForAP(@PathVariable String selectedDate,
-			@PathVariable String selectedStartHour, @PathVariable String selectedEndHour,
-			@PathVariable List<String> checkedStudents) {
+															  @PathVariable String selectedStartHour, @PathVariable String selectedEndHour,
+															  @PathVariable List<String> checkedStudents) {
 		List<String> seances = new ArrayList<String>();
 
 		checkDisponibilityByUnit(false, seances, selectedStartHour, selectedEndHour);
@@ -3310,7 +3320,7 @@ public class MainController {
 
 	@GetMapping("/disponibility/classrooms/{selectedDate}/{selectedStartHour}/{selectedEndHour}")
 	public List<String> findClassroomsDisponibility(@PathVariable String selectedDate,
-			@PathVariable String selectedStartHour, @PathVariable String selectedEndHour) {
+													@PathVariable String selectedStartHour, @PathVariable String selectedEndHour) {
 
 		List<String> seances = new ArrayList<String>();
 		checkDisponibilityByUnit(false, seances, selectedStartHour, selectedEndHour);
@@ -3376,8 +3386,8 @@ public class MainController {
 
 	@GetMapping("/disponibilityClassrooms/{idCheckedStuds}/{selectedDate}/{selectedStartHour}/{selectedEndHour}")
 	public List<String> findClassroomsDisponibilityWithAECalc(@PathVariable List<String> idCheckedStuds,
-			@PathVariable String selectedDate, @PathVariable String selectedStartHour,
-			@PathVariable String selectedEndHour) {
+															  @PathVariable String selectedDate, @PathVariable String selectedStartHour,
+															  @PathVariable String selectedEndHour) {
 		/*
 		 * If AE has Many Students : Got ONLY ClassRooms Availables on - ALL INTERVAL
 		 * (10-11, 11-12, ...) - NOT ONLY selectedStartHour & selectedEndHour : 10-11
@@ -3520,7 +3530,7 @@ public class MainController {
 
 	@GetMapping("/authorizedStudentsToSTN/{idSession}/{idRespServiceStage}")
 	public List<StudentPlanifySTNDto> authorizedStudentsToSTN(@PathVariable Integer idSession,
-			@PathVariable String idRespServiceStage) {
+															  @PathVariable String idRespServiceStage) {
 
 		Set<String> idStudents = fichePFERepository.findAllAuthorizedStudentsForSoutenance(idSession,
 				idRespServiceStage);
@@ -3553,35 +3563,35 @@ public class MainController {
 	@GetMapping("/allAuthorizedStudentsToSTN/{idRespServiceStage}")
 	public List<StudentPlanifySTNDto> allAuthorizedStudentsToSTN(@PathVariable String idRespServiceStage)
 	{
-		
+
 		Set<String> idStudents = fichePFERepository.findAllAllAuthorizedStudentsForSoutenance(idRespServiceStage);
 		List<StudentPlanifySTNDto> studentsDtos = new ArrayList<StudentPlanifySTNDto>();
-		
+
 		System.out.println("-------------------> idStudents: " + idStudents);
-		
+
 		for(String idStudent : idStudents)
 		{
 			System.out.println("-------------------> UNIT-idStudent: " + idStudent);
 			FichePFEPlanificationSTNDto fp = fichePFERepository.findFichePFEForPlanSTNByStudent(idStudent);
 			String currentClass = utilServices.findCurrentClassByIdEt(idStudent);
 			String dateDepot = "--";
-			
+
 			if(fp.getDateDepotReports() != null)
 			{
 				dateDepot = fp.getDateDepotReports();
 			}
-			
+
 			String traineeKind = codeNomenclatureRepository.findLibNomenclatureByCodeStrAndCodeNome("111", fp.getTrainingKind());
-			
-			studentsDtos.add(new StudentPlanifySTNDto(idStudent, utilServices.findStudentFullNameById(idStudent), currentClass, 
+
+			studentsDtos.add(new StudentPlanifySTNDto(idStudent, utilServices.findStudentFullNameById(idStudent), currentClass,
 					dateDepot, fp.getLibelleSession(), traineeKind, fp.getDateSoutenance()));
 		}
-		
+
 		return studentsDtos;
-	
+
 	}
-	
-	
+
+
 	public List<String> lol(String selectedDate, String selectedStartHour, String selectedEndHour) {
 		List<String> seances = new ArrayList<String>();
 		checkDisponibilityByUnit(false, seances, selectedStartHour, selectedEndHour);
@@ -3647,7 +3657,7 @@ public class MainController {
 
 	@GetMapping("/checkedStudentsToMultiplePlanifSTN/{idRSS}/{idCheckedStuds}")
 	public List<StudentMultiplePlanificationDto> checkedStudentsToMultiplePlanifSTN(@PathVariable String idRSS,
-			@PathVariable List<String> idCheckedStuds) {
+																					@PathVariable List<String> idCheckedStuds) {
 		System.out.println("--------Size-1-----------##################----------------> MP: " + idCheckedStuds.size());
 		if (idRSS.equalsIgnoreCase("SR-STG-GC")) {
 			List<String> idPairs = new ArrayList<String>();
@@ -3842,7 +3852,7 @@ public class MainController {
 
 	@GetMapping("/checkAllFilledEntriesToBePlanifiedSTN/{idRSS}/{idCheckedStuds}")
 	public Boolean checkAllFilledEntriesToBePlanifiedSTN(@PathVariable String idRSS,
-			@PathVariable List<String> idCheckedStuds) {
+														 @PathVariable List<String> idCheckedStuds) {
 
 		if (idRSS.equalsIgnoreCase("SR-STG-GC")) {
 			List<String> idPairs = new ArrayList<String>();
@@ -3905,8 +3915,8 @@ public class MainController {
 
 	@GetMapping("/checkDisponibilityEncadrantForAP/{idRSS}/{idCheckedStuds}/{selectedDate}/{selectedStartHour}/{selectedEndHour}")
 	public List<StudentAdvancedPlanificationDto> checkDisponibilityEncadrantForAP(@PathVariable String idRSS,
-			@PathVariable List<String> idCheckedStuds, @PathVariable String selectedDate,
-			@PathVariable String selectedStartHour, @PathVariable String selectedEndHour) throws ParseException {
+																				  @PathVariable List<String> idCheckedStuds, @PathVariable String selectedDate,
+																				  @PathVariable String selectedStartHour, @PathVariable String selectedEndHour) throws ParseException {
 
 		// Got Distinct PE for Checked Students
 		System.out
@@ -4091,8 +4101,8 @@ public class MainController {
 	// hi2109
 	@GetMapping("/handleAutoPlanifSallesExpertsJuryPresidentsForAP/{idRSS}/{idCheckedStuds}/{selectedSalles}/{selectedExperts}/{selectedJuryPresidents}")
 	public void handleAutoPlanifSallesExpertsJuryPresidentsForAP(@PathVariable String idRSS,
-			@PathVariable List<String> idCheckedStuds, @PathVariable List<String> selectedSalles,
-			@PathVariable List<String> selectedExperts, @PathVariable List<String> selectedJuryPresidents) {
+																 @PathVariable List<String> idCheckedStuds, @PathVariable List<String> selectedSalles,
+																 @PathVariable List<String> selectedExperts, @PathVariable List<String> selectedJuryPresidents) {
 
 		if (idRSS.equalsIgnoreCase("SR-STG-GC")) {
 			List<String> idPairs = new ArrayList<String>();
@@ -4219,7 +4229,7 @@ public class MainController {
 				System.out.println("JP - " + nbrTrainingJP
 						+ " --------------------------------------------------------------> AFFECT JP: "
 						+ teacherRepository.findByIdEns(jp).getNomEns() + " -- " + utilServices
-								.findStudentFullNameById(fichePFEs.get(i).getIdFichePFE().getConventionPK().getIdEt()));
+						.findStudentFullNameById(fichePFEs.get(i).getIdFichePFE().getConventionPK().getIdEt()));
 
 				if (nbrTrainingJP < 6) {
 					fichePFEs.get(i).setPresidentJuryEns(teacherRepository.findByIdEns(jp));
@@ -4262,7 +4272,7 @@ public class MainController {
 											System.out.println("JP ........................> AFFECT: " + j + " - "
 													+ teacherRepository.findByIdEns(s).getNomEns() + " -> "
 													+ utilServices.findStudentFullNameById(fichePFE1s.get(j)
-															.getIdFichePFE().getConventionPK().getIdEt())
+													.getIdFichePFE().getConventionPK().getIdEt())
 													+ " ("
 													+ fichePFE1s.get(j).getIdFichePFE().getConventionPK().getIdEt()
 													+ ")");
@@ -4316,7 +4326,7 @@ public class MainController {
 				}
 				System.out.println("EXP ............$$............> NBR: "
 						+ utilServices
-								.findStudentFullNameById(fichePFEs.get(i).getIdFichePFE().getConventionPK().getIdEt())
+						.findStudentFullNameById(fichePFEs.get(i).getIdFichePFE().getConventionPK().getIdEt())
 						+ " <== " + allStus1.size() + " - " + nbrAffectedExps1.size() + " => " + giveOK1 + " | "
 						+ nbrAffectedExps1);
 
@@ -4331,7 +4341,7 @@ public class MainController {
 							+ " --------------------------------------------------------------> AFFECT EXP: "
 							+ teacherRepository.findByIdEns(exp).getNomEns() + " - "
 							+ utilServices.findStudentFullNameById(
-									fichePFEs.get(i).getIdFichePFE().getConventionPK().getIdEt()));
+							fichePFEs.get(i).getIdFichePFE().getConventionPK().getIdEt()));
 
 					if (nbrTrainingExp < 6) {
 						fichePFEs.get(i).setExpertEns(teacherRepository.findByIdEns(exp));
@@ -4360,7 +4370,7 @@ public class MainController {
 
 							System.out.println("EXP ...........> NBR: "
 									+ utilServices.findStudentFullNameById(
-											fichePFEs.get(i).getIdFichePFE().getConventionPK().getIdEt())
+									fichePFEs.get(i).getIdFichePFE().getConventionPK().getIdEt())
 									+ " <== " + allStus.size() + " - " + nbrAffectedExps.size() + " => " + giveOK
 									+ " | " + nbrAffectedExps);
 							/*****/
@@ -4393,7 +4403,7 @@ public class MainController {
 												System.out.println("EXP ........................> AFFECT: " + j + " - "
 														+ teacherRepository.findByIdEns(s).getNomEns() + " -> "
 														+ utilServices.findStudentFullNameById(fichePFE1s.get(j)
-																.getIdFichePFE().getConventionPK().getIdEt())
+														.getIdFichePFE().getConventionPK().getIdEt())
 														+ " ("
 														+ fichePFE1s.get(j).getIdFichePFE().getConventionPK().getIdEt()
 														+ ")");
@@ -4497,7 +4507,7 @@ public class MainController {
 
 	@GetMapping("/nbrAuthorizedStudentsToSTN/{idSession}/{idRespServiceStage}")
 	public Integer nbrAuthorizedStudentsToSTN(@PathVariable Integer idSession,
-			@PathVariable String idRespServiceStage) {
+											  @PathVariable String idRespServiceStage) {
 		Set<String> idStudents = fichePFERepository.findAllAuthorizedStudentsForSoutenance(idSession,
 				idRespServiceStage);
 		return idStudents.size();
@@ -4505,21 +4515,21 @@ public class MainController {
 
 	@GetMapping("/nbrAllStudentsDoneSoutenance/{idSession}/{idRespServiceStage}")
 	public Integer nbrAllStudentsDoneSoutenance(@PathVariable Integer idSession,
-			@PathVariable String idRespServiceStage) {
+												@PathVariable String idRespServiceStage) {
 		Set<String> idStudents = fichePFERepository.findAllStudentsDoneSoutenance(idSession, idRespServiceStage);
 		return idStudents.size();
 	}
 
 	@GetMapping("/nbrAllStudentsPlanifiedSoutenance/{idSession}/{idRespServiceStage}")
 	public Integer nbrAllStudentsPlanifiedSoutenance(@PathVariable Integer idSession,
-			@PathVariable String idRespServiceStage) {
+													 @PathVariable String idRespServiceStage) {
 		Set<String> idStudents = fichePFERepository.findAllStudentsPlanifiedSoutenance(idSession, idRespServiceStage);
 		return idStudents.size();
 	}
 
 	@GetMapping("/soutenancesNotifiées/{idSession}/{idRespServiceStage}")
 	public List<StudentPlanifySTNDto> findAllStudentsDoneSoutenance(@PathVariable Integer idSession,
-			@PathVariable String idRespServiceStage) {
+																	@PathVariable String idRespServiceStage) {
 
 		Set<String> idStudents = fichePFERepository.findAllStudentsDoneSoutenance(idSession, idRespServiceStage);
 		List<StudentPlanifySTNDto> studentsDtos = new ArrayList<StudentPlanifySTNDto>();
@@ -4565,10 +4575,10 @@ public class MainController {
 		{
 			idServiceStage = idRespServiceStage;
 		}
-		
+
 		Set<String> idStudents = fichePFERepository.findAllStudentsAllDoneSoutenance(idServiceStage);
 		System.out.println("--> PIKA STN : " + idServiceStage + " - " + idStudents.size() );
-		
+
 		List<StudentPlanifySTNDto> studentsDtos = new ArrayList<StudentPlanifySTNDto>();
 
 		System.out.println("--> idStudents: " + idStudents);
@@ -4603,7 +4613,7 @@ public class MainController {
 	public List<StudentPlanifySTNDto> findAllStudentsAllDoneSoutenanceForCPS() {
 
 		Set<String> idStudents = fichePFERepository.findAllStudentsAllDoneSoutenanceForCPS();
-		
+
 		List<StudentPlanifySTNDto> studentsDtos = new ArrayList<StudentPlanifySTNDto>();
 
 		System.out.println("--> idStudents: " + idStudents);
@@ -4668,7 +4678,7 @@ public class MainController {
 
 	@GetMapping("/soutenancesPlanifiées/{idSession}/{idRespServiceStage}")
 	public List<StudentPlanifySTNDto> findAllStudentsWithPlanifiedSoutenances(@PathVariable Integer idSession,
-			@PathVariable String idRespServiceStage) {
+																			  @PathVariable String idRespServiceStage) {
 
 		Set<String> idStudents = fichePFERepository.findAllStudentsPlanifiedSoutenance(idSession, idRespServiceStage);
 		List<StudentPlanifySTNDto> studentsDtos = new ArrayList<StudentPlanifySTNDto>();
@@ -4843,7 +4853,7 @@ public class MainController {
 
 	@GetMapping("/affectJuryPresidentEns/{idEt}/{idJuryPresident}/{date}/{startHour}/{endHour}")
 	public void affectJuryPresidentEns(@PathVariable String idEt, @PathVariable String idJuryPresident,
-			@PathVariable String date, @PathVariable String startHour, @PathVariable String endHour)
+									   @PathVariable String date, @PathVariable String startHour, @PathVariable String endHour)
 			throws ParseException {
 
 		FichePFE fichePFE = fichePFERepository.findFichePFEByStudent(idEt).get(0);
@@ -4866,7 +4876,7 @@ public class MainController {
 
 	@GetMapping("/affectExpertEns/{idEt}/{idExpert}/{date}/{startHour}/{endHour}")
 	public void affectExpertEns(@PathVariable String idEt, @PathVariable String idExpert, @PathVariable String date,
-			@PathVariable String startHour, @PathVariable String endHour) throws ParseException {
+								@PathVariable String startHour, @PathVariable String endHour) throws ParseException {
 
 		FichePFE fichePFE = fichePFERepository.findFichePFEByStudent(idEt).get(0);
 
@@ -4887,7 +4897,7 @@ public class MainController {
 
 	@GetMapping("/affectJuryPresidentNotEns/{idEt}/{fullNameJuryPresident}/{date}/{startHour}/{endHour}")
 	public void affectJuryPresidentNotEns(@PathVariable String idEt, @PathVariable String fullNameJuryPresident,
-			@PathVariable String date, @PathVariable String startHour, @PathVariable String endHour)
+										  @PathVariable String date, @PathVariable String startHour, @PathVariable String endHour)
 			throws ParseException {
 
 		FichePFE fichePFE = fichePFERepository.findFichePFEByStudent(idEt).get(0);
@@ -4918,29 +4928,29 @@ public class MainController {
 		esi.setEtatDepot("03");
 		esi.setDateDemandeMAJ(new Date());
 		evaluationEngTrRepository.save(esi);
-		
+
 		// **************************************************************************** Notification by mail
-		DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");  
+		DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		String dateDepotDocsStageING = dateFormata.format(new Date());
-			
+
 		String subject = "Demande Mettre à Jour Dépôt Stage Ingénieur";
-			
+
 		// Server
 		String studentMail = utilServices.findStudentMailById(idEt);
 		String academicEncadrantMail = utilServices.findEncadrantPedagogiqueByStudentId(idEt).getMail();
 		String academicEncadrantFullName = utilServices.findFullNamePedagogicalEncadrant(idEt);
-				
+
 		String content = "Nous voulons vous informer par le présent mail que vous avez envoyé une "
-					   + "<strong><font color=grey>Demande de Modification de votre Dépôt</font></strong> "
-					   + "et c'est le <font color=blue> " + dateDepotDocsStageING + " </font>.<br/>"
-		               + "Votre Encadrant(e) Académique Madame/Monsieur <strong><font color=grey>" + academicEncadrantFullName + "</font></strong> va traiter "
-		               + "votre demande le plutôt possible.";
-		        
+				+ "<strong><font color=grey>Demande de Modification de votre Dépôt</font></strong> "
+				+ "et c'est le <font color=blue> " + dateDepotDocsStageING + " </font>.<br/>"
+				+ "Votre Encadrant(e) Académique Madame/Monsieur <strong><font color=grey>" + academicEncadrantFullName + "</font></strong> va traiter "
+				+ "votre demande le plutôt possible.";
+
 		utilServices.sendMailWithCC(subject, studentMail, academicEncadrantMail, content);
-		
+
 		return esi.getEtatDepot();
 	}
-	
+
 	@GetMapping("/confirmMyDepotStageING/{idEt}")
 	public String confirmMyDepotStageING(@PathVariable String idEt)
 	{
@@ -4948,32 +4958,32 @@ public class MainController {
 		esi.setEtatDepot("02");
 		esi.setDateConfirmDepot(new Date());
 		evaluationEngTrRepository.save(esi);
-		
+
 		// **************************************************************************** Notification by mail
-		DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");  
+		DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		String dateConfirmationDepotDocsStageING = dateFormata.format(new Date());
-			
+
 		String subject = "Dépôt Stage Ingénieur";
-			
+
 		// Server
 		String studentMail = utilServices.findStudentMailById(idEt); //.substring(0, utilServices.findStudentMailById(idEt).lastIndexOf("@")) + "@mail.tn";
-    	String academicEncMail = utilServices.findMailPedagogicalEncadrant(idEt); //.substring(0, utilServices.findMailPedagogicalEncadrant(idEt).lastIndexOf("@")) + "@mail.tn";
-    	
+		String academicEncMail = utilServices.findMailPedagogicalEncadrant(idEt); //.substring(0, utilServices.findMailPedagogicalEncadrant(idEt).lastIndexOf("@")) + "@mail.tn";
+
 		String academicEncadrantFullName = utilServices.findFullNamePedagogicalEncadrant(idEt);
-								
-    	String content = "Nous voulons vous informer par le présent mail que vous avez déposé vos Documents pour Stage Ingénieur : "
-    				   + "votre <strong><font color=grey> Journal </font></strong>, "
-    				   + "votre <strong><font color=grey> Attestation </font></strong> "
-    				   + "ainsi que votre <strong><font color=grey> Rapport </font></strong>, "
-    				   + "et c'est le <font color=blue> " + dateConfirmationDepotDocsStageING + " </font>. <br/>"
-				       + "Votre Encadrant(e) Académique Madame/Monsieur <strong><font color=grey>" + academicEncadrantFullName + "</font></strong> va attribuer "
-				       + "la <font color=red>Note Stage Ingénieur</font> en se basant sur votre Dépôt.";
-    	
-   		utilServices.sendMailWithCC(subject, studentMail, academicEncMail, content);
-		
+
+		String content = "Nous voulons vous informer par le présent mail que vous avez déposé vos Documents pour Stage Ingénieur : "
+				+ "votre <strong><font color=grey> Journal </font></strong>, "
+				+ "votre <strong><font color=grey> Attestation </font></strong> "
+				+ "ainsi que votre <strong><font color=grey> Rapport </font></strong>, "
+				+ "et c'est le <font color=blue> " + dateConfirmationDepotDocsStageING + " </font>. <br/>"
+				+ "Votre Encadrant(e) Académique Madame/Monsieur <strong><font color=grey>" + academicEncadrantFullName + "</font></strong> va attribuer "
+				+ "la <font color=red>Note Stage Ingénieur</font> en se basant sur votre Dépôt.";
+
+		utilServices.sendMailWithCC(subject, studentMail, academicEncMail, content);
+
 		return "02";
 	}
-	
+
 
 	@GetMapping("/findTeacherByIdEns/{idEns}")
 	public TeacherDto findTeacherByIdEns(@PathVariable String idEns) {
@@ -4991,8 +5001,8 @@ public class MainController {
 
 	@GetMapping("/pedagogicalEncadrantDisponibility/{idPedagocialEncadrant}/{idEt}/{selectedDate}/{selectedStartHour}/{selectedEndHour}")
 	public Boolean findPedagogicalEncadrantDisponibility(@PathVariable String idPedagocialEncadrant,
-			@PathVariable String idEt, @PathVariable String selectedDate, @PathVariable String selectedStartHour,
-			@PathVariable String selectedEndHour) {
+														 @PathVariable String idEt, @PathVariable String selectedDate, @PathVariable String selectedStartHour,
+														 @PathVariable String selectedEndHour) {
 		Boolean isAvailablePE = false;
 		List<String> seances = new ArrayList<String>();
 
@@ -5011,7 +5021,7 @@ public class MainController {
 	}
 
 	public String resultDisponibilityPE(String idPedagogicalEncadrant, String idEt, String selectedDate,
-			String selectedStartHour, String selectedEndHour) {
+										String selectedStartHour, String selectedEndHour) {
 		String result = null;
 
 		List<String> seances = new ArrayList<String>();
@@ -5067,7 +5077,7 @@ public class MainController {
 	}
 
 	public String resultDisponibilityPEForAdvacedPlanif(String idPedagogicalEncadrant, String idEt, String selectedDate,
-			String selectedStartHour, String selectedEndHour) {
+														String selectedStartHour, String selectedEndHour) {
 		String result = null;
 
 		List<String> seances = new ArrayList<String>();
@@ -5117,7 +5127,7 @@ public class MainController {
 	}
 
 	public String resultDisponibilityPEForAdvancedPlanifStep1(String idPedagogicalEncadrant, String idEt,
-			String selectedDate, String selectedStartHour, String selectedEndHour) {
+															  String selectedDate, String selectedStartHour, String selectedEndHour) {
 		String result = null;
 
 		List<String> seances = new ArrayList<String>();
@@ -5391,7 +5401,7 @@ public class MainController {
 
 	@GetMapping("/affectClassRoom/{idEt}/{codeSalle}/{date}/{startHour}/{endHour}")
 	public void affectClassRoom(@PathVariable String idEt, @PathVariable String codeSalle, @PathVariable String date,
-			@PathVariable String startHour, @PathVariable String endHour) throws ParseException {
+								@PathVariable String startHour, @PathVariable String endHour) throws ParseException {
 
 		FichePFE fichePFE = fichePFERepository.findFichePFEByStudent(idEt).get(0);
 
@@ -5541,14 +5551,14 @@ public class MainController {
 
 	@GetMapping("/fillFicheDepotPFE/{idEt}/{notePE}/{onPlanningStg}/{onBilanPerDebStg}/{onBilanPerMilStg}/{onBilanPerFinStg}/{onFicheEvalMiPar}/{onFicheEvalFin}/{onJournalBord}/{onRapportStg}/{dateRDV1}/{dateRDV2}/{dateRDV3}/{presenceKindRDV1}/{presenceKindRDV2}/{presenceKindRDV3}/{satisfactionRDV1}/{satisfactionRDV2}/{satisfactionRDV3}/{etatTreatEA}")
 	public void fillFicheDepotPFE(@PathVariable String idEt, @PathVariable BigDecimal notePE,
-			@PathVariable Boolean onPlanningStg, @PathVariable Boolean onBilanPerDebStg,
-			@PathVariable Boolean onBilanPerMilStg, @PathVariable Boolean onBilanPerFinStg,
-			@PathVariable Boolean onFicheEvalMiPar, @PathVariable Boolean onFicheEvalFin,
-			@PathVariable Boolean onJournalBord, @PathVariable Boolean onRapportStg, @PathVariable String dateRDV1,
-			@PathVariable String dateRDV2, @PathVariable String dateRDV3, @PathVariable String presenceKindRDV1,
-			@PathVariable String presenceKindRDV2, @PathVariable String presenceKindRDV3,
-			@PathVariable String satisfactionRDV1, @PathVariable String satisfactionRDV2,
-			@PathVariable String satisfactionRDV3, @PathVariable String etatTreatEA) throws ParseException {
+								  @PathVariable Boolean onPlanningStg, @PathVariable Boolean onBilanPerDebStg,
+								  @PathVariable Boolean onBilanPerMilStg, @PathVariable Boolean onBilanPerFinStg,
+								  @PathVariable Boolean onFicheEvalMiPar, @PathVariable Boolean onFicheEvalFin,
+								  @PathVariable Boolean onJournalBord, @PathVariable Boolean onRapportStg, @PathVariable String dateRDV1,
+								  @PathVariable String dateRDV2, @PathVariable String dateRDV3, @PathVariable String presenceKindRDV1,
+								  @PathVariable String presenceKindRDV2, @PathVariable String presenceKindRDV3,
+								  @PathVariable String satisfactionRDV1, @PathVariable String satisfactionRDV2,
+								  @PathVariable String satisfactionRDV3, @PathVariable String etatTreatEA) throws ParseException {
 		System.out.println("---------------------------> notePE: " + notePE);
 		System.out.println("---------------------------> onPlanningStg: " + onPlanningStg);
 		System.out.println("---------------------------> dateRDV1: " + dateRDV1);
@@ -5619,8 +5629,8 @@ public class MainController {
 
 	@GetMapping("/downloadStudentPV/{idEt}/{nomet}/{classe}/{juryPresident}/{membre}/{pedagogicalEncadrant}/{stnDate}")
 	public ResponseEntity downloadStudentPV(@PathVariable String idEt, @PathVariable String nomet,
-			@PathVariable String classe, @PathVariable String juryPresident, @PathVariable String membre,
-			@PathVariable String pedagogicalEncadrant, @PathVariable String stnDate) throws IOException {
+											@PathVariable String classe, @PathVariable String juryPresident, @PathVariable String membre,
+											@PathVariable String pedagogicalEncadrant, @PathVariable String stnDate) throws IOException {
 		// System.out.println("-------------PV---------------------> idEt: " + idEt);
 		// System.out.println("-------------PV---------------------> nomet: " + nomet);
 		// System.out.println("-------------PV---------------------> classe: " +
@@ -5692,8 +5702,8 @@ public class MainController {
 
 	@GetMapping("/downloadBinomePV/{idStu}/{idEt}/{nomet}/{classe}/{juryPresident}/{membre}/{pedagogicalEncadrant}/{stnDate}")
 	public ResponseEntity downloadBinomePV(@PathVariable String idStu, @PathVariable String idEt,
-			@PathVariable String nomet, @PathVariable String classe, @PathVariable String juryPresident,
-			@PathVariable String membre, @PathVariable String pedagogicalEncadrant, @PathVariable String stnDate)
+										   @PathVariable String nomet, @PathVariable String classe, @PathVariable String juryPresident,
+										   @PathVariable String membre, @PathVariable String pedagogicalEncadrant, @PathVariable String stnDate)
 			throws IOException {
 		// System.out.println("-------------PV---------------------> idEt: " + idEt);
 		// System.out.println("-------------PV---------------------> nomet: " + nomet);
@@ -5766,7 +5776,7 @@ public class MainController {
 
 	@GetMapping("/downloadPlanningSoutenanceExcel/{idSession}/{idRespServiceStage}")
 	public ResponseEntity downloadPlanningSoutenanceExcel(@PathVariable Integer idSession,
-			@PathVariable String idRespServiceStage) throws IOException {
+														  @PathVariable String idRespServiceStage) throws IOException {
 		String sessionLabel = sessionRepository.findByIdSession(1).getLibelleSession();
 
 		// System.out.println("---------- Download Excel -------> idSession: " +
@@ -5906,7 +5916,7 @@ public class MainController {
 
 	@GetMapping("/downloadPlanningSoutenanceNotifiéesExcel/{idSession}/{idRespServiceStage}")
 	public ResponseEntity downloadPlanningSoutenanceNotifiéesExcel(@PathVariable Integer idSession,
-			@PathVariable String idRespServiceStage) throws IOException {
+																   @PathVariable String idRespServiceStage) throws IOException {
 		String sessionLabel = sessionRepository.findByIdSession(1).getLibelleSession();
 
 		// System.out.println("---------- Download Excel -------> idSession: " +
@@ -6039,7 +6049,7 @@ public class MainController {
 
 	@GetMapping("/downloadPlanningSoutenancePlanifiéesExcel/{idSession}/{idRespServiceStage}")
 	public ResponseEntity downloadPlanningSoutenancePlanifiéesExcel(@PathVariable Integer idSession,
-			@PathVariable String idRespServiceStage) throws IOException {
+																	@PathVariable String idRespServiceStage) throws IOException {
 		String sessionLabel = sessionRepository.findByIdSession(1).getLibelleSession();
 
 		// System.out.println("---------- Download Excel -------> idSession: " +
@@ -6363,7 +6373,7 @@ public class MainController {
 
 	@GetMapping("/downloadFicheDepotPFE/{idEt}/{classe}/{nomet}/{pairClass}")
 	public ResponseEntity downloadFicheDepotPFE(@PathVariable String idEt, @PathVariable String classe,
-			@PathVariable String nomet, @PathVariable String pairClass) throws IOException {
+												@PathVariable String nomet, @PathVariable String pairClass) throws IOException {
 		// System.out.println("-------------PV---------------------> idEt: " + idEt);
 		// System.out.println("-------------PV---------------------> nomet: " + nomet);
 		// System.out.println("-------------PV---------------------> classe: " +
@@ -7078,20 +7088,20 @@ public class MainController {
 	 * = fichePFERepository.findAllAuthorizedStudentsForSoutenance(idSession,
 	 * idRespServiceStage); List<StudentPlanifySTNDto> studentsDtos = new
 	 * ArrayList<StudentPlanifySTNDto>();
-	 * 
+	 *
 	 * for(String idStudent : idStudents) { FichePFE fichePFE =
 	 * fichePFERepository.findFichePFEByStudent(idStudent).get(0);
-	 * 
+	 *
 	 * String traineeKind =
 	 * codeNomenclatureRepository.findLibNomenclatureByCodeStrAndCodeNome("111",
 	 * fichePFE.getTraineeKind()); String sessionLabel =
 	 * sessionRepository.findByIdSession(fichePFE.getSession().getIdSession()).
 	 * getLibelleSession();
-	 * 
+	 *
 	 * studentsDtos.add(new StudentPlanifySTNDto(idStudent,
 	 * studentRepository.utilServices.findStudentFullNameById(idStudent),
 	 * currentClass, dateDepot, sessionLabel, statusPlanifySTN, traineeKind)); }
-	 * 
+	 *
 	 * return studentsDtos; }
 	 */
 
@@ -7279,7 +7289,7 @@ public class MainController {
 	 ******************************************************/
 
 	public void checkDisponibilityByUnit(Boolean isAvailablePE, List<String> seances, String selectedStartHour,
-			String selectedEndHour) {
+										 String selectedEndHour) {
 		System.out.println("--------------SARS----------------> CALC-1: " + seances);
 		System.out.println("--------------SARS----------------> CALC-2: " + selectedStartHour);
 		System.out.println("--------------SARS----------------> CALC-3: " + selectedEndHour);
@@ -7455,9 +7465,9 @@ public class MainController {
 	public List<StudentAffectationDetailsDto> findAllAffectedStudentsToAExpByYear(@PathVariable String idAE, @PathVariable String selectedYear)
 	{
 		List<StudentAffectationDetailsDto> las = utilServices.findStudentsDtoTrainedByPExpAndYear(idAE, selectedYear);
-		
+
 		System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$: " + las.size());
-		
+
 		for(StudentAffectationDetailsDto sd : las)
 		{
 			sd.setUniverYear(sd.getUniverYear() + "-" + (Integer.parseInt(sd.getUniverYear()) + 1));
@@ -7467,13 +7477,13 @@ public class MainController {
 			}
 			else
 			{
-				sd.setOption(utilServices.findOptionByClass(sd.getClasse(), optionRepository.listOptionsByYear(selectedYear)).replace("_01", ""));	
+				sd.setOption(utilServices.findOptionByClass(sd.getClasse(), optionRepository.listOptionsByYear(selectedYear)).replace("_01", ""));
 			}
 		}
-		
+
 		return las;
 	}
-	
+
 	public void localNotificationValidateDepot(String idStu, String subject, String content) {
 		String receiver = "saria.essid@gmail.com";
 
@@ -7558,9 +7568,9 @@ public class MainController {
 		String currentClass = utilServices.findCurrentClassByIdEt(idStu);
 
 		System.out.println("-------------------------> HOSTS DR: " + currentClass);
-		
 
-    	String studentOption = null;
+
+		String studentOption = null;
 		if(currentClass.contains("4ALINFO"))
 		{
 			studentOption = optionStudentALTRepository.findOptionByStudentALT(idStu) + "_01";
@@ -7568,45 +7578,45 @@ public class MainController {
 		else
 		{
 			studentOption = utilServices.findOptionByClass(currentClass, optionRepository.listOptionsByYear("2021"));
-			// sd.setOption(utilServices.findOptionByClass(sd.getClasse(), optionRepository.listOptionsByYear("2021")).replace("_01", ""));	
+			// sd.setOption(utilServices.findOptionByClass(sd.getClasse(), optionRepository.listOptionsByYear("2021")).replace("_01", ""));
 		}
 
 		System.out.println("----------------> Code Option: " + studentOption);
 
 		//String mailAcademicCoordinator = pedagogicalCoordinatorRepository
 		//		.findPedagogicalCoordinatorMailByCodeOption(studentOption);
-		
+
 		String idCPS = pedagogicalCoordinatorRepository.gotIdEnsPedagogicalCoordinatorByOption(studentOption.toLowerCase());
-    	
+
 		String mailCPS = "saria.essid@esprit.tn";
-    	if(
-    			studentOption.toUpperCase().contains("SIM") || studentOption.toUpperCase().contains("GAMIX") ||
-    			studentOption.toUpperCase().contains("WIN") || studentOption.toUpperCase().contains("IOSYS")
-    	  )
-    	{
-    		if(studentOption.toUpperCase().contains("SIM"))
-        	{
-        		mailCPS = "CPS_SIM@esprit.tn";
-        	}
-        	if(studentOption.toUpperCase().contains("GAMIX"))
-        	{
-        		mailCPS = "CPS_GAMIX@esprit.tn";
-        	}
-        	if(studentOption.toUpperCase().contains("WIN"))
-        	{
-        		mailCPS = "CPS_WIN@esprit.tn";
-        	}
-        	if(studentOption.toUpperCase().contains("IOSYS"))
-        	{
-        		mailCPS = "CPS_IOSYS@esprit.tn";
-        	}
-    	}
-    	else
-    	{
-    		mailCPS = pedagogicalCoordinatorRepository.gotAllMAilsPedagogicalCoordinatorByIdNew(idCPS);
-    	}
-		
-		
+		if(
+				studentOption.toUpperCase().contains("SIM") || studentOption.toUpperCase().contains("GAMIX") ||
+						studentOption.toUpperCase().contains("WIN") || studentOption.toUpperCase().contains("IOSYS")
+		)
+		{
+			if(studentOption.toUpperCase().contains("SIM"))
+			{
+				mailCPS = "CPS_SIM@esprit.tn";
+			}
+			if(studentOption.toUpperCase().contains("GAMIX"))
+			{
+				mailCPS = "CPS_GAMIX@esprit.tn";
+			}
+			if(studentOption.toUpperCase().contains("WIN"))
+			{
+				mailCPS = "CPS_WIN@esprit.tn";
+			}
+			if(studentOption.toUpperCase().contains("IOSYS"))
+			{
+				mailCPS = "CPS_IOSYS@esprit.tn";
+			}
+		}
+		else
+		{
+			mailCPS = pedagogicalCoordinatorRepository.gotAllMAilsPedagogicalCoordinatorByIdNew(idCPS);
+		}
+
+
 		// String idAcademicCoordinator =
 		// pedagogicalCoordinatorRepository.findPedagogicalCoordinatorByCodeOption(codeOption);
 		// System.out.println("----------------> Academic Coordinator: " +
@@ -7635,8 +7645,8 @@ public class MainController {
 
 	@GetMapping("/validateAndNotifySoutenanceActors/{idEtToSTN}/{selectedDate}/{selectedStartHour}/{selectedEndHour}/{salle}/{pedagogicalEncadrant}/{presjury}/{expertEns}")
 	public void validateAndNotifySoutenanceActors(@PathVariable String idEtToSTN, @PathVariable String selectedDate,
-			@PathVariable String selectedStartHour, @PathVariable String selectedEndHour, @PathVariable String salle,
-			@PathVariable String pedagogicalEncadrant, @PathVariable String presjury, @PathVariable String expertEns)
+												  @PathVariable String selectedStartHour, @PathVariable String selectedEndHour, @PathVariable String salle,
+												  @PathVariable String pedagogicalEncadrant, @PathVariable String presjury, @PathVariable String expertEns)
 			throws IOException, GeneralSecurityException {
 		FichePFE fichePFE = fichePFERepository.findFichePFEByStudent(idEtToSTN).get(0);
 		fichePFE.setEtatFiche("06");
@@ -7660,13 +7670,13 @@ public class MainController {
 			}
 			// System.out.println("CON-------------- STN-5: " + relatedSession.getIdSession());
 			fichePFE.setSession(relatedSession);
-			
+
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		/**********************************************************************************************************/
-		
+
 		String nameRSS = conventionRepository.findNameResponsableServiceStageByIdEt(idEtToSTN).get(0);
 
 		String studentMail = utilServices.findStudentMailById(idEtToSTN); // SERVER
@@ -7733,11 +7743,11 @@ public class MainController {
 
 		FichePFE fichePFE = fichePFERepository.findFichePFEByStudent(idEtToSTN).get(0);
 		fichePFE.setEtatFiche("06");
-		
+
 
 		DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy");
 		String formattedDateSoutenance = dateFormata.format(fichePFE.getDateSoutenance());
-		
+
 		/*******************************************************************************************Session********/
 		Date date1;
 		try
@@ -7756,13 +7766,13 @@ public class MainController {
 			}
 			// System.out.println("CON-------------- STN-5: " + relatedSession.getIdSession());
 			fichePFE.setSession(relatedSession);
-			
+
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		/**********************************************************************************************************/
-		
+
 		fichePFERepository.save(fichePFE);
 
 		String nameRSS = conventionRepository.findNameResponsableServiceStageByIdEt(idEtToSTN).get(0);
@@ -7998,7 +8008,7 @@ public class MainController {
 
 	@GetMapping("/listStudentsByClass/{codeClass}/{pcMail}")
 	public List<StudentFullNameMailTelDto> listStudentsByClass(@PathVariable String codeClass,
-			@PathVariable String pcMail) {
+															   @PathVariable String pcMail) {
 		System.out.println("--PC----------------> class . pcMail: " + codeClass + " . " + pcMail);
 
 		List<StudentFullNameMailTelDto> lStudents = new ArrayList<StudentFullNameMailTelDto>();
@@ -8067,94 +8077,94 @@ public class MainController {
 
 	@GetMapping("/listStudentsByYearAndClass/{selectedYear}/{codeClass}/{pcMail}")
 	public List<StudentFullNameMailTelDto> listStudentsByYearAndClass(@PathVariable String selectedYear,
-			@PathVariable String codeClass, @PathVariable String pcMail) {
+																	  @PathVariable String codeClass, @PathVariable String pcMail) {
 
-	System.out.println("--PC-------ccc---------> year . class . pcMail: " + selectedYear + " - " + codeClass + " - " + pcMail);
-	
-	List<StudentFullNameMailTelDto> lStudents = new ArrayList<StudentFullNameMailTelDto>();
-	if(!codeClass.contains("4ALINFO"))
-	{
-		System.out.println("------------------------> NOT ALINFO");
-		
-		lStudents = utilServices.findStudentsFullNameMailTelByYearAndClass(selectedYear, codeClass);
-		
-		for(StudentFullNameMailTelDto s : lStudents)
+		System.out.println("--PC-------ccc---------> year . class . pcMail: " + selectedYear + " - " + codeClass + " - " + pcMail);
+
+		List<StudentFullNameMailTelDto> lStudents = new ArrayList<StudentFullNameMailTelDto>();
+		if(!codeClass.contains("4ALINFO"))
 		{
-			s.setOption(utilServices.findOptionByClass(codeClass, optionRepository.listOptionsByYear(selectedYear)).replace("_01", ""));
-			
-			if(utilServices.findIdEncadrantPedagogiqueByStudent(s.getId()) != null)
-			{
-				s.setAffected("AFFECTEE");
-			}
-		}
-	}
-	if(codeClass.contains("4ALINFO"))
-	{
-		if(pcMail.equalsIgnoreCase("CD-Alt@esprit.tn") || pcMail.equalsIgnoreCase("CPS-Alt@esprit.tn"))
-		{
-			System.out.println("------------------------> IS ALINFO CD");
-			
-			List<String> stuALINFOs = optionStudentALTRepository.findStudentsALTByYearAndClasse(selectedYear, codeClass);
-			
-			System.out.println("----> Size ùùùù: " + stuALINFOs.size());
-			
-			for(String s : stuALINFOs)
-			{
-				System.out.println("----> " + codeClass + ": " + utilServices.findStudentFullNameByIdYear(s, selectedYear) + " - " + s);
-				lStudents.addAll(utilServices.findStudentsFullNameMailTelByIdEtWithActivatedYears(s));
-			}
-			
+			System.out.println("------------------------> NOT ALINFO");
+
+			lStudents = utilServices.findStudentsFullNameMailTelByYearAndClass(selectedYear, codeClass);
+
 			for(StudentFullNameMailTelDto s : lStudents)
 			{
-				s.setOption(optionStudentALTRepository.findOptionByStudentALTAndYear(s.getId(), selectedYear));
+				s.setOption(utilServices.findOptionByClass(codeClass, optionRepository.listOptionsByYear(selectedYear)).replace("_01", ""));
+
 				if(utilServices.findIdEncadrantPedagogiqueByStudent(s.getId()) != null)
 				{
 					s.setAffected("AFFECTEE");
 				}
 			}
 		}
-		else
+		if(codeClass.contains("4ALINFO"))
 		{
-			System.out.println("------------------------> IS ALINFO CPS");
-			
-			String idPC = pedagogicalCoordinatorRepository.gotIdPedagogicalCoordinator(pcMail).get(0);
-			System.out.println("------------------------> idPC: " + idPC);
-			List<String> options = pedagogicalCoordinatorRepository.listOptionsByPedagogicalCoordinator(idPC);
-			System.out.println("------------------------> options: " + options.size());
-			
-			List<String> stuALINFOs = new ArrayList<String>();
-			for(String opt : options)
+			if(pcMail.equalsIgnoreCase("CD-Alt@esprit.tn") || pcMail.equalsIgnoreCase("CPS-Alt@esprit.tn"))
 			{
-				System.out.println("UNIT -------> opt . " + "class = " + opt + " . " + codeClass);
-				stuALINFOs.addAll(optionStudentALTRepository.findStudentsALTByYearAndOptionAndClasse(selectedYear, opt, codeClass));
-			}
-			
-			for(String s : stuALINFOs)
-			{
-				System.out.println("--sssssssss--> " + codeClass + ": " + utilServices.findStudentFullNameByIdYear(s, selectedYear));
-				lStudents.addAll(utilServices.findStudentsFullNameMailTelByIdEtWithYear(s, selectedYear));
-			}
-			
-			for(StudentFullNameMailTelDto s : lStudents)
-			{
-				s.setOption(optionStudentALTRepository.findOptionByStudentALTAndYear(s.getId(), selectedYear));
-				if(utilServices.findIdEncadrantPedagogiqueByStudentByYear(s.getId(), selectedYear) != null)
+				System.out.println("------------------------> IS ALINFO CD");
+
+				List<String> stuALINFOs = optionStudentALTRepository.findStudentsALTByYearAndClasse(selectedYear, codeClass);
+
+				System.out.println("----> Size ùùùù: " + stuALINFOs.size());
+
+				for(String s : stuALINFOs)
 				{
-					s.setAffected("AFFECTEE");
+					System.out.println("----> " + codeClass + ": " + utilServices.findStudentFullNameByIdYear(s, selectedYear) + " - " + s);
+					lStudents.addAll(utilServices.findStudentsFullNameMailTelByIdEtWithActivatedYears(s));
+				}
+
+				for(StudentFullNameMailTelDto s : lStudents)
+				{
+					s.setOption(optionStudentALTRepository.findOptionByStudentALTAndYear(s.getId(), selectedYear));
+					if(utilServices.findIdEncadrantPedagogiqueByStudent(s.getId()) != null)
+					{
+						s.setAffected("AFFECTEE");
+					}
 				}
 			}
-		}
-		
-	}
-	
-	lStudents.sort(Comparator.comparing(StudentFullNameMailTelDto::getFullName));
-	return lStudents;
+			else
+			{
+				System.out.println("------------------------> IS ALINFO CPS");
 
-}
+				String idPC = pedagogicalCoordinatorRepository.gotIdPedagogicalCoordinator(pcMail).get(0);
+				System.out.println("------------------------> idPC: " + idPC);
+				List<String> options = pedagogicalCoordinatorRepository.listOptionsByPedagogicalCoordinator(idPC);
+				System.out.println("------------------------> options: " + options.size());
+
+				List<String> stuALINFOs = new ArrayList<String>();
+				for(String opt : options)
+				{
+					System.out.println("UNIT -------> opt . " + "class = " + opt + " . " + codeClass);
+					stuALINFOs.addAll(optionStudentALTRepository.findStudentsALTByYearAndOptionAndClasse(selectedYear, opt, codeClass));
+				}
+
+				for(String s : stuALINFOs)
+				{
+					System.out.println("--sssssssss--> " + codeClass + ": " + utilServices.findStudentFullNameByIdYear(s, selectedYear));
+					lStudents.addAll(utilServices.findStudentsFullNameMailTelByIdEtWithYear(s, selectedYear));
+				}
+
+				for(StudentFullNameMailTelDto s : lStudents)
+				{
+					s.setOption(optionStudentALTRepository.findOptionByStudentALTAndYear(s.getId(), selectedYear));
+					if(utilServices.findIdEncadrantPedagogiqueByStudentByYear(s.getId(), selectedYear) != null)
+					{
+						s.setAffected("AFFECTEE");
+					}
+				}
+			}
+
+		}
+
+		lStudents.sort(Comparator.comparing(StudentFullNameMailTelDto::getFullName));
+		return lStudents;
+
+	}
 
 	@GetMapping("/listStudentsByClassForExp/{codeClass}/{pcMail}")
 	public List<StudentFullNameMailTelDto> listStudentsByClassForExp(@PathVariable String codeClass,
-			@PathVariable String pcMail) {
+																	 @PathVariable String pcMail) {
 		System.out.println("--PC----------------> class . pcMail: " + codeClass + " . " + pcMail);
 
 		List<StudentFullNameMailTelDto> lStudents = new ArrayList<StudentFullNameMailTelDto>();
@@ -8227,17 +8237,17 @@ public class MainController {
 
 		String year = "2021";
 		System.out.println("--PC----------------> class . pcMail: " + codeClass + " . " + pcMail);
-		
+
 		List<StudentFullNameMailTelDto> lStudents = new ArrayList<StudentFullNameMailTelDto>();
 		if(!codeClass.contains("4ALINFO"))
 		{
 			System.out.println("------------------------> NOT ALINFO : " + codeClass);
-			
+
 			lStudents = utilServices.findStudentsFullNameMailTelByYearAndClass(year, codeClass);
-			
+
 			for(StudentFullNameMailTelDto s : lStudents)
 			{
-				
+
 				// Note Expert (Note Restitution)
 				String idExpert = utilServices.findIdExpertByStudent(s.getId());
 				if(noteRestitutionRepository.findNoteRestitutionMarkByAEandStu(idExpert, s.getId(), "2021") != null)
@@ -8249,7 +8259,7 @@ public class MainController {
 				{
 					s.setNoteRestitution("--");
 				}
-				
+
 				s.setOption(utilServices.findOptionByClass(s.getId(), optionRepository.listOptionsByYear(year)).replace("_01", ""));
 				if(utilServices.findIdExpertByStudentAndYear(s.getId(), year) != null)
 				{
@@ -8257,26 +8267,26 @@ public class MainController {
 				}
 			}
 		}
-		
+
 		if(codeClass.contains("4ALINFO"))
 		{
 			if(pcMail.equalsIgnoreCase("CD-Alt@esprit.tn") || pcMail.equalsIgnoreCase("CPS-Alt@esprit.tn"))
 			{
 				System.out.println("------------------------> IS ALINFO CD");
-				
+
 				List<String> stuALINFOs = optionStudentALTRepository.findStudentsALTByYearAndClasse(year, codeClass);
-				
+
 				System.out.println("----> Size ùùùù: " + stuALINFOs.size());
-				
+
 				for(String s : stuALINFOs)
 				{
 					System.out.println("----> " + codeClass + ": " + utilServices.findStudentFullNameById(s) + " - " + s);
 					lStudents.addAll(utilServices.findStudentsFullNameMailTelByIdEtAndYear(s, year));
 				}
-				
+
 				for(StudentFullNameMailTelDto s : lStudents)
 				{
-					
+
 					// Note Expert (Note Restitution)
 					String idExpert = utilServices.findIdExpertByStudent(s.getId());
 					if(noteRestitutionRepository.findNoteRestitutionMarkByAEandStu(idExpert, s.getId(), "2021") != null)
@@ -8288,7 +8298,7 @@ public class MainController {
 					{
 						s.setNoteRestitution("--");
 					}
-					
+
 					s.setOption(optionStudentALTRepository.findOptionByStudentALTAndYear(s.getId(), year));
 					if(utilServices.findIdExpertByStudentAndYear(s.getId(), year) != null)
 					{
@@ -8299,28 +8309,28 @@ public class MainController {
 			else
 			{
 				System.out.println("------------------------> IS ALINFO CPS");
-				
+
 				String idPC = pedagogicalCoordinatorRepository.gotIdPedagogicalCoordinator(pcMail).get(0);
 				System.out.println("------------------------> idPC: " + idPC);
 				List<String> options = pedagogicalCoordinatorRepository.listOptionsByPedagogicalCoordinator(idPC);
 				System.out.println("------------------------> options: " + options.size());
-				
+
 				List<String> stuALINFOs = new ArrayList<String>();
 				for(String opt : options)
 				{
 					System.out.println("UNIT -------> opt . " + "class = " + opt + " . " + codeClass);
 					stuALINFOs.addAll(optionStudentALTRepository.findStudentsALTByYearAndOptionAndClasse(year, opt, codeClass));
 				}
-				
+
 				for(String s : stuALINFOs)
 				{
 					System.out.println(s + "----> " + codeClass + ": " + utilServices.findStudentFullNameById(s));
 					lStudents.addAll(utilServices.findStudentsFullNameMailTelByIdEtAndYear(s, "2021"));
 				}
-				
+
 				for(StudentFullNameMailTelDto s : lStudents)
 				{
-					
+
 					// Note Expert (Note Restitution)
 					String idExpert = utilServices.findIdExpertByStudent(s.getId());
 					if(noteRestitutionRepository.findNoteRestitutionMarkByAEandStu(idExpert, s.getId(), "2021") != null)
@@ -8332,7 +8342,7 @@ public class MainController {
 					{
 						s.setNoteRestitution("--");
 					}
-					
+
 					s.setOption(optionStudentALTRepository.findOptionByStudentALTAndYear(s.getId(), year));
 					if(utilServices.findIdExpertByStudentAndYear(s.getId(), year) != null)
 					{
@@ -8340,12 +8350,12 @@ public class MainController {
 					}
 				}
 			}
-			
+
 		}
-		
+
 		lStudents.sort(Comparator.comparing(StudentFullNameMailTelDto::getFullName));
 		return lStudents;
-	
+
 	}
 
 	@GetMapping("/listStudentsByClassAndYearForExpPARAM/{year}/{codeClass}/{pcMail}")
@@ -8531,7 +8541,7 @@ public class MainController {
 
 	@GetMapping("/findAllAffectedStudentsToAEByYear/{idAE}/{year}")
 	public List<StudentAffectationDetailsDto> findAllAffectedStudentsToAEByYear(@PathVariable String idAE,
-			@PathVariable String year) {
+																				@PathVariable String year) {
 		List<StudentAffectationDetailsDto> las = utilServices.findStudentsDtoTrainedByPEAndYearNew(idAE, year);
 		System.out.println("--------------------------------------------------- ALL: " + las.size());
 
@@ -8572,8 +8582,8 @@ public class MainController {
 	}
 
 	private void serverSendNotificationThroughoutGmailGCandGDWithPair(String selectedDate, String studentMail,
-			String pairMail, String idEtToSTN, String pairFullName, String selectedStartHour, String selectedEndHour,
-			String salle, String presjury, String pedagogicalEncadrant, String expertEns, String nameRSS)
+																	  String pairMail, String idEtToSTN, String pairFullName, String selectedStartHour, String selectedEndHour,
+																	  String salle, String presjury, String pedagogicalEncadrant, String expertEns, String nameRSS)
 			throws IOException, GeneralSecurityException {
 
 		String dateSoutenance = selectedDate;
@@ -8587,7 +8597,7 @@ public class MainController {
 		String nomJP = null;
 		List<String> juryHosts = new ArrayList<String>();
 		List<String> respHosts = new ArrayList<String>();
-		
+
 		List<String> calendarHosts = new ArrayList<String>();
 
 		if (presjury.contains("EXTERNE")) {
@@ -8638,54 +8648,54 @@ public class MainController {
 		else
 		{
 			studentOption = utilServices.findOptionByClass(currentClass, optionRepository.listOptionsByYear("2021"));
-			// sd.setOption(utilServices.findOptionByClass(sd.getClasse(), optionRepository.listOptionsByYear("2021")).replace("_01", ""));	
+			// sd.setOption(utilServices.findOptionByClass(sd.getClasse(), optionRepository.listOptionsByYear("2021")).replace("_01", ""));
 		}
 
 		System.out.println("----------------> Code Option: " + studentOption);
 
 		//String mailAcademicCoordinator = pedagogicalCoordinatorRepository
 		//		.findPedagogicalCoordinatorMailByCodeOption(studentOption);
-		
+
 		String idCPS = pedagogicalCoordinatorRepository.gotIdEnsPedagogicalCoordinatorByOption(studentOption.toLowerCase());
-    	
+
 		String mailCPS = "saria.essid@esprit.tn";
-    	if(
-    			studentOption.toUpperCase().contains("SIM") || studentOption.toUpperCase().contains("GAMIX") ||
-    			studentOption.toUpperCase().contains("WIN") || studentOption.toUpperCase().contains("IOSYS")
-    	  )
-    	{
-    		if(studentOption.toUpperCase().contains("SIM"))
-        	{
-        		mailCPS = "CPS_SIM@esprit.tn";
-        	}
-        	if(studentOption.toUpperCase().contains("GAMIX"))
-        	{
-        		mailCPS = "CPS_GAMIX@esprit.tn";
-        	}
-        	if(studentOption.toUpperCase().contains("WIN"))
-        	{
-        		mailCPS = "CPS_WIN@esprit.tn";
-        	}
-        	if(studentOption.toUpperCase().contains("IOSYS"))
-        	{
-        		mailCPS = "CPS_IOSYS@esprit.tn";
-        	}
-    	}
-    	else
-    	{
-    		mailCPS = pedagogicalCoordinatorRepository.gotAllMAilsPedagogicalCoordinatorByIdNew(idCPS);
-    	}
-    	
-    	
-    	
-    	/******************************************************************************************* Mail RSS ***/
-    	String mailRSS = responsableServiceStageRepository.findRespServStgMailById(conventionRepository.findResponsableServiceStageByIdEt(idEtToSTN).get(0));
-		
-    	
-    	// Add respHosts : CPS + RSS
-    	respHosts.add(mailCPS);respHosts.add(mailRSS);
-    	String respMembers = respHosts.stream().map(plain -> '"' + StringEscapeUtils.escapeJava(plain) + '"').collect(Collectors.joining(", "));
-        
+		if(
+				studentOption.toUpperCase().contains("SIM") || studentOption.toUpperCase().contains("GAMIX") ||
+						studentOption.toUpperCase().contains("WIN") || studentOption.toUpperCase().contains("IOSYS")
+		)
+		{
+			if(studentOption.toUpperCase().contains("SIM"))
+			{
+				mailCPS = "CPS_SIM@esprit.tn";
+			}
+			if(studentOption.toUpperCase().contains("GAMIX"))
+			{
+				mailCPS = "CPS_GAMIX@esprit.tn";
+			}
+			if(studentOption.toUpperCase().contains("WIN"))
+			{
+				mailCPS = "CPS_WIN@esprit.tn";
+			}
+			if(studentOption.toUpperCase().contains("IOSYS"))
+			{
+				mailCPS = "CPS_IOSYS@esprit.tn";
+			}
+		}
+		else
+		{
+			mailCPS = pedagogicalCoordinatorRepository.gotAllMAilsPedagogicalCoordinatorByIdNew(idCPS);
+		}
+
+
+
+		/******************************************************************************************* Mail RSS ***/
+		String mailRSS = responsableServiceStageRepository.findRespServStgMailById(conventionRepository.findResponsableServiceStageByIdEt(idEtToSTN).get(0));
+
+
+		// Add respHosts : CPS + RSS
+		respHosts.add(mailCPS);respHosts.add(mailRSS);
+		String respMembers = respHosts.stream().map(plain -> '"' + StringEscapeUtils.escapeJava(plain) + '"').collect(Collectors.joining(", "));
+
 		// Notify GC
 		String selectedStartHourGC = utilServices.convertHourToGCH(selectedStartHour);
 		String selectedEndHourGC = utilServices.convertHourToGCH(selectedEndHour);
@@ -8707,9 +8717,9 @@ public class MainController {
 		String pairsMail = studentPair.stream().map(plain -> '"' + StringEscapeUtils.escapeJava(plain) + '"')
 				.collect(Collectors.joining(", "));
 		String subject = "Soutenance de PFE";
-		
+
 		sendMailSTNServices.sendMailPairWithRSSandCPS(subject, pairsMail, respMembers, dateSoutenance, selectedStartHour, selectedEndHour, meetLink ,nomJP, nomPE, nomEXP, salle, nameRSS);
-		
+
 //		sendMailSTNServices.sendMailPair(subject, pairsMail, dateSoutenance, selectedStartHour, selectedEndHour,
 //				meetLink, nomJP, nomPE, nomEXP, salle, nameRSS);
 
@@ -8725,7 +8735,7 @@ public class MainController {
 		// System.out.println("MAIN------------------With
 		// Pair-----------------------------> Google Drive End : " + new Date());
 		sendMailSTNServices.sendMailJuryPresidentPairWithRSSandCPS(subject, utilServices.findStudentFullNameById(idEtToSTN), pairFullName, juryMembers, respMembers, dateSoutenance, selectedStartHour, selectedEndHour, meetLink ,nomJP, nomPE, nomEXP, salle, sharedStudentESPReport, nameRSS);
-		
+
 		sendMailSTNServices.sendMailToScolarityForPair("Réservation Salle pour Soutenance PFE",
 				utilServices.findStudentFullNameById(idEtToSTN), pairFullName, dateSoutenance, selectedStartHour,
 				selectedEndHour, salle, nameRSS);
@@ -8733,8 +8743,8 @@ public class MainController {
 	}
 
 	private void serverSendNotificationThroughoutGmailGCandGDLonely(String selectedDate, String studentMail,
-			String idEtToSTN, String selectedStartHour, String selectedEndHour, String salle, String presjury,
-			String pedagogicalEncadrant, String expertEns, String nameRSS)
+																	String idEtToSTN, String selectedStartHour, String selectedEndHour, String salle, String presjury,
+																	String pedagogicalEncadrant, String expertEns, String nameRSS)
 			throws IOException, GeneralSecurityException {
 
 		String dateSoutenance = selectedDate;
@@ -8796,55 +8806,55 @@ public class MainController {
 		else
 		{
 			studentOption = utilServices.findOptionByClass(currentClass, optionRepository.listOptionsByYear("2021"));
-			// sd.setOption(utilServices.findOptionByClass(sd.getClasse(), optionRepository.listOptionsByYear("2021")).replace("_01", ""));	
+			// sd.setOption(utilServices.findOptionByClass(sd.getClasse(), optionRepository.listOptionsByYear("2021")).replace("_01", ""));
 		}
 
 		System.out.println("----------------> Code Option: " + studentOption);
 
 		//String mailAcademicCoordinator = pedagogicalCoordinatorRepository
 		//		.findPedagogicalCoordinatorMailByCodeOption(studentOption);
-		
+
 		String idCPS = pedagogicalCoordinatorRepository.gotIdEnsPedagogicalCoordinatorByOption(studentOption.toLowerCase());
-    	
+
 		String mailCPS = "saria.essid@esprit.tn";
-    	if(
-    			studentOption.toUpperCase().contains("SIM") || studentOption.toUpperCase().contains("GAMIX") ||
-    			studentOption.toUpperCase().contains("WIN") || studentOption.toUpperCase().contains("IOSYS")
-    	  )
-    	{
-    		if(studentOption.toUpperCase().contains("SIM"))
-        	{
-        		mailCPS = "CPS_SIM@esprit.tn";
-        	}
-        	if(studentOption.toUpperCase().contains("GAMIX"))
-        	{
-        		mailCPS = "CPS_GAMIX@esprit.tn";
-        	}
-        	if(studentOption.toUpperCase().contains("WIN"))
-        	{
-        		mailCPS = "CPS_WIN@esprit.tn";
-        	}
-        	if(studentOption.toUpperCase().contains("IOSYS"))
-        	{
-        		mailCPS = "CPS_IOSYS@esprit.tn";
-        	}
-    	}
-    	else
-    	{
-    		mailCPS = pedagogicalCoordinatorRepository.gotAllMAilsPedagogicalCoordinatorByIdNew(idCPS);
-    	}
-    	
-    	
-    	
-    	/******************************************************************************************* Mail RSS ***/
-    	String mailRSS = responsableServiceStageRepository.findRespServStgMailById(conventionRepository.findResponsableServiceStageByIdEt(idEtToSTN).get(0));
-		
-    	
-    	// Add respHosts : CPS + RSS
-    	respHosts.add(mailCPS);respHosts.add(mailRSS);
-    	String respMembers = respHosts.stream().map(plain -> '"' + StringEscapeUtils.escapeJava(plain) + '"').collect(Collectors.joining(", "));
-        
-		
+		if(
+				studentOption.toUpperCase().contains("SIM") || studentOption.toUpperCase().contains("GAMIX") ||
+						studentOption.toUpperCase().contains("WIN") || studentOption.toUpperCase().contains("IOSYS")
+		)
+		{
+			if(studentOption.toUpperCase().contains("SIM"))
+			{
+				mailCPS = "CPS_SIM@esprit.tn";
+			}
+			if(studentOption.toUpperCase().contains("GAMIX"))
+			{
+				mailCPS = "CPS_GAMIX@esprit.tn";
+			}
+			if(studentOption.toUpperCase().contains("WIN"))
+			{
+				mailCPS = "CPS_WIN@esprit.tn";
+			}
+			if(studentOption.toUpperCase().contains("IOSYS"))
+			{
+				mailCPS = "CPS_IOSYS@esprit.tn";
+			}
+		}
+		else
+		{
+			mailCPS = pedagogicalCoordinatorRepository.gotAllMAilsPedagogicalCoordinatorByIdNew(idCPS);
+		}
+
+
+
+		/******************************************************************************************* Mail RSS ***/
+		String mailRSS = responsableServiceStageRepository.findRespServStgMailById(conventionRepository.findResponsableServiceStageByIdEt(idEtToSTN).get(0));
+
+
+		// Add respHosts : CPS + RSS
+		respHosts.add(mailCPS);respHosts.add(mailRSS);
+		String respMembers = respHosts.stream().map(plain -> '"' + StringEscapeUtils.escapeJava(plain) + '"').collect(Collectors.joining(", "));
+
+
 		// Notify GC
 		String selectedStartHourGC = utilServices.convertHourToGCH(selectedStartHour);
 		String selectedEndHourGC = utilServices.convertHourToGCH(selectedEndHour);
@@ -9081,27 +9091,27 @@ public class MainController {
 	{
 		System.out.println("TOKEN --------------> 1: " + jwt);
 		String result = "NO";
-	    if (jwt!=null && jwtUtils.validateJwtToken(jwt)) {
-	        // String id = jwtUtils.getUserNameFromJwtToken(jwt);
-	    	System.out.println("TOKEN --------------> 2 OK");
-	    	result = "YES";
-	    }
-	    System.out.println("TOKEN --------------> 3: " + result);
-	    return result;
+		if (jwt!=null && jwtUtils.validateJwtToken(jwt)) {
+			// String id = jwtUtils.getUserNameFromJwtToken(jwt);
+			System.out.println("TOKEN --------------> 2 OK");
+			result = "YES";
+		}
+		System.out.println("TOKEN --------------> 3: " + result);
+		return result;
 	}
-	
+
 	@GetMapping("/pwdESPTea/{mailEns}/{idEns}")
 	public String findDecodedIdEns(@PathVariable String mailEns, @PathVariable String idEns)
 	{
 		String pwd = "NOTYET";
 		System.out.println(")))))))))))))))))) 1 : " + mailEns);
-		
+
 		String decMailEns = utilServices.decodeEncodedValue(mailEns);
 		System.out.println(")))))))))))))))))) 2 : " + decMailEns);
-		
+
 		String decIdEns = utilServices.decodeEncodedValue(idEns);
 		System.out.println(")))))))))))))))))) 2 : " + decIdEns);
-		
+
 		if(teacherRepository.findTeacherJWTPWDByMailAndId(decMailEns, decIdEns) != null)
 		{
 			String fullPwd = teacherRepository.findTeacherJWTPWDByMailAndId(decMailEns, decIdEns);
@@ -9109,10 +9119,10 @@ public class MainController {
 			pwd = fullPwd.substring(0, fullPwd.lastIndexOf("$$$$$"));
 			System.out.println(")))))))))))))))))) 4 : " + idEns);
 		}
-		
+
 		return pwd;
 	}
-	
+
 	@PostMapping("/simpleSigninTeacher")
 	public ResponseEntity<?> simpleSigninTeacher(@Valid @RequestBody LoginRequest loginRequest) {
 		System.out.println("Teacher --------------> Sign-In with: " + loginRequest.getId() + " -- "
@@ -9240,9 +9250,9 @@ public class MainController {
 			 * authenticationManager.authenticate( new
 			 * UsernamePasswordAuthenticationToken(loginRequest.getId(),
 			 * loginRequest.getPassword()));
-			 * 
+			 *
 			 * System.out.println("Teacher --------------> 0. Second Login 1 ");
-			 * 
+			 *
 			 * SecurityContextHolder.getContext().setAuthentication(authentication);
 			 * System.out.println("Teacher --------------> 0. Second Login 2 "); String jwt
 			 * = jwtUtils.generateTeacherJwtToken(authentication);
@@ -9258,9 +9268,9 @@ public class MainController {
 			 * authenticationManager.authenticate( new
 			 * UsernamePasswordAuthenticationToken(loginRequest.getId(),
 			 * loginRequest.getPassword()));
-			 * 
+			 *
 			 * System.out.println("Teacher --------------> 0. Second Login 1 ");
-			 * 
+			 *
 			 * SecurityContextHolder.getContext().setAuthentication(authentication);
 			 * System.out.println("Teacher --------------> 0. Second Login 2 "); String jwt
 			 * = jwtUtils.generateTeacherJwtToken(authentication);
@@ -9276,9 +9286,9 @@ public class MainController {
 			 * authenticationManager.authenticate( new
 			 * UsernamePasswordAuthenticationToken(loginRequest.getId(),
 			 * loginRequest.getPassword()));
-			 * 
+			 *
 			 * System.out.println("Teacher --------------> 0. Second Login 1 ");
-			 * 
+			 *
 			 * SecurityContextHolder.getContext().setAuthentication(authentication);
 			 * System.out.println("Teacher --------------> 0. Second Login 2 "); String jwt
 			 * = jwtUtils.generateTeacherJwtToken(authentication);
@@ -9509,7 +9519,7 @@ public class MainController {
 
 	@PostMapping("/secureResponsableServiceStagePassword/{idUserSce}/{pwdJWTResponsableServiceStage}")
 	public ResponseEntity<?> secureResponsableServiceStagePassword(@PathVariable String idUserSce,
-			@PathVariable String pwdJWTResponsableServiceStage) throws UnsupportedEncodingException {
+																   @PathVariable String pwdJWTResponsableServiceStage) throws UnsupportedEncodingException {
 
 		// System.out.println("ResponsableServiceStage --------------> Secure Password
 		// 1: " + idUserSce + " - " + pwdJWTResponsableServiceStage);
@@ -9572,7 +9582,7 @@ public class MainController {
 
 	@PostMapping("/secureTeacherPassword/{mailEns}/{pwdJWTEnseignantEncoded}")
 	public ResponseEntity<?> secureTeacherPassword(@PathVariable String mailEns,
-			@PathVariable String pwdJWTEnseignantEncoded) throws UnsupportedEncodingException {
+												   @PathVariable String pwdJWTEnseignantEncoded) throws UnsupportedEncodingException {
 
 		String pwdJWTEnseignant = URLDecoder.decode(pwdJWTEnseignantEncoded, StandardCharsets.UTF_8.toString());
 
@@ -9628,7 +9638,7 @@ public class MainController {
 
 	@PostMapping("/securePedagogicalCoordinatorPassword/{idUserSce}/{pwdJWTPedagogicalCoordinator}")
 	public ResponseEntity<?> securePedagogicalCoordinatorPassword(@PathVariable String idUserSce,
-			@PathVariable String pwdJWTPedagogicalCoordinator) throws UnsupportedEncodingException {
+																  @PathVariable String pwdJWTPedagogicalCoordinator) throws UnsupportedEncodingException {
 
 		// System.out.println("ResponsableServiceStage --------------> Secure Password
 		// 1: " + idUserSce + " - " + pwdJWTResponsableServiceStage);
@@ -9686,7 +9696,7 @@ public class MainController {
 		return ResponseEntity
 				.ok(new MessageResponse("PedagogicalCoordinator : PedagogicalCoordinator registered successfully!"));
 	}
-	
+
 
 	/************************************************** Reset Password ***********************************/
 	@PostMapping("/applyToInitializeMyOwnPassword")
@@ -9694,29 +9704,29 @@ public class MainController {
 	{
 		String response = utilServices.forgotPassword(loginRequest.getEmail());
 		System.out.println("----------------PIKA1811-------> AZERTY 2: " + response);
-		
+
 		String result = "INIT";
-		if (!response.startsWith("Invalid")) 
+		if (!response.startsWith("Invalid"))
 		{
 			System.out.println("-;--------------PIKA1811--------> AZERTY 3: " + response);
-			
-			DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");  
+
+			DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 			String dateDemandeInitPwd = dateFormata.format(new Date());
-				
+
 			String content = "Nous voulons vous informer par le présent mail que Vous pouvez changer votre Mot de passe en utilisant le lien  "
-					       + "<font color=blue> <a href=\"https://pfe.esprit.tn/renewMyTeacherPassword\">initialiser mon Mot de Passe</a> </font>.<br/>"
-					       + "Votre<font color=green>Token</font> est : <font color=green>" + response + "</font><br/>"
-					       + "Notez bien : ce Token <font color=red>n'est plus valable</font> que pendant 30 minutes dès la présente date <font color=grey>" + dateDemandeInitPwd + "</font>";
+					+ "<font color=blue> <a href=\"https://pfe.esprit.tn/renewMyTeacherPassword\">initialiser mon Mot de Passe</a> </font>.<br/>"
+					+ "Votre<font color=green>Token</font> est : <font color=green>" + response + "</font><br/>"
+					+ "Notez bien : ce Token <font color=red>n'est plus valable</font> que pendant 30 minutes dès la présente date <font color=grey>" + dateDemandeInitPwd + "</font>";
 			utilServices.sendMail("Récupération Mot de Passe pour Espace Enseignant", loginRequest.getEmail().toLowerCase().trim(), content);
-			
-			
+
+
 			result = "ALLOW";
 		}
 		else
 		{
 			result = "DENY";
 		}
-		
+
 		System.out.println("-;--------------PIKA1811--------> result 3: " + result);
 		return result;
 	}
@@ -9732,7 +9742,7 @@ public class MainController {
 		System.out.println("---------***--------------> decoded token: " + decodedTkn);
 		return utilServices.resetPassword(decodedTkn, decodedPwd);
 	}
-	
+
 
 	/************************************************** Reset Password Etudiant ***********************************/
 	@PostMapping("/applyToInitializeMyStudentPassword")
@@ -9741,28 +9751,28 @@ public class MainController {
 		System.out.println("----------HI-------> AZERTY 1");
 		String response = utilServices.forgotStudentPassword(loginRequest.getEmail());
 		System.out.println("----------HI-------> AZERTY 2: " + response);
-		
+
 		String result = "INIT";
-		if (!response.startsWith("Invalid") && !response.equalsIgnoreCase("NOTEXIST")) 
+		if (!response.startsWith("Invalid") && !response.equalsIgnoreCase("NOTEXIST"))
 		{
 			System.out.println("-;--------------HI--------> AZERTY 3: " + response);
-			
-			DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");  
+
+			DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 			String dateDemandeInitPwd = dateFormata.format(new Date());
-				
+
 			String content = "Nous voulons vous informer par le présent mail que Vous pouvez changer votre Mot de passe en utilisant le lien  "
-					       + "<font color=blue> <a href=\"https://pfe.esprit.tn/renewMyStudentPassword\">initialiser mon Mot de Passe</a> </font>.<br/>"
-					       + "Votre<font color=green>Token</font> est : <font color=green>" + response + "</font><br/>"
-					       + "Notez bien : ce Token <font color=red>n'est plus valable</font> que pendant 30 minutes dès la présente date <font color=grey>" + dateDemandeInitPwd + "</font>";
+					+ "<font color=blue> <a href=\"https://pfe.esprit.tn/renewMyStudentPassword\">initialiser mon Mot de Passe</a> </font>.<br/>"
+					+ "Votre<font color=green>Token</font> est : <font color=green>" + response + "</font><br/>"
+					+ "Notez bien : ce Token <font color=red>n'est plus valable</font> que pendant 30 minutes dès la présente date <font color=grey>" + dateDemandeInitPwd + "</font>";
 			utilServices.sendMail("Récupération Mot de Passe", utilServices.findStudentMailById(loginRequest.getEmail()).toLowerCase().trim(), content);
-			
+
 			result = "ALLOW";
 		}
 		else
 		{
 			result = "DENY";
 		}
-		
+
 		System.out.println("-;--------------PIKA1811--------> result 3: " + result);
 		return result;
 	}
@@ -9779,7 +9789,7 @@ public class MainController {
 		System.out.println("---------STU--------------> decoded token: " + decodedTkn);
 		return utilServices.resetStudentPassword(decodedTkn, decodedPwd);
 	}
-	
+
 
 	/************************************************** Reset Password CD/CPS ***********************************/
 	@PostMapping("/applyToInitializeMyCDCPSPassword")
@@ -9788,28 +9798,28 @@ public class MainController {
 		System.out.println("----------HI-------> AZERTY 1");
 		String response = utilServices.forgotCDCPSPassword(loginRequest.getEmail());
 		System.out.println("----------HI-------> AZERTY 2: " + response);
-		
+
 		String result = "INIT";
-		if (!response.startsWith("Invalid") && !response.equalsIgnoreCase("NOTEXIST")) 
+		if (!response.startsWith("Invalid") && !response.equalsIgnoreCase("NOTEXIST"))
 		{
 			System.out.println("-;--------------HI--------> AZERTY 3: " + response);
-			
-			DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");  
+
+			DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 			String dateDemandeInitPwd = dateFormata.format(new Date());
-				
+
 			String content = "Nous voulons vous informer par le présent mail que Vous pouvez changer votre Mot de passe en utilisant le lien  "
-					       + "<font color=blue> <a href=\"https://pfe.esprit.tn/renewMyStudentPassword\">initialiser mon Mot de Passe</a> </font>.<br/>"
-					       + "Votre<font color=green>Token</font> est : <font color=green>" + response + "</font><br/>"
-					       + "Notez bien : ce Token <font color=red>n'est plus valable</font> que pendant 30 minutes dès la présente date <font color=grey>" + dateDemandeInitPwd + "</font>";
+					+ "<font color=blue> <a href=\"https://pfe.esprit.tn/renewMyStudentPassword\">initialiser mon Mot de Passe</a> </font>.<br/>"
+					+ "Votre<font color=green>Token</font> est : <font color=green>" + response + "</font><br/>"
+					+ "Notez bien : ce Token <font color=red>n'est plus valable</font> que pendant 30 minutes dès la présente date <font color=grey>" + dateDemandeInitPwd + "</font>";
 			utilServices.sendMail("Récupération Mot de Passe", loginRequest.getEmail().toLowerCase().trim(), content);
-			
+
 			result = "ALLOW";
 		}
 		else
 		{
 			result = "DENY";
 		}
-		
+
 		System.out.println("-;--------------PIKA1811--------> result 3: " + result);
 		return result;
 	}
@@ -9826,79 +9836,79 @@ public class MainController {
 		System.out.println("---------STU--------------> decoded token: " + decodedTkn);
 		return utilServices.resetCDCPSPassword(decodedTkn, decodedPwd);
 	}
-	
+
 
 	@GetMapping("/signedConvention/{currentUserCode}")
 	public ResponseEntity<List<String>> getSignedConvention(@PathVariable String currentUserCode)
 	{
 		Integer index = 1;
-	    List<DepotSignedConvDto> files = storageService.getSignedConv(currentUserCode).map(report -> {
-	    String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/signedConvention/").path(index.toString()).toUriString();
-	    
-	      return report;
-	    }).collect(Collectors.toList());
-	    List<String> lss = new ArrayList<>();
-	    for(DepotSignedConvDto dbd : files)
-	    {
-	    	String signedConv = null;
-	    	
-	    	String pathSignedConv = dbd.getPathSignedConv();
-	    	String nameSignedConv = null;
-	    	String dateSignedConv = dbd.getDateDepotSignedConv();
-	    	
-	    	if(dbd.getPathSignedConv() != null)
-	    	{
-	    		nameSignedConv = pathSignedConv.substring(pathSignedConv.indexOf("uploads")+8, pathSignedConv.indexOf("espdsi2020"));
-	    		signedConv = nameSignedConv + "UNITR1" + dateSignedConv;
-	    		lss.add(signedConv);
-	    	}
-    		
-	    }
-	    
-	    return ResponseEntity.status(HttpStatus.OK).body(lss);
+		List<DepotSignedConvDto> files = storageService.getSignedConv(currentUserCode).map(report -> {
+			String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/signedConvention/").path(index.toString()).toUriString();
+
+			return report;
+		}).collect(Collectors.toList());
+		List<String> lss = new ArrayList<>();
+		for(DepotSignedConvDto dbd : files)
+		{
+			String signedConv = null;
+
+			String pathSignedConv = dbd.getPathSignedConv();
+			String nameSignedConv = null;
+			String dateSignedConv = dbd.getDateDepotSignedConv();
+
+			if(dbd.getPathSignedConv() != null)
+			{
+				nameSignedConv = pathSignedConv.substring(pathSignedConv.indexOf("uploads")+8, pathSignedConv.indexOf("espdsi2020"));
+				signedConv = nameSignedConv + "UNITR1" + dateSignedConv;
+				lss.add(signedConv);
+			}
+
+		}
+
+		return ResponseEntity.status(HttpStatus.OK).body(lss);
 	}
-	
+
 	@PostMapping("/upload/signedConv/{currentUserCode}")
 	public ResponseEntity<MessageResponse> uploadSignedConv(@PathVariable String currentUserCode, @RequestParam("file") MultipartFile file)
 	{
 
 		// // System.out.println("-----------------------------A: " + currentUserCode);
-        String message = "";
-        try
-        {
-        	// // System.out.println("-----------------------------1.1");
-        	storageService.storeSignedConvention(file, currentUserCode);
-        	// // System.out.println("-----------------------------1.2");
-        	message = "Votre Convention Signée " + file.getOriginalFilename() + " a été bien déposé.";
-        	// // System.out.println("-----------------------------1.3");
-        	
-        	
-        	/***************************************** Notification By Mail *****************************************/
-        	DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");  
-        	String dateDepot = dateFormata.format(new Date());
-        					
-        	String subject = "Dépôt Convention Signée";
-        			
-        	// String studentMail = utilServices.findStudentMailById(currentUserCode);   DEPLOY_SERVER
-        	// String academicEncMail = utilServices.findMailPedagogicalEncadrant(currentUserCode); DEPLOY_SERVER
+		String message = "";
+		try
+		{
+			// // System.out.println("-----------------------------1.1");
+			storageService.storeSignedConvention(file, currentUserCode);
+			// // System.out.println("-----------------------------1.2");
+			message = "Votre Convention Signée " + file.getOriginalFilename() + " a été bien déposé.";
+			// // System.out.println("-----------------------------1.3");
 
-        	String studentMail = utilServices.findStudentMailById(currentUserCode);//.substring(0, utilServices.findStudentMailById(currentUserCode).lastIndexOf("@")) + "@mail.tn";
-    		String mailRSS = responsableServiceStageRepository.findRespServStgMailById(conventionRepository.findResponsableServiceStageByIdEt(currentUserCode).get(0));
-        							
-       		String content = "Nous voulons vous informer par le présent mail que vous avez déposé"
-        					+ " votre <strong><font color=grey> Convention Signée </font></strong> "
-        					+ "le <font color=red> " + dateDepot + " </font>.";
-        	
-        	utilServices.sendMailWithCC(subject, studentMail, mailRSS, content);
-       		/********************************************************************************************************/
-        	
-        	return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse(message));
-        }
-        catch (Exception e)
-        {
-        	message = "Erreur de téléchargement de votre Convention Signée " + file.getOriginalFilename();
-        	return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new MessageResponse(message));
-        }
+
+			/***************************************** Notification By Mail *****************************************/
+			DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+			String dateDepot = dateFormata.format(new Date());
+
+			String subject = "Dépôt Convention Signée";
+
+			// String studentMail = utilServices.findStudentMailById(currentUserCode);   DEPLOY_SERVER
+			// String academicEncMail = utilServices.findMailPedagogicalEncadrant(currentUserCode); DEPLOY_SERVER
+
+			String studentMail = utilServices.findStudentMailById(currentUserCode);//.substring(0, utilServices.findStudentMailById(currentUserCode).lastIndexOf("@")) + "@mail.tn";
+			String mailRSS = responsableServiceStageRepository.findRespServStgMailById(conventionRepository.findResponsableServiceStageByIdEt(currentUserCode).get(0));
+
+			String content = "Nous voulons vous informer par le présent mail que vous avez déposé"
+					+ " votre <strong><font color=grey> Convention Signée </font></strong> "
+					+ "le <font color=red> " + dateDepot + " </font>.";
+
+			utilServices.sendMailWithCC(subject, studentMail, mailRSS, content);
+			/********************************************************************************************************/
+
+			return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse(message));
+		}
+		catch (Exception e)
+		{
+			message = "Erreur de téléchargement de votre Convention Signée " + file.getOriginalFilename();
+			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new MessageResponse(message));
+		}
 	}
 
 
@@ -9906,73 +9916,73 @@ public class MainController {
 	public ResponseEntity<List<String>> getSignedAvenant(@PathVariable String currentUserCode)
 	{
 		Integer index = 1;
-	    List<DepotSignedAvenDto> files = storageService.getSignedAven(currentUserCode).map(report -> {
-	    String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/signedAvenant/").path(index.toString()).toUriString();
-	    
-	      return report;
-	    }).collect(Collectors.toList());
-	    List<String> lss = new ArrayList<>();
-	    for(DepotSignedAvenDto dbd : files)
-	    {
-	    	String signedConv = null;
-	    	
-	    	String pathSignedAven = dbd.getPathSignedAven();
-	    	String nameSignedAven = null;
-	    	String dateSignedAven = dbd.getDateDepotSignedAven();
-	    	
-	    	if(dbd.getPathSignedAven() != null)
-	    	{
-	    		nameSignedAven = pathSignedAven.substring(pathSignedAven.indexOf("uploads")+8, pathSignedAven.indexOf("espdsi2020"));
-	    		signedConv = nameSignedAven + "UNITR1" + dateSignedAven;
-	    		lss.add(signedConv);
-	    	}
-    		
-	    }
-	    
-	    return ResponseEntity.status(HttpStatus.OK).body(lss);
+		List<DepotSignedAvenDto> files = storageService.getSignedAven(currentUserCode).map(report -> {
+			String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/signedAvenant/").path(index.toString()).toUriString();
+
+			return report;
+		}).collect(Collectors.toList());
+		List<String> lss = new ArrayList<>();
+		for(DepotSignedAvenDto dbd : files)
+		{
+			String signedConv = null;
+
+			String pathSignedAven = dbd.getPathSignedAven();
+			String nameSignedAven = null;
+			String dateSignedAven = dbd.getDateDepotSignedAven();
+
+			if(dbd.getPathSignedAven() != null)
+			{
+				nameSignedAven = pathSignedAven.substring(pathSignedAven.indexOf("uploads")+8, pathSignedAven.indexOf("espdsi2020"));
+				signedConv = nameSignedAven + "UNITR1" + dateSignedAven;
+				lss.add(signedConv);
+			}
+
+		}
+
+		return ResponseEntity.status(HttpStatus.OK).body(lss);
 	}
-	
+
 	@PostMapping("/upload/signedAven/{currentUserCode}")
 	public ResponseEntity<MessageResponse> uploadSignedAven(@PathVariable String currentUserCode, @RequestParam("file") MultipartFile file)
 	{
 
 		// // System.out.println("-----------------------------A: " + currentUserCode);
-        String message = "";
-        try
-        {
-        	// // System.out.println("-----------------------------1.1");
-        	storageService.storeSignedAvenant(file, currentUserCode);
-        	// // System.out.println("-----------------------------1.2");
-        	message = "Votre Avenant Signé " + file.getOriginalFilename() + " a été bien déposé.";
-        	// // System.out.println("-----------------------------1.3");
-        	
-        	/***************************************** Notification By Mail *****************************************/
-        	DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");  
-        	String dateDepot = dateFormata.format(new Date());
-        					
-        	String subject = "Dépôt Avenant Signé";
-        			
-        	// String studentMail = utilServices.findStudentMailById(currentUserCode);   DEPLOY_SERVER
-        	// String academicEncMail = utilServices.findMailPedagogicalEncadrant(currentUserCode); DEPLOY_SERVER
+		String message = "";
+		try
+		{
+			// // System.out.println("-----------------------------1.1");
+			storageService.storeSignedAvenant(file, currentUserCode);
+			// // System.out.println("-----------------------------1.2");
+			message = "Votre Avenant Signé " + file.getOriginalFilename() + " a été bien déposé.";
+			// // System.out.println("-----------------------------1.3");
 
-        	String studentMail = utilServices.findStudentMailById(currentUserCode).substring(0, utilServices.findStudentMailById(currentUserCode).lastIndexOf("@")) + "@mail.tn";
-    		String mailRSS = responsableServiceStageRepository.findRespServStgMailById(conventionRepository.findResponsableServiceStageByIdEt(currentUserCode).get(0));
-        							
-       		String content = "Nous voulons vous informer par le présent mail que vous avez déposé"
-        					+ " votre <strong><font color=grey> Avenant Signé </font></strong> "
-        					+ "le <font color=red> " + dateDepot + " </font>.";
-        	
-        	utilServices.sendMailWithCC(subject, studentMail, mailRSS, content);
-       		/********************************************************************************************************/
-        	
-        	return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse(message));
-        }
-        catch (Exception e)
-        {
-        	message = "Erreur de téléchargement de votre Avenant Signé " + file.getOriginalFilename();
-        	return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new MessageResponse(message));
-        }
+			/***************************************** Notification By Mail *****************************************/
+			DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+			String dateDepot = dateFormata.format(new Date());
+
+			String subject = "Dépôt Avenant Signé";
+
+			// String studentMail = utilServices.findStudentMailById(currentUserCode);   DEPLOY_SERVER
+			// String academicEncMail = utilServices.findMailPedagogicalEncadrant(currentUserCode); DEPLOY_SERVER
+
+			String studentMail = utilServices.findStudentMailById(currentUserCode).substring(0, utilServices.findStudentMailById(currentUserCode).lastIndexOf("@")) + "@mail.tn";
+			String mailRSS = responsableServiceStageRepository.findRespServStgMailById(conventionRepository.findResponsableServiceStageByIdEt(currentUserCode).get(0));
+
+			String content = "Nous voulons vous informer par le présent mail que vous avez déposé"
+					+ " votre <strong><font color=grey> Avenant Signé </font></strong> "
+					+ "le <font color=red> " + dateDepot + " </font>.";
+
+			utilServices.sendMailWithCC(subject, studentMail, mailRSS, content);
+			/********************************************************************************************************/
+
+			return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse(message));
+		}
+		catch (Exception e)
+		{
+			message = "Erreur de téléchargement de votre Avenant Signé " + file.getOriginalFilename();
+			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new MessageResponse(message));
+		}
 	}
 
-	
+
 }

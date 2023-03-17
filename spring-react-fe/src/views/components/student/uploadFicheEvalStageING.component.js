@@ -113,19 +113,19 @@ export default class UploadFicheEvalStageING extends Component
     componentDidMount()
     {
 
-      let encodedString = btoa(currentStudent.id);
+        const Jasypt = require('jasypt');
+        const jasypt = new Jasypt();
+        jasypt.setPassword('SALT');
+        const encryptMsg = jasypt.encrypt(currentStudent.id);
+        console.log('----------------0610: ' + encryptMsg);
 
-      const studentCodeReq = {studentCode : encodedString}
-      console.log('---------------------encodedString: ' + encodedString)
-
-
-      return axios
-        .post(API_URL + "/journalStageINGOFF", studentCodeReq)
-        .then((res) => {console.log('---------------------OK JOURNAL GET 17.03.2023', res.data)
-          console.log('---------------------OK JOURNAL GET 17.03.2023')
-
-          this.setState({fileInfosJournal: res.data});
-        })
+        const studentCodeReq = {studentCode : encryptMsg}
+        return axios
+          .post(API_URL + "/jstging" , studentCodeReq)
+          .then((res) => {console.log('-------------PIKA--------2', res.data)
+            console.log('---------------------OK JOURNAL GET 17.03.2023')
+            this.setState({fileInfosJournal: res.data});
+          })
 
         /*AuthService.getJournalStageINGFile(currentStudent.id).then((response) => {
             this.setState({fileInfosJournal: response.data});
