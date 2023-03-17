@@ -2,8 +2,6 @@ import React, { Component } from "react";
 
 import AuthService from "../../services/auth.service";
 import greyUpload from "../../images/greyUpload.jpg";
-import axios from "axios";
-const API_URL = process.env.REACT_APP_API_URL_MESP;
 
 import blueLightUpload from "../../images/blueLightUpload.png";
 import orangeUpload from "../../images/orangeUpload.jpg";
@@ -25,6 +23,7 @@ import Spinner from "react-bootstrap/Spinner";
 import { Icon } from '@iconify/react';
 import handPointingLeft from '@iconify-icons/mdi/hand-pointing-left';
 import handPointingRight from '@iconify-icons/mdi/hand-pointing-right';
+import axios from "axios";
 
 
 const customStyles = {
@@ -40,6 +39,7 @@ const customStyles = {
 
 const API_URL_STU = process.env.REACT_APP_API_URL_STU;
 const currentStudent = AuthService.getCurrentStudent();
+const API_URL = process.env.REACT_APP_API_URL_MESP;
 
 export default class UploadFicheEvalStageING extends Component
 {
