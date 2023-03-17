@@ -14,27 +14,14 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Optional;
-import java.util.Set;
-import java.util.TreeMap;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.esprit.gdp.payload.request.*;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.joda.time.DateTime;
@@ -143,11 +130,6 @@ import com.esprit.gdp.models.temporaryEntities.UrgRdvPFE;
 import com.esprit.gdp.models.temporaryEntities.UrgRdvPFEDto;
 import com.esprit.gdp.models.temporaryEntities.UrgRdvPFEPK;
 import com.esprit.gdp.models.temporaryEntities.UrgRdvPFERepository;
-import com.esprit.gdp.payload.request.AddAvenantRequest;
-import com.esprit.gdp.payload.request.AddCompanyRequest;
-import com.esprit.gdp.payload.request.AddConventionRequest;
-import com.esprit.gdp.payload.request.ForgotPwdWithEmailRequest;
-import com.esprit.gdp.payload.request.LoginRequest;
 import com.esprit.gdp.payload.response.MessageResponse;
 import com.esprit.gdp.payload.response.TeacherResponse;
 import com.esprit.gdp.payload.response.UserResponse;
@@ -2500,6 +2482,64 @@ public class MainController {
 		}
 		//
 		for (String s : lss) {
+			System.out.println("---------------------***----------------------> UNIT: " + s);
+		}
+
+		return ResponseEntity.status(HttpStatus.OK).body(lss);
+	}
+
+	@PostMapping("/journalStageINGOFF")
+	public ResponseEntity<List<String>> getJournalStageINGOFF(@RequestBody StudentCodeRequest studentCodeReq)
+	{
+		System.out.println("-----------------Encoded : " + studentCodeReq.getStudentCode());
+
+		byte[] decodedBytes = Base64.getDecoder().decode(studentCodeReq.getStudentCode());
+		String decodedString = new String(decodedBytes);
+
+		System.out.println("-----------------Decoded : " + decodedString);
+
+		List<DepotJournalINGDto> files = evaluationEngTrRepository.findJournalStageINGByStudent(decodedString);
+
+		/*
+		Integer index = 1;
+
+	    List<DepotJournalINGDto> files = storageService.getJournalStageINGDto(currentUserCode).map(report -> {
+	    String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/journalStageING/").path(index.toString()).toUriString();
+
+	    System.out.println("---------------------***----------------------> SARS-journalStageING: " + fileDownloadUri);
+
+	      return report;
+	    }).collect(Collectors.toList());
+
+
+	    System.out.println("---------------------***----------------------> Size: " + files.size());
+
+
+	    // fp.pathRapportVersion1, fp.pathRapportVersion2, fp.dateDepotRapportVersion1, fp.dateDepotRapportVersion2, fp.pathPlagiat, fp.dateDepotPlagiat, fp.confidentiel
+	    */
+
+		List<String> lss = new ArrayList<>();
+
+		for(DepotJournalINGDto dbd : files)
+		{
+			String esING = null;
+
+			String pathEvaluationStageING = dbd.getPathJournalStageING();
+			String nameEvaluationStageING = null;
+			String dateEvaluationStageING = dbd.getDateDepotJournalStageING();
+
+			if(dbd.getPathJournalStageING() != null)
+			{
+				nameEvaluationStageING = pathEvaluationStageING.substring(pathEvaluationStageING.indexOf("uploads")+8, pathEvaluationStageING.indexOf("espdsi2020"));
+				esING = nameEvaluationStageING + "UNITR1" + dateEvaluationStageING;
+				lss.add(esING);
+				// // System.out.println("-------------------------------------------> Bilan NOT NULL 1");
+			}
+
+		}
+//
+		for(String s : lss)
+		{
 			System.out.println("---------------------***----------------------> UNIT: " + s);
 		}
 

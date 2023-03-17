@@ -110,9 +110,24 @@ export default class UploadFicheEvalStageING extends Component
 
     componentDidMount()
     {
-        AuthService.getJournalStageINGFile(currentStudent.id).then((response) => {
+
+      let encodedString = btoa(currentStudent.id);
+
+      const studentCodeReq = {studentCode : encodedString}
+      console.log('---------------------encodedString: ' + encodedString)
+
+
+      return axios
+        .post(API_URL + "/journalStageINGOFF", studentCodeReq)
+        .then((res) => {console.log('---------------------OK JOURNAL GET 17.03.2023', res.data)
+          console.log('---------------------OK JOURNAL GET 17.03.2023')
+
+          this.setState({fileInfosJournal: res.data});
+        })
+
+        /*AuthService.getJournalStageINGFile(currentStudent.id).then((response) => {
             this.setState({fileInfosJournal: response.data});
-        });
+        });*/
 
         AuthService.getAttestationStageINGFile(currentStudent.id).then((response) => {
             this.setState({fileInfosAttestation: response.data});
