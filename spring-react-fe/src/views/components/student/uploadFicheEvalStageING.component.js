@@ -23,7 +23,6 @@ import Spinner from "react-bootstrap/Spinner";
 import { Icon } from '@iconify/react';
 import handPointingLeft from '@iconify-icons/mdi/hand-pointing-left';
 import handPointingRight from '@iconify-icons/mdi/hand-pointing-right';
-import axios from "axios";
 
 
 const customStyles = {
@@ -39,7 +38,6 @@ const customStyles = {
 
 const API_URL_STU = process.env.REACT_APP_API_URL_STU;
 const currentStudent = AuthService.getCurrentStudent();
-const API_URL = process.env.REACT_APP_API_URL_MESP;
 
 export default class UploadFicheEvalStageING extends Component
 {
@@ -112,24 +110,9 @@ export default class UploadFicheEvalStageING extends Component
 
     componentDidMount()
     {
-
-        const Jasypt = require('jasypt');
-        const jasypt = new Jasypt();
-        jasypt.setPassword('SALT');
-        const encryptMsg = jasypt.encrypt(currentStudent.id);
-        console.log('----------------0610: ' + encryptMsg);
-
-        const studentCodeReq = {studentCode : encryptMsg}
-        return axios
-          .post(API_URL + "/jstging" , studentCodeReq)
-          .then((res) => {console.log('-------------PIKA--------2', res.data)
-            console.log('---------------------OK JOURNAL GET 17.03.2023')
-            this.setState({fileInfosJournal: res.data});
-          })
-
-        /*AuthService.getJournalStageINGFile(currentStudent.id).then((response) => {
+        AuthService.getJournalStageINGFile(currentStudent.id).then((response) => {
             this.setState({fileInfosJournal: response.data});
-        });*/
+        });
 
         AuthService.getAttestationStageINGFile(currentStudent.id).then((response) => {
             this.setState({fileInfosAttestation: response.data});

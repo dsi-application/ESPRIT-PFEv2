@@ -10,27 +10,17 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import com.esprit.gdp.payload.request.PlanTravailRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.esprit.gdp.dto.AvenantDateAvDateDebutStageStatusDto;
 import com.esprit.gdp.dto.AvenantHistoryDto;
@@ -2372,348 +2362,172 @@ public class StudentController {
 
 	}
 
-	@PostMapping("/addFichePFE/{idEt}/{projectTitle}/{projectDescription}/{listOfProblematics}/{listOfFunctionnalities}/{listSelectedLibelleTechnologies}/{listOfSupervisors}/{pairId}/{diagramGanttFullPath}")
-	public void addFichePFE(@PathVariable String idEt, @PathVariable String projectTitle,
-			@PathVariable String projectDescription, @PathVariable List<String> listOfProblematics,
-			@PathVariable List<String> listOfFunctionnalities,
-			@PathVariable List<String> listSelectedLibelleTechnologies, @PathVariable List<String> listOfSupervisors,
-			@PathVariable String pairId, @PathVariable String diagramGanttFullPath) {
+	@PostMapping("/addFichePFE/{idEt}")
+	public void addFichePFE(@PathVariable String idEt, @RequestBody PlanTravailRequest planTravailRequest)
+	{
 
-		// // System.out.println("------PAIR---> StudentCJ to be updated is with code: "
-		// + idEt + " - " + pairId);
-		// // System.out.println("---------> Project Title: " + projectTitle);
-		// // System.out.println("---------> project Description: " +
-		// projectDescription);
-
-		// for(String pi : listOfProblematics)
-		// {
-		// // System.out.println(listOfProblematics.size() + "---------> problem Item
-		// Unit: " + pi);
-		// }
-
-		for (String fi : listOfFunctionnalities) {
-			System.out.println(listOfProblematics.size() + "---------> f: " + fi);
-			String funcLib = fi.substring(0, fi.lastIndexOf("20espdsi21"));
-			String funcDesc = fi.substring(fi.lastIndexOf("20espdsi21") + 10);
-			// // System.out.println(listOfFunctionnalities.size() + "--------->
-			// functionnality Item Unit: " + funcLib + " - " + funcDesc);
-		}
-
-		// for(String slt : listSelectedLibelleTechnologies)
-		// {
-		// // System.out.println(listSelectedLibelleTechnologies.size() + "--------->
-		// selected Libelle Technology: " + slt);
-		// }
-
-		// for(String si : listOfSupervisors)
-		// {
-		// // System.out.println(listOfSupervisors.size() + "---------> supervisor Unit:
-		// " + si);
-		// }
-
-		// // System.out.println(" 2
-		// ------------------------------------------------------------------------------------------------
-		// add a new Plan de Travail");
-
-		// StudentCJ student = studentRepository.findByIdEt(idEt).orElseThrow(() -> new
-		// RuntimeException("StudentCJ : Verify your credentials !."));
+		System.out.println("---------------> ");
 
 		FichePFE fichePFE = new FichePFE();
-		// // System.out.println(" 3 ------");
-		// FichePFEPK fichePFEPK = new FichePFEPK(idEt, new Date());
-		// // System.out.println(" 4 ------");
-		// BigDecimal anneeDeb = new BigDecimal("1988");
-		// // System.out.println(" 5 ------");
 		fichePFE.setAnneeDeb("2021");
-		// // System.out.println(" 6 ------");
-		// fichePFE.setIdFichePFE(fichePFEPK);
-		// // System.out.println(" 7 ------");
 
-		fichePFE.setDescriptionProjet(utilServices.decodeEncodedValue(projectDescription));
-
-		System.out.println("------------ projectDescription: " + projectDescription + " - "
-				+ utilServices.decodeEncodedValue(projectDescription));
-		// // System.out.println(" 8 ------");
-		// fichePFE.setEtat("DEPOSEE");
-
-		// Actor actor = actorRepository.findByCodeACT(1);
-		// fichePFE.setActor(actor);
-		// fichePFE.setCodeNom(1);
+		fichePFE.setDescriptionProjet(planTravailRequest.getProjectDescription());
 
 		fichePFE.setEtatFiche("01");
 		fichePFE.setTraineeKind("01");
 
-		// // System.out.println(" 9 ------");
-
-		fichePFE.setTitreProjet(utilServices.decodeEncodedValue(projectTitle));
-		System.out.println(
-				"------------ projectTitle: " + projectTitle + " - " + utilServices.decodeEncodedValue(projectTitle));
-		// // System.out.println(" 10 ------");
-		// fichePFE.setStudent(student);
+		fichePFE.setTitreProjet(planTravailRequest.getProjectTitle());
 
 		Convention convention = conventionRepository.findConventionByIdEt(idEt).get(0);
 
-		FichePFEPK fichePFEPK = new FichePFEPK(convention.getConventionPK(), new Timestamp(System.currentTimeMillis()));
-		// // System.out.println(" 11 ------");
+		FichePFEPK fichePFEPK= new FichePFEPK(convention.getConventionPK(), new Timestamp(System.currentTimeMillis()));
 		fichePFE.setIdFichePFE(fichePFEPK);
-		// // System.out.println(" 12 ------");
 
-		fichePFE.setPedagogicalEncadrant(
-				teacherRepository.findByIdEns(utilServices.findIdEncadrantPedagogiqueByStudent(idEt)));
+		fichePFE.setPedagogicalEncadrant(teacherRepository.findByIdEns(utilServices.findIdEncadrantPedagogiqueByStudent(idEt)));
 
-		// // System.out.println(" LOL.1 ------");
 		List<EncadrantEntreprise> listEncadrantEntreprises = new ArrayList<EncadrantEntreprise>();
-		// // System.out.println(" LOL.2 ------");
-		for (String es : listOfSupervisors) {
-			// // System.out.println(" LOL.3 ------");
-			// EncadrantEntreprise es =
-			// responsibleRepository.findByEmail(utilServices.decodeEncodedValue(t));
-			// System.out.println("------------ superv: " + t + " - " +
-			// utilServices.decodeEncodedValue(t));
-			// // // System.out.println(" LOL.4 ------");
-			// listEncadrantEntreprises.add(es);
-			// // System.out.println(" LOL.5 ------");
+		for(String es : planTravailRequest.getListOfSupervisors())
+		{
 
-			String combSE = utilServices.decodeEncodedValue(es);
+			String combSE = es;
 
-			System.out.println("---------------- combSESE: " + combSE);
 			String combSEFN = combSE.substring(3, combSE.lastIndexOf("LN-"));
 			String combSELN = combSE.substring(combSE.lastIndexOf("LN-") + 3, combSE.lastIndexOf("NT-"));
 			String combSENT = combSE.substring(combSE.lastIndexOf("NT-") + 3, combSE.lastIndexOf("EM-"));
 			String combSEEM = combSE.substring(combSE.lastIndexOf("EM-") + 3);
 
-			// EntrepriseSupervisorDto esd =
-
 			List<String> lrs = new ArrayList<String>();
 
 			lrs = responsibleRepository.findAllSupervisors();
-			System.out.println("---------------- lrs: " + lrs.size());
 			Integer idRespInt = 1;
 
-			if (!lrs.isEmpty()) {
+			if(!lrs.isEmpty())
+			{
 				Integer maxNbr = 0;
 				List<Integer> lis = new ArrayList<Integer>();
-				for (String s : lrs) {
-					// COMPANY-SUPERV-73
+				for(String s : lrs)
+				{
 					maxNbr = Integer.valueOf(s.substring(15));
-					System.out.println("---------------- maxNbr: " + maxNbr);
 					lis.add(maxNbr);
 					Collections.sort(lis);
 				}
 
-				idRespInt = lis.get(lis.size() - 1) + 1;
-				System.out.println("---------------- idRespInt: " + idRespInt);
+				idRespInt = lis.get(lis.size()-1) + 1;
 			}
+
 
 			String idRespStr = "COMPANY-SUPERV-" + idRespInt.toString();
 
 			EncadrantEntreprisePK eePK = new EncadrantEntreprisePK(fichePFEPK, idRespStr);
-			// EncadrantEntreprise companySupervisor = new EncadrantEntreprise(eePK,
-			// utilServices.decodeEncodedValue(es.getFirstName()),
-			// utilServices.decodeEncodedValue(es.getLastName()),
-			// utilServices.decodeEncodedValue(es.getNumTelephone()),
-			// utilServices.decodeEncodedValue(es.getEmail()));
-			//
-			EncadrantEntreprise companySupervisor = new EncadrantEntreprise(eePK, combSEFN, combSELN, combSENT,
-					combSEEM);
+
+			EncadrantEntreprise companySupervisor = new EncadrantEntreprise(eePK, combSEFN, combSELN, combSENT, combSEEM);
 
 			responsibleRepository.save(companySupervisor);
 		}
-		// // System.out.println(" LOL.6 ------");
-		// convention.setEncadrantEntreprises(listEncadrantEntreprises);
 
-		// // System.out.println(" 20 ------");
 		List<Technologie> listSelectedTechs = new ArrayList<Technologie>();
-		// // System.out.println(" 21 ------");
-		for (String t : listSelectedLibelleTechnologies) {
-			// // System.out.println(" 22 ------ tech: " + t);
-			Technologie tech = technologyRepository.findByName(utilServices.decodeEncodedValue(t));
+		for(String t : planTravailRequest.getListSelectedLibelleTechnologies())
+		{
+			Technologie tech = technologyRepository.findByName(t);
 			listSelectedTechs.add(tech);
-			System.out.println("------------ t: " + t + " - " + utilServices.decodeEncodedValue(t));
-			// // System.out.println(" 23 ------");
 		}
-		// // System.out.println(" 24 ------");
 		fichePFE.setTechnologies(listSelectedTechs);
-		// // System.out.println(" 25 ------");
 
-		// Convention convention =
-		// conventionRepository.findConventionByIdEt(idEt).get(0);
-		// fichePFE.setConvention(convention);
-		// fichePFE.setDateConvention(convention.getConventionPK().getDateConvention());
+		fichePFE.setBinome(planTravailRequest.getPairId());
 
-		// se0109 StudentCJ pair = studentRepository.findByIdEt(pairId).orElseThrow(()
-		// -> new RuntimeException("StudentCJ : Verify your credentials !."));
-		fichePFE.setBinome(pairId);
-
-		/*****************************************************************************************************
-		 * Session
-		 *****/
+		/***************************************************************************************************** Session *****/
 		DateFormat dateFormata = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-		// String timestampToString =
-		// dateFormata.format(convention.getConventionPK().getDateConvention());
-
-		// Avenant avenant = avenantRepository.findAvenantByIdEtAndDateConvention(idEt,
-		// timestampToString).get(0);
-		// if(avenant == null)
-		// {
-		/* START SESSION
 		Date conventionDt = convention.getDateDebut();
-		// System.out.println("CON-------------- STN-1: " + conventionDt);
 
 		int noOfDays = 168;
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(conventionDt);
 		calendar.add(Calendar.DAY_OF_YEAR, noOfDays);
 		Date expectedDateForSTN = calendar.getTime();
-		// System.out.println("CON-------------- STN-2: " + expectedDateForSTN);
 
 		List<com.esprit.gdp.models.Session> sessions = sessionRepository.findAll();
-		// System.out.println("CON-------------- STN-3: " + sessions.size());
 		com.esprit.gdp.models.Session relatedSession = null;
-		for (com.esprit.gdp.models.Session s : sessions) {
-			if (expectedDateForSTN.after(s.getDateDebut()) && expectedDateForSTN.before(s.getDateFin())) {
-				// System.out.println("CON-------------- STN-4");
+		for(com.esprit.gdp.models.Session s : sessions)
+		{
+			if(expectedDateForSTN.after(s.getDateDebut()) && expectedDateForSTN.before(s.getDateFin()))
+			{
 				relatedSession = s;
 			}
 		}
-		// System.out.println("CON-------------- STN-5: " +
-		// relatedSession.getIdSession());
 		fichePFE.setSession(relatedSession);
-		END SESSION*/
-		// }
-		// else
-		// {
-		// Date avenantDt = avenant.getDateDebut();
-		// // System.out.println("AVN-------------- STN-1: " + avenantDt);
-		//
-		// int noOfDays = 168;
-		// Calendar calendar = Calendar.getInstance();
-		// calendar.setTime(avenantDt);
-		// calendar.add(Calendar.DAY_OF_YEAR, noOfDays);
-		// Date expectedDateForSTN = calendar.getTime();
-		// // System.out.println("AVN-------------- STN-2: " + expectedDateForSTN);
-		//
-		// List<com.esprit.gdp.models.Session> sessions = sessionRepository.findAll();
-		// // System.out.println("AVN-------------- STN-3: " + sessions.size());
-		// com.esprit.gdp.models.Session relatedSession = null;
-		// for(com.esprit.gdp.models.Session s : sessions)
-		// {
-		// if(expectedDateForSTN.after(s.getDateDebut()) &&
-		// expectedDateForSTN.before(s.getDateFin()))
-		// {
-		// // System.out.println("AVN-------------- STN-4");
-		// relatedSession = s;
-		// }
-		// }
-		// System.out.println("AVN-------------- STN-5: " +
-		// relatedSession.getIdSession());
-//		fichePFE.setSession(relatedSession);
-		// }
 
 		/*********************************************/
 		String dbadd = "C:/ESP/uploads/";
 
-		fichePFE.setPathDiagrammeGantt(dbadd + utilServices.decodeEncodedValue(diagramGanttFullPath));
+		fichePFE.setPathDiagrammeGantt(dbadd + planTravailRequest.getDiagramGanttFullPath());
 		fichePFE.setDateDepotGanttDiagram(new Date());
 
 		fichePFERepository.save(fichePFE);
 
-		// // System.out.println("--------$$$------ 26.1: " +
-		// fichePFE.getDateConvention());
-
-		// // System.out.println("-------------- 26: " + fichePFE.getTitreProjet());
-
-		// System.out.println("===================> Size Id: " +
-		// listOfFunctionnalities.size());
-
-		// List<Fonctionnalite> lfes = new ArrayList<Fonctionnalite>();
-
-		// String timestampToString1 =
-		// dateFormata.format(fichePFE.getIdFichePFE().getDateDepotFiche());
-		// sars(listOfProblematics, idEt, timestampToString1, fichePFE);
-
-		for (String pi : listOfProblematics) {
+		for(String pi : planTravailRequest.getListOfProblematics())
+		{
 			String timestampToString1 = dateFormata.format(fichePFE.getIdFichePFE().getDateDepotFiche());
 
 			List<String> lfs = new ArrayList<String>();
 			lfs = problematicRepository.findAllProblematicsByStudentAndDateDepotFiche(idEt, timestampToString1);
 			Integer idProblematic = lfs.size() + 1;
 
-			System.out.println("===================> lfs: " + lfs);
-
 			Problematique problematic = new Problematique();
 			ProblematiquePK problematicPK = new ProblematiquePK(fichePFEPK, idProblematic);
 
-			System.out.println("===============hhhhh=*************===> TRY: " + problematicPK.getNumOrdre() + " _ "
-					+ problematicPK.getFichePFEPK().getDateDepotFiche() + " - " + utilServices.decodeEncodedValue(pi));
 			problematic.setProblematicPK(problematicPK);
-			problematic.setName(utilServices.decodeEncodedValue(pi)); // utilServices.decodeEncodedValue(pi)
+			problematic.setName(pi);
 			problematic.setFichePFEProblematic(fichePFE);
-			System.out.println("================*************===> TRY: " + problematicPK.getNumOrdre() + " _ "
-					+ problematicPK.getFichePFEPK().getDateDepotFiche() + " - " + "lol" + problematicPK.getNumOrdre());
-			// problematicRepository.saveAndFlush(problematic);
 			problematicRepository.save(problematic);
-
-			System.out.println("===******===> SAVED: " + problematicPK.getNumOrdre() + " - "
-					+ utilServices.decodeEncodedValue(pi));
 
 		}
 
-		for (String fi : listOfFunctionnalities) {
-			// // System.out.println("-------------- 2 TO DO : Add a new Functionnality : "
-			// + fi + " - " + fichePFE.getIdFichePFE().getIdEt());
+		for(String fi : planTravailRequest.getListOfFunctionnalities())
+		{
 			String funcLib = fi.substring(0, fi.lastIndexOf("20espdsi21"));
-			String funcDesc = fi.substring(fi.lastIndexOf("20espdsi21") + 10);
+			String funcDesc = fi.substring(fi.lastIndexOf("20espdsi21")+10);
 
 			Fonctionnalite functionnality = new Fonctionnalite();
 
 			List<String> lfs = new ArrayList<String>();
-			lfs = functionnalityRepository.findAllFonctionalitiesLibelleByFichePFE(idEt,
-					fichePFE.getIdFichePFE().getDateDepotFiche());
+			lfs = functionnalityRepository.findAllFonctionalitiesLibelleByFichePFE(idEt, fichePFE.getIdFichePFE().getDateDepotFiche());
 			Integer idFonctionnality = lfs.size() + 1;
 			FunctionnalityPK functionnalityPK = new FunctionnalityPK(fichePFE.getIdFichePFE(), idFonctionnality);
 
 			functionnality.setFunctionnalityPK(functionnalityPK);
-			functionnality.setName(utilServices.decodeEncodedValue(funcLib));
-			functionnality.setDescription(utilServices.decodeEncodedValue(funcDesc));
+			functionnality.setName(funcLib);
+			functionnality.setDescription(funcDesc);
 			functionnality.setFichePFEFunctionnality(fichePFE);
 
-			System.out.println("------------ fl: " + funcLib + " - " + utilServices.decodeEncodedValue(funcLib));
-			System.out.println("------------ fd: " + funcDesc + " - " + utilServices.decodeEncodedValue(funcDesc));
-
 			functionnalityRepository.save(functionnality);
-			// lfs.add(functionnality);
 		}
 
 		// Save in Traitement Plan de Travail for History
 		TraitementFichePFE afp = new TraitementFichePFE();
-		TraitementFichePK annulationFichePK = new TraitementFichePK(fichePFE.getIdFichePFE(),
-				fichePFE.getIdFichePFE().getDateDepotFiche());
+		TraitementFichePK annulationFichePK = new TraitementFichePK(fichePFE.getIdFichePFE(), fichePFE.getIdFichePFE().getDateDepotFiche());
 		afp.setTraitementFichePK(annulationFichePK);
 		afp.setTypeTrtFiche("01");
 		afp.setFichePFETraitementFichePFE(fichePFE);
 		traitementFicheRepository.save(afp);
 
-		/*****************************************
-		 * Notification By Mail
-		 *****************************************/
+		/***************************************** Notification By Mail *****************************************/
 
 		DateFormat dateFormatz = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		String dateDepotESPFile = dateFormatz.format(new Date());
 
-		String subject = "Sauvegarde Plan de Travail";
+		String subject = "Sauvegarde Plan de Travail OFF";
 
-		// String studentMail = utilServices.findStudentMailById(idEt).substring(0,
-		// utilServices.findStudentMailById(idEt).lastIndexOf("@")) + "@mail.tn";
-		String studentMail = utilServices.findStudentMailById(idEt); // DEPLOY_SERVER
+		String studentMail = utilServices.findStudentMailById(idEt);  // DEPLOY_SERVER
 
 		String content = "Nous voulons vous informer par le présent mail que vous avez sauvegardé une "
-				+ "première version de votre " + "<strong><font color=grey> Plan de DEPLOY_SERVER/strong> "
+				+ "première version de votre "
+				+ "<strong><font color=grey> Plan de Travail </font></strong> "
 				+ "le <font color=red> " + dateDepotESPFile + " </font>."
 				+ "<br/>Cette Version peut être modifiée à tout moment et elle est accessible uniquement par Vous."
 				+ "<br/>Une fois, vous êtes sûrs de vos données insérées, vous pouvez confirmer votre Plan de Travail "
-				+ "pour que votre " + "<strong><font color=grey> Encadrant Académique </font></strong> "
+				+ "pour que votre "
+				+ "<strong><font color=grey> Encadrant Académique </font></strong> "
 				+ "puisse le traiter.";
 
 		utilServices.sendMail(subject, studentMail, content);
@@ -2721,422 +2535,13 @@ public class StudentController {
 
 	}
 
-	// @PostMapping("/addFichePFE/{idEt}/{projectTitle}/{projectDescription}/{listOfProblematics}/{listOfFunctionnalities}/{listSelectedLibelleTechnologies}/{listOfSupervisors}/{pairId}/{diagramGanttFullPath}")
-	// public void addFichePFE(@PathVariable String idEt, @PathVariable String
-	// projectTitle, @PathVariable String projectDescription, @PathVariable
-	// List<String> listOfProblematics, @PathVariable List<String>
-	// listOfFunctionnalities, @PathVariable List<String>
-	// listSelectedLibelleTechnologies, @PathVariable List<String>
-	// listOfSupervisors, @PathVariable String pairId, @PathVariable String
-	// diagramGanttFullPath)
-	// {
-	//
-	// // // System.out.println("------PAIR---> StudentCJ to be updated is with
-	// code: " + idEt + " - " + pairId);
-	// // // System.out.println("---------> Project Title: " + projectTitle);
-	// // // System.out.println("---------> project Description: " +
-	// projectDescription);
-	//
-	//// for(String pi : listOfProblematics)
-	//// {
-	//// // System.out.println(listOfProblematics.size() + "---------> problem Item
-	// Unit: " + pi);
-	//// }
-	//
-	// for(String fi : listOfFunctionnalities)
-	// {
-	// System.out.println(listOfProblematics.size() + "---------> f: " + fi);
-	// String funcLib = fi.substring(0, fi.lastIndexOf("20espdsi21"));
-	// String funcDesc = fi.substring(fi.lastIndexOf("20espdsi21")+10);
-	// // // System.out.println(listOfFunctionnalities.size() + "--------->
-	// functionnality Item Unit: " + funcLib + " - " + funcDesc);
-	// }
-	//
-	//// for(String slt : listSelectedLibelleTechnologies)
-	//// {
-	//// // System.out.println(listSelectedLibelleTechnologies.size() + "--------->
-	// selected Libelle Technology: " + slt);
-	//// }
-	//
-	//// for(String si : listOfSupervisors)
-	//// {
-	//// // System.out.println(listOfSupervisors.size() + "---------> supervisor
-	// Unit: " + si);
-	//// }
-	//
-	// // // System.out.println(" 2
-	// ------------------------------------------------------------------------------------------------
-	// add a new Plan de Travail");
-	//
-	// // StudentCJ student = studentRepository.findByIdEt(idEt).orElseThrow(() ->
-	// new RuntimeException("StudentCJ : Verify your credentials !."));
-	//
-	// FichePFE fichePFE = new FichePFE();
-	// // // System.out.println(" 3 ------");
-	// // FichePFEPK fichePFEPK = new FichePFEPK(idEt, new Date());
-	// // // System.out.println(" 4 ------");
-	// //BigDecimal anneeDeb = new BigDecimal("1988");
-	// // // System.out.println(" 5 ------");
-	// fichePFE.setAnneeDeb("1988");
-	// // // System.out.println(" 6 ------");
-	// //fichePFE.setIdFichePFE(fichePFEPK);
-	// // // System.out.println(" 7 ------");
-	//
-	//
-	// fichePFE.setDescriptionProjet(utilServices.decodeEncodedValue(projectDescription));
-	//
-	// System.out.println("------------ projectDescription: " + projectDescription +
-	// " - " + utilServices.decodeEncodedValue(projectDescription));
-	// // // System.out.println(" 8 ------");
-	// //fichePFE.setEtat("DEPOSEE");
-	//
-	//// Actor actor = actorRepository.findByCodeACT(1);
-	//// fichePFE.setActor(actor);
-	//// fichePFE.setCodeNom(1);
-	//
-	// fichePFE.setEtatFiche("01");
-	// fichePFE.setTraineeKind("01");
-	//
-	// // // System.out.println(" 9 ------");
-	//
-	// fichePFE.setTitreProjet(utilServices.decodeEncodedValue(projectTitle));
-	// System.out.println("------------ projectTitle: " + projectTitle + " - " +
-	// utilServices.decodeEncodedValue(projectTitle));
-	// // // System.out.println(" 10 ------");
-	// // fichePFE.setStudent(student);
-	//
-	// Convention convention =
-	// conventionRepository.findConventionByIdEt(idEt).get(0);
-	//
-	// FichePFEPK fichePFEPK= new FichePFEPK(convention.getConventionPK(), new
-	// Timestamp(System.currentTimeMillis()));
-	// // // System.out.println(" 11 ------");
-	// fichePFE.setIdFichePFE(fichePFEPK);
-	// // // System.out.println(" 12 ------");
-	//
-	//
-	// fichePFE.setPedagogicalEncadrant(teacherRepository.findByIdEns(utilServices.findIdEncadrantPedagogiqueByStudent(idEt)));
-	//
-	//
-	//
-	// // // System.out.println(" LOL.1 ------");
-	// List<EncadrantEntreprise> listEncadrantEntreprises = new
-	// ArrayList<EncadrantEntreprise>();
-	// // // System.out.println(" LOL.2 ------");
-	// for(String es : listOfSupervisors)
-	// {
-	// // // System.out.println(" LOL.3 ------");
-	//// EncadrantEntreprise es =
-	// responsibleRepository.findByEmail(utilServices.decodeEncodedValue(t));
-	//// System.out.println("------------ superv: " + t + " - " +
-	// utilServices.decodeEncodedValue(t));
-	//// // // System.out.println(" LOL.4 ------");
-	//// listEncadrantEntreprises.add(es);
-	// // // System.out.println(" LOL.5 ------");
-	//
-	// String combSE = utilServices.decodeEncodedValue(es);
-	//
-	// System.out.println("---------------- combSESE: " + combSE);
-	// String combSEFN = combSE.substring(3, combSE.lastIndexOf("LN-"));
-	// String combSELN = combSE.substring(combSE.lastIndexOf("LN-") + 3,
-	// combSE.lastIndexOf("NT-"));
-	// String combSENT = combSE.substring(combSE.lastIndexOf("NT-") + 3,
-	// combSE.lastIndexOf("EM-"));
-	// String combSEEM = combSE.substring(combSE.lastIndexOf("EM-") + 3);
-	//
-	//// EntrepriseSupervisorDto esd =
-	//
-	// List<String> lrs = new ArrayList<String>();
-	//
-	// lrs = responsibleRepository.findAllSupervisors();
-	// System.out.println("---------------- lrs: " + lrs.size());
-	// Integer idRespInt = 1;
-	//
-	// if(!lrs.isEmpty())
-	// {
-	// Integer maxNbr = 0;
-	// List<Integer> lis = new ArrayList<Integer>();
-	// for(String s : lrs)
-	// {
-	// // COMPANY-SUPERV-73
-	// maxNbr = Integer.valueOf(s.substring(15));
-	// System.out.println("---------------- maxNbr: " + maxNbr);
-	// lis.add(maxNbr);
-	// Collections.sort(lis);
-	// }
-	//
-	// idRespInt = lis.get(lis.size()-1) + 1;
-	// System.out.println("---------------- idRespInt: " + idRespInt);
-	// }
-	//
-	//
-	// String idRespStr = "COMPANY-SUPERV-" + idRespInt.toString();
-	//
-	// EncadrantEntreprisePK eePK = new EncadrantEntreprisePK(fichePFEPK,
-	// idRespStr);
-	//// EncadrantEntreprise companySupervisor = new EncadrantEntreprise(eePK,
-	// utilServices.decodeEncodedValue(es.getFirstName()),
-	// utilServices.decodeEncodedValue(es.getLastName()),
-	// utilServices.decodeEncodedValue(es.getNumTelephone()),
-	// utilServices.decodeEncodedValue(es.getEmail()));
-	////
-	// EncadrantEntreprise companySupervisor = new EncadrantEntreprise(eePK,
-	// combSEFN, combSELN, combSENT, combSEEM);
-	//
-	// responsibleRepository.save(companySupervisor);
-	// }
-	// // // System.out.println(" LOL.6 ------");
-	// //convention.setEncadrantEntreprises(listEncadrantEntreprises);
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	// // // System.out.println(" 20 ------");
-	// List<Technologie> listSelectedTechs = new ArrayList<Technologie>();
-	// // // System.out.println(" 21 ------");
-	// for(String t : listSelectedLibelleTechnologies)
-	// {
-	// // // System.out.println(" 22 ------ tech: " + t);
-	// Technologie tech =
-	// technologyRepository.findByName(utilServices.decodeEncodedValue(t));
-	// listSelectedTechs.add(tech);
-	// System.out.println("------------ t: " + t + " - " +
-	// utilServices.decodeEncodedValue(t));
-	// // // System.out.println(" 23 ------");
-	// }
-	// // // System.out.println(" 24 ------");
-	// fichePFE.setTechnologies(listSelectedTechs);
-	// // // System.out.println(" 25 ------");
-	//
-	// // Convention convention =
-	// conventionRepository.findConventionByIdEt(idEt).get(0);
-	// // fichePFE.setConvention(convention);
-	// //
-	// fichePFE.setDateConvention(convention.getConventionPK().getDateConvention());
-	//
-	// // se0109 StudentCJ pair =
-	// studentRepository.findByIdEt(pairId).orElseThrow(() -> new
-	// RuntimeException("StudentCJ : Verify your credentials !."));
-	// fichePFE.setBinome(pairId);
-	//
-	// /*****************************************************************************************************
-	// Session *****/
-	// DateFormat dateFormata = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	//
-	//// String timestampToString =
-	// dateFormata.format(convention.getConventionPK().getDateConvention());
-	//
-	// // Avenant avenant =
-	// avenantRepository.findAvenantByIdEtAndDateConvention(idEt,
-	// timestampToString).get(0);
-	//// if(avenant == null)
-	//// {
-	// Date conventionDt = convention.getDateDebut();
-	// // System.out.println("CON-------------- STN-1: " + conventionDt);
-	//
-	// int noOfDays = 168;
-	// Calendar calendar = Calendar.getInstance();
-	// calendar.setTime(conventionDt);
-	// calendar.add(Calendar.DAY_OF_YEAR, noOfDays);
-	// Date expectedDateForSTN = calendar.getTime();
-	// // System.out.println("CON-------------- STN-2: " + expectedDateForSTN);
-	//
-	// List<com.esprit.gdp.models.Session> sessions = sessionRepository.findAll();
-	// // System.out.println("CON-------------- STN-3: " + sessions.size());
-	// com.esprit.gdp.models.Session relatedSession = null;
-	// for(com.esprit.gdp.models.Session s : sessions)
-	// {
-	// if(expectedDateForSTN.after(s.getDateDebut()) &&
-	// expectedDateForSTN.before(s.getDateFin()))
-	// {
-	// // System.out.println("CON-------------- STN-4");
-	// relatedSession = s;
-	// }
-	// }
-	// // System.out.println("CON-------------- STN-5: " +
-	// relatedSession.getIdSession());
-	// fichePFE.setSession(relatedSession);
-	//// }
-	//// else
-	//// {
-	//// Date avenantDt = avenant.getDateDebut();
-	//// // System.out.println("AVN-------------- STN-1: " + avenantDt);
-	////
-	//// int noOfDays = 168;
-	//// Calendar calendar = Calendar.getInstance();
-	//// calendar.setTime(avenantDt);
-	//// calendar.add(Calendar.DAY_OF_YEAR, noOfDays);
-	//// Date expectedDateForSTN = calendar.getTime();
-	//// // System.out.println("AVN-------------- STN-2: " + expectedDateForSTN);
-	////
-	//// List<com.esprit.gdp.models.Session> sessions = sessionRepository.findAll();
-	//// // System.out.println("AVN-------------- STN-3: " + sessions.size());
-	//// com.esprit.gdp.models.Session relatedSession = null;
-	//// for(com.esprit.gdp.models.Session s : sessions)
-	//// {
-	//// if(expectedDateForSTN.after(s.getDateDebut()) &&
-	// expectedDateForSTN.before(s.getDateFin()))
-	//// {
-	//// // System.out.println("AVN-------------- STN-4");
-	//// relatedSession = s;
-	//// }
-	//// }
-	// // System.out.println("AVN-------------- STN-5: " +
-	// relatedSession.getIdSession());
-	// fichePFE.setSession(relatedSession);
-	//// }
-	//
-	//
-	// /*********************************************/
-	// String dbadd = "C:/ESP/uploads/";
-	//
-	// fichePFE.setPathDiagrammeGantt(dbadd +
-	// utilServices.decodeEncodedValue(diagramGanttFullPath));
-	// fichePFE.setDateDepotGanttDiagram(new Date());
-	//
-	// fichePFERepository.save(fichePFE);
-	//
-	// // // System.out.println("--------$$$------ 26.1: " +
-	// fichePFE.getDateConvention());
-	//
-	// // // System.out.println("-------------- 26: " + fichePFE.getTitreProjet());
-	//
-	//
-	// // System.out.println("===================> Size Id: " +
-	// listOfFunctionnalities.size());
-	//
-	// // List<Fonctionnalite> lfes = new ArrayList<Fonctionnalite>();
-	//
-	//
-	//// String timestampToString1 =
-	// dateFormata.format(fichePFE.getIdFichePFE().getDateDepotFiche());
-	//// sars(listOfProblematics, idEt, timestampToString1, fichePFE);
-	//
-	//
-	// for(String pi : listOfProblematics)
-	// {
-	// String timestampToString1 =
-	// dateFormata.format(fichePFE.getIdFichePFE().getDateDepotFiche());
-	//
-	// List<String> lfs = new ArrayList<String>();
-	// lfs =
-	// problematicRepository.findAllProblematicsByStudentAndDateDepotFiche(idEt,
-	// timestampToString1);
-	// Integer idProblematic = lfs.size() + 1;
-	//
-	// System.out.println("===================> lfs: " + lfs);
-	//
-	// Problematique problematic = new Problematique();
-	// ProblematiquePK problematicPK = new ProblematiquePK(fichePFEPK,
-	// idProblematic);
-	//
-	// System.out.println("===============hhhhh=*************===> TRY: " +
-	// problematicPK.getNumOrdre() + " _ " +
-	// problematicPK.getFichePFEPK().getDateDepotFiche() + " - " +
-	// utilServices.decodeEncodedValue(pi));
-	// problematic.setProblematicPK(problematicPK);
-	// problematic.setName(utilServices.decodeEncodedValue(pi)); //
-	// utilServices.decodeEncodedValue(pi)
-	// problematic.setFichePFEProblematic(fichePFE);
-	// System.out.println("================*************===> TRY: " +
-	// problematicPK.getNumOrdre() + " _ " +
-	// problematicPK.getFichePFEPK().getDateDepotFiche() + " - " + "lol" +
-	// problematicPK.getNumOrdre());
-	//// problematicRepository.saveAndFlush(problematic);
-	// problematicRepository.save(problematic);
-	//
-	// System.out.println("===******===> SAVED: " + problematicPK.getNumOrdre() + "
-	// - " + utilServices.decodeEncodedValue(pi));
-	//
-	// }
-	//
-	// for(String fi : listOfFunctionnalities)
-	// {
-	// // // System.out.println("-------------- 2 TO DO : Add a new Functionnality :
-	// " + fi + " - " + fichePFE.getIdFichePFE().getIdEt());
-	// String funcLib = fi.substring(0, fi.lastIndexOf("20espdsi21"));
-	// String funcDesc = fi.substring(fi.lastIndexOf("20espdsi21")+10);
-	//
-	// Fonctionnalite functionnality = new Fonctionnalite();
-	//
-	// List<String> lfs = new ArrayList<String>();
-	// lfs = functionnalityRepository.findAllFonctionalitiesLibelleByFichePFE(idEt,
-	// fichePFE.getIdFichePFE().getDateDepotFiche());
-	// Integer idFonctionnality = lfs.size() + 1;
-	// FunctionnalityPK functionnalityPK = new
-	// FunctionnalityPK(fichePFE.getIdFichePFE(), idFonctionnality);
-	//
-	// functionnality.setFunctionnalityPK(functionnalityPK);
-	// functionnality.setName(utilServices.decodeEncodedValue(funcLib));
-	// functionnality.setDescription(utilServices.decodeEncodedValue(funcDesc));
-	// functionnality.setFichePFEFunctionnality(fichePFE);
-	//
-	// System.out.println("------------ fl: " + funcLib + " - " +
-	// utilServices.decodeEncodedValue(funcLib));
-	// System.out.println("------------ fd: " + funcDesc + " - " +
-	// utilServices.decodeEncodedValue(funcDesc));
-	//
-	// functionnalityRepository.save(functionnality);
-	// //lfs.add(functionnality);
-	// }
-	//
-	// // Save in Traitement Plan de Travail for History
-	// TraitementFichePFE afp = new TraitementFichePFE();
-	// TraitementFichePK annulationFichePK = new
-	// TraitementFichePK(fichePFE.getIdFichePFE(),
-	// fichePFE.getIdFichePFE().getDateDepotFiche());
-	// afp.setTraitementFichePK(annulationFichePK);
-	// afp.setTypeTrtFiche("01");
-	// afp.setFichePFETraitementFichePFE(fichePFE);
-	// traitementFicheRepository.save(afp);
-	//
-	// /***************************************** Notification By Mail
-	// *****************************************/
-	//
-	// DateFormat dateFormatz = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-	// String dateDepotESPFile = dateFormatz.format(new Date());
-	//
-	// String subject = "Sauvegarde Plan de Travail";
-	//
-	//// String studentMail = utilServices.findStudentMailById(idEt).substring(0,
-	// utilServices.findStudentMailById(idEt).lastIndexOf("@")) + "@mail.tn";
-	// String studentMail = utilServices.findStudentMailById(idEt); // DEPLOY_SERVER
-	//
-	// String content = "Nous voulons vous informer par le présent mail que vous
-	// avez sauvegardé une "
-	// + "première version de votre "
-	// + "<strong><font color=grey> Plan de TravDEPLOY_SERVERong> "
-	// + "le <font color=red> " + dateDepotESPFile + " </font>."
-	// + "<br/>Cette Version peut être modifiée à tout moment et elle est accessible
-	// uniquement par Vous."
-	// + "<br/>Une fois, vous êtes sûrs de vos données insérées, vous pouvez
-	// confirmer votre Plan de Travail "
-	// + "pour que votre "
-	// + "<strong><font color=grey> Encadrant Académique </font></strong> "
-	// + "puisse le traiter.";
-	//
-	// utilServices.sendMail(subject, studentMail, content);
-	// /********************************************************************************************************/
-	//
-	// }
-
-	@PostMapping("/updateFichePFE/{idEt}/{projectTitle}/{projectDescription}/{listOfProblematics}/{listOfFunctionnalities}/{listSelectedLibelleTechnologies}/{traineeshipCompany}/{listOfSupervisors}/{pairId}/{diagramGanttFullPath}")
-	public void updateFichePFE(@PathVariable String idEt, @PathVariable String projectTitle,
-			@PathVariable String projectDescription, @PathVariable List<String> listOfProblematics,
-			@PathVariable List<String> listOfFunctionnalities,
-			@PathVariable List<String> listSelectedLibelleTechnologies, @PathVariable String traineeshipCompany,
-			@PathVariable List<String> listOfSupervisors, @PathVariable String pairId,
-			@PathVariable String diagramGanttFullPath) throws UnsupportedEncodingException {
+	@PostMapping("/updateFichePFE/{idEt}")
+	public void updateFichePFE(@PathVariable String idEt, @RequestBody PlanTravailRequest planTravailRequest)
+	{
 
 		FichePFE fichePFE = fichePFERepository.findFichePFEByStudent(idEt).get(0);
 
-		// // System.out.println("---------------------------------------------- DATE: "
-		// + fichePFE.getIdFichePFE().getDateDepotFiche());
+		// // System.out.println("---------------------------------------------- DATE: " + fichePFE.getIdFichePFE().getDateDepotFiche());
 
 		DateFormat dateFormata = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String timestampToString = dateFormata.format(fichePFE.getIdFichePFE().getDateDepotFiche());
@@ -3144,244 +2549,222 @@ public class StudentController {
 		List<String> lops = new ArrayList<String>();
 		lops = problematicRepository.findAllProblematicsByStudentAndDateDepotFiche(idEt, timestampToString);
 
-		// List<String> pdt = problematicRepository.lol1(idEt);
+		//List<String> pdt = problematicRepository.lol1(idEt);
 
-		// // System.out.println("---------------------------------------------- DATE
-		// PROB - 1: " + timestampToString);
-		//// System.out.println("---------------------------------------------- DATE
-		// PROB - 2: " + pdt.get(0));
+		// // System.out.println("---------------------------------------------- DATE PROB - 1: " + timestampToString);
+		//// System.out.println("---------------------------------------------- DATE PROB - 2: " + pdt.get(0));
 
-		for (int i = 1; i < lops.size() + 1; i++) {
-			// // System.out.println("---------------------------------------------- ID
-			// PROB: " + lops.size() + " - " + i);
+		for(int i=1; i<lops.size()+1; i++)
+		{
+			// // System.out.println("---------------------------------------------- ID PROB: " + lops.size() + " - " + i);
 			problematicRepository.deleteAllProblematicsByIdFichePFE(idEt, timestampToString);
-			// ProblematicPK problematicPK = new ProblematicPK(idEt,
-			// fichePFE.getIdFichePFE().getDateDepotFiche(), i);
+			// ProblematicPK problematicPK = new ProblematicPK(idEt, fichePFE.getIdFichePFE().getDateDepotFiche(), i);
 			// problematicRepository.deleteById(problematicPK);
 		}
 
-		// // System.out.println("---------------------------------------------- AFTER
-		// DELETE PROBS: " + lops.size());
+		// // System.out.println("---------------------------------------------- AFTER DELETE PROBS: " + lops.size());
 
 		List<String> lofs = new ArrayList<String>();
 		lofs = functionnalityRepository.findAllFonctionalitiesLibelleByFichePFE(idEt, timestampToString);
-		for (int i = 1; i < lofs.size() + 1; i++) {
-			// // System.out.println("---------------------------------------------- ID
-			// FUNC: " + lofs.size() + " - " + i);
+		for(int i=1; i<lofs.size()+1; i++)
+		{
+			// // System.out.println("---------------------------------------------- ID FUNC: " + lofs.size() + " - " + i);
 			functionnalityRepository.deleteAllFunctionnalitiesByIdFichePFE(idEt, timestampToString);
-			// FunctionnalityPK functionnalityPK = new FunctionnalityPK(idEt,
-			// fichePFE.getIdFichePFE().getDateDepotFiche(), i);
+			// FunctionnalityPK functionnalityPK = new FunctionnalityPK(idEt, fichePFE.getIdFichePFE().getDateDepotFiche(), i);
 			// functionnalityRepository.deleteById(functionnalityPK);
 		}
 
-		// // System.out.println("---------------------------------------------- AFTER
-		// DELETE FUNCS: " + lofs.size());
+		// // System.out.println("---------------------------------------------- AFTER DELETE FUNCS: " + lofs.size());
 
-		// // System.out.println("---------> StudentCJ to be updated is with code: " +
-		// idEt);
+		// // System.out.println("---------> StudentCJ to be updated is with code: " + idEt);
 		// // System.out.println("---------> Project Title: " + projectTitle);
-		// // System.out.println("---------> project Description: " +
-		// projectDescription);
-		// // System.out.println("---------> project Traineeship Company: " +
-		// traineeshipCompany);
+		// // System.out.println("---------> project Description: " + projectDescription);
+		// // System.out.println("---------> project Traineeship Company: " + traineeshipCompany);
 
-		// for(String pi : listOfProblematics)
-		// {
-		// // System.out.println(listOfProblematics.size() + "---------> problem Item
-		// Unit: " + pi);
-		// }
+//		for(String pi : listOfProblematics)
+//		{
+//			// System.out.println(listOfProblematics.size() + "---------> problem Item Unit: " + pi);
+//		}
 
-		for (String fi : listOfFunctionnalities) {
+		for(String fi : planTravailRequest.getListOfFunctionnalities())
+		{
 			String funcLib = fi.substring(0, fi.lastIndexOf("20espdsi21"));
-			String funcDesc = fi.substring(fi.lastIndexOf("20espdsi21") + 10);
-			// // System.out.println(listOfFunctionnalities.size() + "--------->
-			// functionnality Item Unit: " + funcLib + " - " + funcDesc);
+			String funcDesc = fi.substring(fi.lastIndexOf("20espdsi21")+10);
+			// // System.out.println(listOfFunctionnalities.size() + "---------> functionnality Item Unit: " + funcLib + " - " + funcDesc);
 		}
 
-		// for(String slt : listSelectedLibelleTechnologies)
-		// {
-		// // System.out.println(listSelectedLibelleTechnologies.size() + "--------->
-		// selected Libelle Technology: " + slt);
-		// }
+//		for(String slt : listSelectedLibelleTechnologies)
+//		{
+//			// System.out.println(listSelectedLibelleTechnologies.size() + "---------> selected Libelle Technology: " + slt);
+//		}
 
-		// for(String si : listOfSupervisors)
-		// {
-		// // System.out.println(listOfSupervisors.size() + "---------> supervisor Unit:
-		// " + si);
-		// }
+//		for(String si : listOfSupervisors)
+//		{
+//			// System.out.println(listOfSupervisors.size() + "---------> supervisor  Unit: " + si);
+//		}
 
-		// // System.out.println(" 2
-		// ------------------------------------------------------------------------------------------------
-		// update Plan de Travail");
+		// // System.out.println(" 2 ------------------------------------------------------------------------------------------------ update Plan de Travail");
 
 		fichePFE.setAnneeDeb("2021");
 
-		// FichePFEPK idFichePFE= new FichePFEPK(idEt,
-		// fichePFE.getIdFichePFE().getDateDepotFiche());
-		// fichePFE.setIdFichePFE(idFichePFE);
+//		FichePFEPK idFichePFE= new FichePFEPK(idEt, fichePFE.getIdFichePFE().getDateDepotFiche());
+//		fichePFE.setIdFichePFE(idFichePFE);
 
-		fichePFE.setDescriptionProjet(utilServices.decodeEncodedValue(projectDescription));
+		fichePFE.setDescriptionProjet(planTravailRequest.getProjectDescription());
 
-		fichePFE.setTitreProjet(utilServices.decodeEncodedValue(projectTitle));
+		fichePFE.setTitreProjet(planTravailRequest.getProjectTitle());
+
+
 
 		Convention convention = conventionRepository.findConventionByIdEt(idEt).get(0);
 		// // System.out.println(" LOL.1 ------");
 		List<EncadrantEntreprise> listEncadrantEntreprises = new ArrayList<EncadrantEntreprise>();
 		// // System.out.println(" LOL.2 ------");
-		for (String t : listOfSupervisors) {
-			// // System.out.println(" LOL.3 ------");
-			EncadrantEntreprise es = responsibleRepository.findByEmail(utilServices.decodeEncodedValue(t)).get(0);
+		for(String t : planTravailRequest.getListOfSupervisors())
+		{
+			System.out.println(" LOL.3 ----^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^--");
+			EncadrantEntreprise es = responsibleRepository.findByEmail(t).get(0);
 			// // System.out.println(" LOL.4 ------");
 			listEncadrantEntreprises.add(es);
 			// // System.out.println(" LOL.5 ------");
 		}
 		// // System.out.println(" LOL.6 ------");
-		// convention.setEncadrantEntreprises(listEncadrantEntreprises);
+		//convention.setEncadrantEntreprises(listEncadrantEntreprises);
 
 		List<Technologie> listSelectedTechs = new ArrayList<Technologie>();
-		for (String t : listSelectedLibelleTechnologies) {
-			Technologie tech = technologyRepository.findByName(utilServices.decodeEncodedValue(t));
+		for(String t : planTravailRequest.getListSelectedLibelleTechnologies())
+		{
+			Technologie tech = technologyRepository.findByName(t);
 			listSelectedTechs.add(tech);
 		}
 		fichePFE.setTechnologies(null);
 		fichePFE.setTechnologies(listSelectedTechs);
 
-		// se0109 StudentCJ pair = studentRepository.findByIdEt(pairId).orElseThrow(()
-		// -> new RuntimeException("StudentCJ : Verify your credentials !."));
-		fichePFE.setBinome(pairId);
+		// se0109 StudentCJ pair = studentRepository.findByIdEt(pairId).orElseThrow(() -> new RuntimeException("StudentCJ : Verify your credentials !."));
+		fichePFE.setBinome(planTravailRequest.getPairId());
 
 		/*********************************************/
 		String dbadd = "C:/ESP/uploads/";
 
-		String fileNameLabelExt = utilServices.decodeEncodedValue(diagramGanttFullPath);
-		// String fileNameLab = fileNameLabelExt.substring(0,
-		// fileNameLabelExt.lastIndexOf("."));
-		// String fileNameExt =
-		// fileNameLabelExt.substring(fileNameLabelExt.lastIndexOf("."));
-		//
-		// String formedNameFile = fileNameLab + "espdsi2020" + new Date().getTime() +
-		// fileNameExt;
+
+		String fileNameLabelExt = planTravailRequest.getDiagramGanttFullPath();
+//		String fileNameLab = fileNameLabelExt.substring(0, fileNameLabelExt.lastIndexOf("."));
+//		String fileNameExt = fileNameLabelExt.substring(fileNameLabelExt.lastIndexOf("."));
+//
+//		String formedNameFile = fileNameLab + "espdsi2020" + new Date().getTime() + fileNameExt;
 
 		fichePFE.setPathDiagrammeGantt(dbadd + fileNameLabelExt);
 		fichePFE.setDateDepotGanttDiagram(new Date());
 
-		System.out.println(
-				"-------####################**************########################-----------> " + fileNameLabelExt);
-		// System.out.println("-------############################################----------->
-		// " + fileNameLab);
-		// System.out.println("-------############################################----------->
-		// " + fileNameExt);
-		// System.out.println("-------############################################----------->
-		// " + formedNameFile);
-		// System.out.println("-------############################################----------->
-		// " + dbadd + formedNameFile);
+		System.out.println("-------####################**************########################-----------> " + fileNameLabelExt);
+//		System.out.println("-------############################################-----------> " + fileNameLab);
+//		System.out.println("-------############################################-----------> " + fileNameExt);
+//		System.out.println("-------############################################-----------> " + formedNameFile);
+//		System.out.println("-------############################################-----------> " + dbadd + formedNameFile);
 
 		fichePFERepository.save(fichePFE);
 
-		System.out.println("-------###########********ùùù******########-----------> "
-				+ fichePFERepository.findGanttDiagramms(idEt).get(0));
+		System.out.println("-------###########********ùùù******########-----------> " + fichePFERepository.findGanttDiagramms(idEt).get(0));
 
 		// *** fichePFERepository.save(fichePFE);
 
-		// List<Fonctionnalite> lfs = new ArrayList<Fonctionnalite>();
-		for (String fi : listOfFunctionnalities) {
-			// // System.out.println("-------------- 2 TO DO : Add a new Functionnality : "
-			// + fi + " - " + fichePFE.getIdFichePFE().getIdEt());
+		//List<Fonctionnalite> lfs = new ArrayList<Fonctionnalite>();
+		for(String fi : planTravailRequest.getListOfFunctionnalities())
+		{
+			// // System.out.println("-------------- 2 TO DO : Add a new Functionnality : " + fi + " - " + fichePFE.getIdFichePFE().getIdEt());
 			String funcLib = fi.substring(0, fi.lastIndexOf("20espdsi21"));
-			String funcDesc = fi.substring(fi.lastIndexOf("20espdsi21") + 10);
+			String funcDesc = fi.substring(fi.lastIndexOf("20espdsi21")+10);
 
 			Fonctionnalite functionnality = new Fonctionnalite();
 
 			List<String> lfs = new ArrayList<String>();
-			lfs = functionnalityRepository.findAllFonctionalitiesLibelleByFichePFE(idEt,
-					fichePFE.getIdFichePFE().getDateDepotFiche());
+			lfs = functionnalityRepository.findAllFonctionalitiesLibelleByFichePFE(idEt, fichePFE.getIdFichePFE().getDateDepotFiche());
 			Integer idFonctionnality = lfs.size() + 1;
 			FunctionnalityPK functionnalityPK = new FunctionnalityPK(fichePFE.getIdFichePFE(), idFonctionnality);
 
 			functionnality.setFunctionnalityPK(functionnalityPK);
-			functionnality.setName(utilServices.decodeEncodedValue(funcLib));
-			functionnality.setDescription(utilServices.decodeEncodedValue(funcDesc));
+			functionnality.setName(funcLib);
+			functionnality.setDescription(funcDesc);
 			functionnality.setFichePFEFunctionnality(fichePFE);
 
 			functionnalityRepository.save(functionnality);
-			// lfs.add(functionnality);
+			//lfs.add(functionnality);
 		}
-		// fichePFE.addFonctionaliteToFiche(lfs);
+		//fichePFE.addFonctionaliteToFiche(lfs);
 
-		// List<Problematique> lps = new ArrayList<Problematique>();
-		for (String pi : listOfProblematics) {
-			// // System.out.println(" UNIT --------------> " +
-			// fichePFE.getIdFichePFE().getIdEt() + " - " + pi);
-			//
-			// List<String> lfs = new ArrayList<String>();
-			// lfs = functionnalityRepository.findAllFonctionalitiesLibelleByFichePFE(idEt,
-			// fichePFE.getIdFichePFE().getDateDepotFiche());
-			// Integer idFonctionnality = lfs.size() + 1;
-			// FunctionnalityPK functionnalityPK = new FunctionnalityPK(idEt,
-			// fichePFE.getIdFichePFE().getDateDepotFiche(), idFonctionnality);
-			//
-			// functionnality.setFunctionnalityPK(functionnalityPK);
-			// functionnality.setName(funcLib);
-			// functionnality.setDescription(funcDesc);
-			// functionnality.setFichePFEFunctionnality(fichePFE);
-			//
-			// functionnalityRepository.save(functionnality);
+
+		//List<Problematique> lps = new ArrayList<Problematique>();
+		for(String pi : planTravailRequest.getListOfProblematics())
+		{
+			// // System.out.println(" UNIT --------------> " + fichePFE.getIdFichePFE().getIdEt() + " - " + pi);
+//
+//			List<String> lfs = new ArrayList<String>();
+//			lfs = functionnalityRepository.findAllFonctionalitiesLibelleByFichePFE(idEt, fichePFE.getIdFichePFE().getDateDepotFiche());
+//			Integer idFonctionnality = lfs.size() + 1;
+//			FunctionnalityPK functionnalityPK = new FunctionnalityPK(idEt, fichePFE.getIdFichePFE().getDateDepotFiche(), idFonctionnality);
+//
+//			functionnality.setFunctionnalityPK(functionnalityPK);
+//			functionnality.setName(funcLib);
+//			functionnality.setDescription(funcDesc);
+//			functionnality.setFichePFEFunctionnality(fichePFE);
+//
+//			functionnalityRepository.save(functionnality);
+
+
 
 			List<String> lps = new ArrayList<String>();
 			lps = problematicRepository.findAllProblematicsByStudentAndDateDepotFiche(idEt, timestampToString);
 			Integer idProblematic = lps.size() + 1;
 			ProblematiquePK problematicPK = new ProblematiquePK(fichePFE.getIdFichePFE(), idProblematic);
 
-			// functionnality.setFunctionnalityPK(functionnalityPK);
-			// functionnality.setName(funcLib);
-			// functionnality.setDescription(funcDesc);
-			// functionnality.setFichePFEFunctionnality(fichePFE);
-			//
-			// functionnalityRepository.save(functionnality);
+//			functionnality.setFunctionnalityPK(functionnalityPK);
+//			functionnality.setName(funcLib);
+//			functionnality.setDescription(funcDesc);
+//			functionnality.setFichePFEFunctionnality(fichePFE);
+//
+//			functionnalityRepository.save(functionnality);
 
-			Problematique problematic = new Problematique(problematicPK, utilServices.decodeEncodedValue(pi), fichePFE);
-			// lps.add(problematique);
+			Problematique problematic = new Problematique(problematicPK, pi, fichePFE);
+			//lps.add(problematique);
 
 			problematicRepository.save(problematic);
 		}
-		// fichePFE.addProblematiqueToFiche(lps);
+		//fichePFE.addProblematiqueToFiche(lps);
 
-		// // System.out.println("-------------- 1: " +
-		// fichePFE.getIdFichePFE().getDateDepotFiche());
+		// // System.out.println("-------------- 1: " + fichePFE.getIdFichePFE().getDateDepotFiche());
 
-		// // System.out.println("-------------- 6 Update a new Plan de Travail
-		// Dependencies : " + fichePFE.getIdFichePFE().getDateDepotFiche());
+
+
+		// // System.out.println("-------------- 6 Update a new Plan de Travail Dependencies : " + fichePFE.getIdFichePFE().getDateDepotFiche());
 
 		// Save in Traitement Plan de Travail for History
 		TraitementFichePFE afp = new TraitementFichePFE();
-		TraitementFichePK annulationFichePK = new TraitementFichePK(fichePFE.getIdFichePFE(),
-				new Timestamp(System.currentTimeMillis()));
+		TraitementFichePK annulationFichePK = new TraitementFichePK(fichePFE.getIdFichePFE(), new Timestamp(System.currentTimeMillis()));
 		afp.setTraitementFichePK(annulationFichePK);
 		afp.setTypeTrtFiche("01");
 		afp.setFichePFETraitementFichePFE(fichePFE);
 		traitementFicheRepository.save(afp);
 
-		/*****************************************
-		 * Notification By Mail
-		 *****************************************/
+
+		/***************************************** Notification By Mail *****************************************/
 		DateFormat dateFormatz = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		String dateDepotESPFile = dateFormatz.format(new Date());
 
 		String subject = "Sauvegarde Plan de Travail";
 
-		// String studentMail = utilServices.findStudentMailById(idEt).substring(0,
-		// utilServices.findStudentMailById(idEt).lastIndexOf("@")) + "@mail.tn";
-		String studentMail = utilServices.findStudentMailById(idEt); // DEPLOY_SERVER
+		String studentMail = utilServices.findStudentMailById(idEt).substring(0, utilServices.findStudentMailById(idEt).lastIndexOf("@")) + "@mail.tn";
+		// String studentMail = utilServices.findStudentMailById(idEt);  // DEPLOY_SERVER
 
 		String content = "Nous voulons vous informer par le présent mail que vous avez effectué des modifications à votre "
-				+ "<strong><font color=grey> Plan de Travail </font></strong> " + "le <font color=red> "
-				+ dateDepotESPFile + " </font>."
+				+ "<strong><font color=grey> Plan de Travail </font></strong> "
+				+ "le <font color=red> " + dateDepotESPFile + " </font>."
 				+ "<br/>Cette Version peut être modifiée à tout moment et elle est accessible uniquement par Vous."
 				+ "<br/>Une fois, vous êtes sûrs de vos données insérées, vous pouvez confirmer votre Plan de Travail "
-				+ "pour que votre " + "<strong><font color=grey> Encadrant Académique </font></strong> "
+				+ "pour que votre "
+				+ "<strong><font color=grey> Encadrant Académique </font></strong> "
 				+ "puisse le traiter.";
 
-		utilServices.sendMail(subject, studentMail, content);
+		//utilServices.sendMail(subject, studentMail, content);
 		/********************************************************************************************************/
 
 	}

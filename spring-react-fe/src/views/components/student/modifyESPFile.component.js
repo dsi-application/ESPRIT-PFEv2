@@ -1334,136 +1334,135 @@ export default class ModifyESPFile extends Component {
 
     }
 
+  modifyMaFichePFE() {
+    let espFileLength = 0;
+    this.setState({loadingModifyFichePFE: true});
 
-    modifyMaFichePFE() {
-        let espFileLength = 0;
-        this.setState({loadingModifyFichePFE: true});
+    // console.log('espFileLength-------0311--------1-> ' + this.state.diagramGanttFullPath);
+    // console.log('espFileLength-------0311--------1-> ' + this.state.ganttDiagramFP);
 
-        // console.log('espFileLength-------0311--------1-> ' + this.state.diagramGanttFullPath);
-        // console.log('espFileLength-------0311--------1-> ' + this.state.ganttDiagramFP);
-
-        if(this.state.diagramGanttFullPath === '')
-        {
-            // console.log('espFileLength-------0311---------> ' + this.state.ganttDiagramAutoLabel);
-            this.state.diagramGanttFullPath = this.state.ganttDiagramAutoLabel;
-        }
-
-        // console.log('espFileLength-------0311--------2-> ' + this.state.diagramGanttFullPath);
-        // console.log('espFileLength-------0311--------2-> ' + this.state.ganttDiagramFP);
-
-        let listOfProblematics = [];
-        for (let pi of this.state.problemItem) {
-            // console.log('-----------------------> Add Prob Unit: ' + pi.probLibelle);
-
-            //var formattedProblematic = pi.probLibelle.replaceAll(",", "£");
-            // console.log('REPLACE 2 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$> Add Prob Unit: ' + formattedProblematic);
-
-            listOfProblematics.push(pi.probLibelle);
-        }
-        listOfProblematics.splice(0, 1);
-        // console.log('-----------------------> list of problematics: ' + listOfProblematics.length);
-
-        /*------------------------------------------------------------------------------------------------------------*/
-        let listOfFunctionnalities = [];
-        for (let fi of this.state.functionnalityItem) {
-            let funcCombination = fi.funcLibelle + "20espdsi21" + fi.funcDescription;
-
-            //var formattedFuncCombinaison = funcCombination.replaceAll(",", "£");
-            // // console.log('REPLACE 2 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$> Add Func Unit: ' + formattedFuncCombinaison);
-            // console.log('-FUNC1608----------------------> Add Func Unit: ' + fi.funcLibelle + " - " + fi.funcDescription);
-            listOfFunctionnalities.push(funcCombination);
-        }
-
-        listOfFunctionnalities.splice(0, 1);
-        // // console.log('-----------------------> list of functionnalities: ' + listOfFunctionnalities.length);
-
-        /*------------------------------------------------------------------------------------------------------------*/
-        let listOfSupervisors = [];
-        for (let si of this.state.supervisorItem) {
-            // console.log('------0311----------espFileLength-------> Add Superv Unit: ' + si.supervEmail.length);
-            listOfSupervisors.push(si.supervEmail);
-            espFileLength += si.supervEmail.length;
-        }
-        //listOfSupervisors.splice(0, 1);
-        // console.log('-----------------------> list of supervisors: ' + listOfSupervisors.length);
-
-        //console.log('Iterate ----- Finish > ' + this.state.selectedProjectCompany.emailSociete + " - " + this.state.selectedCompanies[finalIndex].value +
-
-        let traineeshipCompany = this.state.projectCompany.designation;
-        // console.log('-----------------------> Traineeship Company: ' + traineeshipCompany);
-
-        /********************************************************************************************* Manage Items ***/
-
-        let newProblems = [];
-        for (let sl of listOfProblematics) {
-            // console.log('aze=================***============================' + sl);
-            newProblems.push(encodeURIComponent(sl));
-            espFileLength += sl.length;
-        }
-
-        let newFuncs = [];
-        for (let sl of listOfFunctionnalities) {
-            // console.log('aze=================***============================' + sl);
-            newFuncs.push(encodeURIComponent(sl));
-            espFileLength += sl.length;
-        }
-
-        let newTechs = [];
-        for (let sl of this.state.listSelectedLibelleTechnologies) {
-            // console.log('aze=================***============================' + sl);
-            newTechs.push(encodeURIComponent(sl));
-            espFileLength += sl.length;
-        }
-
-        let newSupervs = [];
-        for (let sl of listOfSupervisors) {
-            // console.log('aze=================***============================' + sl);
-            newSupervs.push(encodeURIComponent(sl));
-        }
-
-        espFileLength += this.state.userToBeUpdated.idEt.length;
-        espFileLength += this.state.projectTitle.length;
-        espFileLength += this.state.projectDescription.length;
-        espFileLength += this.state.pairId.length;
-
-        StudentService.updateFichePFE(
-            this.state.userToBeUpdated.idEt,
-            encodeURIComponent(this.state.projectTitle),
-            encodeURIComponent(this.state.projectDescription),
-            newProblems,
-            newFuncs,
-            newTechs,
-            traineeshipCompany,
-            newSupervs,
-            this.state.pairId,
-            encodeURIComponent(this.state.diagramGanttFullPath)
-        ).then(
-            (response) => {
-                // // console.log('Add Plan de Travail ------------- 1');
-                // console.log('Update Plan de Travail -------0311------ SUCCESS');
-                this.setState({
-                    successConfirmFichePFE: true,
-                    showModifyButton: false,
-                    showSauvegardeButton: true,
-                    loadingModifyFichePFE: false
-                });
-            },
-            (error) => {
-
-                // console.log('Update Plan de Travail -----0311-------- ERROR');
-                this.setState({errorConfirmSauvegarderFichePFE: true, loadingModifyFichePFE: false});
-
-                this.setState({
-                    content:
-                        (error.response && error.response.data) ||
-                        error.message ||
-                        error.toString(),
-                });
-            }
-        );
+    if(this.state.diagramGanttFullPath === '')
+    {
+      // console.log('espFileLength-------0311---------> ' + this.state.ganttDiagramAutoLabel);
+      this.state.diagramGanttFullPath = this.state.ganttDiagramAutoLabel;
     }
 
-    sauvegarderMaFichePFE() {
+    // console.log('espFileLength-------0311--------2-> ' + this.state.diagramGanttFullPath);
+    // console.log('espFileLength-------0311--------2-> ' + this.state.ganttDiagramFP);
+
+    let listOfProblematics = [];
+    for (let pi of this.state.problemItem) {
+      // console.log('-----------------------> Add Prob Unit: ' + pi.probLibelle);
+
+      //var formattedProblematic = pi.probLibelle.replaceAll(",", "£");
+      // console.log('REPLACE 2 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$> Add Prob Unit: ' + formattedProblematic);
+
+      listOfProblematics.push(pi.probLibelle);
+    }
+    listOfProblematics.splice(0, 1);
+    // console.log('-----------------------> list of problematics: ' + listOfProblematics.length);
+
+    /*------------------------------------------------------------------------------------------------------------*/
+    let listOfFunctionnalities = [];
+    for (let fi of this.state.functionnalityItem) {
+      let funcCombination = fi.funcLibelle + "20espdsi21" + fi.funcDescription;
+
+      //var formattedFuncCombinaison = funcCombination.replaceAll(",", "£");
+      // // console.log('REPLACE 2 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$> Add Func Unit: ' + formattedFuncCombinaison);
+      // console.log('-FUNC1608----------------------> Add Func Unit: ' + fi.funcLibelle + " - " + fi.funcDescription);
+      listOfFunctionnalities.push(funcCombination);
+    }
+
+    listOfFunctionnalities.splice(0, 1);
+    // // console.log('-----------------------> list of functionnalities: ' + listOfFunctionnalities.length);
+
+    /*------------------------------------------------------------------------------------------------------------*/
+    let listOfSupervisors = [];
+    for (let si of this.state.supervisorItem) {
+      // console.log('------0311----------espFileLength-------> Add Superv Unit: ' + si.supervEmail.length);
+      listOfSupervisors.push(si.supervEmail);
+      espFileLength += si.supervEmail.length;
+    }
+    //listOfSupervisors.splice(0, 1);
+    // console.log('-----------------------> list of supervisors: ' + listOfSupervisors.length);
+
+    //console.log('Iterate ----- Finish > ' + this.state.selectedProjectCompany.emailSociete + " - " + this.state.selectedCompanies[finalIndex].value +
+
+    let traineeshipCompany = this.state.projectCompany.designation;
+    // console.log('-----------------------> Traineeship Company: ' + traineeshipCompany);
+
+    /********************************************************************************************* Manage Items ***/
+
+    let newProblems = [];
+    for (let sl of listOfProblematics) {
+      // console.log('aze=================***============================' + sl);
+      newProblems.push(sl);
+      espFileLength += sl.length;
+    }
+
+    let newFuncs = [];
+    for (let sl of listOfFunctionnalities) {
+      // console.log('aze=================***============================' + sl);
+      newFuncs.push(sl);
+      espFileLength += sl.length;
+    }
+
+    let newTechs = [];
+    for (let sl of this.state.listSelectedLibelleTechnologies) {
+      // console.log('aze=================***============================' + sl);
+      newTechs.push(sl);
+      espFileLength += sl.length;
+    }
+
+    let newSupervs = [];
+    for (let sl of listOfSupervisors) {
+      // console.log('aze=================***============================' + sl);
+      newSupervs.push(sl);
+    }
+
+    espFileLength += this.state.userToBeUpdated.idEt.length;
+    espFileLength += this.state.projectTitle.length;
+    espFileLength += this.state.projectDescription.length;
+    espFileLength += this.state.pairId.length;
+
+    StudentService.updateFichePFE(
+      this.state.userToBeUpdated.idEt,
+      this.state.projectTitle,
+      this.state.projectDescription,
+      newProblems,
+      newFuncs,
+      newTechs,
+      traineeshipCompany,
+      newSupervs,
+      this.state.pairId,
+      this.state.diagramGanttFullPath
+    ).then(
+      (response) => {
+        // // console.log('Add Plan de Travail ------------- 1');
+        // console.log('Update Plan de Travail -------0311------ SUCCESS');
+        this.setState({
+          successConfirmFichePFE: true,
+          showModifyButton: false,
+          showSauvegardeButton: true,
+          loadingModifyFichePFE: false
+        });
+      },
+      (error) => {
+
+        // console.log('Update Plan de Travail -----0311-------- ERROR');
+        this.setState({errorConfirmSauvegarderFichePFE: true, loadingModifyFichePFE: false});
+
+        this.setState({
+          content:
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString(),
+        });
+      }
+    );
+  }
+
+  sauvegarderMaFichePFE() {
         this.setState({loadingConfirmFichePFE: true});
         StudentService.sauvegarderFichePFE(this.state.userToBeUpdated.idEt).then(
             (response) => {

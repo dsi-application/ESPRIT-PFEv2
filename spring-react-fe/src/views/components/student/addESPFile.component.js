@@ -548,7 +548,7 @@ export default class AddESPFile extends Component {
           }
           // console.log('------------------PAIR-YES');
         }
-      
+
 
       // console.log('------------------PAIR------------------- My Pair FullName 2: ' + this.state.studentFullName + " - " + myPairFN);
     }
@@ -1172,28 +1172,17 @@ export default class AddESPFile extends Component {
     this.setState({loadingSaveFichePFE: true})
     let listOfProblematics = [];
     for (let pi of this.state.problemItem) {
-      // console.log('-----------------------> Add Prob Unit: ' + pi.probLibelle);
-
-      //var formattedProblematic = pi.probLibelle.replaceAll(",", "£");
-      // console.log('REPLACE 2 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$> Add Prob Unit: ' + formattedProblematic);
-
       listOfProblematics.push(pi.probLibelle);
     }
 
     listOfProblematics.splice(0, 1);
-    // console.log('-----------------------> list of problematics: ' + listOfProblematics.length);
-
-    // console.log(listOfProblematics);
     /*------------------------------------------------------------------------------------------------------------*/
     let listOfFunctionnalities = [];
     for (let fi of this.state.functionnalityItem) {
       let funcCombination = fi.funcLibelle + "20espdsi21" + fi.funcDescription;
-      // console.log('-----------------------> Add Func Unit: ' + fi.funcLibelle);
-      //var formattedFuncCombinaison = funcCombination.replaceAll(",", "£");
       listOfFunctionnalities.push(funcCombination);
     }
     listOfFunctionnalities.splice(0, 1);
-    // console.log('-----------------------> list of functionnalities: ' + listOfFunctionnalities.length);
 
     /*------------------------------------------------------------------------------------------------------------*/
     let listOfSupervisors = [];
@@ -1203,73 +1192,45 @@ export default class AddESPFile extends Component {
         supervNumTel = '--';
       }
       let supervCombination = "FN-" + sl.supervFirstName +
-          "LN-" + sl.supervLastName +
-          "NT-" + supervNumTel +
-          "EM-" + sl.supervEmail;
+        "LN-" + sl.supervLastName +
+        "NT-" + supervNumTel +
+        "EM-" + sl.supervEmail;
       // console.log('-----------------------> Add Superv Unit: ' + sl.supervEmail);
       listOfSupervisors.push(supervCombination);
     }
-    //listOfSupervisors.splice(0, 1);
-    // // console.log('-----------------------> list of supervisors: ' + listOfSupervisors.length);
 
     /*------------------------------------------------------------------------------------------------------------*/
 
     /********************************************************************************************* Manage Items ***/
 
-        // console.log('Add Plan de Travail PFE ------------- 1: ' + encodeURIComponent(this.state.projectTitle));
-
-
-    let newProblems = [];
-    for (let sl of listOfProblematics) {
-      // console.log('aze=========probs==' + sl);
-      newProblems.push(encodeURIComponent(sl));
-    }
-
-    let newFuncs = [];
-    for (let sl of listOfFunctionnalities) {
-      // console.log('aze=========funcs==' + sl);
-      newFuncs.push(encodeURIComponent(sl));
-    }
-
-    let newTechs = [];
-    for (let sl of this.state.listSelectedLibelleTechnologies) {
-      // console.log('aze=========techs==' + sl);
-      newTechs.push(encodeURIComponent(sl));
-    }
-
-    let newSupervs = [];
-    for (let sl of listOfSupervisors) {
-      // console.log('aze0712======supervs==', sl);
-      newSupervs.push(encodeURIComponent(sl));
-    }
 
     StudentService.addFichePFE(
-        this.state.userToBeUpdated.idEt,
-        encodeURIComponent(this.state.projectTitle),
-        encodeURIComponent(this.state.projectDescription),
-        newProblems,
-        newFuncs,
-        newTechs,
-        newSupervs,
-        this.state.pairId,
-        this.state.diagramGanttFullPath
+      this.state.userToBeUpdated.idEt,
+      this.state.projectTitle,
+      this.state.projectDescription,
+      listOfProblematics,
+      listOfFunctionnalities,
+      this.state.listSelectedLibelleTechnologies,
+      listOfSupervisors,
+      this.state.pairId,
+      this.state.diagramGanttFullPath
     ).then(
-        (response) => {
-          // console.log('Add Plan de Travail ------------- 1');
-          this.setState({
-            successConfirmFichePFE: true,
-            showDeposeButton: false,
-            showSauvegardeButton: true,
-            loadingSaveFichePFE: false
-          });
-        },
-        (error) => {
-          this.setState({
-            successConfirmFichePFE: true,
-            showDeposeButton: false,
-            showSauvegardeButton: true,
-          });
-        }
+      (response) => {
+        // console.log('Add Plan de Travail ------------- 1');
+        this.setState({
+          successConfirmFichePFE: true,
+          showDeposeButton: false,
+          showSauvegardeButton: true,
+          loadingSaveFichePFE: false
+        });
+      },
+      (error) => {
+        this.setState({
+          successConfirmFichePFE: true,
+          showDeposeButton: false,
+          showSauvegardeButton: true,
+        });
+      }
     );
   }
 

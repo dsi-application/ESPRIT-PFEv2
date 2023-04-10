@@ -16,120 +16,42 @@ class StudentService
     return axios.get(API_URL + "/applyForCancelAgreement/" + idEt + "/" + encodeURIComponent(encodeURIComponent(cancellingMotif)));
   }
 
-
   addFichePFE(
-      codeEtudiant,
-      projectTitle,
-      projectDescription,
-      listOfProblematics,
-      listOfFunctionnalities,
-      listSelectedLibelleTechnologies,
-      listOfSupervisors,
-      pairId,
-      diagramGanttFullPath
+    codeEtudiant,
+    projectTitle,
+    projectDescription,
+    listOfProblematics,
+    listOfFunctionnalities,
+    listSelectedLibelleTechnologies,
+    listOfSupervisors,
+    pairId,
+    diagramGanttFullPath
   ) {
 
-    // console.log('---------- projectDescription: ' , projectDescription);
     if (projectDescription === "") {
       projectDescription = "----------";
     }
 
     if (pairId === "" || pairId === undefined) {
-      pairId = "--"; // 151JMT1632 //219JMT0000";
+      pairId = "--";
     }
 
-    // console.log('############################################> codeEtudiant: ' + codeEtudiant + " - " + pairId);
-    // console.log('############################################> projectTitle: ' + projectTitle);
-    // console.log('############################################> projectDescription: ' + projectDescription);
+    const planTravailRequest = {projectTitle: projectTitle, projectDescription: projectDescription, listOfProblematics: listOfProblematics, listOfFunctionnalities: listOfFunctionnalities, listSelectedLibelleTechnologies: listSelectedLibelleTechnologies, listOfSupervisors: listOfSupervisors, pairId: pairId, diagramGanttFullPath: diagramGanttFullPath}
 
-    /*
-        for (let pi of listOfProblematics)
-        {
-            // console.log('################----------##################> Add Prob Unit: ' + pi);
-        }
-
-        for (let fi of listOfFunctionnalities)
-        {
-            console.log('################----------##################> Add Func Unit: ' + fi);
-        }
-
-        for (let ti of listSelectedLibelleTechnologies)
-        {
-            console.log('################----------##################> Add Tech Unit: ' + ti);
-        }
-
-        // console.log('############################################> traineeshipCompany: ' + traineeshipCompany);
-
-        for (let si of listOfSupervisors)
-        {
-            console.log('################----------##################> Add Superv Unit: ' + si);
-        }
-        */
-
-    // console.log('Service ---------------- Add Plan Travail for Etudiant: ' + codeEtudiant);
-
-
-    let newProblems = [];
-    for (let sl of listOfProblematics) {
-      // console.log('aze=================***============================' + sl);
-      newProblems.push(encodeURIComponent(sl));
-    }
-
-    let newFuncs = [];
-    for (let sl of listOfFunctionnalities) {
-      // console.log('aze=================***============================' + sl);
-      newFuncs.push(encodeURIComponent(sl));
-    }
-
-    let newTechs = [];
-    for (let sl of listSelectedLibelleTechnologies) {
-      // console.log('aze=================***============================' + sl);
-      newTechs.push(encodeURIComponent(sl));
-    }
-
-    let newSupervs = [];
-    for (let sl of listOfSupervisors) {
-      newSupervs.push(encodeURIComponent(sl));
-      // console.log('aze=================***=gggg========supervs====', sl);
-    }
-
-    let url =
-        "addFichePFE/" +
-        codeEtudiant +
-        "/" +
-        encodeURIComponent(projectTitle) +
-        "/" +
-        encodeURIComponent(projectDescription) +
-        "/" +
-        newProblems +
-        "/" +
-        newFuncs +
-        "/" +
-        newTechs +
-        "/" +
-        newSupervs +
-        "/" +
-        pairId +
-        "/" +
-        encodeURIComponent(diagramGanttFullPath);
-
-    // console.log(url);
-
-    return axios.post(API_URL + url);
+    return axios.post(API_URL + "addFichePFE/" + codeEtudiant, planTravailRequest);
   }
 
-  
   updateFichePFE(
-      codeEtudiant,
-      projectTitle,
-      projectDescription,
-      listOfProblematics,
-      listOfFunctionnalities,
-      listSelectedLibelleTechnologies,
-      traineeshipCompany,
-      listOfSupervisors,
-      pairId,
-      diagramGanttFullPath
+    codeEtudiant,
+    projectTitle,
+    projectDescription,
+    listOfProblematics,
+    listOfFunctionnalities,
+    listSelectedLibelleTechnologies,
+    traineeshipCompany,
+    listOfSupervisors,
+    pairId,
+    diagramGanttFullPath
   ) {
     if (projectDescription === "") {
       projectDescription = "----------";
@@ -170,56 +92,35 @@ class StudentService
            }
            */
 
-    // console.log('Service ---------------- Update Plan Travail for Etudiant: ' + codeEtudiant);
+    // console.log('Service ---------------- Update Fiche PFE for Etudiant: ' + codeEtudiant);
 
     let newProblems = [];
     for (let sl of listOfProblematics) {
       // console.log('aze=================***============================' + sl);
-      newProblems.push(encodeURIComponent(sl));
+      newProblems.push(sl);
     }
 
     let newFuncs = [];
     for (let sl of listOfFunctionnalities) {
       // console.log('aze=================***============================' + sl);
-      newFuncs.push(encodeURIComponent(sl));
+      newFuncs.push(sl);
     }
 
     let newTechs = [];
     for (let sl of listSelectedLibelleTechnologies) {
       // console.log('aze=================***============================' + sl);
-      newTechs.push(encodeURIComponent(sl));
+      newTechs.push(sl);
     }
 
     let newSupervs = [];
     for (let sl of listOfSupervisors) {
       // console.log('aze=================***============================', sl);
-      newSupervs.push(encodeURIComponent(sl));
+      newSupervs.push(sl);
     }
-    let url =
-        "updateFichePFE/" +
-        encodeURIComponent(codeEtudiant) +
-        "/" +
-        encodeURIComponent(projectTitle) +
-        "/" +
-        encodeURIComponent(projectDescription) +
-        "/" +
-        newProblems +
-        "/" +
-        newFuncs +
-        "/" +
-        newTechs +
-        "/" +
-        traineeshipCompany +
-        "/" +
-        newSupervs +
-        "/" +
-        pairId +
-        "/" +
-        encodeURIComponent(diagramGanttFullPath);
 
-    // console.log('--------------------- 0311 -------------> RESULT: ' + API_URL + url);
+    const planTravailRequest = {projectTitle: projectTitle, projectDescription: projectDescription, listOfProblematics: newProblems, listOfFunctionnalities: newFuncs, listSelectedLibelleTechnologies: newTechs, listOfSupervisors: newSupervs, pairId: pairId, diagramGanttFullPath: diagramGanttFullPath}
 
-    return axios.post(API_URL + url);
+    return axios.post(API_URL + "updateFichePFE/" + codeEtudiant, planTravailRequest);
   }
 
   sauvegarderFichePFE(code) {

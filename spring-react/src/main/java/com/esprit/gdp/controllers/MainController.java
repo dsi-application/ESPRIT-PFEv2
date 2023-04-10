@@ -2440,7 +2440,7 @@ public class MainController {
 	}
 
 	@GetMapping("/journalStageING/{currentUserCode}")
-	public ResponseEntity<List<String>> getJournalStageING(@PathVariable String currentUserCode) {
+	public List<String> getJournalStageING(@PathVariable String currentUserCode) {
 
 		// NEW VERSION
 		List<DepotJournalINGDto> files = evaluationEngTrRepository.findJournalStageINGByStudent(currentUserCode);
@@ -2485,7 +2485,7 @@ public class MainController {
 			System.out.println("---------------------***----------------------> UNIT: " + s);
 		}
 
-		return ResponseEntity.status(HttpStatus.OK).body(lss);
+		return lss;
 	}
 
 	@PostMapping("/jstging")
@@ -2547,7 +2547,7 @@ public class MainController {
 			}
 
 		}
-//
+
 		for(String s : lss)
 		{
 			System.out.println("---------------------***----------------------> UNIT: " + s);
