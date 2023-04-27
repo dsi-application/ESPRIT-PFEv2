@@ -2388,6 +2388,39 @@ class UploadReport extends Component {
 
                                           </CCol>
                                         </CRow>
+                                        <CRow>
+                                          <CCol md={8}/>
+                                          <CCol md={3}>
+                                            {(
+                                              (
+                                                (surveyFirstJob !== "DONE") &&
+                                                (depotStatus === "" || depotStatus === "METTRE A JOUR")
+                                              ) &&
+                                              <CButton  color="primary"
+                                                //style={{width: "300px"}}
+                                                //variant="ghost"
+                                                        disabled={fileInfos.length !== 4}
+                                                        enabled={fileInfos.length === 4}
+                                                        className="float-left"
+                                                        onClick={() => this.redirectToJalon()}>
+                                                Je passe à l'Enquête puis Confirmer mon Dépôt
+                                              </CButton>
+                                            )}
+                                          </CCol>
+                                          <CCol md={1}>
+                                            {(
+                                              (depotStatus === "" || depotStatus === "METTRE A JOUR") &&
+                                              <CButton  color="success"
+                                                        style={{width: "100px"}}
+                                                        disabled={fileInfos.length !== 4 || surveyFirstJob !== "DONE"}
+                                                        enabled={fileInfos.length === 4}
+                                                        className="float-right"
+                                                        onClick={() => this.validateMyDepot()}>
+                                                Confirmer mon Dépôt
+                                              </CButton>
+                                            )}
+                                          </CCol>
+                                        </CRow>
                                       </CCardFooter>
                                     </CCard>
                                 )}
