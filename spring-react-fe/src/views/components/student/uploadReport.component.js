@@ -109,6 +109,7 @@ class UploadReport extends Component {
 
     this.confirmStepEMGC = this.confirmStepEMGC.bind(this);
     this.validateMyDepot = this.validateMyDepot.bind(this);
+    this.redirectToJalon = this.redirectToJalon.bind(this);
     this.requestForUpdateMyDepot = this.requestForUpdateMyDepot.bind(this);
     this.updateMyDepotYES = this.updateMyDepotYES.bind(this);
     this.updateMyDepotNO = this.updateMyDepotNO.bind(this);
@@ -149,6 +150,7 @@ class UploadReport extends Component {
       showPopupSuccessDepot: false,
       showSpinnerWaitingDepot: false,
       showPopupUpdateDepot: false,
+      surveyFirstJob: "INIT",
       pairKinds: [
         {
           value: "Non",
@@ -434,6 +436,17 @@ class UploadReport extends Component {
 
       this.state.allTraineeshipKinds = crsList;
     }
+
+    // Survey First Job
+    var requestsfj = new XMLHttpRequest();
+    requestsfj.open(
+      "GET",
+      API_URL_STU + "verifySurveyFirstJobDONE/" + currentStudent.id,
+      false
+    );
+    requestsfj.send(null);
+    this.state.surveyFirstJob = requestsfj.responseText;
+
   }
 
   componentDidMount() {
@@ -1430,6 +1443,11 @@ class UploadReport extends Component {
 
   }
 
+  redirectToJalon()
+  {
+    window.location.href = "/Jalon";
+  }
+
   validateMyDepot()
   {
     this.setState({ stepper: "Step5", depotStatus: "NOTYET", showSpinnerWaitingDepot: true });
@@ -1466,6 +1484,7 @@ class UploadReport extends Component {
       successUpload,
       showUploadReportV1Button,
       timeForDepotRapportV1,
+      surveyFirstJob,
       timeForDepotRapportV2,
       dateDepotRapportFormedV1,
       dateDepotRapportFormedV2,
