@@ -1661,6 +1661,7 @@ public class StudentController {
 				"Historique Bilans", ""));
 		stds.add(new StudentTimelineDto(12, "Dépôt\n Rapport Version 2", dateDepotRapportVFinale, "uploadReport",
 				"Historique Rapports", ""));
+		stds.add(new StudentTimelineDto(13, "Enquête\n Premier Emploi", dateDepotRapportVFinale, "myStudentTimeline", "Enquête Premier Emploi", ""));
 
 		// stds.add(new StudentTimelineDto("Lancement\n" + " " + " " + " " + " " + "
 		// Stage PFE " + " " + " " + " ", dateNewestDebutStageConvAv, "/myDocuments"));

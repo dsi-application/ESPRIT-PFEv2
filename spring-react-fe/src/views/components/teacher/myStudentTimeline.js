@@ -240,7 +240,8 @@ function ColorlibStepIcon(props) {
         9: <MenuBookIcon/>,
         10: <AirplayIcon/>,
         11: <StyleIcon/>,
-        12: <MenuBookIcon/>
+        12: <MenuBookIcon/>,
+        13: <BusinessCenterIcon/>
     };
 
     return (
@@ -1271,7 +1272,7 @@ function MyStudentTimeline(props) {
     };
 
     const downloadPDFFile = (filePath) => {
-        
+
         	let aze = encodeURIComponent(encodeURIComponent(filePath));
             console.log('------------------------------- AZE-2: ' , aze)
             axios.get(`${process.env.REACT_APP_API_URL_STU}` + "downloadMyPDF/" + aze, { responseType: "blob" })
@@ -2648,6 +2649,16 @@ function MyStudentTimeline(props) {
         );
     };
 
+  const surveyFirstJob = () => {
+    return (
+      <>
+        <span className="greyMarkCourrierSmalLabel">Not Yet Deployed !.</span>
+        <br/>
+        <Wave text=". . ." effect="stretch" effectChange={2.8} />
+      </>
+    );
+  };
+
     const startTrDateNote = () => {
         let studentFN = studentFullName.substring(32);
         return (
@@ -3887,6 +3898,10 @@ function MyStudentTimeline(props) {
                             {
                                 stepId === 12 &&
                                 rapport2Historic()
+                            }
+                            {
+                              stepId === 13 &&
+                              surveyFirstJob()
                             }
                         </DialogContent>
                         <DialogActions>
