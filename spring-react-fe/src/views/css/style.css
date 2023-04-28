@@ -1875,3 +1875,10 @@
   font-weight: bold;
   animation: clignote 2s linear infinite;
 }
+.react-datepicker-wrapper,
+.react-datepicker__input-container,
+.react-datepicker__input-container input {
+  display: block;
+  width: 300px;
+  height: 45px
+}
