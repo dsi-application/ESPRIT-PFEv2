@@ -4,7 +4,7 @@
     <groupId>com.spring-react.main</groupId>
     <artifactId>spring-boot-multimodule</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.1</version>
+    <version>1.2.0</version>
     <name>Spring-Angular-Parent</name>
 
 	<modules>
