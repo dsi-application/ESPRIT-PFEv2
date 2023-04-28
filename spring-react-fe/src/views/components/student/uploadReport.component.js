@@ -196,9 +196,9 @@ class UploadReport extends Component {
 
     var requestfp = new XMLHttpRequest();
     requestfp.open(
-        "GET",
-        API_URL_STU + "fichePFEStatus/" + currentStudent.id,
-        false
+      "GET",
+      API_URL_STU + "fichePFEStatus/" + currentStudent.id,
+      false
     );
     requestfp.send(null);
 
@@ -342,10 +342,10 @@ class UploadReport extends Component {
       // console.log('0.4 ---------lol1-----fsff-----> DATE vf: ' + this.state.dateDepotRapportV2);
 
       if (
-            (this.state.dateDepotRapportV1.getTime() <= this.state.dateNow.getTime())
-            ||
-            (this.state.dateDepotRapportV1.getTime() > this.state.dateNow.getTime())
-         )
+        (this.state.dateDepotRapportV1.getTime() <= this.state.dateNow.getTime())
+        ||
+        (this.state.dateDepotRapportV1.getTime() > this.state.dateNow.getTime())
+      )
       {
         // console.log('0.4 ---------lol1----------> DATE now: ' + this.state.dateNow);
         this.state.timeForDepotRapportV1 = "BEFORETIMEV1";
@@ -358,18 +358,18 @@ class UploadReport extends Component {
       }
 
       if (
-          this.state.dateDepotRapportV1.getTime() < this.state.dateNow.getTime() &&
-          this.state.dateDepotRapportV2.getTime() > this.state.dateNow.getTime()
+        this.state.dateDepotRapportV1.getTime() < this.state.dateNow.getTime() &&
+        this.state.dateDepotRapportV2.getTime() > this.state.dateNow.getTime()
       ) {
         // console.log('0.4 ---------lol1----------> DATE now: ' + this.state.dateNow);
         this.state.timeForDepotRapportV2 = "AFTERTIMEV1BEFORETIMEV2";
       }
       console.log('0.4 ---------lol1------sars0505 1----> DATE now: ' + this.state.dateNow);
       if (
-            (this.state.dateDepotRapportV2.getTime() <= this.state.dateNow.getTime())
-            ||
-            (this.state.dateDepotRapportV2.getTime() > this.state.dateNow.getTime()) // lol-1703
-         )
+        (this.state.dateDepotRapportV2.getTime() <= this.state.dateNow.getTime())
+        ||
+        (this.state.dateDepotRapportV2.getTime() > this.state.dateNow.getTime()) // lol-1703
+      )
       {
         console.log('0.4 ---------lol1------sars0505 2----> DATE now: ' + this.state.dateNow);
         this.state.timeForDepotRapportV2 = "ITISTIMEV2";
@@ -384,11 +384,11 @@ class UploadReport extends Component {
       }*/
 
       this.state.currentDay =
-          currentDt.getDate() +
-          "-" +
-          (currentDt.getMonth() + 1) +
-          "-" +
-          currentDt.getFullYear();
+        currentDt.getDate() +
+        "-" +
+        (currentDt.getMonth() + 1) +
+        "-" +
+        currentDt.getFullYear();
 
 
       // Manage Upload Second Report & Complements
@@ -436,6 +436,7 @@ class UploadReport extends Component {
 
       this.state.allTraineeshipKinds = crsList;
     }
+
 
     // Survey First Job
     var requestsfj = new XMLHttpRequest();
@@ -577,26 +578,26 @@ class UploadReport extends Component {
     // console.log('----------llllllllllllllll-------> giving: ', this.state.giveOKRLV);
 
     AuthService.getReports(currentStudent.id).then(
-        (response) => {
-          let files = response.data;
+      (response) => {
+        let files = response.data;
 
-          if (files.length === 0) {
-            // console.log('-----------------------------> All files in DB: 0');
-            this.setState({
-              showUploadReportV1Button: true
-            });
-          }
-          if (files.length === 1) {
-            // console.log('--------------az1---------------> All files in DB: 1' + files[0]);
-
-            this.setState({
-              showUploadReportV1Button: false
-            });
-          }
-        },
-        (error) => {
-          // console.log('SELECT -------------- Error');
+        if (files.length === 0) {
+          // console.log('-----------------------------> All files in DB: 0');
+          this.setState({
+            showUploadReportV1Button: true
+          });
         }
+        if (files.length === 1) {
+          // console.log('--------------az1---------------> All files in DB: 1' + files[0]);
+
+          this.setState({
+            showUploadReportV1Button: false
+          });
+        }
+      },
+      (error) => {
+        // console.log('SELECT -------------- Error');
+      }
     );
 
     // console.log('1111111111111-------->', this.state.showUploadReportV1Button);
@@ -606,7 +607,7 @@ class UploadReport extends Component {
       // console.log('---------------RFV-6--------------> A' + this.state.showUploadIconRFV);
 
       let notif =
-          "Vous avez choisi le fichier " + event.target.files[0].name + " .";
+        "Vous avez choisi le fichier " + event.target.files[0].name + " .";
       return NotificationManager.success(notif, "Information", 6000);
     }
 
@@ -628,45 +629,45 @@ class UploadReport extends Component {
     });
 
     AuthService.uploadReportV1(
-        currentFile,
-        currentStudent.id,
-        this.state.checked,
-        (event) => {
-          this.setState({
-            showUploadReportV1Button: false,
-            progress: Math.round((100 * event.loaded) / event.total),
-            successUpload: true
-          });
-        }
-    )
-        .then((response) => {
-          // console.log('-------------------------> 1');
-          this.setState({
-            successUpload: false,
-            message: response.data.message,
-            showPopupSuccessUploadRV1: true
-          });
-          return AuthService.getReports(currentStudent.id);
-        })
-        .then((files) => {
-          this.setState({
-            fileInfos: files.data,
-            giveOkModifyRLV: false
-          });
-          // console.log('-------------------------> 2.1');
-          // console.log(this.state.fileInfos);
-          // console.log('-------------------------> 2.2');
-          // console.log(files.data);
-          // console.log('-------------------------> 2.3');
-        })
-        .catch(() => {
-          // console.log('-------------------------> 3');
-          this.setState({
-            progress: 0,
-            message: "Could not upload the file !.",
-            currentFile: undefined,
-          });
+      currentFile,
+      currentStudent.id,
+      this.state.checked,
+      (event) => {
+        this.setState({
+          showUploadReportV1Button: false,
+          progress: Math.round((100 * event.loaded) / event.total),
+          successUpload: true
         });
+      }
+    )
+      .then((response) => {
+        // console.log('-------------------------> 1');
+        this.setState({
+          successUpload: false,
+          message: response.data.message,
+          showPopupSuccessUploadRV1: true
+        });
+        return AuthService.getReports(currentStudent.id);
+      })
+      .then((files) => {
+        this.setState({
+          fileInfos: files.data,
+          giveOkModifyRLV: false
+        });
+        // console.log('-------------------------> 2.1');
+        // console.log(this.state.fileInfos);
+        // console.log('-------------------------> 2.2');
+        // console.log(files.data);
+        // console.log('-------------------------> 2.3');
+      })
+      .catch(() => {
+        // console.log('-------------------------> 3');
+        this.setState({
+          progress: 0,
+          message: "Could not upload the file !.",
+          currentFile: undefined,
+        });
+      });
 
     this.setState({
       selectedFiles: undefined,
@@ -717,157 +718,157 @@ class UploadReport extends Component {
   modifyMyDepot()
   {
     AuthService.updateMyDepot(currentStudent.id).then(
-        (response) =>
-        {
-          this.setState({
-            showModalConfirmRelanceDepot: false,
-            showReloadRFV: false, showButtonRFV: true, labelRFV: "", showUploadIconRFV: true, checked: false,
-            showReloadRAP: false, showButtonRAP: true, labelRAP: "", showUploadIconRAP: true,
-            showReloadASP: false, showButtonASP: true, labelASP: "", showUploadIconASP: true,
-            showReloadDCS: false, showButtonDCS: true, labelDCS: "", showUploadIconDCS: true,
-          });
-          // console.log("Check Disponibility ----df----cr----- SUCCESS");
-          /*this.setState({ showPopupUpdateDepot: false });*/
-          return AuthService.getReports(currentStudent.id);
-        })
-        .then((files) => {
-          this.setState({
-            fileInfos: files.data,
-          });
+      (response) =>
+      {
+        this.setState({
+          showModalConfirmRelanceDepot: false,
+          showReloadRFV: false, showButtonRFV: true, labelRFV: "", showUploadIconRFV: true, checked: false,
+          showReloadRAP: false, showButtonRAP: true, labelRAP: "", showUploadIconRAP: true,
+          showReloadASP: false, showButtonASP: true, labelASP: "", showUploadIconASP: true,
+          showReloadDCS: false, showButtonDCS: true, labelDCS: "", showUploadIconDCS: true,
+        });
+        // console.log("Check Disponibility ----df----cr----- SUCCESS");
+        /*this.setState({ showPopupUpdateDepot: false });*/
+        return AuthService.getReports(currentStudent.id);
+      })
+      .then((files) => {
+        this.setState({
+          fileInfos: files.data,
+        });
 
-        })
-        .catch(() => {
-            }
-        );
+      })
+      .catch(() => {
+        }
+      );
   }
 
   modifyMyRLV()
   {
     AuthService.updateMyRLV(currentStudent.id).then(
-        (response) =>
-        {
-          this.setState({
-            giveOkModifyRLV: true
-          });
-          // console.log("Check Disponibility ----df----cr----- FAIL");
-          return AuthService.getReports(currentStudent.id);
-        })
-        .then((files) => {
-          this.setState({
-            fileInfos: files.data,
-          });
-
-        })
-        .catch(() => {
+      (response) =>
+      {
+        this.setState({
+          giveOkModifyRLV: true
         });
+        // console.log("Check Disponibility ----df----cr----- FAIL");
+        return AuthService.getReports(currentStudent.id);
+      })
+      .then((files) => {
+        this.setState({
+          fileInfos: files.data,
+        });
+
+      })
+      .catch(() => {
+      });
   }
 
   modifyMyRFV()
   {
     AuthService.updateMyRFV(currentStudent.id).then(
-        (response) =>
-        {
-          this.setState({
-            showReloadRFV: false,
-            showButtonRFV: true,
-            labelRFV: "",
-            dateRFV:"",
-            showUploadIconRFV: true,
-            checked: false,
-          });
-          // console.log("Check Disponibility ----df----cr----- FAIL");
-          return AuthService.getReports(currentStudent.id);
-        })
-        .then((files) => {
-          this.setState({
-            fileInfos: files.data,
-          });
-        })
-        .catch(() => {
-          // console.log('-------------------------> 3');
-
+      (response) =>
+      {
+        this.setState({
+          showReloadRFV: false,
+          showButtonRFV: true,
+          labelRFV: "",
+          dateRFV:"",
+          showUploadIconRFV: true,
+          checked: false,
         });
+        // console.log("Check Disponibility ----df----cr----- FAIL");
+        return AuthService.getReports(currentStudent.id);
+      })
+      .then((files) => {
+        this.setState({
+          fileInfos: files.data,
+        });
+      })
+      .catch(() => {
+        // console.log('-------------------------> 3');
+
+      });
   }
 
   modifyMyRAP()
   {
     AuthService.updateMyRAP(currentStudent.id).then(
-        (response) =>
-        {
-          this.setState({
-            showReloadRAP: false,
-            showButtonRAP: true,
-            labelRAP: "",
-            dateRAP:"",
-            showUploadIconRAP: true
-          });
-          // console.log("Check Disponibility ----df----cr----- FAIL");
-          /*this.setState({ showPopupUpdateDepot: false });*/
-          return AuthService.getReports(currentStudent.id);
-        })
-        .then((files) => {
-          this.setState({
-            fileInfos: files.data,
-          });
-        })
-        .catch(() => {
-          // console.log('-------------------------> 3');
-
+      (response) =>
+      {
+        this.setState({
+          showReloadRAP: false,
+          showButtonRAP: true,
+          labelRAP: "",
+          dateRAP:"",
+          showUploadIconRAP: true
         });
+        // console.log("Check Disponibility ----df----cr----- FAIL");
+        /*this.setState({ showPopupUpdateDepot: false });*/
+        return AuthService.getReports(currentStudent.id);
+      })
+      .then((files) => {
+        this.setState({
+          fileInfos: files.data,
+        });
+      })
+      .catch(() => {
+        // console.log('-------------------------> 3');
+
+      });
   }
 
   modifyMyASP()
   {
     AuthService.updateMyASP(currentStudent.id).then(
-        (response) =>
-        {
-          this.setState({
-            showReloadASP: false,
-            showButtonASP: true,
-            labelASP: "",
-            dateASP:"",
-            showUploadIconASP: true
-          });
-          // console.log("Check Disponibility ----df----cr----- FAIL");
-          /*this.setState({ showPopupUpdateDepot: false });*/
-          return AuthService.getReports(currentStudent.id);
-        })
-        .then((files) => {
-          this.setState({
-            fileInfos: files.data,
-          });
-        })
-        .catch(() => {
-          // console.log('-------------------------> 3');
-
+      (response) =>
+      {
+        this.setState({
+          showReloadASP: false,
+          showButtonASP: true,
+          labelASP: "",
+          dateASP:"",
+          showUploadIconASP: true
         });
+        // console.log("Check Disponibility ----df----cr----- FAIL");
+        /*this.setState({ showPopupUpdateDepot: false });*/
+        return AuthService.getReports(currentStudent.id);
+      })
+      .then((files) => {
+        this.setState({
+          fileInfos: files.data,
+        });
+      })
+      .catch(() => {
+        // console.log('-------------------------> 3');
+
+      });
   }
 
   modifyMyDCS()
   {
     AuthService.updateMyDCS(currentStudent.id).then(
-        (response) =>
-        {
-          this.setState({
-            showReloadDCS: false,
-            showButtonDCS: true,
-            labelDCS: "",
-            dateDCS:"",
-            showUploadIconDCS: true
-          });
-          // console.log("Check Disponibility ----df----cr----- FAIL");
-          /*this.setState({ showPopupUpdateDepot: false });*/
-          return AuthService.getReports(currentStudent.id);
-        })
-        .then((files) => {
-          this.setState({
-            fileInfos: files.data,
-          });
-        })
-        .catch(() => {
-          // console.log('-------------------------> 3');
-
+      (response) =>
+      {
+        this.setState({
+          showReloadDCS: false,
+          showButtonDCS: true,
+          labelDCS: "",
+          dateDCS:"",
+          showUploadIconDCS: true
         });
+        // console.log("Check Disponibility ----df----cr----- FAIL");
+        /*this.setState({ showPopupUpdateDepot: false });*/
+        return AuthService.getReports(currentStudent.id);
+      })
+      .then((files) => {
+        this.setState({
+          fileInfos: files.data,
+        });
+      })
+      .catch(() => {
+        // console.log('-------------------------> 3');
+
+      });
   }
 
   reportConfidentialHandler(e) {
@@ -908,18 +909,18 @@ class UploadReport extends Component {
     // console.log('-------------GIVE OK-4--------', this.state.itsITandEM + " - " + this.state.giveOKRFV);
 
     AuthService.getReports(currentStudent.id).then(
-        (response) => {
-          let files = response.data;
-          // console.log('---------------RFV-3--------------> All files in DB-1: ' + files.length);
-          // console.log(files);
-          // console.log('---------------RFV-4--------------> All files in DB-2: ' + files.length);
-          /*if (files.length === 0) {
+      (response) => {
+        let files = response.data;
+        // console.log('---------------RFV-3--------------> All files in DB-1: ' + files.length);
+        // console.log(files);
+        // console.log('---------------RFV-4--------------> All files in DB-2: ' + files.length);
+        /*if (files.length === 0) {
 
         }*/
-        },
-        (error) => {
-          // console.log('SELECT -------------- Error');
-        }
+      },
+      (error) => {
+        // console.log('SELECT -------------- Error');
+      }
     );
 
 
@@ -932,7 +933,7 @@ class UploadReport extends Component {
       // console.log('---------------RFV-6--------------> A' + this.state.showUploadIconRFV);
 
       let notif =
-          "Vous avez choisi le fichier " + event.target.files[0].name + " .";
+        "Vous avez choisi le fichier " + event.target.files[0].name + " .";
       return NotificationManager.success(notif, "Information", 6000);
     }
 
@@ -958,19 +959,19 @@ class UploadReport extends Component {
     // console.log('--------------------------------------------------------------> 1: ' + this.state.giveOKRAP);
 
     AuthService.getReports(currentStudent.id).then(
-        (response) => {
-          let files = response.data;
-          // console.log('---------------RAP-3--------------> All files in DB-1: ' + files.length);
-          // console.log(files);
-          // console.log('---------------RAP-4--------------> All files in DB-2: ' + files.length);
-          /*if (files.length === 0) {
+      (response) => {
+        let files = response.data;
+        // console.log('---------------RAP-3--------------> All files in DB-1: ' + files.length);
+        // console.log(files);
+        // console.log('---------------RAP-4--------------> All files in DB-2: ' + files.length);
+        /*if (files.length === 0) {
           console.log('---------------RFV-5.1--hgvh------------> All files in DB: 0');
 
         }*/
-        },
-        (error) => {
-          // console.log('SELECT -------------- Error');
-        }
+      },
+      (error) => {
+        // console.log('SELECT -------------- Error');
+      }
     );
 
 
@@ -983,7 +984,7 @@ class UploadReport extends Component {
       // console.log('---------------RAP-6--------------> A' + this.state.showUploadIconRAP);
 
       let notif =
-          "Vous avez choisi le fichier " + event.target.files[0].name + " .";
+        "Vous avez choisi le fichier " + event.target.files[0].name + " .";
       return NotificationManager.success(notif, "Information", 6000);
     }
 
@@ -1008,18 +1009,18 @@ class UploadReport extends Component {
     }
 
     AuthService.getReports(currentStudent.id).then(
-        (response) => {
-          let files = response.data;
-          // console.log('---------------ASP-3--------------> All files in DB-1: ' + files.length);
-          // console.log(files);
-          // console.log('---------------ASP-4--------------> All files in DB-2: ' + files.length);
-          /*if (files.length === 0) {
+      (response) => {
+        let files = response.data;
+        // console.log('---------------ASP-3--------------> All files in DB-1: ' + files.length);
+        // console.log(files);
+        // console.log('---------------ASP-4--------------> All files in DB-2: ' + files.length);
+        /*if (files.length === 0) {
 
         }*/
-        },
-        (error) => {
-          // console.log('SELECT -------------- Error');
-        }
+      },
+      (error) => {
+        // console.log('SELECT -------------- Error');
+      }
     );
 
 
@@ -1032,7 +1033,7 @@ class UploadReport extends Component {
       // console.log('---------------ASP-6--------------> A' + this.state.showUploadIconASP);
 
       let notif =
-          "Vous avez choisi le fichier " + event.target.files[0].name + " .";
+        "Vous avez choisi le fichier " + event.target.files[0].name + " .";
       return NotificationManager.success(notif, "Information", 6000);
     }
 
@@ -1047,18 +1048,18 @@ class UploadReport extends Component {
     });
 
     AuthService.getReports(currentStudent.id).then(
-        (response) => {
-          let files = response.data;
-          // console.log('---------------DCS-3--------------> All files in DB-1: ' + files.length);
-          // console.log(files);
-          // console.log('---------------DCS-4--------------> All files in DB-2: ' + files.length);
-          /*if (files.length === 0) {
+      (response) => {
+        let files = response.data;
+        // console.log('---------------DCS-3--------------> All files in DB-1: ' + files.length);
+        // console.log(files);
+        // console.log('---------------DCS-4--------------> All files in DB-2: ' + files.length);
+        /*if (files.length === 0) {
 
         }*/
-        },
-        (error) => {
-          // console.log('SELECT -------------- Error');
-        }
+      },
+      (error) => {
+        // console.log('SELECT -------------- Error');
+      }
     );
 
 
@@ -1069,7 +1070,7 @@ class UploadReport extends Component {
     // console.log('---------------DCS-6--------------> A' + this.state.showUploadIconDCS);
 
     let notif =
-        "Vous avez choisi le fichier " + event.target.files[0].name + " .";
+      "Vous avez choisi le fichier " + event.target.files[0].name + " .";
     return NotificationManager.success(notif, "Information", 6000);
 
 
@@ -1099,46 +1100,46 @@ class UploadReport extends Component {
     });
 
     AuthService.uploadReportV2(
-        this.state.currentFileRFV,
-        currentStudent.id,
-        this.state.traineeShipKind,
-        this.state.checked,
-        (event) => {
-          this.setState({
-            showButtonRFV: false,
-            progressRFV: Math.round((100 * event.loaded) / event.total),
-            successUploadRFV: true,
-          });
-        }
-    )
-        .then((response) => {
-          // console.log('-------------------------> 1');
-          this.setState({
-            successUploadRFV: false,
-            message: response.data.message,
-            showPopupSuccessUpload: true,
-            showReloadRFV: true,
-          });
-          return AuthService.getReports(currentStudent.id);
-        })
-        .then((files) => {
-          this.setState({
-            fileInfos: files.data,
-          });
-          // console.log('-------------------------> 2.1');
-          // console.log(this.state.fileInfos);
-          // console.log('-------------------------> 2.2');
-          // console.log(files.data);
-          // console.log('-------------------------> 2.3');
-        })
-        .catch(() => {
-          // console.log('-------------------------> 3');
-          this.setState({
-            progressRFV: 0,
-            message: "Could not upload the file !.",
-            currentFileRFV: undefined,
-          });
+      this.state.currentFileRFV,
+      currentStudent.id,
+      this.state.traineeShipKind,
+      this.state.checked,
+      (event) => {
+        this.setState({
+          showButtonRFV: false,
+          progressRFV: Math.round((100 * event.loaded) / event.total),
+          successUploadRFV: true,
         });
+      }
+    )
+      .then((response) => {
+        // console.log('-------------------------> 1');
+        this.setState({
+          successUploadRFV: false,
+          message: response.data.message,
+          showPopupSuccessUpload: true,
+          showReloadRFV: true,
+        });
+        return AuthService.getReports(currentStudent.id);
+      })
+      .then((files) => {
+        this.setState({
+          fileInfos: files.data,
+        });
+        // console.log('-------------------------> 2.1');
+        // console.log(this.state.fileInfos);
+        // console.log('-------------------------> 2.2');
+        // console.log(files.data);
+        // console.log('-------------------------> 2.3');
+      })
+      .catch(() => {
+        // console.log('-------------------------> 3');
+        this.setState({
+          progressRFV: 0,
+          message: "Could not upload the file !.",
+          currentFileRFV: undefined,
+        });
+      });
   }
 
   uploadPlagiat() {
@@ -1149,45 +1150,45 @@ class UploadReport extends Component {
 
 
     AuthService.uploadPlagiat(
-        this.state.currentFileRAP,
-        currentStudent.id,
-        this.state.checked,
-        (event) => {
-          this.setState({
-            showButtonRAP: false,
-            progressRAP: Math.round((100 * event.loaded) / event.total),
-            successUploadRAP: true,
-          });
-        }
-    )
-        .then((response) => {
-          // console.log('-------------------------> 1');
-          this.setState({
-            successUploadRAP: false,
-            message: response.data.message,
-            showPopupSuccessUpload: true,
-            showReloadRAP: true,
-          });
-          return AuthService.getReports(currentStudent.id);
-        })
-        .then((files) => {
-          this.setState({
-            fileInfos: files.data,
-          });
-          // console.log('-------------------------> 2.1');
-          // console.log(this.state.fileInfos);
-          // console.log('-------------------------> 2.2');
-          // console.log(files.data);
-          // console.log('-------------------------> 2.3');
-        })
-        .catch(() => {
-          // console.log('-------------------------> 3');
-          this.setState({
-            progressRAP: 0,
-            message: "Could not upload the file !.",
-            currentFileRAP: undefined,
-          });
+      this.state.currentFileRAP,
+      currentStudent.id,
+      this.state.checked,
+      (event) => {
+        this.setState({
+          showButtonRAP: false,
+          progressRAP: Math.round((100 * event.loaded) / event.total),
+          successUploadRAP: true,
         });
+      }
+    )
+      .then((response) => {
+        // console.log('-------------------------> 1');
+        this.setState({
+          successUploadRAP: false,
+          message: response.data.message,
+          showPopupSuccessUpload: true,
+          showReloadRAP: true,
+        });
+        return AuthService.getReports(currentStudent.id);
+      })
+      .then((files) => {
+        this.setState({
+          fileInfos: files.data,
+        });
+        // console.log('-------------------------> 2.1');
+        // console.log(this.state.fileInfos);
+        // console.log('-------------------------> 2.2');
+        // console.log(files.data);
+        // console.log('-------------------------> 2.3');
+      })
+      .catch(() => {
+        // console.log('-------------------------> 3');
+        this.setState({
+          progressRAP: 0,
+          message: "Could not upload the file !.",
+          currentFileRAP: undefined,
+        });
+      });
 
   }
 
@@ -1199,45 +1200,45 @@ class UploadReport extends Component {
 
 
     AuthService.uploadSupplement(
-        this.state.currentFileDCS,
-        currentStudent.id,
-        this.state.checked,
-        (event) => {
-          this.setState({
-            showButtonDCS: false,
-            progressDCS: Math.round((100 * event.loaded) / event.total),
-            successUploadDCS: true,
-          });
-        }
-    )
-        .then((response) => {
-          // console.log('-------------------------> 1');
-          this.setState({
-            successUploadDCS: false,
-            message: response.data.message,
-            showPopupSuccessUpload: true,
-            showReloadDCS: true,
-          });
-          return AuthService.getReports(currentStudent.id);
-        })
-        .then((files) => {
-          this.setState({
-            fileInfos: files.data,
-          });
-          // console.log('-------------------------> 2.1');
-          // console.log(this.state.fileInfos);
-          // console.log('-------------------------> 2.2');
-          // console.log(files.data);
-          // console.log('-------------------------> 2.3');
-        })
-        .catch(() => {
-          // console.log('-------------------------> 3');
-          this.setState({
-            progressDCS: 0,
-            message: "Could not upload the file !.",
-            currentFileDCS: undefined,
-          });
+      this.state.currentFileDCS,
+      currentStudent.id,
+      this.state.checked,
+      (event) => {
+        this.setState({
+          showButtonDCS: false,
+          progressDCS: Math.round((100 * event.loaded) / event.total),
+          successUploadDCS: true,
         });
+      }
+    )
+      .then((response) => {
+        // console.log('-------------------------> 1');
+        this.setState({
+          successUploadDCS: false,
+          message: response.data.message,
+          showPopupSuccessUpload: true,
+          showReloadDCS: true,
+        });
+        return AuthService.getReports(currentStudent.id);
+      })
+      .then((files) => {
+        this.setState({
+          fileInfos: files.data,
+        });
+        // console.log('-------------------------> 2.1');
+        // console.log(this.state.fileInfos);
+        // console.log('-------------------------> 2.2');
+        // console.log(files.data);
+        // console.log('-------------------------> 2.3');
+      })
+      .catch(() => {
+        // console.log('-------------------------> 3');
+        this.setState({
+          progressDCS: 0,
+          message: "Could not upload the file !.",
+          currentFileDCS: undefined,
+        });
+      });
 
   }
 
@@ -1248,45 +1249,45 @@ class UploadReport extends Component {
     });
 
     AuthService.uploadInternshipCertifcate(
-        this.state.currentFileASP,
-        currentStudent.id,
-        this.state.checked,
-        (event) => {
-          this.setState({
-            showButtonASP: false,
-            progressASP: Math.round((100 * event.loaded) / event.total),
-            successUploadASP: true,
-          });
-        }
-    )
-        .then((response) => {
-          // console.log('-------------------------> 1');
-          this.setState({
-            successUploadASP: false,
-            message: response.data.message,
-            showPopupSuccessUpload: true,
-            showReloadASP: true,
-          });
-          return AuthService.getReports(currentStudent.id);
-        })
-        .then((files) => {
-          this.setState({
-            fileInfos: files.data,
-          });
-          // console.log('-------------------------> 2.1');
-          // console.log(this.state.fileInfos);
-          // console.log('-------------------------> 2.2');
-          // console.log(files.data);
-          // console.log('-------------------------> 2.3');
-        })
-        .catch(() => {
-          // console.log('-------------------------> 3');
-          this.setState({
-            progressASP: 0,
-            message: "Could not upload the file !.",
-            currentFileASP: undefined,
-          });
+      this.state.currentFileASP,
+      currentStudent.id,
+      this.state.checked,
+      (event) => {
+        this.setState({
+          showButtonASP: false,
+          progressASP: Math.round((100 * event.loaded) / event.total),
+          successUploadASP: true,
         });
+      }
+    )
+      .then((response) => {
+        // console.log('-------------------------> 1');
+        this.setState({
+          successUploadASP: false,
+          message: response.data.message,
+          showPopupSuccessUpload: true,
+          showReloadASP: true,
+        });
+        return AuthService.getReports(currentStudent.id);
+      })
+      .then((files) => {
+        this.setState({
+          fileInfos: files.data,
+        });
+        // console.log('-------------------------> 2.1');
+        // console.log(this.state.fileInfos);
+        // console.log('-------------------------> 2.2');
+        // console.log(files.data);
+        // console.log('-------------------------> 2.3');
+      })
+      .catch(() => {
+        // console.log('-------------------------> 3');
+        this.setState({
+          progressASP: 0,
+          message: "Could not upload the file !.",
+          currentFileASP: undefined,
+        });
+      });
 
   }
 
@@ -1294,19 +1295,19 @@ class UploadReport extends Component {
     // console.log('-------------------------> OK: Delete 0: ' + id);
 
     AuthService.deleteReportById(id)
-        .then((response) => {
-          // console.log('xxxxxxxxxxxxxxxxxxxxxxx> OK: Delete 1: ' + id);
-          return AuthService.getReports(currentStudent.id);
-        })
-        .then((files) => {
-          // console.log('xxxxxxxxxxxxxxxxxxxxxxx> OK: Delete 2: ' + id);
-          this.setState({
-            fileInfos: files.data,
-          });
-        })
-        .catch(() => {
-          // console.log('xxxxxxxxxxxxxxxxxxxxxxx> ERROR: Delete 3: ' + id);
+      .then((response) => {
+        // console.log('xxxxxxxxxxxxxxxxxxxxxxx> OK: Delete 1: ' + id);
+        return AuthService.getReports(currentStudent.id);
+      })
+      .then((files) => {
+        // console.log('xxxxxxxxxxxxxxxxxxxxxxx> OK: Delete 2: ' + id);
+        this.setState({
+          fileInfos: files.data,
         });
+      })
+      .catch(() => {
+        // console.log('xxxxxxxxxxxxxxxxxxxxxxx> ERROR: Delete 3: ' + id);
+      });
   }
 
   onChangeTraineeShipKind(i, val)
@@ -1411,35 +1412,35 @@ class UploadReport extends Component {
     });
 
     AuthService.updateMyDepot(currentStudent.id).then(
-        (response) => {
-          this.setState({ showPopupUpdateDepot: false });
+      (response) => {
+        this.setState({ showPopupUpdateDepot: false });
 
-          var requestfp = new XMLHttpRequest();
-          requestfp.open("GET", API_URL_MESP + "fichePFEDepot/" + currentStudent.id, false);
-          requestfp.send(null);
-          let depSt = requestfp.responseText;
+        var requestfp = new XMLHttpRequest();
+        requestfp.open("GET", API_URL_MESP + "fichePFEDepot/" + currentStudent.id, false);
+        requestfp.send(null);
+        let depSt = requestfp.responseText;
 
-          // console.log('-----------UPDATE2021----------------depSt-------------> RES123: ' + depSt)
+        // console.log('-----------UPDATE2021----------------depSt-------------> RES123: ' + depSt)
 
 
-          if(depSt.includes("timestamp"))
-          {
-            this.setState({ depotStatus: "" });
-          }
-          else
-          {
-            this.setState({ depotStatus: depSt });
-          }
+        if(depSt.includes("timestamp"))
+        {
+          this.setState({ depotStatus: "" });
+        }
+        else
+        {
+          this.setState({ depotStatus: depSt });
+        }
 
-          return AuthService.getReports(currentStudent.id);
+        return AuthService.getReports(currentStudent.id);
 
-        })
-        .then((files) => {
-          this.setState({ fileInfos: files.data });
-        })
-        .catch(() => {
+      })
+      .then((files) => {
+        this.setState({ fileInfos: files.data });
+      })
+      .catch(() => {
 
-        });
+      });
 
   }
 
@@ -1453,23 +1454,23 @@ class UploadReport extends Component {
     this.setState({ stepper: "Step5", depotStatus: "NOTYET", showSpinnerWaitingDepot: true });
     // console.log("Check Disponibility --------cr2021----- 0: " + this.state.depotStatus);
     AuthService.validateMyDepot(currentStudent.id).then(
-        (response) =>
-        {
-          var requestfp = new XMLHttpRequest();
-          requestfp.open(
-              "GET",
-              API_URL_MESP + "fichePFEDepot/" + currentStudent.id,
-              false
-          );
-          requestfp.send(null);
+      (response) =>
+      {
+        var requestfp = new XMLHttpRequest();
+        requestfp.open(
+          "GET",
+          API_URL_MESP + "fichePFEDepot/" + currentStudent.id,
+          false
+        );
+        requestfp.send(null);
 
-          this.setState({ showSpinnerWaitingDepot: false, showPopupSuccessDepot: true, depotStatus: requestfp.responseText });
-          // console.log("Check Disponibility --------cr2021----- 1: " + requestfp.responseText);
-          // console.log("Check Disponibility --------cr2021----- 2: " + this.state.depotStatus);
-        },
-        (error) => {
-          // console.log("Check Disponibility --------cr----- FAIL");
-        }
+        this.setState({ showSpinnerWaitingDepot: false, showPopupSuccessDepot: true, depotStatus: requestfp.responseText });
+        // console.log("Check Disponibility --------cr2021----- 1: " + requestfp.responseText);
+        // console.log("Check Disponibility --------cr2021----- 2: " + this.state.depotStatus);
+      },
+      (error) => {
+        // console.log("Check Disponibility --------cr----- FAIL");
+      }
     );
   }
 
@@ -1520,1724 +1521,128 @@ class UploadReport extends Component {
     const { classes } = this.props;
 
     return (
-        <>
-            {
-              fichePFEStatus === "" ?
-                  <CRow>
-                    <CCol md="2"/>
-                    <CCol md="8">
-                      <CCard accentColor="danger">
-                        <CCardBody>
-                          <center>
-                            <br/>
-                            <br/>
-                            Vous ne pouvez pas déposer vos Rapports.
-                            <br/>
-                            Vous devez tout d'abord
-                            &nbsp;
-                            <span className="clignoteRed">
+      <>
+        {
+          fichePFEStatus === "" ?
+            <CRow>
+              <CCol md="2"/>
+              <CCol md="8">
+                <CCard accentColor="danger">
+                  <CCardBody>
+                    <center>
+                      <br/>
+                      <br/>
+                      Vous ne pouvez pas déposer vos Rapports.
+                      <br/>
+                      Vous devez tout d'abord
+                      &nbsp;
+                      <span className="clignoteRed">
                               déposer votre Fiche PFE
                         </span>
-                            &nbsp;.
-                            <br/>
-                            <br/>
-                            <br/>
-                          </center>
-                        </CCardBody>
-                        <CCardFooter>
+                      &nbsp;.
+                      <br/>
+                      <br/>
+                      <br/>
+                    </center>
+                  </CCardBody>
+                  <CCardFooter>
                       <span style={{color: "#666666", fontSize: "11px", fontStyle: "italic"}} className="float-right">
                         Today is {currentDay}
                       </span>
-                        </CCardFooter>
-                      </CCard>
-                    </CCol>
-                    <CCol md="2"/>
-                  </CRow>
-                  :
+                  </CCardFooter>
+                </CCard>
+              </CCol>
+              <CCol md="2"/>
+            </CRow>
+            :
+            <>
+              {
+                statusConvention === "02" ?
                   <>
                     {
-                        statusConvention === "02" ?
-                          <>
-                            {
-                              fichePFEStatus === "" &&
-                              <>
-                                <CRow>
-                                  <CCol md="2"/>
-                                  <CCol md="8">
-                                    <br/><br/>
-                                    <CCard accentColor="danger">
-                                      <CCardBody>
-                                        <center>
-                                          <br/>
-                                          <br/>
-                                          Vous ne pouvez pas déposer votre Rapport.
-                                          <br/>
-                                          Vous devez tout d'abord
-                                          &nbsp;
-                                          <span className="clignoteRed">
+                      fichePFEStatus === "" &&
+                      <>
+                        <CRow>
+                          <CCol md="2"/>
+                          <CCol md="8">
+                            <br/><br/>
+                            <CCard accentColor="danger">
+                              <CCardBody>
+                                <center>
+                                  <br/>
+                                  <br/>
+                                  Vous ne pouvez pas déposer votre Rapport.
+                                  <br/>
+                                  Vous devez tout d'abord
+                                  &nbsp;
+                                  <span className="clignoteRed">
                                               déposer votre Fiche PFE
                                           </span>
-                                          &nbsp;.
-                                          <br/>
-                                          <br/>
-                                          <br/>
-                                        </center>
-                                      </CCardBody>
-                                      <CCardFooter>
+                                  &nbsp;.
+                                  <br/>
+                                  <br/>
+                                  <br/>
+                                </center>
+                              </CCardBody>
+                              <CCardFooter>
                                           <span style={{color: "#666666", fontSize: "11px", fontStyle: "italic"}} className="float-right">
                                             Today is {currentDay}
                                           </span>
-                                      </CCardFooter>
-                                    </CCard>
-                                  </CCol>
-                                  <CCol md="2"/>
-                                </CRow>
-                              </>
-                            }
+                              </CCardFooter>
+                            </CCard>
+                          </CCol>
+                          <CCol md="2"/>
+                        </CRow>
+                      </>
+                    }
 
-                            {
-                              // Can't Upload : not VALIDEE
-                              (fichePFEStatus === "01" || fichePFEStatus === "02" || fichePFEStatus === "04" || fichePFEStatus === "05") &&
-                              <CRow>
-                                <CCol md="2"/>
-                                <CCol md="8">
-                                  <br/><br/>
-                                  <CCard accentColor="danger">
-                                    <CCardBody>
-                                      <center>
-                                        <br /><br />
-                                        <span className="info2InDiv">
+                    {
+                      // Can't Upload : not VALIDEE
+                      (fichePFEStatus === "01" || fichePFEStatus === "02" || fichePFEStatus === "04" || fichePFEStatus === "05") &&
+                      <CRow>
+                        <CCol md="2"/>
+                        <CCol md="8">
+                          <br/><br/>
+                          <CCard accentColor="danger">
+                            <CCardBody>
+                              <center>
+                                <br /><br />
+                                <span className="info2InDiv">
                                             Vous ne pouvez pas déposer vos Rapports
                                             <br/>
                                             tant que votre Fiche PFE
-                                            &nbsp;
-                                            <span className="clignoteRed">
+                                  &nbsp;
+                                  <span className="clignoteRed">
                                               n'est pas encore validée
                                             </span>
                                             .
                                         </span>
-                                        <br /><br />
-                                        <br />
-                                      </center>
-                                    </CCardBody>
-                                    <CCardFooter>
+                                <br /><br />
+                                <br />
+                              </center>
+                            </CCardBody>
+                            <CCardFooter>
                                       <span style={{color: "#666666", fontSize: "11px", fontStyle: "italic"}} className="float-right">
                                         Today is {currentDay}
                                       </span>
-                                    </CCardFooter>
-                                  </CCard>
-                                </CCol>
-                                <CCol md="2"/>
-                              </CRow>
-                            }
-
-                            {
-                              //  Upload Rapport v1
-                              fichePFEStatus === "03" &&
-                              <>
-                                {
-                                  fileInfos.length === 1 && timeForDepotRapportV2.trim() !== "ITISTIMEV2" &&
-                                  <CRow>
-                                    <CCol md="8">
-                                      <br/>
-                                      <CRow>
-                                        <CCol md="8">
-                                          <CAlert color="info" closeButton>
-                                            <center>
-                                              <AccessAlarmIcon style={{ color: "#990099", fontSize: 30 }} />
-                                              <br /><br />
-                                              <span className="reportClignoteMark">
-                                  NORMALEMENT
-                                </span>
-                                              &nbsp;
-                                              <span className="info2InDiv">
-                                  les dates programmées pour publier vos
-                                                &nbsp;
-                                                <span className="reportMark">
-                                    Rapports
-                                  </span>
-                                                &nbsp;
-                                                sont planifiées comme présenté par le Timeline à droite.
-                                </span>
-                                              <br />
-                                              Mais quand même, le dépôt est possible dès maintenant à tout moment.
-                                              <br/>
-                                              <br/>
-                                            </center>
-                                          </CAlert>
-                                        </CCol>
-                                        <CCol md="4">
-                                          <CAlert color="warning" closeButton>
-                                            <h6 className="alert-heading"><strong>État Dépôt Rapports</strong></h6>
-                                            <CRow>
-                                              <CCol>
-                                                Il vous reste encore à déposer :
-                                                <br/>
-                                                -&nbsp; Rapport version finale
-                                                <br/>
-                                                -&nbsp; Rapport Anti-Plagiat
-                                                <br/>
-                                                -&nbsp; Attestation de Stage
-                                                {
-                                                  itsITandEM === "NO" &&
-                                                  <>
-                                                    <br/>
-                                                    -&nbsp; Dossier Technique
-                                                  </>
-                                                }
-                                                <br/>à déposer dans la date adéquate.
-                                              </CCol>
-                                            </CRow>
-                                          </CAlert>
-                                        </CCol>
-                                      </CRow>
-                                      <CCard accentColor="primary">
-                                        <CCardBody>
-                                  <span className="text-primary" style={{fontSize: "13px", fontWeight: "bold"}}>
-                                    Liste des Rapports déposés
-                                  </span>
-                                          <br/><br/>
-                                          <ul className="list-group list-group-flush">
-                                            {fileInfos.map((file, index) => (
-                                                <li className="list-group-item" key={index}>
-                                                  <CRow>
-                                                    <CCol md="3" class="bg-warning py-2">
-                                                      {file.includes("RLV") && (
-                                                          <CListGroup accent>
-                                                            <CListGroupItem accent="primary"><strong>Rapport v1</strong></CListGroupItem>
-                                                          </CListGroup>
-                                                      )}
-                                                    </CCol>
-                                                    <CCol md="5" class="bg-warning py-2">
-                                                      <div style={{marginTop: '13px'}}>{file.substr(0, file.indexOf("UNITR1"))}.pdf</div>
-                                                    </CCol>
-                                                    <CCol md="3" class="bg-warning py-2">
-                                                      <div style={{marginTop: '13px'}}>{file.substr(file.indexOf("UNITR1") + 9)}</div>
-                                                    </CCol>
-                                                    <CCol md="1" class="bg-warning py-2">
-                                                      <center>
-                                                        <CButton  shape="pill" color="primary" aria-expanded="true"
-                                                                  onClick={() => this.modifyMyRLV()}>
-                                                          <CTooltip content="Modifier mon Rapport Version 1" placement="top">
-                                                            <CIcon content={freeSet.cilReload}/>
-                                                          </CTooltip>
-                                                        </CButton>
-                                                      </center>
-                                                    </CCol>
-                                                  </CRow>
-                                                </li>
-                                            ))}
-                                          </ul>
-                                        </CCardBody>
-                                        <CCardFooter>
-                        <span style={{color: "#666666", fontSize: "11px", fontStyle: "italic"}} className="float-right">
-                          Today is {currentDay}
-                        </span>
-                                        </CCardFooter>
-                                      </CCard>
-                                    </CCol>
-                                    <CCol md="4">
-                                      <VerticalTimeline>
-                                        <VerticalTimelineElement
-                                            className="vertical-timeline-element--work"
-                                            date={dateDepotRapportFormedV2}
-                                            contentStyle={{ background: 'rgb(204, 0, 204)', color: '#000000' }}
-                                            contentArrowStyle={{ borderRight: '10px solid  rgb(204, 0, 204)' }}
-                                            iconStyle={{ background: 'rgb(204, 0, 204)', color: '#fff', width: '10px' , height: '10px', marginLeft: '-4px', marginTop: '27px'}}>
-                                          <h6 className="vertical-timeline-element-title">Date Dépôt Rapport Version 2</h6>
-                                          <span style={{color: "#d9d9d9", fontSize: "11px", fontStyle: "italic"}}>
-                                    24ème Semaine
-                                  </span>
-                                        </VerticalTimelineElement>
-
-                                        <VerticalTimelineElement
-                                            className="vertical-timeline-element--education"
-                                            date={dateDepotRapportFormedV1}
-                                            contentStyle={{ background: 'rgb(153, 0, 153)', color: '#000000' }}
-                                            contentArrowStyle={{ borderRight: '7px solid  rgb(153, 0, 153)' }}
-                                            iconStyle={{ background: 'rgb(153, 0, 153)', color: '#fff', width: '10px' , height: '10px', marginLeft: '-4px', marginTop: '27px' }}>
-                                          <h6 className="vertical-timeline-element-title">Date Dépôt Rapport Version 1</h6>
-                                          <span style={{color: "#d9d9d9", fontSize: "11px", fontStyle: "italic"}}>
-                                    18ème Semaine
-                                  </span>
-                                        </VerticalTimelineElement>
-                                        <VerticalTimelineElement
-                                            iconStyle={{ background: 'rgb(102, 0, 102)', color: '#fff' }}
-                                            icon={<AccessAlarmIcon />}
-                                        />
-                                      </VerticalTimeline>
-                                      <CRow>
-                                        <CCol xs="12">
-                                          <center>
-                                    <span className="float-center" style={{color: "#990099", fontSize: "14px", fontWeight: "bold"}}>
-                                      {dateNewestDebutStageConvAv}
-                                    </span>
-                                          </center>
-                                        </CCol>
-                                      </CRow>
-                                    </CCol>
-                                  </CRow>
-                                }
-                              </>
-                            }
-
-                            {
-                              // Upload Rapport v2 lol-1703 && timeForDepotRapportV2.trim() === "ITISTIMEV2" &&
-                              fichePFEStatus === "03" && timeForDepotRapportV2.trim() === "ITISTIMEV2" &&
-                              <>
-                                {( (fileInfos.length === 3 || fileInfos.length > 0) && itsITandEM === "YES" &&
-                                    <CCard accentColor="info">
-
-                                      <CCardBody>
-
-                                        {fileInfos.length >= 0  &&(
-                                            <>
-                                              <CRow>
-                                                <CCol md="4" class="bg-warning py-2">
-                                                  <NotificationContainer/>
-                                                  {(
-                                                      labelRFV === "" && showUploadIconRFV &&
-                                                      <center>
-                                                        <label
-                                                            htmlFor="filePickerRAP"
-                                                            className="custom-file-upload">
-                                                          <img
-                                                              src={redUpload}
-                                                              className="cursorPointer"
-                                                              class="img-fluid"
-                                                              width="100px"
-                                                              height="75px"
-                                                              title="Déposer Rapport Version Finale"
-                                                              alt=""
-                                                          />
-                                                        </label>
-                                                        <br/>
-                                                        <label className="btn btn-default">
-                                                          <input
-                                                              id="filePickerRAP"
-                                                              type="file"
-                                                              className="cursorPointer"
-                                                              style={{ visibility: "hidden" }}
-                                                              accept="application/pdf"
-                                                              onChange={this.selectReportFinalVersion}
-                                                          />
-                                                        </label>
-                                                      </center>
-                                                  )}
-
-                                                  {(
-                                                      labelRFV !== "" &&
-                                                      <CRow>
-                                                        <CCol md="2"/>
-                                                        <CCol md="8">
-                                                          <CCard color="danger" className="text-white">
-                                                            <CCardHeader>
-                                                              <div style={{textAlign: "right"}}>
-                                                                <img  src={espritLogo}
-                                                                      className="cursorPointer"
-                                                                      class="img-fluid"
-                                                                      width="40px"
-                                                                      height="50px"/>
-                                                              </div>
-                                                            </CCardHeader>
-                                                            <CCardBody>
-                                                              <div style={{textAlign: "center"}}>
-                                                                {labelRFV}
-                                                                <br/><br/>
-                                                                <span className="signature">
-                                                By {studentFullName}
-                                              </span>
-                                                                <br/>
-                                                                <span style={{fontSize: "11px", color: "black"}}>
-                                                {dateRFV}
-                                              </span>
-                                                              </div>
-                                                            </CCardBody>
-                                                          </CCard>
-                                                        </CCol>
-                                                        <CCol md="2"/>
-                                                      </CRow>
-                                                  )}
-
-                                                  {(
-                                                      showReloadRFV && (depotStatus === "" || depotStatus === "METTRE A JOUR") &&
-                                                      <center>
-                                                        <CButton  shape="pill" color="danger" aria-expanded="true"
-                                                                  onClick={() => this.modifyMyRFV()}>
-                                                          <CTooltip content="Modifier mon Rapport Version Finale" placement="top">
-                                                            <CIcon content={freeSet.cilReload}/>
-                                                          </CTooltip>
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileRFV && !giveOKRFV && (
-                                                      <center>
-                                                        <div className="alert alert-danger" role="alert" style= {{width: "300px"}}>
-                                                          Il ne s'agit pas d'un Fichier PDF !.
-                                                          <br/>
-                                                          Merci de respecter le format demandé.
-                                                        </div>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileRFV && successUploadRFV && (
-                                                      <div className="progress">
-                                                        <div
-                                                            className="progress-bar bg-danger progress-bar-striped progress-bar-animated"
-                                                            role="progressbar"
-                                                            aria-valuenow={progressRFV}
-                                                            aria-valuemin="0"
-                                                            aria-valuemax="100"
-                                                            style={{ width: progressRFV + "%" }}>
-                                                          {progressRFV}%
-                                                        </div>
-                                                      </div>
-                                                  )}
-
-                                                  {showButtonRFV && giveOKRFV && labelRFV !== "" && (
-                                                      <center>
-                                                        <Checkbox
-                                                            checked={this.state.checked}
-                                                            color="secondary"
-                                                            onChange={(e) =>
-                                                                this.reportConfidentialHandler(e)
-                                                            }
-                                                            inputProps={{ "aria-label": "secondary checkbox" }}
-                                                        />
-                                                        &nbsp;&nbsp; Confidendial Upload
-                                                      </center>
-                                                  )}
-
-                                                  {(
-                                                      showButtonRFV &&
-                                                      <center>
-                                                        <CButton  variant="outline" color="danger"
-                                                                  onClick={this.uploadReportFinalVersion}
-                                                                  disabled={labelRFV === ""}
-                                                                  enabled={labelRFV !== ""}>
-                                                          Déposer Rapport Version Finale
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-
-                                                </CCol>
-
-                                                <CCol md="4" class="bg-warning py-2">
-                                                  {(
-                                                      labelRAP === "" && showUploadIconRAP &&
-                                                      <center>
-                                                        <label
-                                                            htmlFor="filePickerASP"
-                                                            className="custom-file-upload">
-                                                          <img
-                                                              src={blueLightUpload}
-                                                              className="cursorPointer"
-                                                              class="img-fluid"
-                                                              width="100px"
-                                                              height="75px"
-                                                              title="Déposer Rapport Anti-Plagiat"
-                                                              alt=""
-                                                          />
-                                                        </label>
-                                                        <br/>
-                                                        <label className="btn btn-default">
-                                                          <input
-                                                              id="filePickerASP"
-                                                              type="file"
-                                                              className="cursorPointer"
-                                                              style={{ visibility: "hidden" }}
-                                                              accept="application/pdf"
-                                                              onChange={this.selectReportAntiPlagiat}
-                                                          />
-                                                        </label>
-                                                      </center>
-                                                  )}
-
-                                                  {(
-                                                      labelRAP !== "" &&
-                                                      <CRow>
-                                                        <CCol md="2"/>
-                                                        <CCol md="8">
-                                                          <CCard color="info" className="text-white">
-                                                            <CCardHeader>
-                                                              <div style={{textAlign: "right"}}>
-                                                                <img  src={espritLogo}
-                                                                      className="cursorPointer"
-                                                                      class="img-fluid"
-                                                                      width="40px"
-                                                                      height="50px"/>
-                                                              </div>
-                                                            </CCardHeader>
-                                                            <CCardBody>
-                                                              <div style={{textAlign: "center"}}>
-                                                                {labelRAP}
-                                                                <br/><br/>
-                                                                <span className="signature">
-                                                By {studentFullName}
-                                              </span>
-                                                                <br/>
-                                                                <span style={{fontSize: "11px", color: "black"}}>
-                                                {dateRAP}
-                                              </span>
-                                                              </div>
-                                                            </CCardBody>
-                                                          </CCard>
-                                                        </CCol>
-                                                        <CCol md="2"/>
-                                                      </CRow>
-                                                  )}
-
-                                                  {(
-                                                      showReloadRAP && (depotStatus === "" || depotStatus === "METTRE A JOUR") &&
-                                                      <center>
-                                                        <CButton  shape="pill" color="info" aria-expanded="true"
-                                                                  onClick={() => this.modifyMyRAP()}>
-                                                          <CTooltip content="Modifier mon Rapport Anti-Plagiat" placement="top">
-                                                            <CIcon content={freeSet.cilReload}/>
-                                                          </CTooltip>
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileRAP && !giveOKRAP && (
-                                                      <center>
-                                                        <div className="alert alert-danger" role="alert" style= {{width: "300px"}}>
-                                                          Il ne s'agit pas d'un Fichier PDF !.
-                                                          <br/>
-                                                          Merci de respecter le format demandé.
-                                                        </div>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileRAP && successUploadRAP && (
-                                                      <div className="progress">
-                                                        <div
-                                                            className="progress-bar bg-info progress-bar-striped progress-bar-animated"
-                                                            role="progressbar"
-                                                            aria-valuenow={progressRAP}
-                                                            aria-valuemin="0"
-                                                            aria-valuemax="100"
-                                                            style={{ width: progressRAP + "%" }}>
-                                                          {progressRAP}%
-                                                        </div>
-                                                      </div>
-                                                  )}
-
-                                                  {(
-                                                      showButtonRAP &&
-                                                      <center>
-                                                        <CButton  variant="outline" color="info"
-                                                                  onClick={this.uploadPlagiat}
-                                                                  disabled={labelRAP === ""}
-                                                                  enabled={labelRAP !== ""}>
-                                                          Déposer Rapport Anti-Plagiat
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-                                                </CCol>
-
-                                                <CCol md="4" class="bg-warning py-2">
-
-                                                  {(
-                                                      labelASP === "" && showUploadIconASP &&
-                                                      <center>
-                                                        <label
-                                                            htmlFor="filePickerRFV"
-                                                            className="custom-file-upload">
-                                                          <img
-                                                              src={orangeUpload}
-                                                              className="cursorPointer"
-                                                              class="img-fluid"
-                                                              width="100px"
-                                                              height="75px"
-                                                              title="Déposer Attestation Stage PFE"
-                                                              alt=""
-                                                          />
-                                                        </label>
-                                                        <br/>
-                                                        <label className="btn btn-default">
-                                                          <input
-                                                              id="filePickerRFV"
-                                                              type="file"
-                                                              className="cursorPointer"
-                                                              style={{ visibility: "hidden" }}
-                                                              accept="application/pdf"
-                                                              onChange={this.selectAttestationStagePFE}
-                                                          />
-                                                        </label>
-                                                      </center>
-                                                  )}
-
-                                                  {(
-                                                      labelASP !== "" &&
-                                                      <CRow>
-                                                        <CCol md="2"/>
-                                                        <CCol md="8">
-                                                          <CCard color="warning" className="text-white">
-                                                            <CCardHeader>
-                                                              <div style={{textAlign: "right"}}>
-                                                                <img  src={espritLogo}
-                                                                      className="cursorPointer"
-                                                                      class="img-fluid"
-                                                                      width="40px"
-                                                                      height="50px"/>
-                                                              </div>
-                                                            </CCardHeader>
-                                                            <CCardBody>
-                                                              <div style={{textAlign: "center"}}>
-                                                                {labelASP}
-                                                                <br/><br/>
-                                                                <span className="signature">
-                                                By {studentFullName}
-                                              </span>
-                                                                <br/>
-                                                                <span style={{fontSize: "11px", color: "black"}}>
-                                                {dateASP}
-                                              </span>
-                                                              </div>
-                                                            </CCardBody>
-                                                          </CCard>
-                                                        </CCol>
-                                                        <CCol md="2"/>
-                                                      </CRow>
-                                                  )}
-
-                                                  {(
-                                                      showReloadASP && (depotStatus === "" || depotStatus === "METTRE A JOUR") &&
-                                                      <center>
-                                                        <CButton  shape="pill" color="warning" aria-expanded="true"
-                                                                  onClick={() => this.modifyMyASP()}>
-                                                          <CTooltip content="Modifier mon Attestation Stage PFE" placement="top">
-                                                            <CIcon content={freeSet.cilReload}/>
-                                                          </CTooltip>
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileASP && !giveOKASP && (
-                                                      <center>
-                                                        <div className="alert alert-danger" role="alert" style= {{width: "300px"}}>
-                                                          Il ne s'agit pas d'un Fichier PDF !.
-                                                          <br/>
-                                                          Merci de respecter le format demandé.
-                                                        </div>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileASP && successUploadASP && (
-                                                      <div className="progress">
-                                                        <div
-                                                            className="progress-bar bg-warning progress-bar-striped progress-bar-animated"
-                                                            role="progressbar"
-                                                            aria-valuenow={progressASP}
-                                                            aria-valuemin="0"
-                                                            aria-valuemax="100"
-                                                            style={{ width: progressASP + "%" }}>
-                                                          {progressASP}%
-                                                        </div>
-                                                      </div>
-                                                  )}
-
-                                                  {(
-                                                      showButtonASP &&
-                                                      <center>
-                                                        <CButton  variant="outline" color="warning"
-                                                                  onClick={this.uploadTrainingCertif}
-                                                                  disabled={labelASP === ""}
-                                                                  enabled={labelASP !== ""}>
-                                                          Déposer Attestation Stage PFE
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-
-                                                </CCol>
-
-                                                <br/>
-
-                                              </CRow>
-                                              <br/>
-                                              {(fileInfos.length > 0 &&
-                                                  <Divider />
-                                              )}
-
-                                            </>
-                                        )}
-
-                                        {showPopupSuccessUpload && (
-                                            <Modal
-                                                isOpen={showPopupSuccessUpload}
-                                                contentLabel="Example Modal"
-                                                style={customStyles}>
-                                              <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Information</span>
-                                              <hr/>
-                                              <center>
-                                                <br />
-                                                <br />
-                                                {message}
-                                                <br />
-                                                <br />
-                                                <br />
-                                                <button
-                                                    className="btn btn-sm btn-primary"
-                                                    onClick={this.closeModalSuccessUpload}
-                                                >
-                                                  Ok
-                                                </button>
-                                                <br />
-                                                <br />
-                                              </center>
-                                            </Modal>
-                                        )}
-                                        {showModalConfirmRelanceDepot && (
-                                            <Modal
-                                                isOpen={showModalConfirmRelanceDepot}
-                                                contentLabel="Example Modal"
-                                                style={customStyles}>
-                                              <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Confirmation</span>
-                                              <hr/>
-                                              <center>
-                                                <br />
-                                                <br />
-                                                Êtes-vous sûr de vouloir relancer votre dépôt ?
-                                                <br />
-                                                <br />
-                                                <br />
-                                                <button className="btn btn-sm btn-success"
-                                                        onClick={this.modifyMyDepot}>
-                                                  Oui
-                                                </button>
-                                                &nbsp;
-                                                <button className="btn btn-sm btn-danger"
-                                                        onClick={this.closeModalConfirmRelanceDepot}>
-                                                  Non
-                                                </button>
-                                                <br />
-                                                <br />
-                                              </center>
-                                            </Modal>
-                                        )}
-
-                                        {fileInfos.length >0 && (
-                                            <div>
-                                              <CContainer>
-                                                <CRow>
-                                                  <CCol md="9" class="bg-warning py-2">
-                                                    <div className="card-header">
-                                                      <span className="menuTitleBleuReport">Informations sur mes Rapports</span>
-                                                    </div>
-
-                                                    <ul className="list-group list-group-flush">
-                                                      {
-                                                        fileInfos.map((file, index) => (
-                                                            <li className="list-group-item" key={index}>
-                                                              <CRow>
-                                                                <CCol md="3" class="bg-warning py-2">
-                                                                  {file.includes("RLV") && (
-                                                                      <CListGroup accent>
-                                                                        <CListGroupItem accent="dark"><strong>Rapport Version 1</strong></CListGroupItem>
-                                                                      </CListGroup>
-                                                                  )}
-                                                                  {file.includes("RFV") && (
-                                                                      <CListGroup accent>
-                                                                        <CListGroupItem accent="danger"><strong>Rapport Version Finale</strong></CListGroupItem>
-                                                                      </CListGroup>
-                                                                  )}
-                                                                  {file.includes("RAP") && (
-                                                                      <CListGroup accent>
-                                                                        <CListGroupItem accent="info"><strong>Rapport Anti-Plagiat : URKUND</strong></CListGroupItem>
-                                                                      </CListGroup>
-                                                                  )}
-                                                                  {file.includes("ASP") && (
-                                                                      <CListGroup accent>
-                                                                        <CListGroupItem accent="warning"><strong>Attestation Stage PFE</strong></CListGroupItem>
-                                                                      </CListGroup>
-                                                                  )}
-                                                                </CCol>
-                                                                <CCol md="6" class="bg-warning py-2">
-                                                                  <div style={{marginTop: '13px'}}>
-                                                                    {file.substr(0, file.indexOf("UNITR1"))}.pdf
-                                                                  </div>
-                                                                </CCol>
-                                                                <CCol md="2" class="bg-warning py-2">
-                                                                  <div style={{marginTop: '13px'}}>
-                                                                    {file.substr(file.indexOf("UNITR1") + 9)}
-                                                                  </div>
-                                                                </CCol>
-                                                                <CCol md="1" class="bg-warning py-2">
-                                                                  <div style={{marginTop: '13px'}}>
-                                                                    {
-                                                                      fileInfos.length === 1 &&
-                                                                      <CButton  shape="pill" color="primary" aria-expanded="true"
-                                                                                onClick={() => this.modifyMyRLV()}>
-                                                                        <CTooltip content="Modifier mon Rapport Version 1" placement="top">
-                                                                          <CIcon content={freeSet.cilReload}/>
-                                                                        </CTooltip>
-                                                                      </CButton>
-                                                                    }
-                                                                  </div>
-                                                                </CCol>
-                                                              </CRow>
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                                  </CCol>
-                                                  <CCol lg="3">
-                                                    <br/>
-                                                    {(
-                                                        (depotStatus === "" || depotStatus === "METTRE A JOUR") && fileInfos.length > 1 &&
-                                                        <center>
-                                                          <br/><br/>
-
-                                                          <span className="text-primary" style={{fontSize: "11px"}}>
-                                                  Cliquer sur ce bouton pour <ins>relancer</ins> votre Dépôt.
-                                                </span>
-                                                          <br/>
-                                                          <Icon icon={handPointingDown} color="blue" width="30" height="30" />
-                                                          <br/><br/>
-
-                                                          <CButton  shape="pill" color="primary" aria-expanded="true"
-                                                                    onClick={() => this.openModalConfirmRelanceDepot()}>
-                                                            <CTooltip content="Relancer mon Dépôt" placement="top">
-                                                              <CIcon content={freeSet.cilReload}/>
-                                                            </CTooltip>
-                                                          </CButton>
-                                                        </center>
-                                                    )}
-                                                    {( depotStatus.includes("DEPOSEE") &&
-                                                        <CAlert color="info">
-                                                          <h5 className="alert-heading"><strong>Dépôt Effectué</strong></h5>
-                                                          <p>
-                                                            Votre requête a été bien déposée le <ins>{depotStatus.substring(7, depotStatus.length)}</ins>.
-                                                          </p>
-                                                          <p>
-                                                            Elle va être traitée le plus tôt possible.
-                                                          </p>
-                                                          <hr />
-                                                          <p className="mb-0">
-                                                            Merci de patienter.
-                                                          </p>
-                                                        </CAlert>
-                                                    )}
-
-                                                    {( depotStatus.includes("VALIDEE") &&
-                                                        <CAlert color="success">
-                                                          <h5 className="alert-heading"><strong>Dépôt Validé</strong></h5>
-                                                          <p>
-                                                            Votre requête a été <ins>validée</ins> le <ins>{depotStatus.substring(7, depotStatus.length)}</ins>.
-                                                          </p>
-                                                          <hr />
-                                                          <p className="mb-0">
-                                                            Bonne Chance.
-                                                          </p>
-                                                        </CAlert>
-                                                    )}
-
-                                                    {( depotStatus.includes("INCOMPLET") &&
-                                                        <CAlert color="danger">
-                                                          <h5 className="alert-heading"><strong>Dépôt Incomplet</strong></h5>
-                                                          <p>
-                                                            Votre requête a été marquée comme <ins>incomplète</ins> le <ins>{depotStatus.substring(9, 19)}</ins>.
-                                                          </p>
-                                                          <strong>Motif: </strong> {depotStatus.substring(19, depotStatus.length)}.
-                                                          <hr />
-                                                          <CButton  variant="outline" color="danger"
-                                                                    onClick={() => this.requestForUpdateMyDepot()}>
-                                                            Mettre à jour mon Dépôt
-                                                          </CButton>
-                                                        </CAlert>
-                                                    )}
-                                                  </CCol>
-                                                </CRow>
-                                              </CContainer>
-                                            </div>
-                                        )}
-
-                                      </CCardBody>
-                                      <CCardFooter>
-                                        <CRow>
-                                          <CCol sm="4" md="3"/>
-                                          <CCol sm="4" md="7">
-                                            {(
-                                                (depotStatus === "" || depotStatus === "METTRE A JOUR") && fileInfos.length === 3 &&
-                                                <>
-                                  <span className="text-success" style={{fontSize: "11px"}}>
-                                    Cliquer sur ce bouton pour <strong> valider votre dépôt </strong> ( <ins>PS:</ins> Une fois Cliquer, vous ne pourrez pas modifier votre dépôt ).
-                                  </span>
-                                                  &nbsp;&nbsp;&nbsp;
-                                                  <Icon icon={handPointingRight} color="green" width="30" height="30" />
-                                                </>
-                                            )}
-                                          </CCol>
-                                          <CCol sm="4" md="2">
-                                            {(
-                                                depotStatus.includes("DEPOSEE") &&
-                                                <h5><CBadge color="primary">Requête Envoyée</CBadge></h5>
-                                            )}
-
-                                            {(
-                                                depotStatus.includes("VALIDEE") &&
-                                                <h5><CBadge color="success">Dépôt Validé</CBadge></h5>
-                                            )}
-
-                                            {(
-                                                depotStatus.includes("INCOMPLET") &&
-                                                <h5><CBadge color="danger">Dépôt Incomplet</CBadge></h5>
-                                            )}
-                                            {(
-                                                (depotStatus === "" || depotStatus === "METTRE A JOUR") &&
-                                                <CButton  color="success"
-                                                          disabled={fileInfos.length !== 4}
-                                                          enabled={fileInfos.length === 4}
-                                                          className="float-right"
-                                                          onClick={() => this.validateMyDepot()}>
-                                                  Je valide 1 - {fileInfos.length}
-                                                </CButton>
-                                            )}
-
-                                            {(
-                                                showSpinnerWaitingDepot &&
-                                                <Backdrop className={classes.backdrop} open={showSpinnerWaitingDepot} >
-                                                  <CircularProgress color="inherit" />
-                                                </Backdrop>
-                                            )}
-
-                                          </CCol>
-                                        </CRow>
-                                        <CRow>
-                                          <CCol md={8}/>
-                                          <CCol md={3}>
-                                            {(
-                                              (
-                                                (surveyFirstJob !== "DONE") &&
-                                                (depotStatus === "" || depotStatus === "METTRE A JOUR")
-                                              ) &&
-                                              <CButton  color="primary"
-                                                //style={{width: "300px"}}
-                                                //variant="ghost"
-                                                        disabled={fileInfos.length !== 4}
-                                                        enabled={fileInfos.length === 4}
-                                                        className="float-left"
-                                                        onClick={() => this.redirectToJalon()}>
-                                                Je passe à l'Enquête puis Confirmer mon Dépôt
-                                              </CButton>
-                                            )}
-                                          </CCol>
-                                          <CCol md={1}>
-                                            {(
-                                              (depotStatus === "" || depotStatus === "METTRE A JOUR") &&
-                                              <CButton  color="success"
-                                                        style={{width: "100px"}}
-                                                        disabled={fileInfos.length !== 4 || surveyFirstJob !== "DONE"}
-                                                        enabled={fileInfos.length === 4}
-                                                        className="float-right"
-                                                        onClick={() => this.validateMyDepot()}>
-                                                Confirmer mon Dépôt
-                                              </CButton>
-                                            )}
-                                          </CCol>
-                                        </CRow>
-                                      </CCardFooter>
-                                    </CCard>
-                                )}
-
-                                {( (fileInfos.length === 3 || fileInfos.length > 0) && itsITandEM === "NO" &&
-                                    <CCard accentColor="info">
-
-                                      <CCardBody>
-
-                                        {fileInfos.length >= 0  &&(
-                                            <>
-                                              <CRow>
-                                                <CCol md="3" class="bg-warning py-2">
-                                                  <NotificationContainer/>
-                                                  {(
-                                                      labelRFV === "" && showUploadIconRFV &&
-                                                      <center>
-                                                        <label
-                                                            htmlFor="filePickerRAP"
-                                                            className="custom-file-upload">
-                                                          <img
-                                                              src={redUpload}
-                                                              className="cursorPointer"
-                                                              class="img-fluid"
-                                                              width="100px"
-                                                              height="75px"
-                                                              title="Déposer Rapport Version Finale"
-                                                              alt=""
-                                                          />
-                                                        </label>
-                                                        <br/>
-                                                        <label className="btn btn-default">
-                                                          <input
-                                                              id="filePickerRAP"
-                                                              type="file"
-                                                              className="cursorPointer"
-                                                              style={{ visibility: "hidden" }}
-                                                              accept="application/pdf"
-                                                              onChange={this.selectReportFinalVersion}
-                                                          />
-                                                        </label>
-                                                      </center>
-                                                  )}
-
-                                                  {(
-                                                      labelRFV !== "" &&
-                                                      <CRow>
-                                                        <CCol md="1"/>
-                                                        <CCol md="10">
-                                                          <CCard color="danger" className="text-white">
-                                                            <CCardHeader>
-                                                              <div style={{textAlign: "right"}}>
-                                                                <img  src={espritLogo}
-                                                                      className="cursorPointer"
-                                                                      class="img-fluid"
-                                                                      width="40px"
-                                                                      height="50px"/>
-                                                              </div>
-                                                            </CCardHeader>
-                                                            <CCardBody>
-                                                              <div style={{textAlign: "center"}}>
-                                                                {labelRFV}
-                                                                <br/><br/>
-                                                                <span className="signature">
-                                                By {studentFullName}
-                                              </span>
-                                                                <br/>
-                                                                <span style={{fontSize: "11px", color: "black"}}>
-                                                {dateRFV}
-                                              </span>
-                                                              </div>
-                                                            </CCardBody>
-                                                          </CCard>
-                                                        </CCol>
-                                                        <CCol md="1"/>
-                                                      </CRow>
-                                                  )}
-
-                                                  {(
-                                                      showReloadRFV && (depotStatus === "" || depotStatus === "METTRE A JOUR") &&
-                                                      <center>
-                                                        <CButton  shape="pill" color="danger" aria-expanded="true"
-                                                                  onClick={() => this.modifyMyRFV()}>
-                                                          <CTooltip content="Modifier mon Rapport Version Finale" placement="top">
-                                                            <CIcon content={freeSet.cilReload}/>
-                                                          </CTooltip>
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileRFV && !giveOKRFV && (
-                                                      <center>
-                                                        <div className="alert alert-danger" role="alert" style= {{width: "200px"}}>
-                                                          Il ne s'agit pas d'un Fichier PDF !.
-                                                          <br/>
-                                                          Merci de respecter le format demandé.
-                                                        </div>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileRFV && successUploadRFV && (
-                                                      <div className="progress">
-                                                        <div
-                                                            className="progress-bar bg-danger progress-bar-striped progress-bar-animated"
-                                                            role="progressbar"
-                                                            aria-valuenow={progressRFV}
-                                                            aria-valuemin="0"
-                                                            aria-valuemax="100"
-                                                            style={{ width: progressRFV + "%" }}>
-                                                          {progressRFV}%
-                                                        </div>
-                                                      </div>
-                                                  )}
-
-                                                  {showButtonRFV && giveOKRFV && labelRFV !== "" && (
-                                                      <center>
-                                                        <Checkbox
-                                                            checked={this.state.checked}
-                                                            color="secondary"
-                                                            onChange={(e) =>
-                                                                this.reportConfidentialHandler(e)
-                                                            }
-                                                            inputProps={{ "aria-label": "secondary checkbox" }}
-                                                        />
-                                                        &nbsp;&nbsp; Confidendial Upload
-                                                      </center>
-                                                  )}
-
-                                                  {(
-                                                      showButtonRFV &&
-                                                      <center>
-                                                        <CButton  variant="outline" color="danger"
-                                                                  onClick={this.uploadReportFinalVersion}
-                                                                  disabled={labelRFV === ""}
-                                                                  enabled={labelRFV !== ""}>
-                                                          Déposer Rapport Version Finale
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-
-                                                </CCol>
-
-                                                <CCol md="3" class="bg-warning py-2">
-                                                  {(
-                                                      labelRAP === "" && showUploadIconRAP &&
-                                                      <center>
-                                                        <label
-                                                            htmlFor="filePickerASP"
-                                                            className="custom-file-upload">
-                                                          <img
-                                                              src={blueLightUpload}
-                                                              className="cursorPointer"
-                                                              class="img-fluid"
-                                                              width="100px"
-                                                              height="75px"
-                                                              title="Déposer Rapport Anti-Plagiat"
-                                                              alt=""
-                                                          />
-                                                        </label>
-                                                        <br/>
-                                                        <label className="btn btn-default">
-                                                          <input
-                                                              id="filePickerASP"
-                                                              type="file"
-                                                              className="cursorPointer"
-                                                              style={{ visibility: "hidden" }}
-                                                              accept="application/pdf"
-                                                              onChange={this.selectReportAntiPlagiat}
-                                                          />
-                                                        </label>
-                                                      </center>
-                                                  )}
-
-                                                  {(
-                                                      labelRAP !== "" &&
-                                                      <CRow>
-                                                        <CCol md="1"/>
-                                                        <CCol md="10">
-                                                          <CCard color="info" className="text-white">
-                                                            <CCardHeader>
-                                                              <div style={{textAlign: "right"}}>
-                                                                <img  src={espritLogo}
-                                                                      className="cursorPointer"
-                                                                      class="img-fluid"
-                                                                      width="40px"
-                                                                      height="50px"/>
-                                                              </div>
-                                                            </CCardHeader>
-                                                            <CCardBody>
-                                                              <div style={{textAlign: "center"}}>
-                                                                {labelRAP}
-                                                                <br/><br/>
-                                                                <span className="signature">
-                                                By {studentFullName}
-                                              </span>
-                                                                <br/>
-                                                                <span style={{fontSize: "11px", color: "black"}}>
-                                                {dateRAP}
-                                              </span>
-                                                              </div>
-                                                            </CCardBody>
-                                                          </CCard>
-                                                        </CCol>
-                                                        <CCol md="1"/>
-                                                      </CRow>
-                                                  )}
-
-                                                  {(
-                                                      showReloadRAP && (depotStatus === "" || depotStatus === "METTRE A JOUR") &&
-                                                      <center>
-                                                        <CButton  shape="pill" color="info" aria-expanded="true"
-                                                                  onClick={() => this.modifyMyRAP()}>
-                                                          <CTooltip content="Modifier mon Rapport Anti-Plagiat" placement="top">
-                                                            <CIcon content={freeSet.cilReload}/>
-                                                          </CTooltip>
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileRAP && !giveOKRAP && (
-                                                      <center>
-                                                        <div className="alert alert-danger" role="alert" style= {{width: "200px"}}>
-                                                          Il ne s'agit pas d'un Fichier PDF !.
-                                                          <br/>
-                                                          Merci de respecter le format demandé.
-                                                        </div>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileRAP && successUploadRAP && (
-                                                      <div className="progress">
-                                                        <div
-                                                            className="progress-bar bg-info progress-bar-striped progress-bar-animated"
-                                                            role="progressbar"
-                                                            aria-valuenow={progressRAP}
-                                                            aria-valuemin="0"
-                                                            aria-valuemax="100"
-                                                            style={{ width: progressRAP + "%" }}>
-                                                          {progressRAP}%
-                                                        </div>
-                                                      </div>
-                                                  )}
-
-                                                  {(
-                                                      showButtonRAP &&
-                                                      <center>
-                                                        <CButton  variant="outline" color="info"
-                                                                  onClick={this.uploadPlagiat}
-                                                                  disabled={labelRAP === ""}
-                                                                  enabled={labelRAP !== ""}>
-                                                          Déposer Rapport Anti-Plagiat
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-                                                </CCol>
-
-                                                <CCol md="3" class="bg-warning py-2">
-
-                                                  {(
-                                                      labelASP === "" && showUploadIconASP &&
-                                                      <center>
-                                                        <label
-                                                            htmlFor="filePickerRFV"
-                                                            className="custom-file-upload">
-                                                          <img
-                                                              src={orangeUpload}
-                                                              className="cursorPointer"
-                                                              class="img-fluid"
-                                                              width="100px"
-                                                              height="75px"
-                                                              title="Déposer Attestation Stage PFE"
-                                                              alt=""
-                                                          />
-                                                        </label>
-                                                        <br/>
-                                                        <label className="btn btn-default">
-                                                          <input
-                                                              id="filePickerRFV"
-                                                              type="file"
-                                                              className="cursorPointer"
-                                                              style={{ visibility: "hidden" }}
-                                                              accept="application/pdf"
-                                                              onChange={this.selectAttestationStagePFE}
-                                                          />
-                                                        </label>
-                                                      </center>
-                                                  )}
-
-                                                  {(
-                                                      labelASP !== "" &&
-                                                      <CRow>
-                                                        <CCol md="1"/>
-                                                        <CCol md="10">
-                                                          <CCard color="warning" className="text-white">
-                                                            <CCardHeader>
-                                                              <div style={{textAlign: "right"}}>
-                                                                <img  src={espritLogo}
-                                                                      className="cursorPointer"
-                                                                      class="img-fluid"
-                                                                      width="40px"
-                                                                      height="50px"/>
-                                                              </div>
-                                                            </CCardHeader>
-                                                            <CCardBody>
-                                                              <div style={{textAlign: "center"}}>
-                                                                {labelASP}
-                                                                <br/><br/>
-                                                                <span className="signature">
-                                                By {studentFullName}
-                                              </span>
-                                                                <br/>
-                                                                <span style={{fontSize: "11px", color: "black"}}>
-                                                {dateASP}
-                                              </span>
-                                                              </div>
-                                                            </CCardBody>
-                                                          </CCard>
-                                                        </CCol>
-                                                        <CCol md="1"/>
-                                                      </CRow>
-                                                  )}
-
-                                                  {(
-                                                      showReloadASP && (depotStatus === "" || depotStatus === "METTRE A JOUR") &&
-                                                      <center>
-                                                        <CButton  shape="pill" color="warning" aria-expanded="true"
-                                                                  onClick={() => this.modifyMyASP()}>
-                                                          <CTooltip content="Modifier mon Attestation Stage PFE" placement="top">
-                                                            <CIcon content={freeSet.cilReload}/>
-                                                          </CTooltip>
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileASP && !giveOKASP && (
-                                                      <center>
-                                                        <div className="alert alert-danger" role="alert" style= {{width: "200px"}}>
-                                                          Il ne s'agit pas d'un Fichier PDF !.
-                                                          <br/>
-                                                          Merci de respecter le format demandé.
-                                                        </div>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileASP && successUploadASP && (
-                                                      <div className="progress">
-                                                        <div
-                                                            className="progress-bar bg-warning progress-bar-striped progress-bar-animated"
-                                                            role="progressbar"
-                                                            aria-valuenow={progressASP}
-                                                            aria-valuemin="0"
-                                                            aria-valuemax="100"
-                                                            style={{ width: progressASP + "%" }}>
-                                                          {progressASP}%
-                                                        </div>
-                                                      </div>
-                                                  )}
-
-                                                  {(
-                                                      showButtonASP &&
-                                                      <center>
-                                                        <CButton  variant="outline" color="warning"
-                                                                  onClick={this.uploadTrainingCertif}
-                                                                  disabled={labelASP === ""}
-                                                                  enabled={labelASP !== ""}>
-                                                          Déposer Attestation Stage PFE
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-
-                                                </CCol>
-
-                                                <CCol md="3" class="bg-primary py-2">
-                                                  {(
-                                                      labelDCS === "" && showUploadIconDCS &&
-                                                      <center>
-                                                        <label
-                                                            htmlFor="filePickerDCS"
-                                                            className="custom-file-upload">
-                                                          <img
-                                                              src={blueBoldUpload}
-                                                              className="cursorPointer"
-                                                              class="img-fluid"
-                                                              width="100px"
-                                                              height="75px"
-                                                              title="Déposer Dossier ou Document Optionnel"
-                                                              alt=""
-                                                          />
-                                                        </label>
-                                                        <br/>
-                                                        <label className="btn btn-default">
-                                                          <input
-                                                              id="filePickerDCS"
-                                                              type="file"
-                                                              className="cursorPointer"
-                                                              style={{ visibility: "hidden" }}
-                                                              onChange={this.selectDossierDocumentSupplemenaire}
-                                                          />
-                                                        </label>
-                                                      </center>
-                                                  )}
-
-                                                  {(
-                                                      labelDCS !== "" &&
-                                                      <CRow>
-                                                        <CCol md="1"/>
-                                                        <CCol md="10">
-                                                          <CCard color="primary" className="text-white">
-                                                            <CCardHeader>
-                                                              <div style={{textAlign: "right"}}>
-                                                                <img  src={espritLogo}
-                                                                      className="cursorPointer"
-                                                                      class="img-fluid"
-                                                                      width="40px"
-                                                                      height="50px"/>
-                                                              </div>
-                                                            </CCardHeader>
-                                                            <CCardBody>
-                                                              <div style={{textAlign: "center"}}>
-                                                                {labelDCS}
-                                                                <br/><br/>
-                                                                <span className="signature">
-                                                By {studentFullName}
-                                              </span>
-                                                                <br/>
-                                                                <span style={{fontSize: "11px", color: "black"}}>
-                                                {dateDCS}
-                                              </span>
-                                                              </div>
-                                                            </CCardBody>
-                                                          </CCard>
-                                                        </CCol>
-                                                        <CCol md="1"/>
-                                                      </CRow>
-                                                  )}
-
-                                                  {(
-                                                      showReloadDCS && (depotStatus === "" || depotStatus === "METTRE A JOUR") &&
-                                                      <center>
-                                                        <CButton  shape="pill" color="primary" aria-expanded="true"
-                                                                  onClick={() => this.modifyMyDCS()}>
-                                                          <CTooltip content="Modifier mon Supplément Optionnel" placement="top">
-                                                            <CIcon content={freeSet.cilReload}/>
-                                                          </CTooltip>
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileDCS && successUploadDCS && (
-                                                      <div className="progress">
-                                                        <div
-                                                            className="progress-bar progress-bar-striped progress-bar-animated"
-                                                            role="progressbar"
-                                                            aria-valuenow={progressDCS}
-                                                            aria-valuemin="0"
-                                                            aria-valuemax="100"
-                                                            style={{ width: progressDCS + "%" }}>
-                                                          {progressDCS}%
-                                                        </div>
-                                                      </div>
-                                                  )}
-
-                                                  {(
-                                                      showButtonDCS &&
-                                                      <center>
-                                                        <CButton  variant="outline" color="primary"
-                                                                  onClick={this.uploadSupplement}
-                                                                  disabled={labelDCS === ""}
-                                                                  enabled={labelDCS !== ""}>
-                                                          Déposer Dossier Technique 1
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-
-                                                </CCol>
-
-                                              </CRow>
-                                              <br/>
-                                              {(fileInfos.length > 0 &&
-                                                  <Divider />
-                                              )}
-
-                                            </>
-                                        )}
-
-                                        {showPopupSuccessUpload && (
-                                            <Modal
-                                                isOpen={showPopupSuccessUpload}
-                                                contentLabel="Example Modal"
-                                                style={customStyles}
-                                            >
-                                              <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Information</span>
-                                              <hr/>
-                                              <center>
-                                                <br />
-                                                <br />
-                                                {message}
-                                                <br />
-                                                <br />
-                                                <br />
-                                                <button
-                                                    className="btn btn-sm btn-primary"
-                                                    onClick={this.closeModalSuccessUpload}
-                                                >
-                                                  Ok
-                                                </button>
-                                                <br />
-                                                <br />
-                                              </center>
-                                            </Modal>
-                                        )}
-
-                                        {showModalConfirmRelanceDepot && (
-                                            <Modal
-                                                isOpen={showModalConfirmRelanceDepot}
-                                                contentLabel="Example Modal"
-                                                style={customStyles}
-                                            >
-                                              <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Confirmation</span>
-                                              <hr/>
-                                              <center>
-                                                <br />
-                                                <br />
-                                                Êtes-vous sûr de vouloir relancer votre dépôt ?
-                                                <br />
-                                                <br />
-                                                <br />
-                                                <button className="btn btn-sm btn-success"
-                                                        onClick={this.modifyMyDepot}>
-                                                  Oui
-                                                </button>
-                                                &nbsp;
-                                                <button className="btn btn-sm btn-danger"
-                                                        onClick={this.closeModalConfirmRelanceDepot}>
-                                                  Non
-                                                </button>
-                                                <br />
-                                                <br />
-                                              </center>
-                                            </Modal>
-                                        )}
-
-                                        {fileInfos.length >0 && (
-                                            <div>
-
-                                              <CContainer>
-                                                <CRow>
-                                                  <CCol md="9" class="bg-warning py-2">
-
-                                                    <div className="card-header">
-                                                      <span className="menuTitleGreyReport">Informations sur mes Rapports 2</span>
-                                                    </div>
-
-                                                    <ul className="list-group list-group-flush">
-                                                      {fileInfos.map((file, index) => (
-                                                          <li className="list-group-item" key={index}>
-                                                            <CRow>
-                                                              <CCol md="4" class="bg-warning py-2">
-                                                                {file.includes("RLV") && (
-                                                                    <CListGroup accent>
-                                                                      <CListGroupItem accent="dark"><strong>Rapport Version 1</strong></CListGroupItem>
-                                                                    </CListGroup>
-                                                                )}
-                                                                {file.includes("RFV") && (
-                                                                    <CListGroup accent>
-                                                                      <CListGroupItem accent="danger"><strong>Rapport Version Finale</strong></CListGroupItem>
-                                                                    </CListGroup>
-                                                                )}
-                                                                {file.includes("RAP") && (
-                                                                    <CListGroup accent>
-                                                                      <CListGroupItem accent="info"><strong>Rapport Anti-Plagiat : URKUND</strong></CListGroupItem>
-                                                                    </CListGroup>
-                                                                )}
-                                                                {file.includes("ASP") && (
-                                                                    <CListGroup accent>
-                                                                      <CListGroupItem accent="warning"><strong>Attestation Stage PFE</strong></CListGroupItem>
-                                                                    </CListGroup>
-                                                                )}
-                                                                {file.includes("DCS") && (
-                                                                    <CListGroup accent>
-                                                                      <CListGroupItem accent="primary"><strong>Dossier Technique</strong></CListGroupItem>
-                                                                    </CListGroup>
-                                                                )}
-                                                              </CCol>
-                                                              <CCol md="6" class="bg-warning py-2">
-                                                                <div style={{marginTop: '13px'}}>
-                                                                  {file.substr(0, file.indexOf("UNITR1"))}.pdf
-                                                                </div>
-                                                              </CCol>
-                                                              <CCol md="2" class="bg-warning py-2">
-                                                                <div style={{marginTop: '13px'}}>
-                                                                  {file.substr(file.indexOf("UNITR1") + 9)}
-                                                                </div>
-                                                              </CCol>
-                                                            </CRow>
-                                                          </li>
-                                                      ))}
-                                                    </ul>
-
-                                                  </CCol>
-                                                  <CCol md="3">
-                                                    <br/>
-                                                    {(
-                                                        (depotStatus === "" || depotStatus === "METTRE A JOUR") &&
-                                                        <center>
-                                                          <br/><br/>
-
-                                                          <span className="text-dark" style={{fontSize: "11px"}}>
-                                                  Cliquer sur ce bouton pour <ins>relancer</ins> votre Dépôt.
-                                                </span>
-                                                          <br/>
-                                                          <Icon icon={handPointingDown} color="grey" width="30" height="30" />
-                                                          <br/><br/>
-
-                                                          <CButton  shape="pill" color="dark" aria-expanded="true"
-                                                                    onClick={() => this.openModalConfirmRelanceDepot()}>
-                                                            <CTooltip content="Relancer mon Dépôt" placement="top">
-                                                              <CIcon content={freeSet.cilReload}/>
-                                                            </CTooltip>
-                                                          </CButton>
-                                                        </center>
-                                                    )}
-                                                    {( depotStatus.includes("DEPOSEE") &&
-                                                        <CAlert color="info">
-                                                          <h5 className="alert-heading"><strong>Dépôt Effectué</strong></h5>
-                                                          <p>
-                                                            Votre requête a été bien déposée le <ins>{depotStatus.substring(7, depotStatus.length)}</ins>.
-                                                          </p>
-                                                          <p>
-                                                            Elle va être traitée le plus tôt possible.
-                                                          </p>
-                                                          <hr />
-                                                          <p className="mb-0">
-                                                            Merci de patienter.
-                                                          </p>
-                                                        </CAlert>
-                                                    )}
-
-                                                    {( depotStatus.includes("VALIDEE") &&
-                                                        <CAlert color="success">
-                                                          <h5 className="alert-heading"><strong>Dépôt Validé</strong></h5>
-                                                          <p>
-                                                            Votre requête a été <ins>validée</ins> le <ins>{depotStatus.substring(7, depotStatus.length)}</ins>.
-                                                          </p>
-                                                          <hr />
-                                                          <p className="mb-0">
-                                                            Bonne Chance.
-                                                          </p>
-                                                        </CAlert>
-                                                    )}
-
-                                                    {( depotStatus.includes("INCOMPLET") &&
-                                                        <CAlert color="danger">
-                                                          <h5 className="alert-heading"><strong>Dépôt Incomplet</strong></h5>
-                                                          <p>
-                                                            Votre requête a été marquée comme <ins>incomplète</ins> le <ins>{depotStatus.substring(9, 19)}</ins>.
-                                                          </p>
-                                                          <strong>Motif: </strong> {depotStatus.substring(19, depotStatus.length)}.
-                                                          <hr />
-                                                          <CButton  variant="outline" color="danger"
-                                                                    onClick={() => this.requestForUpdateMyDepot()}>
-                                                            Mettre à jour mon Dépôt
-                                                          </CButton>
-                                                        </CAlert>
-                                                    )}
-                                                  </CCol>
-                                                </CRow>
-                                              </CContainer>
-                                            </div>
-                                        )}
-
-                                      </CCardBody>
-                                      <CCardFooter>
-                                        <CRow>
-                                          <CCol sm="4" md="3"/>
-                                          <CCol sm="4" md="7">
-                                            {(
-                                                (depotStatus === "" || depotStatus === "METTRE A JOUR") && fileInfos.length === 3 &&
-                                                <>
-                                  <span className="text-success" style={{fontSize: "11px"}}>
-                                    Cliquer sur ce bouton pour <strong> valider votre dépôt </strong> ( <ins>PS:</ins> Une fois Cliquer, vous ne pourrez pas modifier votre dépôt ).
-                                  </span>
-                                                  &nbsp;&nbsp;&nbsp;
-                                                  <Icon icon={handPointingRight} color="green" width="30" height="30" />
-                                                </>
-                                            )}
-                                          </CCol>
-                                          <CCol sm="4" md="2">
-                                            {(
-                                                depotStatus.includes("DEPOSEE") &&
-                                                <h5><CBadge color="primary">Requête Envoyée</CBadge></h5>
-                                            )}
-
-                                            {(
-                                                depotStatus.includes("VALIDEE") &&
-                                                <h5><CBadge color="success">Dépôt Validé</CBadge></h5>
-                                            )}
-
-                                            {(
-                                                depotStatus.includes("INCOMPLET") &&
-                                                <h5><CBadge color="danger">Dépôt Incomplet</CBadge></h5>
-                                            )}
-                                            {(
-                                                (depotStatus === "" || depotStatus === "METTRE A JOUR")  && itsITandEM === "YES" &&
-                                                <CButton  color="success"
-                                                          disabled={fileInfos.length !== 4}
-                                                          enabled={fileInfos.length === 4}
-                                                          className="float-right"
-                                                          onClick={() => this.validateMyDepot()}>
-                                                  Je valide 2 - {fileInfos.length}
-                                                </CButton>
-                                            )}
-
-                                            {(
-                                                (depotStatus === "" || depotStatus === "METTRE A JOUR")  && itsITandEM === "NO" &&
-                                                <CButton  color="success"
-                                                          disabled={fileInfos.length < 5}
-                                                          enabled={fileInfos.length > 4}
-                                                          className="float-right"
-                                                          onClick={() => this.validateMyDepot()}>
-                                                  Je valide 3 - {fileInfos.length}
-                                                </CButton>
-                                            )}
-
-                                            {(
-                                                showSpinnerWaitingDepot &&
-                                                <Backdrop className={classes.backdrop} open={showSpinnerWaitingDepot} >
-                                                  <CircularProgress color="inherit" />
-                                                </Backdrop>
-                                            )}
-
-
-
-                                          </CCol>
-                                        </CRow>
-                                      </CCardFooter>
-                                    </CCard>
-                                )}
-
-                                <CModal
-                                    show={showPopupSuccessDepot}
-                                    onClose={() => this.closeShowPopupSuccessDepot()}
-                                    className={classes.backdrop1}
-                                    color="primary">
-                                  <CModalHeader closeButton>
-                                    <CModalTitle>Information</CModalTitle>
-                                  </CModalHeader>
-                                  <CModalBody>
-                                    <center>
-                                      <br/><br/>
-                                      Vous avez validé le dépôt de vos documents.
-                                      <br/>
-                                      Merci de patienter jusqu'au le traitement de votre requête.
-                                    </center>
-                                    <br/><br/>
-                                  </CModalBody>
-                                  <CModalFooter>
-                                    <CButton color="primary" onClick={() => this.closeShowPopupSuccessDepot()}>
-                                      Ok
-                                    </CButton>
-                                  </CModalFooter>
-                                </CModal>
-
-                                <CModal
-                                    show={showPopupUpdateDepot}
-                                    onClose={() => this.updateMyDepotNO()}
-                                    className={classes.backdrop1}
-                                    color="secondary">
-                                  <CModalHeader closeButton>
-                                    <CModalTitle>Confirmation</CModalTitle>
-                                  </CModalHeader>
-                                  <CModalBody>
-                                    Voulez-vous mettre à jour votre dépôt <ins>en tenir compte</ins> la cause de signaler votre requête précédante comme incomplète ?.
-                                    <br/><br/>
-                                  </CModalBody>
-                                  <CModalFooter>
-                                    <CButton color="success" onClick={() => this.updateMyDepotYES()}>
-                                      Oui
-                                    </CButton>
-                                    &nbsp;
-                                    <CButton color="danger" onClick={() => this.updateMyDepotNO()}>
-                                      Pas Maintenant
-                                    </CButton>
-                                  </CModalFooter>
-                                </CModal>
-                              </>
-                            }
-
-                            {
-                              // Before v1
-                              fichePFEStatus === "03" && fileInfos.length === 0 &&
+                            </CCardFooter>
+                          </CCard>
+                        </CCol>
+                        <CCol md="2"/>
+                      </CRow>
+                    }
+
+                    {
+                      //  Upload Rapport v1
+                      fichePFEStatus === "03" &&
+                      <>
+                        {
+                          fileInfos.length === 1 && timeForDepotRapportV2.trim() !== "ITISTIMEV2" &&
+                          <CRow>
+                            <CCol md="8">
+                              <br/>
                               <CRow>
                                 <CCol md="8">
-                                  <br/>
                                   <CAlert color="info" closeButton>
                                     <center>
                                       <AccessAlarmIcon style={{ color: "#990099", fontSize: 30 }} />
@@ -3261,4397 +1666,2217 @@ class UploadReport extends Component {
                                       <br/>
                                     </center>
                                   </CAlert>
-                                  <br/>
-                                  {
-                                    ( fileInfos.length === 0 || giveOkModifyRLV ) &&
-                                    <CCard accentColor="primary">
-                                      <CCardBody>
-                                        <CRow>
-                                          <CCol>
-                                            <div style={{ textAlign: "left" }}>
-                                     <span className="titleReport">
-                                       Dépôt Rapport Version 1
-                                     </span>
-                                            </div>
-                                          </CCol>
-                                          <CCol>
-                                            <div style={{ textAlign: "right" }}>
-                                    <span className="noteDepotReport">
-                                       Vous devez choisir un fichier PDF.
-                                    </span>
-                                            </div>
-                                          </CCol>
-                                        </CRow>
-
-                                        <NotificationContainer/>
-
-                                        <div>
-                                          <center>
-                                            <label
-                                                htmlFor="filePicker"
-                                                className="custom-file-upload"
-                                            >
-                                              <img
-                                                  src={uploadIcon}
-                                                  className="cursorPointer"
-                                                  width="80px"
-                                                  height="50px"
-                                                  title="Choose your Report version 1"
-                                                  alt=""
-                                              />
-                                            </label>
-                                            <br />
-                                            <label className="btn btn-default">
-                                              <input
-                                                  id="filePicker"
-                                                  type="file"
-                                                  style={{ visibility: "hidden" }}
-                                                  accept="application/pdf"
-                                                  onChange={this.selectFile}
-                                              />
-                                            </label>
-                                            <br />
-
-                                            {selectedFiles && !giveOKRLV && (
-                                                <center>
-                                                  <div className="alert alert-danger" role="alert" style= {{width: "300px"}}>
-                                                    Il ne s'agit pas d'un Fichier PDF !.
-                                                    <br/>
-                                                    Merci de respecter le format demandé.
-                                                  </div>
-                                                </center>
-                                            )}
-
-                                            {currentFile && successUpload && (
-                                                <div className="progress" style={{ width: "500px" }}>
-                                                  <div  className="progress-bar bg-primary progress-bar-striped progress-bar-animated"
-                                                        role="progressbar"
-                                                        aria-valuenow={progress}
-                                                        aria-valuemin="0"
-                                                        aria-valuemax="100"
-                                                        style={{ width: progress + "%" }}>
-                                                    {progress}%
-                                                  </div>
-                                                </div>
-                                            )}
-
-                                            {showUploadReportV1Button && selectedFiles && giveOKRLV && (
-                                                <button
-                                                    className="btn btn-primary"
-                                                    onClick={this.uploadReportV1}
-                                                >
-                                                  Déposer Rapport v1
-                                                </button>
-                                            )}
-                                          </center>
-                                        </div>
-                                      </CCardBody>
-                                      <CCardFooter>
-                              <span style={{color: "#666666", fontSize: "11px", fontStyle: "italic"}} className="float-right">
-                                Today is {currentDay}
-                              </span>
-                                      </CCardFooter>
-                                    </CCard>
-                                  }
-
-                                  {
-                                    showPopupSuccessUploadRV1 &&
-                                    <Modal isOpen={showPopupSuccessUploadRV1} contentLabel="Example Modal" style={customStyles}>
-                                      <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Information</span>
-                                      <center>
-                                        <br />
-                                        <br />
-                                        {message}
-                                        <br />
-                                        <br />
-                                        <br />
-                                        <button
-                                            className="btn btn-sm btn-primary"
-                                            onClick={this.closeModalSuccessUploadRV1}
-                                        >
-                                          Ok
-                                        </button>
-                                        <br />
-                                        <br />
-                                      </center>
-                                    </Modal>
-                                  }
-
                                 </CCol>
                                 <CCol md="4">
-                                  <VerticalTimeline>
-                                    <VerticalTimelineElement
-                                        className="vertical-timeline-element--work"
-                                        date={dateDepotRapportFormedV2}
-                                        contentStyle={{ background: 'rgb(204, 0, 204)', color: '#000000' }}
-                                        contentArrowStyle={{ borderRight: '10px solid  rgb(204, 0, 204)' }}
-                                        iconStyle={{ background: 'rgb(204, 0, 204)', color: '#fff', width: '10px' , height: '10px', marginLeft: '-4px', marginTop: '27px'}}>
-                                      <h6 className="vertical-timeline-element-title">Date Dépôt Rapport Version 2</h6>
-                                      <span style={{color: "#d9d9d9", fontSize: "11px", fontStyle: "italic"}}>
-                              24ème Semaine
-                            </span>
-                                    </VerticalTimelineElement>
-
-                                    <VerticalTimelineElement
-                                        className="vertical-timeline-element--education"
-                                        date={dateDepotRapportFormedV1}
-                                        contentStyle={{ background: 'rgb(153, 0, 153)', color: '#000000' }}
-                                        contentArrowStyle={{ borderRight: '7px solid  rgb(153, 0, 153)' }}
-                                        iconStyle={{ background: 'rgb(153, 0, 153)', color: '#fff', width: '10px' , height: '10px', marginLeft: '-4px', marginTop: '27px' }}>
-                                      <h6 className="vertical-timeline-element-title">Date Dépôt Rapport Version 1</h6>
-                                      <span style={{color: "#d9d9d9", fontSize: "11px", fontStyle: "italic"}}>
-                              18ème Semaine
-                            </span>
-                                    </VerticalTimelineElement>
-                                    <VerticalTimelineElement
-                                        iconStyle={{ background: 'rgb(102, 0, 102)', color: '#fff' }}
-                                        icon={<AccessAlarmIcon />}
-                                    />
-                                  </VerticalTimeline>
-                                  <CRow>
-                                    <CCol xs="12">
-                                      <center>
-                          <span className="float-center" style={{color: "#990099", fontSize: "14px", fontWeight: "bold"}}>
-                            {dateNewestDebutStageConvAv}
-                          </span>
-                                      </center>
-                                    </CCol>
-                                  </CRow>
+                                  <CAlert color="warning" closeButton>
+                                    <h6 className="alert-heading"><strong>État Dépôt Rapports</strong></h6>
+                                    <CRow>
+                                      <CCol>
+                                        Il vous reste encore à déposer :
+                                        <br/>
+                                        -&nbsp; Rapport version finale
+                                        <br/>
+                                        -&nbsp; Rapport Anti-Plagiat
+                                        <br/>
+                                        -&nbsp; Attestation de Stage
+                                        {
+                                          itsITandEM === "NO" &&
+                                          <>
+                                            <br/>
+                                            -&nbsp; Dossier Technique
+                                          </>
+                                        }
+                                        <br/>à déposer dans la date adéquate.
+                                      </CCol>
+                                    </CRow>
+                                  </CAlert>
                                 </CCol>
                               </CRow>
-                            }
-
-                            {
-                              // After v2 + INCOMPLETE
-                              (
-                                  (timeForDepotRapportV2.trim() === "AFTERTIMEV2" && depotStatus.includes("INCOMPLET"))
-                                  ||
-                                  (timeForDepotRapportV2.trim() === "AFTERTIMEV2" && depotStatus.includes("VALIDEE"))
-                              ) &&
-                              <>
-
-                                {(
-                                    fileInfos.length === 4 && itsITandEM === "YES" &&
-                                    <CCard accentColor="info">
-
-                                      <CCardBody>
-                                        {
-                                          fileInfos.length > 1  &&  // Upload Report v2 + URKUND + AS
-                                          <>
-                                            <CRow>
-                                              <CCol md="4" class="bg-warning py-2">
-                                                <NotificationContainer/>
-                                                {(
-                                                    labelRFV === "" && showUploadIconRFV &&
-                                                    <center>
-                                                      <label
-                                                          htmlFor="filePickerRAP"
-                                                          className="custom-file-upload">
-                                                        <img
-                                                            src={redUpload}
-                                                            className="cursorPointer"
-                                                            class="img-fluid"
-                                                            width="100px"
-                                                            height="75px"
-                                                            title="Déposer Rapport Version Finale"
-                                                            alt=""
-                                                        />
-                                                      </label>
-                                                      <br/>
-                                                      <label className="btn btn-default">
-                                                        <input
-                                                            id="filePickerRAP"
-                                                            type="file"
-                                                            className="cursorPointer"
-                                                            style={{ visibility: "hidden" }}
-                                                            accept="application/pdf"
-                                                            onChange={this.selectReportFinalVersion}
-                                                        />
-                                                      </label>
-                                                    </center>
-                                                )}
-
-                                                {(
-                                                    labelRFV !== "" &&
-                                                    <CRow>
-                                                      <CCol md="2"/>
-                                                      <CCol md="8">
-                                                        <CCard color="danger" className="text-white">
-                                                          <CCardHeader>
-                                                            <div style={{textAlign: "right"}}>
-                                                              <img  src={espritLogo}
-                                                                    className="cursorPointer"
-                                                                    class="img-fluid"
-                                                                    width="40px"
-                                                                    height="50px"/>
-                                                            </div>
-                                                          </CCardHeader>
-                                                          <CCardBody>
-                                                            <div style={{textAlign: "center"}}>
-                                                              {labelRFV}
-                                                              <br/><br/>
-                                                              <span className="signature">
-                                                By {studentFullName}
-                                              </span>
-                                                              <br/>
-                                                              <span style={{fontSize: "11px", color: "black"}}>
-                                                {dateRFV}
-                                              </span>
-                                                            </div>
-                                                          </CCardBody>
-                                                        </CCard>
-                                                      </CCol>
-                                                      <CCol md="2"/>
-                                                    </CRow>
-                                                )}
-
-                                                {(
-                                                    showReloadRFV && depotStatus === "" &&
-                                                    <center>
-                                                      <CButton  shape="pill" color="danger" aria-expanded="true"
-                                                                onClick={() => this.modifyMyRFV()}>
-                                                        <CTooltip content="Modifier mon Rapport Version Finale" placement="top">
-                                                          <CIcon content={freeSet.cilReload}/>
-                                                        </CTooltip>
-                                                      </CButton>
-                                                    </center>
-                                                )}
-
-                                                {currentFileRFV && !giveOKRFV && (
-                                                    <center>
-                                                      <div className="alert alert-danger" role="alert" style= {{width: "300px"}}>
-                                                        Il ne s'agit pas d'un Fichier PDF !.
-                                                        <br/>
-                                                        Merci de respecter le format demandé.
-                                                      </div>
-                                                    </center>
-                                                )}
-
-                                                {currentFileRFV && successUploadRFV && (
-                                                    <div className="progress">
-                                                      <div
-                                                          className="progress-bar bg-danger progress-bar-striped progress-bar-animated"
-                                                          role="progressbar"
-                                                          aria-valuenow={progressRFV}
-                                                          aria-valuemin="0"
-                                                          aria-valuemax="100"
-                                                          style={{ width: progressRFV + "%" }}>
-                                                        {progressRFV}%
-                                                      </div>
-                                                    </div>
-                                                )}
-
-                                                {showButtonRFV && giveOKRFV && labelRFV !== "" && (
-                                                    <center>
-                                                      <Checkbox
-                                                          checked={this.state.checked}
-                                                          color="secondary"
-                                                          onChange={(e) =>
-                                                              this.reportConfidentialHandler(e)
-                                                          }
-                                                          inputProps={{ "aria-label": "secondary checkbox" }}
-                                                      />
-                                                      &nbsp;&nbsp; Confidendial Upload
-                                                    </center>
-                                                )}
-
-                                                {(
-                                                    showButtonRFV &&
-                                                    <center>
-                                                      <CButton  variant="outline" color="danger"
-                                                                onClick={this.uploadReportFinalVersion}
-                                                                disabled={labelRFV === ""}
-                                                                enabled={labelRFV !== ""}>
-                                                        Déposer Rapport Version Finale
-                                                      </CButton>
-                                                    </center>
-                                                )}
-
-
-                                              </CCol>
-
-                                              <CCol md="4" class="bg-warning py-2">
-                                                {(
-                                                    labelRAP === "" && showUploadIconRAP &&
-                                                    <center>
-                                                      <label
-                                                          htmlFor="filePickerASP"
-                                                          className="custom-file-upload">
-                                                        <img
-                                                            src={blueLightUpload}
-                                                            className="cursorPointer"
-                                                            class="img-fluid"
-                                                            width="100px"
-                                                            height="75px"
-                                                            title="Déposer Rapport Anti-Plagiat"
-                                                            alt=""
-                                                        />
-                                                      </label>
-                                                      <br/>
-                                                      <label className="btn btn-default">
-                                                        <input
-                                                            id="filePickerASP"
-                                                            type="file"
-                                                            className="cursorPointer"
-                                                            style={{ visibility: "hidden" }}
-                                                            accept="application/pdf"
-                                                            onChange={this.selectReportAntiPlagiat}
-                                                        />
-                                                      </label>
-                                                    </center>
-                                                )}
-
-                                                {(
-                                                    labelRAP !== "" &&
-                                                    <CRow>
-                                                      <CCol md="2"/>
-                                                      <CCol md="8">
-                                                        <CCard color="info" className="text-white">
-                                                          <CCardHeader>
-                                                            <div style={{textAlign: "right"}}>
-                                                              <img  src={espritLogo}
-                                                                    className="cursorPointer"
-                                                                    class="img-fluid"
-                                                                    width="40px"
-                                                                    height="50px"/>
-                                                            </div>
-                                                          </CCardHeader>
-                                                          <CCardBody>
-                                                            <div style={{textAlign: "center"}}>
-                                                              {labelRAP}
-                                                              <br/><br/>
-                                                              <span className="signature">
-                                                By {studentFullName}
-                                              </span>
-                                                              <br/>
-                                                              <span style={{fontSize: "11px", color: "black"}}>
-                                                {dateRAP}
-                                              </span>
-                                                            </div>
-                                                          </CCardBody>
-                                                        </CCard>
-                                                      </CCol>
-                                                      <CCol md="2"/>
-                                                    </CRow>
-                                                )}
-
-                                                {(
-                                                    showReloadRAP && depotStatus === "" &&
-                                                    <center>
-                                                      <CButton  shape="pill" color="info" aria-expanded="true"
-                                                                onClick={() => this.modifyMyRAP()}>
-                                                        <CTooltip content="Modifier mon Rapport Anti-Plagiat" placement="top">
-                                                          <CIcon content={freeSet.cilReload}/>
-                                                        </CTooltip>
-                                                      </CButton>
-                                                    </center>
-                                                )}
-
-                                                {currentFileRAP && !giveOKRAP && (
-                                                    <center>
-                                                      <div className="alert alert-danger" role="alert" style= {{width: "300px"}}>
-                                                        Il ne s'agit pas d'un Fichier PDF !.
-                                                        <br/>
-                                                        Merci de respecter le format demandé.
-                                                      </div>
-                                                    </center>
-                                                )}
-
-                                                {currentFileRAP && successUploadRAP && (
-                                                    <div className="progress">
-                                                      <div
-                                                          className="progress-bar bg-info progress-bar-striped progress-bar-animated"
-                                                          role="progressbar"
-                                                          aria-valuenow={progressRAP}
-                                                          aria-valuemin="0"
-                                                          aria-valuemax="100"
-                                                          style={{ width: progressRAP + "%" }}>
-                                                        {progressRAP}%
-                                                      </div>
-                                                    </div>
-                                                )}
-
-                                                {(
-                                                    showButtonRAP &&
-                                                    <center>
-                                                      <CButton  variant="outline" color="info"
-                                                                onClick={this.uploadPlagiat}
-                                                                disabled={labelRAP === ""}
-                                                                enabled={labelRAP !== ""}>
-                                                        Déposer Rapport Anti-Plagiat
-                                                      </CButton>
-                                                    </center>
-                                                )}
-
-                                              </CCol>
-
-                                              <CCol md="4" class="bg-warning py-2">
-
-                                                {(
-                                                    labelASP === "" && showUploadIconASP &&
-                                                    <center>
-                                                      <label
-                                                          htmlFor="filePickerRFV"
-                                                          className="custom-file-upload">
-                                                        <img
-                                                            src={orangeUpload}
-                                                            className="cursorPointer"
-                                                            class="img-fluid"
-                                                            width="100px"
-                                                            height="75px"
-                                                            title="Déposer Attestation Stage PFE"
-                                                            alt=""
-                                                        />
-                                                      </label>
-                                                      <br/>
-                                                      <label className="btn btn-default">
-                                                        <input
-                                                            id="filePickerRFV"
-                                                            type="file"
-                                                            className="cursorPointer"
-                                                            style={{ visibility: "hidden" }}
-                                                            accept="application/pdf"
-                                                            onChange={this.selectAttestationStagePFE}
-                                                        />
-                                                      </label>
-                                                    </center>
-                                                )}
-
-                                                {(
-                                                    labelASP !== "" &&
-                                                    <CRow>
-                                                      <CCol md="2"/>
-                                                      <CCol md="8">
-                                                        <CCard color="warning" className="text-white">
-                                                          <CCardHeader>
-                                                            <div style={{textAlign: "right"}}>
-                                                              <img  src={espritLogo}
-                                                                    className="cursorPointer"
-                                                                    class="img-fluid"
-                                                                    width="40px"
-                                                                    height="50px"/>
-                                                            </div>
-                                                          </CCardHeader>
-                                                          <CCardBody>
-                                                            <div style={{textAlign: "center"}}>
-                                                              {labelASP}
-                                                              <br/><br/>
-                                                              <span className="signature">
-                                                By {studentFullName}
-                                              </span>
-                                                              <br/>
-                                                              <span style={{fontSize: "11px", color: "black"}}>
-                                                {dateASP}
-                                              </span>
-                                                            </div>
-                                                          </CCardBody>
-                                                        </CCard>
-                                                      </CCol>
-                                                      <CCol md="2"/>
-                                                    </CRow>
-                                                )}
-
-                                                {(
-                                                    showReloadASP && depotStatus === "" &&
-                                                    <center>
-                                                      <CButton  shape="pill" color="warning" aria-expanded="true"
-                                                                onClick={() => this.modifyMyASP()}>
-                                                        <CTooltip content="Modifier mon Attestation Stage PFE" placement="top">
-                                                          <CIcon content={freeSet.cilReload}/>
-                                                        </CTooltip>
-                                                      </CButton>
-                                                    </center>
-                                                )}
-
-                                                {currentFileASP && !giveOKASP && (
-                                                    <center>
-                                                      <div className="alert alert-danger" role="alert" style= {{width: "300px"}}>
-                                                        Il ne s'agit pas d'un Fichier PDF !.
-                                                        <br/>
-                                                        Merci de respecter le format demandé.
-                                                      </div>
-                                                    </center>
-                                                )}
-
-                                                {currentFileASP && successUploadASP && (
-                                                    <div className="progress">
-                                                      <div
-                                                          className="progress-bar bg-warning progress-bar-striped progress-bar-animated"
-                                                          role="progressbar"
-                                                          aria-valuenow={progressASP}
-                                                          aria-valuemin="0"
-                                                          aria-valuemax="100"
-                                                          style={{ width: progressASP + "%" }}>
-                                                        {progressASP}%
-                                                      </div>
-                                                    </div>
-                                                )}
-
-                                                {(
-                                                    showButtonASP &&
-                                                    <center>
-                                                      <CButton  variant="outline" color="warning"
-                                                                onClick={this.uploadTrainingCertif}
-                                                                disabled={labelASP === ""}
-                                                                enabled={labelASP !== ""}>
-                                                        Déposer Attestation Stage PFE
-                                                      </CButton>
-                                                    </center>
-                                                )}
-
-
-                                              </CCol>
-
-                                              <br/>
-
-                                            </CRow>
-                                            <br/>
-                                            <Divider />
-                                          </>
-                                        }
-
-                                        {
-                                          // Show Alert DEPOSEE-VALIDEE-INCOMPLET
-                                          fileInfos.length > 1 && (
-                                              <div>
-
-                                                <CContainer>
-                                                  <CRow>
-                                                    <CCol md="9" class="bg-warning py-2">
-                                                      <div className="card-header">
-                                                        <span className="menuTitleBleuReport">Informations sur mes Rapports 3</span>
-                                                      </div>
-
-                                                      <ul className="list-group list-group-flush">
-                                                        {fileInfos.map((file, index) => (
-                                                            <li className="list-group-item" key={index}>
-                                                              <CRow>
-                                                                <CCol md="4" class="bg-warning py-2">
-                                                                  {file.includes("RLV") && (
-                                                                      <CListGroup accent>
-                                                                        <CListGroupItem accent="dark"><strong>Rapport Version 1</strong></CListGroupItem>
-                                                                      </CListGroup>
-                                                                  )}
-                                                                  {file.includes("RFV") && (
-                                                                      <CListGroup accent>
-                                                                        <CListGroupItem accent="danger"><strong>Rapport Version Finale</strong></CListGroupItem>
-                                                                      </CListGroup>
-                                                                  )}
-                                                                  {file.includes("RAP") && (
-                                                                      <CListGroup accent>
-                                                                        <CListGroupItem accent="info"><strong>Rapport Anti-Plagiat : URKUND</strong></CListGroupItem>
-                                                                      </CListGroup>
-                                                                  )}
-                                                                  {file.includes("ASP") && (
-                                                                      <CListGroup accent>
-                                                                        <CListGroupItem accent="warning"><strong>Attestation Stage PFE</strong></CListGroupItem>
-                                                                      </CListGroup>
-                                                                  )}
-                                                                </CCol>
-                                                                <CCol md="6" class="bg-warning py-2">
-                                                                  <div style={{marginTop: '13px'}}>
-                                                                    {file.substr(0, file.indexOf("UNITR1"))}.pdf
-                                                                  </div>
-                                                                </CCol>
-                                                                <CCol md="2" class="bg-warning py-2">
-                                                                  <div style={{marginTop: '13px'}}>
-                                                                    {file.substr(file.indexOf("UNITR1") + 9)}
-                                                                  </div>
-                                                                </CCol>
-                                                              </CRow>
-                                                            </li>
-                                                        ))}
-                                                      </ul>
-                                                    </CCol>
-                                                    <CCol lg="3">
-                                                      <br/>
-                                                      {(
-                                                          depotStatus === "" && fileInfos.length > 1 &&
-                                                          <center>
-                                                            <br/><br/>
-
-                                                            <span className="text-primary" style={{fontSize: "11px"}}>
-                                      Cliquer sur ce bouton pour <ins>relancer</ins> votre Dépôt.
-                                    </span>
-                                                            <br/>
-                                                            <Icon icon={handPointingDown} color="blue" width="30" height="30" />
-                                                            <br/><br/>
-
-                                                            <CButton  shape="pill" color="primary" aria-expanded="true"
-                                                                      onClick={() => this.openModalConfirmRelanceDepot()}>
-                                                              <CTooltip content="Relancer mon Dépôt" placement="top">
-                                                                <CIcon content={freeSet.cilReload}/>
-                                                              </CTooltip>
-                                                            </CButton>
-                                                          </center>
-                                                      )}
-                                                      {( depotStatus.includes("DEPOSEE") &&
-                                                          <CAlert color="info">
-                                                            <h5 className="alert-heading"><strong>Dépôt Effectué</strong></h5>
-                                                            <p>
-                                                              Votre requête a été bien déposée le <ins>{depotStatus.substring(7, depotStatus.length)}</ins>.
-                                                            </p>
-                                                            <p>
-                                                              Elle va être traitée le plus tôt possible.
-                                                            </p>
-                                                            <hr />
-                                                            <p className="mb-0">
-                                                              Merci de patienter.
-                                                            </p>
-                                                          </CAlert>
-                                                      )}
-
-                                                      {( depotStatus.includes("VALIDEE") &&
-                                                          <CAlert color="success">
-                                                            <h5 className="alert-heading"><strong>Dépôt Validé</strong></h5>
-                                                            <p>
-                                                              Votre requête a été <ins>validée</ins> le <ins>{depotStatus.substring(7, depotStatus.length)}</ins>.
-                                                            </p>
-                                                            <hr />
-                                                            <p className="mb-0">
-                                                              Bonne Chance.
-                                                            </p>
-                                                          </CAlert>
-                                                      )}
-
-                                                      {( depotStatus.includes("INCOMPLET") &&
-                                                          <CAlert color="danger">
-                                                            <h5 className="alert-heading"><strong>Dépôt Incomplet</strong></h5>
-                                                            <p>
-                                                              Votre requête a été marquée comme <ins>incomplète</ins> le <ins>{depotStatus.substring(9, 19)}</ins>.
-                                                            </p>
-                                                            <strong>Motif: </strong> {depotStatus.substring(19, depotStatus.length)}.
-                                                            <hr />
-                                                            <CButton  variant="outline" color="danger"
-                                                                      onClick={() => this.requestForUpdateMyDepot()}>
-                                                              Mettre à jour mon Dépôt
-                                                            </CButton>
-                                                          </CAlert>
-                                                      )}
-                                                    </CCol>
-                                                  </CRow>
-                                                </CContainer>
-                                              </div>
-                                          )}
-
-                                        {showPopupSuccessUpload && (
-                                            <Modal
-                                                isOpen={showPopupSuccessUpload}
-                                                contentLabel="Example Modal"
-                                                style={customStyles}
-                                            >
-                                              <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Information</span>
-                                              <hr/>
-                                              <center>
-                                                <br />
-                                                <br />
-                                                {message}
-                                                <br />
-                                                <br />
-                                                <br />
-                                                <button
-                                                    className="btn btn-sm btn-primary"
-                                                    onClick={this.closeModalSuccessUpload}
-                                                >
-                                                  Ok
-                                                </button>
-                                                <br />
-                                                <br />
-                                              </center>
-                                            </Modal>
-                                        )}
-                                        {showModalConfirmRelanceDepot && (
-                                            <Modal
-                                                isOpen={showModalConfirmRelanceDepot}
-                                                contentLabel="Example Modal"
-                                                style={customStyles}>
-                                              <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Confirmation</span>
-                                              <hr/>
-                                              <center>
-                                                <br />
-                                                <br />
-                                                Êtes-vous sûr de vouloir relancer votre dépôt ?
-                                                <br />
-                                                <br />
-                                                <br />
-                                                <button className="btn btn-sm btn-success"
-                                                        onClick={this.modifyMyDepot}>
-                                                  Oui
-                                                </button>
-                                                &nbsp;
-                                                <button className="btn btn-sm btn-danger"
-                                                        onClick={this.closeModalConfirmRelanceDepot}>
-                                                  Non
-                                                </button>
-                                                <br />
-                                                <br />
-                                              </center>
-                                            </Modal>
-                                        )}
-
-                                      </CCardBody>
-                                      <CCardFooter>
-                                        <CRow>
-                                          <CCol sm="4" md="3"/>
-                                          <CCol sm="4" md="7">
-                                            {(
-                                                depotStatus === "" && fileInfos.length === 3 &&
-                                                <>
-                                  <span className="text-success" style={{fontSize: "11px"}}>
-                                    Cliquer sur ce bouton pour <strong> valider votre dépôt </strong> ( <ins>PS:</ins> Une fois Cliquer, vous ne pourrez pas modifier votre dépôt ).
+                              <CCard accentColor="primary">
+                                <CCardBody>
+                                  <span className="text-primary" style={{fontSize: "13px", fontWeight: "bold"}}>
+                                    Liste des Rapports déposés
                                   </span>
-                                                  &nbsp;&nbsp;&nbsp;
-                                                  <Icon icon={handPointingRight} color="green" width="30" height="30" />
-                                                </>
+                                  <br/><br/>
+                                  <ul className="list-group list-group-flush">
+                                    {fileInfos.map((file, index) => (
+                                      <li className="list-group-item" key={index}>
+                                        <CRow>
+                                          <CCol md="3" class="bg-warning py-2">
+                                            {file.includes("RLV") && (
+                                              <CListGroup accent>
+                                                <CListGroupItem accent="primary"><strong>Rapport v1</strong></CListGroupItem>
+                                              </CListGroup>
                                             )}
                                           </CCol>
-                                          <CCol sm="4" md="2">
-                                            {(
-                                                depotStatus.includes("DEPOSEE") &&
-                                                <h5><CBadge color="primary">Requête Envoyée</CBadge></h5>
-                                            )}
-
-                                            {(
-                                                depotStatus.includes("VALIDEE") &&
-                                                <h5><CBadge color="success">Dépôt Validé</CBadge></h5>
-                                            )}
-
-                                            {(
-                                                depotStatus.includes("INCOMPLET") &&
-                                                <h5><CBadge color="danger">Dépôt Incomplet</CBadge></h5>
-                                            )}
-                                            {(
-                                                (depotStatus === "" ) &&
-                                                <CButton  color="success"
-                                                          disabled={fileInfos.length !== 4}
-                                                          enabled={fileInfos.length === 4}
-                                                          className="float-right"
-                                                          onClick={() => this.validateMyDepot()}>
-                                                  Je valide 2 - {fileInfos.length}
-                                                </CButton>
-                                            )}
-
-                                            {(
-                                                showSpinnerWaitingDepot &&
-                                                <Backdrop className={classes.backdrop} open={showSpinnerWaitingDepot} >
-                                                  <CircularProgress color="inherit" />
-                                                </Backdrop>
-                                            )}
-
-
-
+                                          <CCol md="5" class="bg-warning py-2">
+                                            <div style={{marginTop: '13px'}}>{file.substr(0, file.indexOf("UNITR1"))}.pdf</div>
+                                          </CCol>
+                                          <CCol md="3" class="bg-warning py-2">
+                                            <div style={{marginTop: '13px'}}>{file.substr(file.indexOf("UNITR1") + 9)}</div>
+                                          </CCol>
+                                          <CCol md="1" class="bg-warning py-2">
+                                            <center>
+                                              <CButton  shape="pill" color="primary" aria-expanded="true"
+                                                        onClick={() => this.modifyMyRLV()}>
+                                                <CTooltip content="Modifier mon Rapport Version 1" placement="top">
+                                                  <CIcon content={freeSet.cilReload}/>
+                                                </CTooltip>
+                                              </CButton>
+                                            </center>
                                           </CCol>
                                         </CRow>
-                                      </CCardFooter>
-                                    </CCard>
-                                )}
-
-                                {( (fileInfos.length === 5) && itsITandEM === "NO" &&
-                                    <CCard accentColor="info">
-
-                                      <CCardBody>
-
-                                        {fileInfos.length >= 0  &&(
-                                            <>
-                                              <CRow>
-                                                <CCol md="3" class="bg-warning py-2">
-                                                  <NotificationContainer/>
-                                                  {(
-                                                      labelRFV === "" && showUploadIconRFV &&
-                                                      <center>
-                                                        <label
-                                                            htmlFor="filePickerRAP"
-                                                            className="custom-file-upload">
-                                                          <img
-                                                              src={redUpload}
-                                                              className="cursorPointer"
-                                                              class="img-fluid"
-                                                              width="100px"
-                                                              height="75px"
-                                                              title="Déposer Rapport Version Finale"
-                                                              alt=""
-                                                          />
-                                                        </label>
-                                                        <br/>
-                                                        <label className="btn btn-default">
-                                                          <input
-                                                              id="filePickerRAP"
-                                                              type="file"
-                                                              className="cursorPointer"
-                                                              style={{ visibility: "hidden" }}
-                                                              accept="application/pdf"
-                                                              onChange={this.selectReportFinalVersion}
-                                                          />
-                                                        </label>
-                                                      </center>
-                                                  )}
-
-                                                  {(
-                                                      labelRFV !== "" &&
-                                                      <CRow>
-                                                        <CCol md="1"/>
-                                                        <CCol md="10">
-                                                          <CCard color="danger" className="text-white">
-                                                            <CCardHeader>
-                                                              <div style={{textAlign: "right"}}>
-                                                                <img  src={espritLogo}
-                                                                      className="cursorPointer"
-                                                                      class="img-fluid"
-                                                                      width="40px"
-                                                                      height="50px"/>
-                                                              </div>
-                                                            </CCardHeader>
-                                                            <CCardBody>
-                                                              <div style={{textAlign: "center"}}>
-                                                                {labelRFV}
-                                                                <br/><br/>
-                                                                <span className="signature">
-                                                By {studentFullName}
-                                              </span>
-                                                                <br/>
-                                                                <span style={{fontSize: "11px", color: "black"}}>
-                                                {dateRFV}
-                                              </span>
-                                                              </div>
-                                                            </CCardBody>
-                                                          </CCard>
-                                                        </CCol>
-                                                        <CCol md="1"/>
-                                                      </CRow>
-                                                  )}
-
-                                                  {(
-                                                      showReloadRFV && depotStatus === "" &&
-                                                      <center>
-                                                        <CButton  shape="pill" color="danger" aria-expanded="true"
-                                                                  onClick={() => this.modifyMyRFV()}>
-                                                          <CTooltip content="Modifier mon Rapport Version Finale" placement="top">
-                                                            <CIcon content={freeSet.cilReload}/>
-                                                          </CTooltip>
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileRFV && !giveOKRFV && (
-                                                      <center>
-                                                        <div className="alert alert-danger" role="alert" style= {{width: "200px"}}>
-                                                          Il ne s'agit pas d'un Fichier PDF !.
-                                                          <br/>
-                                                          Merci de respecter le format demandé.
-                                                        </div>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileRFV && successUploadRFV && (
-                                                      <div className="progress">
-                                                        <div
-                                                            className="progress-bar bg-danger progress-bar-striped progress-bar-animated"
-                                                            role="progressbar"
-                                                            aria-valuenow={progressRFV}
-                                                            aria-valuemin="0"
-                                                            aria-valuemax="100"
-                                                            style={{ width: progressRFV + "%" }}>
-                                                          {progressRFV}%
-                                                        </div>
-                                                      </div>
-                                                  )}
-
-                                                  {showButtonRFV && giveOKRFV && labelRFV !== "" && (
-                                                      <center>
-                                                        <Checkbox
-                                                            checked={this.state.checked}
-                                                            color="secondary"
-                                                            onChange={(e) =>
-                                                                this.reportConfidentialHandler(e)
-                                                            }
-                                                            inputProps={{ "aria-label": "secondary checkbox" }}
-                                                        />
-                                                        &nbsp;&nbsp; Confidendial Upload
-                                                      </center>
-                                                  )}
-
-                                                  {(
-                                                      showButtonRFV &&
-                                                      <center>
-                                                        <CButton  variant="outline" color="danger"
-                                                                  onClick={this.uploadReportFinalVersion}
-                                                                  disabled={labelRFV === ""}
-                                                                  enabled={labelRFV !== ""}>
-                                                          Déposer Rapport Version Finale
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-
-                                                </CCol>
-
-                                                <CCol md="3" class="bg-warning py-2">
-                                                  {(
-                                                      labelRAP === "" && showUploadIconRAP &&
-                                                      <center>
-                                                        <label
-                                                            htmlFor="filePickerASP"
-                                                            className="custom-file-upload">
-                                                          <img
-                                                              src={blueLightUpload}
-                                                              className="cursorPointer"
-                                                              class="img-fluid"
-                                                              width="100px"
-                                                              height="75px"
-                                                              title="Déposer Rapport Anti-Plagiat"
-                                                              alt=""
-                                                          />
-                                                        </label>
-                                                        <br/>
-                                                        <label className="btn btn-default">
-                                                          <input
-                                                              id="filePickerASP"
-                                                              type="file"
-                                                              className="cursorPointer"
-                                                              style={{ visibility: "hidden" }}
-                                                              accept="application/pdf"
-                                                              onChange={this.selectReportAntiPlagiat}
-                                                          />
-                                                        </label>
-                                                      </center>
-                                                  )}
-
-                                                  {(
-                                                      labelRAP !== "" &&
-                                                      <CRow>
-                                                        <CCol md="1"/>
-                                                        <CCol md="10">
-                                                          <CCard color="info" className="text-white">
-                                                            <CCardHeader>
-                                                              <div style={{textAlign: "right"}}>
-                                                                <img  src={espritLogo}
-                                                                      className="cursorPointer"
-                                                                      class="img-fluid"
-                                                                      width="40px"
-                                                                      height="50px"/>
-                                                              </div>
-                                                            </CCardHeader>
-                                                            <CCardBody>
-                                                              <div style={{textAlign: "center"}}>
-                                                                {labelRAP}
-                                                                <br/><br/>
-                                                                <span className="signature">
-                                                By {studentFullName}
-                                              </span>
-                                                                <br/>
-                                                                <span style={{fontSize: "11px", color: "black"}}>
-                                                {dateRAP}
-                                              </span>
-                                                              </div>
-                                                            </CCardBody>
-                                                          </CCard>
-                                                        </CCol>
-                                                        <CCol md="1"/>
-                                                      </CRow>
-                                                  )}
-
-                                                  {(
-                                                      showReloadRAP && depotStatus === "" &&
-                                                      <center>
-                                                        <CButton  shape="pill" color="info" aria-expanded="true"
-                                                                  onClick={() => this.modifyMyRAP()}>
-                                                          <CTooltip content="Modifier mon Rapport Anti-Plagiat" placement="top">
-                                                            <CIcon content={freeSet.cilReload}/>
-                                                          </CTooltip>
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileRAP && !giveOKRAP && (
-                                                      <center>
-                                                        <div className="alert alert-danger" role="alert" style= {{width: "200px"}}>
-                                                          Il ne s'agit pas d'un Fichier PDF !.
-                                                          <br/>
-                                                          Merci de respecter le format demandé.
-                                                        </div>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileRAP && successUploadRAP && (
-                                                      <div className="progress">
-                                                        <div
-                                                            className="progress-bar bg-info progress-bar-striped progress-bar-animated"
-                                                            role="progressbar"
-                                                            aria-valuenow={progressRAP}
-                                                            aria-valuemin="0"
-                                                            aria-valuemax="100"
-                                                            style={{ width: progressRAP + "%" }}>
-                                                          {progressRAP}%
-                                                        </div>
-                                                      </div>
-                                                  )}
-
-                                                  {(
-                                                      showButtonRAP &&
-                                                      <center>
-                                                        <CButton  variant="outline" color="info"
-                                                                  onClick={this.uploadPlagiat}
-                                                                  disabled={labelRAP === ""}
-                                                                  enabled={labelRAP !== ""}>
-                                                          Déposer Rapport Anti-Plagiat
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-                                                </CCol>
-
-                                                <CCol md="3" class="bg-warning py-2">
-
-                                                  {(
-                                                      labelASP === "" && showUploadIconASP &&
-                                                      <center>
-                                                        <label
-                                                            htmlFor="filePickerRFV"
-                                                            className="custom-file-upload">
-                                                          <img
-                                                              src={orangeUpload}
-                                                              className="cursorPointer"
-                                                              class="img-fluid"
-                                                              width="100px"
-                                                              height="75px"
-                                                              title="Déposer Attestation Stage PFE"
-                                                              alt=""
-                                                          />
-                                                        </label>
-                                                        <br/>
-                                                        <label className="btn btn-default">
-                                                          <input
-                                                              id="filePickerRFV"
-                                                              type="file"
-                                                              className="cursorPointer"
-                                                              style={{ visibility: "hidden" }}
-                                                              accept="application/pdf"
-                                                              onChange={this.selectAttestationStagePFE}
-                                                          />
-                                                        </label>
-                                                      </center>
-                                                  )}
-
-                                                  {(
-                                                      labelASP !== "" &&
-                                                      <CRow>
-                                                        <CCol md="1"/>
-                                                        <CCol md="10">
-                                                          <CCard color="warning" className="text-white">
-                                                            <CCardHeader>
-                                                              <div style={{textAlign: "right"}}>
-                                                                <img  src={espritLogo}
-                                                                      className="cursorPointer"
-                                                                      class="img-fluid"
-                                                                      width="40px"
-                                                                      height="50px"/>
-                                                              </div>
-                                                            </CCardHeader>
-                                                            <CCardBody>
-                                                              <div style={{textAlign: "center"}}>
-                                                                {labelASP}
-                                                                <br/><br/>
-                                                                <span className="signature">
-                                                By {studentFullName}
-                                              </span>
-                                                                <br/>
-                                                                <span style={{fontSize: "11px", color: "black"}}>
-                                                {dateASP}
-                                              </span>
-                                                              </div>
-                                                            </CCardBody>
-                                                          </CCard>
-                                                        </CCol>
-                                                        <CCol md="1"/>
-                                                      </CRow>
-                                                  )}
-
-                                                  {(
-                                                      showReloadASP && depotStatus === "" &&
-                                                      <center>
-                                                        <CButton  shape="pill" color="warning" aria-expanded="true"
-                                                                  onClick={() => this.modifyMyASP()}>
-                                                          <CTooltip content="Modifier mon Attestation Stage PFE" placement="top">
-                                                            <CIcon content={freeSet.cilReload}/>
-                                                          </CTooltip>
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileASP && !giveOKASP && (
-                                                      <center>
-                                                        <div className="alert alert-danger" role="alert" style= {{width: "200px"}}>
-                                                          Il ne s'agit pas d'un Fichier PDF !.
-                                                          <br/>
-                                                          Merci de respecter le format demandé.
-                                                        </div>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileASP && successUploadASP && (
-                                                      <div className="progress">
-                                                        <div
-                                                            className="progress-bar bg-warning progress-bar-striped progress-bar-animated"
-                                                            role="progressbar"
-                                                            aria-valuenow={progressASP}
-                                                            aria-valuemin="0"
-                                                            aria-valuemax="100"
-                                                            style={{ width: progressASP + "%" }}>
-                                                          {progressASP}%
-                                                        </div>
-                                                      </div>
-                                                  )}
-
-                                                  {(
-                                                      showButtonASP &&
-                                                      <center>
-                                                        <CButton  variant="outline" color="warning"
-                                                                  onClick={this.uploadTrainingCertif}
-                                                                  disabled={labelASP === ""}
-                                                                  enabled={labelASP !== ""}>
-                                                          Déposer Attestation Stage PFE
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-
-                                                </CCol>
-
-                                                <CCol md="3" class="bg-primary py-2">
-                                                  {(
-                                                      labelDCS === "" && showUploadIconDCS &&
-                                                      <center>
-                                                        <label
-                                                            htmlFor="filePickerDCS"
-                                                            className="custom-file-upload">
-                                                          <img
-                                                              src={blueBoldUpload}
-                                                              className="cursorPointer"
-                                                              class="img-fluid"
-                                                              width="100px"
-                                                              height="75px"
-                                                              title="Déposer Dossier ou Document Optionnel"
-                                                              alt=""
-                                                          />
-                                                        </label>
-                                                        <br/>
-                                                        <label className="btn btn-default">
-                                                          <input
-                                                              id="filePickerDCS"
-                                                              type="file"
-                                                              className="cursorPointer"
-                                                              style={{ visibility: "hidden" }}
-                                                              onChange={this.selectDossierDocumentSupplemenaire}
-                                                          />
-                                                        </label>
-                                                      </center>
-                                                  )}
-
-                                                  {(
-                                                      labelDCS !== "" &&
-                                                      <CRow>
-                                                        <CCol md="1"/>
-                                                        <CCol md="10">
-                                                          <CCard color="primary" className="text-white">
-                                                            <CCardHeader>
-                                                              <div style={{textAlign: "right"}}>
-                                                                <img  src={espritLogo}
-                                                                      className="cursorPointer"
-                                                                      class="img-fluid"
-                                                                      width="40px"
-                                                                      height="50px"/>
-                                                              </div>
-                                                            </CCardHeader>
-                                                            <CCardBody>
-                                                              <div style={{textAlign: "center"}}>
-                                                                {labelDCS}
-                                                                <br/><br/>
-                                                                <span className="signature">
-                                                By {studentFullName}
-                                              </span>
-                                                                <br/>
-                                                                <span style={{fontSize: "11px", color: "black"}}>
-                                                {dateDCS}
-                                              </span>
-                                                              </div>
-                                                            </CCardBody>
-                                                          </CCard>
-                                                        </CCol>
-                                                        <CCol md="1"/>
-                                                      </CRow>
-                                                  )}
-
-                                                  {(
-                                                      showReloadDCS && depotStatus === "" &&
-                                                      <center>
-                                                        <CButton  shape="pill" color="primary" aria-expanded="true"
-                                                                  onClick={() => this.modifyMyDCS()}>
-                                                          <CTooltip content="Modifier mon Supplément Optionnel" placement="top">
-                                                            <CIcon content={freeSet.cilReload}/>
-                                                          </CTooltip>
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileDCS && successUploadDCS && (
-                                                      <div className="progress">
-                                                        <div
-                                                            className="progress-bar progress-bar-striped progress-bar-animated"
-                                                            role="progressbar"
-                                                            aria-valuenow={progressDCS}
-                                                            aria-valuemin="0"
-                                                            aria-valuemax="100"
-                                                            style={{ width: progressDCS + "%" }}>
-                                                          {progressDCS}%
-                                                        </div>
-                                                      </div>
-                                                  )}
-
-                                                  {(
-                                                      showButtonDCS &&
-                                                      <center>
-                                                        <CButton  variant="outline" color="primary"
-                                                                  onClick={this.uploadSupplement}
-                                                                  disabled={labelDCS === ""}
-                                                                  enabled={labelDCS !== ""}>
-                                                          Déposer Dossier Technique 2
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-
-                                                </CCol>
-
-                                              </CRow>
-                                              <br/>
-                                              {(fileInfos.length > 0 &&
-                                                  <Divider />
-                                              )}
-
-                                            </>
-                                        )}
-
-                                        {showPopupSuccessUpload && (
-                                            <Modal
-                                                isOpen={showPopupSuccessUpload}
-                                                contentLabel="Example Modal"
-                                                style={customStyles}
-                                            >
-                                              <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Information</span>
-                                              <hr/>
-                                              <center>
-                                                <br />
-                                                <br />
-                                                {message}
-                                                <br />
-                                                <br />
-                                                <br />
-                                                <button
-                                                    className="btn btn-sm btn-primary"
-                                                    onClick={this.closeModalSuccessUpload}
-                                                >
-                                                  Ok
-                                                </button>
-                                                <br />
-                                                <br />
-                                              </center>
-                                            </Modal>
-                                        )}
-
-                                        {showModalConfirmRelanceDepot && (
-                                            <Modal
-                                                isOpen={showModalConfirmRelanceDepot}
-                                                contentLabel="Example Modal"
-                                                style={customStyles}
-                                            >
-                                              <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Confirmation</span>
-                                              <hr/>
-                                              <center>
-                                                <br />
-                                                <br />
-                                                Êtes-vous sûr de vouloir relancer votre dépôt ?
-                                                <br />
-                                                <br />
-                                                <br />
-                                                <button className="btn btn-sm btn-success"
-                                                        onClick={this.modifyMyDepot}>
-                                                  Oui
-                                                </button>
-                                                &nbsp;
-                                                <button className="btn btn-sm btn-danger"
-                                                        onClick={this.closeModalConfirmRelanceDepot}>
-                                                  Non
-                                                </button>
-                                                <br />
-                                                <br />
-                                              </center>
-                                            </Modal>
-                                        )}
-
-                                        {fileInfos.length >0 && (
-                                            <div>
-
-                                              <CContainer>
-                                                <CRow>
-                                                  <CCol md="9" class="bg-warning py-2">
-                                                    <div className="card-header">
-                                                      <span className="menuTitleGreyReport">Informations sur mes Rapports 4</span>
-                                                    </div>
-
-                                                    <ul className="list-group list-group-flush">
-                                                      {fileInfos.map((file, index) => (
-                                                          <li className="list-group-item" key={index}>
-                                                            <CRow>
-                                                              <CCol md="4" class="bg-warning py-2">
-                                                                {file.includes("RLV") && (
-                                                                    <CListGroup accent>
-                                                                      <CListGroupItem accent="dark"><strong>Rapport Version 1</strong></CListGroupItem>
-                                                                    </CListGroup>
-                                                                )}
-                                                                {file.includes("RFV") && (
-                                                                    <CListGroup accent>
-                                                                      <CListGroupItem accent="danger"><strong>Rapport Version Finale</strong></CListGroupItem>
-                                                                    </CListGroup>
-                                                                )}
-                                                                {file.includes("RAP") && (
-                                                                    <CListGroup accent>
-                                                                      <CListGroupItem accent="info"><strong>Rapport Anti-Plagiat : URKUND</strong></CListGroupItem>
-                                                                    </CListGroup>
-                                                                )}
-                                                                {file.includes("ASP") && (
-                                                                    <CListGroup accent>
-                                                                      <CListGroupItem accent="warning"><strong>Attestation Stage PFE</strong></CListGroupItem>
-                                                                    </CListGroup>
-                                                                )}
-                                                                {file.includes("DCS") && (
-                                                                    <CListGroup accent>
-                                                                      <CListGroupItem accent="primary"><strong>Dossier Technique</strong></CListGroupItem>
-                                                                    </CListGroup>
-                                                                )}
-                                                              </CCol>
-                                                              <CCol md="6" class="bg-warning py-2">
-                                                                <div style={{marginTop: '13px'}}>
-                                                                  {file.substr(0, file.indexOf("UNITR1"))}.pdf
-                                                                </div>
-                                                              </CCol>
-                                                              <CCol md="2" class="bg-warning py-2">
-                                                                <div style={{marginTop: '13px'}}>
-                                                                  {file.substr(file.indexOf("UNITR1") + 9)}
-                                                                </div>
-                                                              </CCol>
-                                                            </CRow>
-                                                          </li>
-                                                      ))}
-                                                    </ul>
-                                                  </CCol>
-                                                  <CCol lg="3">
-                                                    <br/>
-                                                    {(
-                                                        depotStatus === "" &&
-                                                        <center>
-                                                          <br/><br/>
-
-                                                          <span className="text-dark" style={{fontSize: "11px"}}>
-                                      Cliquer sur ce bouton pour <ins>relancer</ins> votre Dépôt.
-                                    </span>
-                                                          <br/>
-                                                          <Icon icon={handPointingDown} color="grey" width="30" height="30" />
-                                                          <br/><br/>
-
-                                                          <CButton  shape="pill" color="dark" aria-expanded="true"
-                                                                    onClick={() => this.openModalConfirmRelanceDepot()}>
-                                                            <CTooltip content="Relancer mon Dépôt" placement="top">
-                                                              <CIcon content={freeSet.cilReload}/>
-                                                            </CTooltip>
-                                                          </CButton>
-                                                        </center>
-                                                    )}
-                                                    {( depotStatus.includes("DEPOSEE") &&
-                                                        <CAlert color="info">
-                                                          <h5 className="alert-heading"><strong>Dépôt Effectué</strong></h5>
-                                                          <p>
-                                                            Votre requête a été bien déposée le <ins>{depotStatus.substring(7, depotStatus.length)}</ins>.
-                                                          </p>
-                                                          <p>
-                                                            Elle va être traitée le plus tôt possible.
-                                                          </p>
-                                                          <hr />
-                                                          <p className="mb-0">
-                                                            Merci de patienter.
-                                                          </p>
-                                                        </CAlert>
-                                                    )}
-
-                                                    {( depotStatus.includes("VALIDEE") &&
-                                                        <CAlert color="success">
-                                                          <h5 className="alert-heading"><strong>Dépôt Validé</strong></h5>
-                                                          <p>
-                                                            Votre requête a été <ins>validée</ins> le <ins>{depotStatus.substring(7, depotStatus.length)}</ins>.
-                                                          </p>
-                                                          <hr />
-                                                          <p className="mb-0">
-                                                            Bonne Chance.
-                                                          </p>
-                                                        </CAlert>
-                                                    )}
-
-                                                    {( depotStatus.includes("INCOMPLET") &&
-                                                        <CAlert color="danger">
-                                                          <h5 className="alert-heading"><strong>Dépôt Incomplet</strong></h5>
-                                                          <p>
-                                                            Votre requête a été marquée comme <ins>incomplète</ins> le <ins>{depotStatus.substring(9, 19)}</ins>.
-                                                          </p>
-                                                          <strong>Motif: </strong> {depotStatus.substring(19, depotStatus.length)}.
-                                                          <hr />
-                                                          <CButton  variant="outline" color="danger"
-                                                                    onClick={() => this.requestForUpdateMyDepot()}>
-                                                            Mettre à jour mon Dépôt
-                                                          </CButton>
-                                                        </CAlert>
-                                                    )}
-                                                  </CCol>
-                                                </CRow>
-                                              </CContainer>
-                                            </div>
-                                        )}
-
-                                      </CCardBody>
-                                      <CCardFooter>
-                                        <CRow>
-                                          <CCol sm="4" md="3"/>
-                                          <CCol sm="4" md="7">
-                                            {(
-                                                depotStatus === "" && fileInfos.length === 3 &&
-                                                <>
-                                  <span className="text-success" style={{fontSize: "11px"}}>
-                                    Cliquer sur ce bouton pour <strong> valider votre dépôt </strong> ( <ins>PS:</ins> Une fois Cliquer, vous ne pourrez pas modifier votre dépôt ).
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </CCardBody>
+                                <CCardFooter>
+                        <span style={{color: "#666666", fontSize: "11px", fontStyle: "italic"}} className="float-right">
+                          Today is {currentDay}
+                        </span>
+                                </CCardFooter>
+                              </CCard>
+                            </CCol>
+                            <CCol md="4">
+                              <VerticalTimeline>
+                                <VerticalTimelineElement
+                                  className="vertical-timeline-element--work"
+                                  date={dateDepotRapportFormedV2}
+                                  contentStyle={{ background: 'rgb(204, 0, 204)', color: '#000000' }}
+                                  contentArrowStyle={{ borderRight: '10px solid  rgb(204, 0, 204)' }}
+                                  iconStyle={{ background: 'rgb(204, 0, 204)', color: '#fff', width: '10px' , height: '10px', marginLeft: '-4px', marginTop: '27px'}}>
+                                  <h6 className="vertical-timeline-element-title">Date Dépôt Rapport Version 2</h6>
+                                  <span style={{color: "#d9d9d9", fontSize: "11px", fontStyle: "italic"}}>
+                                    24ème Semaine
                                   </span>
-                                                  &nbsp;&nbsp;&nbsp;
-                                                  <Icon icon={handPointingRight} color="green" width="30" height="30" />
-                                                </>
-                                            )}
-                                          </CCol>
-                                          <CCol sm="4" md="2">
-                                            {(
-                                                depotStatus.includes("DEPOSEE") &&
-                                                <h5><CBadge color="primary">Requête Envoyée</CBadge></h5>
-                                            )}
+                                </VerticalTimelineElement>
 
-                                            {(
-                                                depotStatus.includes("VALIDEE") &&
-                                                <h5><CBadge color="success">Dépôt Validé</CBadge></h5>
-                                            )}
-
-                                            {(
-                                                depotStatus.includes("INCOMPLET") &&
-                                                <h5><CBadge color="danger">Dépôt Incomplet</CBadge></h5>
-                                            )}
-                                            {(
-                                                depotStatus === ""  && itsITandEM === "YES" &&
-                                                <CButton  color="success"
-                                                          disabled={fileInfos.length !== 4}
-                                                          enabled={fileInfos.length === 4}
-                                                          className="float-right"
-                                                          onClick={() => this.validateMyDepot()}>
-                                                  Je valide 2 - {fileInfos.length}
-                                                </CButton>
-                                            )}
-
-                                            {(
-                                                depotStatus === ""  && itsITandEM === "NO" &&
-                                                <CButton  color="success"
-                                                          disabled={fileInfos.length < 5}
-                                                          enabled={fileInfos.length > 4}
-                                                          className="float-right"
-                                                          onClick={() => this.validateMyDepot()}>
-                                                  Je valide 3 - {fileInfos.length}
-                                                </CButton>
-                                            )}
-
-                                            {(
-                                                showSpinnerWaitingDepot &&
-                                                <Backdrop className={classes.backdrop} open={showSpinnerWaitingDepot} >
-                                                  <CircularProgress color="inherit" />
-                                                </Backdrop>
-                                            )}
-
-
-
-                                          </CCol>
-                                        </CRow>
-                                      </CCardFooter>
-                                    </CCard>
-                                )}
-                                <CModal
-                                    show={showPopupUpdateDepot}
-                                    onClose={() => this.updateMyDepotNO()}
-                                    className={classes.backdrop1}
-                                    color="secondary">
-                                  <CModalHeader closeButton>
-                                    <CModalTitle>Confirmation</CModalTitle>
-                                  </CModalHeader>
-                                  <CModalBody>
-                                    Voulez-vous mettre à jour votre dépôt <ins>en tenir compte</ins> la cause de signaler votre requête précédante comme incomplète ?.
-                                    <br/><br/>
-                                  </CModalBody>
-                                  <CModalFooter>
-                                    <CButton color="success" onClick={() => this.updateMyDepotYES()}>
-                                      Oui
-                                    </CButton>
-                                    &nbsp;
-                                    <CButton color="danger" onClick={() => this.updateMyDepotNO()}>
-                                      Pas Maintenant
-                                    </CButton>
-                                  </CModalFooter>
-                                </CModal>
-                              </>
-                            }
-
-                            {
-                              // After v2 + INCOMPLETE
-                              timeForDepotRapportV2.trim() === "AFTERTIMEV2" && (depotStatus.includes("DEPOSEE") || depotStatus.includes("NOTYET")) &&
-                              <>
-
-                                {(
-                                    fileInfos.length === 4 && itsITandEM === "YES" &&
-                                    <CCard accentColor="info">
-
-                                      <CCardBody>
-                                        {
-                                          fileInfos.length > 1  &&  // Upload Report v2 + URKUND + AS
-                                          <>
-                                            <CRow>
-                                              <CCol md="4" class="bg-warning py-2">
-                                                <NotificationContainer/>
-                                                {(
-                                                    labelRFV === "" && showUploadIconRFV &&
-                                                    <center>
-                                                      <label
-                                                          htmlFor="filePickerRAP"
-                                                          className="custom-file-upload">
-                                                        <img
-                                                            src={redUpload}
-                                                            className="cursorPointer"
-                                                            class="img-fluid"
-                                                            width="100px"
-                                                            height="75px"
-                                                            title="Déposer Rapport Version Finale"
-                                                            alt=""
-                                                        />
-                                                      </label>
-                                                      <br/>
-                                                      <label className="btn btn-default">
-                                                        <input
-                                                            id="filePickerRAP"
-                                                            type="file"
-                                                            className="cursorPointer"
-                                                            style={{ visibility: "hidden" }}
-                                                            accept="application/pdf"
-                                                            onChange={this.selectReportFinalVersion}
-                                                        />
-                                                      </label>
-                                                    </center>
-                                                )}
-
-                                                {(
-                                                    labelRFV !== "" &&
-                                                    <CRow>
-                                                      <CCol md="2"/>
-                                                      <CCol md="8">
-                                                        <CCard color="danger" className="text-white">
-                                                          <CCardHeader>
-                                                            <div style={{textAlign: "right"}}>
-                                                              <img  src={espritLogo}
-                                                                    className="cursorPointer"
-                                                                    class="img-fluid"
-                                                                    width="40px"
-                                                                    height="50px"/>
-                                                            </div>
-                                                          </CCardHeader>
-                                                          <CCardBody>
-                                                            <div style={{textAlign: "center"}}>
-                                                              {labelRFV}
-                                                              <br/><br/>
-                                                              <span className="signature">
-                                                By {studentFullName}
-                                              </span>
-                                                              <br/>
-                                                              <span style={{fontSize: "11px", color: "black"}}>
-                                                {dateRFV}
-                                              </span>
-                                                            </div>
-                                                          </CCardBody>
-                                                        </CCard>
-                                                      </CCol>
-                                                      <CCol md="2"/>
-                                                    </CRow>
-                                                )}
-
-                                                {(
-                                                    showReloadRFV && depotStatus === "" &&
-                                                    <center>
-                                                      <CButton  shape="pill" color="danger" aria-expanded="true"
-                                                                onClick={() => this.modifyMyRFV()}>
-                                                        <CTooltip content="Modifier mon Rapport Version Finale" placement="top">
-                                                          <CIcon content={freeSet.cilReload}/>
-                                                        </CTooltip>
-                                                      </CButton>
-                                                    </center>
-                                                )}
-
-                                                {currentFileRFV && !giveOKRFV && (
-                                                    <center>
-                                                      <div className="alert alert-danger" role="alert" style= {{width: "300px"}}>
-                                                        Il ne s'agit pas d'un Fichier PDF !.
-                                                        <br/>
-                                                        Merci de respecter le format demandé.
-                                                      </div>
-                                                    </center>
-                                                )}
-
-                                                {currentFileRFV && successUploadRFV && (
-                                                    <div className="progress">
-                                                      <div
-                                                          className="progress-bar bg-danger progress-bar-striped progress-bar-animated"
-                                                          role="progressbar"
-                                                          aria-valuenow={progressRFV}
-                                                          aria-valuemin="0"
-                                                          aria-valuemax="100"
-                                                          style={{ width: progressRFV + "%" }}>
-                                                        {progressRFV}%
-                                                      </div>
-                                                    </div>
-                                                )}
-
-                                                {showButtonRFV && giveOKRFV && labelRFV !== "" && (
-                                                    <center>
-                                                      <Checkbox
-                                                          checked={this.state.checked}
-                                                          color="secondary"
-                                                          onChange={(e) =>
-                                                              this.reportConfidentialHandler(e)
-                                                          }
-                                                          inputProps={{ "aria-label": "secondary checkbox" }}
-                                                      />
-                                                      &nbsp;&nbsp; Confidendial Upload
-                                                    </center>
-                                                )}
-
-                                                {(
-                                                    showButtonRFV &&
-                                                    <center>
-                                                      <CButton  variant="outline" color="danger"
-                                                                onClick={this.uploadReportFinalVersion}
-                                                                disabled={labelRFV === ""}
-                                                                enabled={labelRFV !== ""}>
-                                                        Déposer Rapport Version Finale
-                                                      </CButton>
-                                                    </center>
-                                                )}
-
-
-                                              </CCol>
-
-                                              <CCol md="4" class="bg-warning py-2">
-                                                {(
-                                                    labelRAP === "" && showUploadIconRAP &&
-                                                    <center>
-                                                      <label
-                                                          htmlFor="filePickerASP"
-                                                          className="custom-file-upload">
-                                                        <img
-                                                            src={blueLightUpload}
-                                                            className="cursorPointer"
-                                                            class="img-fluid"
-                                                            width="100px"
-                                                            height="75px"
-                                                            title="Déposer Rapport Anti-Plagiat"
-                                                            alt=""
-                                                        />
-                                                      </label>
-                                                      <br/>
-                                                      <label className="btn btn-default">
-                                                        <input
-                                                            id="filePickerASP"
-                                                            type="file"
-                                                            className="cursorPointer"
-                                                            style={{ visibility: "hidden" }}
-                                                            accept="application/pdf"
-                                                            onChange={this.selectReportAntiPlagiat}
-                                                        />
-                                                      </label>
-                                                    </center>
-                                                )}
-
-                                                {(
-                                                    labelRAP !== "" &&
-                                                    <CRow>
-                                                      <CCol md="2"/>
-                                                      <CCol md="8">
-                                                        <CCard color="info" className="text-white">
-                                                          <CCardHeader>
-                                                            <div style={{textAlign: "right"}}>
-                                                              <img  src={espritLogo}
-                                                                    className="cursorPointer"
-                                                                    class="img-fluid"
-                                                                    width="40px"
-                                                                    height="50px"/>
-                                                            </div>
-                                                          </CCardHeader>
-                                                          <CCardBody>
-                                                            <div style={{textAlign: "center"}}>
-                                                              {labelRAP}
-                                                              <br/><br/>
-                                                              <span className="signature">
-                                                By {studentFullName}
-                                              </span>
-                                                              <br/>
-                                                              <span style={{fontSize: "11px", color: "black"}}>
-                                                {dateRAP}
-                                              </span>
-                                                            </div>
-                                                          </CCardBody>
-                                                        </CCard>
-                                                      </CCol>
-                                                      <CCol md="2"/>
-                                                    </CRow>
-                                                )}
-
-                                                {(
-                                                    showReloadRAP && depotStatus === "" &&
-                                                    <center>
-                                                      <CButton  shape="pill" color="info" aria-expanded="true"
-                                                                onClick={() => this.modifyMyRAP()}>
-                                                        <CTooltip content="Modifier mon Rapport Anti-Plagiat" placement="top">
-                                                          <CIcon content={freeSet.cilReload}/>
-                                                        </CTooltip>
-                                                      </CButton>
-                                                    </center>
-                                                )}
-
-                                                {currentFileRAP && !giveOKRAP && (
-                                                    <center>
-                                                      <div className="alert alert-danger" role="alert" style= {{width: "300px"}}>
-                                                        Il ne s'agit pas d'un Fichier PDF !.
-                                                        <br/>
-                                                        Merci de respecter le format demandé.
-                                                      </div>
-                                                    </center>
-                                                )}
-
-                                                {currentFileRAP && successUploadRAP && (
-                                                    <div className="progress">
-                                                      <div
-                                                          className="progress-bar bg-info progress-bar-striped progress-bar-animated"
-                                                          role="progressbar"
-                                                          aria-valuenow={progressRAP}
-                                                          aria-valuemin="0"
-                                                          aria-valuemax="100"
-                                                          style={{ width: progressRAP + "%" }}>
-                                                        {progressRAP}%
-                                                      </div>
-                                                    </div>
-                                                )}
-
-                                                {(
-                                                    showButtonRAP &&
-                                                    <center>
-                                                      <CButton  variant="outline" color="info"
-                                                                onClick={this.uploadPlagiat}
-                                                                disabled={labelRAP === ""}
-                                                                enabled={labelRAP !== ""}>
-                                                        Déposer Rapport Anti-Plagiat
-                                                      </CButton>
-                                                    </center>
-                                                )}
-
-                                              </CCol>
-
-                                              <CCol md="4" class="bg-warning py-2">
-
-                                                {(
-                                                    labelASP === "" && showUploadIconASP &&
-                                                    <center>
-                                                      <label
-                                                          htmlFor="filePickerRFV"
-                                                          className="custom-file-upload">
-                                                        <img
-                                                            src={orangeUpload}
-                                                            className="cursorPointer"
-                                                            class="img-fluid"
-                                                            width="100px"
-                                                            height="75px"
-                                                            title="Déposer Attestation Stage PFE"
-                                                            alt=""
-                                                        />
-                                                      </label>
-                                                      <br/>
-                                                      <label className="btn btn-default">
-                                                        <input
-                                                            id="filePickerRFV"
-                                                            type="file"
-                                                            className="cursorPointer"
-                                                            style={{ visibility: "hidden" }}
-                                                            accept="application/pdf"
-                                                            onChange={this.selectAttestationStagePFE}
-                                                        />
-                                                      </label>
-                                                    </center>
-                                                )}
-
-                                                {(
-                                                    labelASP !== "" &&
-                                                    <CRow>
-                                                      <CCol md="2"/>
-                                                      <CCol md="8">
-                                                        <CCard color="warning" className="text-white">
-                                                          <CCardHeader>
-                                                            <div style={{textAlign: "right"}}>
-                                                              <img  src={espritLogo}
-                                                                    className="cursorPointer"
-                                                                    class="img-fluid"
-                                                                    width="40px"
-                                                                    height="50px"/>
-                                                            </div>
-                                                          </CCardHeader>
-                                                          <CCardBody>
-                                                            <div style={{textAlign: "center"}}>
-                                                              {labelASP}
-                                                              <br/><br/>
-                                                              <span className="signature">
-                                                By {studentFullName}
-                                              </span>
-                                                              <br/>
-                                                              <span style={{fontSize: "11px", color: "black"}}>
-                                                {dateASP}
-                                              </span>
-                                                            </div>
-                                                          </CCardBody>
-                                                        </CCard>
-                                                      </CCol>
-                                                      <CCol md="2"/>
-                                                    </CRow>
-                                                )}
-
-                                                {(
-                                                    showReloadASP && depotStatus === "" &&
-                                                    <center>
-                                                      <CButton  shape="pill" color="warning" aria-expanded="true"
-                                                                onClick={() => this.modifyMyASP()}>
-                                                        <CTooltip content="Modifier mon Attestation Stage PFE" placement="top">
-                                                          <CIcon content={freeSet.cilReload}/>
-                                                        </CTooltip>
-                                                      </CButton>
-                                                    </center>
-                                                )}
-
-                                                {currentFileASP && !giveOKASP && (
-                                                    <center>
-                                                      <div className="alert alert-danger" role="alert" style= {{width: "300px"}}>
-                                                        Il ne s'agit pas d'un Fichier PDF !.
-                                                        <br/>
-                                                        Merci de respecter le format demandé.
-                                                      </div>
-                                                    </center>
-                                                )}
-
-                                                {currentFileASP && successUploadASP && (
-                                                    <div className="progress">
-                                                      <div
-                                                          className="progress-bar bg-warning progress-bar-striped progress-bar-animated"
-                                                          role="progressbar"
-                                                          aria-valuenow={progressASP}
-                                                          aria-valuemin="0"
-                                                          aria-valuemax="100"
-                                                          style={{ width: progressASP + "%" }}>
-                                                        {progressASP}%
-                                                      </div>
-                                                    </div>
-                                                )}
-
-                                                {(
-                                                    showButtonASP &&
-                                                    <center>
-                                                      <CButton  variant="outline" color="warning"
-                                                                onClick={this.uploadTrainingCertif}
-                                                                disabled={labelASP === ""}
-                                                                enabled={labelASP !== ""}>
-                                                        Déposer Attestation Stage PFE
-                                                      </CButton>
-                                                    </center>
-                                                )}
-
-
-                                              </CCol>
-
-                                              <br/>
-
-                                            </CRow>
-                                            <br/>
-                                            <Divider />
-                                          </>
-                                        }
-
-                                        {
-                                          // Show Alert DEPOSEE-VALIDEE-INCOMPLET
-                                          fileInfos.length > 1 && (
-                                              <div>
-
-                                                <CContainer>
-                                                  <CRow>
-                                                    <CCol md="9" class="bg-warning py-2">
-                                                      <div className="card-header">
-                                                        <span className="menuTitleBleuReport">Informations sur mes Rapports 5</span>
-                                                      </div>
-
-                                                      <ul className="list-group list-group-flush">
-                                                        {fileInfos.map((file, index) => (
-                                                            <li className="list-group-item" key={index}>
-                                                              <CRow>
-                                                                <CCol md="4" class="bg-warning py-2">
-                                                                  {file.includes("RLV") && (
-                                                                      <CListGroup accent>
-                                                                        <CListGroupItem accent="dark"><strong>Rapport Version 1</strong></CListGroupItem>
-                                                                      </CListGroup>
-                                                                  )}
-                                                                  {file.includes("RFV") && (
-                                                                      <CListGroup accent>
-                                                                        <CListGroupItem accent="danger"><strong>Rapport Version Finale</strong></CListGroupItem>
-                                                                      </CListGroup>
-                                                                  )}
-                                                                  {file.includes("RAP") && (
-                                                                      <CListGroup accent>
-                                                                        <CListGroupItem accent="info"><strong>Rapport Anti-Plagiat : URKUND</strong></CListGroupItem>
-                                                                      </CListGroup>
-                                                                  )}
-                                                                  {file.includes("ASP") && (
-                                                                      <CListGroup accent>
-                                                                        <CListGroupItem accent="warning"><strong>Attestation Stage PFE</strong></CListGroupItem>
-                                                                      </CListGroup>
-                                                                  )}
-                                                                </CCol>
-                                                                <CCol md="6" class="bg-warning py-2">
-                                                                  <div style={{marginTop: '13px'}}>
-                                                                    {file.substr(0, file.indexOf("UNITR1"))}.pdf
-                                                                  </div>
-                                                                </CCol>
-                                                                <CCol md="2" class="bg-warning py-2">
-                                                                  <div style={{marginTop: '13px'}}>
-                                                                    {file.substr(file.indexOf("UNITR1") + 9)}
-                                                                  </div>
-                                                                </CCol>
-                                                              </CRow>
-                                                            </li>
-                                                        ))}
-                                                      </ul>
-                                                    </CCol>
-                                                    <CCol lg="3">
-                                                      <br/>
-                                                      {(
-                                                          depotStatus === "" && fileInfos.length > 1 &&
-                                                          <center>
-                                                            <br/><br/>
-
-                                                            <span className="text-primary" style={{fontSize: "11px"}}>
-                                      Cliquer sur ce bouton pour <ins>relancer</ins> votre Dépôt.
-                                    </span>
-                                                            <br/>
-                                                            <Icon icon={handPointingDown} color="blue" width="30" height="30" />
-                                                            <br/><br/>
-
-                                                            <CButton  shape="pill" color="primary" aria-expanded="true"
-                                                                      onClick={() => this.openModalConfirmRelanceDepot()}>
-                                                              <CTooltip content="Relancer mon Dépôt" placement="top">
-                                                                <CIcon content={freeSet.cilReload}/>
-                                                              </CTooltip>
-                                                            </CButton>
-                                                          </center>
-                                                      )}
-                                                      {( depotStatus.includes("DEPOSEE") &&
-                                                          <CAlert color="info">
-                                                            <h5 className="alert-heading"><strong>Dépôt Effectué</strong></h5>
-                                                            <p>
-                                                              Votre requête a été bien déposée le <ins>{depotStatus.substring(7, depotStatus.length)}</ins>.
-                                                            </p>
-                                                            <p>
-                                                              Elle va être traitée le plus tôt possible.
-                                                            </p>
-                                                            <hr />
-                                                            <p className="mb-0">
-                                                              Merci de patienter.
-                                                            </p>
-                                                          </CAlert>
-                                                      )}
-
-                                                      {( depotStatus.includes("VALIDEE") &&
-                                                          <CAlert color="success">
-                                                            <h5 className="alert-heading"><strong>Dépôt Validé</strong></h5>
-                                                            <p>
-                                                              Votre requête a été <ins>validée</ins> le <ins>{depotStatus.substring(7, depotStatus.length)}</ins>.
-                                                            </p>
-                                                            <hr />
-                                                            <p className="mb-0">
-                                                              Bonne Chance.
-                                                            </p>
-                                                          </CAlert>
-                                                      )}
-
-                                                      {( depotStatus.includes("INCOMPLET") &&
-                                                          <CAlert color="danger">
-                                                            <h5 className="alert-heading"><strong>Dépôt Incomplet</strong></h5>
-                                                            <p>
-                                                              Votre requête a été marquée comme <ins>incomplète</ins> le <ins>{depotStatus.substring(9, 19)}</ins>.
-                                                            </p>
-                                                            <strong>Motif: </strong> {depotStatus.substring(19, depotStatus.length)}.
-                                                            <hr />
-                                                            <CButton  variant="outline" color="danger"
-                                                                      onClick={() => this.requestForUpdateMyDepot()}>
-                                                              Mettre à jour mon Dépôt
-                                                            </CButton>
-                                                          </CAlert>
-                                                      )}
-                                                    </CCol>
-                                                  </CRow>
-                                                </CContainer>
-                                              </div>
-                                          )}
-
-                                        {showPopupSuccessUpload && (
-                                            <Modal
-                                                isOpen={showPopupSuccessUpload}
-                                                contentLabel="Example Modal"
-                                                style={customStyles}
-                                            >
-                                              <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Information</span>
-                                              <hr/>
-                                              <center>
-                                                <br />
-                                                <br />
-                                                {message}
-                                                <br />
-                                                <br />
-                                                <br />
-                                                <button
-                                                    className="btn btn-sm btn-primary"
-                                                    onClick={this.closeModalSuccessUpload}
-                                                >
-                                                  Ok
-                                                </button>
-                                                <br />
-                                                <br />
-                                              </center>
-                                            </Modal>
-                                        )}
-                                        {showModalConfirmRelanceDepot && (
-                                            <Modal
-                                                isOpen={showModalConfirmRelanceDepot}
-                                                contentLabel="Example Modal"
-                                                style={customStyles}>
-                                              <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Confirmation</span>
-                                              <hr/>
-                                              <center>
-                                                <br />
-                                                <br />
-                                                Êtes-vous sûr de vouloir relancer votre dépôt ?
-                                                <br />
-                                                <br />
-                                                <br />
-                                                <button className="btn btn-sm btn-success"
-                                                        onClick={this.modifyMyDepot}>
-                                                  Oui
-                                                </button>
-                                                &nbsp;
-                                                <button className="btn btn-sm btn-danger"
-                                                        onClick={this.closeModalConfirmRelanceDepot}>
-                                                  Non
-                                                </button>
-                                                <br />
-                                                <br />
-                                              </center>
-                                            </Modal>
-                                        )}
-
-                                      </CCardBody>
-                                      <CCardFooter>
-                                        <CRow>
-                                          <CCol sm="4" md="3"/>
-                                          <CCol sm="4" md="7">
-                                            {(
-                                                depotStatus === "" && fileInfos.length === 3 &&
-                                                <>
-                                  <span className="text-success" style={{fontSize: "11px"}}>
-                                    Cliquer sur ce bouton pour <strong> valider votre dépôt </strong> ( <ins>PS:</ins> Une fois Cliquer, vous ne pourrez pas modifier votre dépôt ).
+                                <VerticalTimelineElement
+                                  className="vertical-timeline-element--education"
+                                  date={dateDepotRapportFormedV1}
+                                  contentStyle={{ background: 'rgb(153, 0, 153)', color: '#000000' }}
+                                  contentArrowStyle={{ borderRight: '7px solid  rgb(153, 0, 153)' }}
+                                  iconStyle={{ background: 'rgb(153, 0, 153)', color: '#fff', width: '10px' , height: '10px', marginLeft: '-4px', marginTop: '27px' }}>
+                                  <h6 className="vertical-timeline-element-title">Date Dépôt Rapport Version 1</h6>
+                                  <span style={{color: "#d9d9d9", fontSize: "11px", fontStyle: "italic"}}>
+                                    18ème Semaine
                                   </span>
-                                                  &nbsp;&nbsp;&nbsp;
-                                                  <Icon icon={handPointingRight} color="green" width="30" height="30" />
-                                                </>
-                                            )}
-                                          </CCol>
-                                          <CCol sm="4" md="2">
-                                            {(
-                                                depotStatus.includes("DEPOSEE") &&
-                                                <h5><CBadge color="primary">Requête Envoyée</CBadge></h5>
-                                            )}
-
-                                            {(
-                                                depotStatus.includes("VALIDEE") &&
-                                                <h5><CBadge color="success">Dépôt Validé</CBadge></h5>
-                                            )}
-
-                                            {(
-                                                depotStatus.includes("INCOMPLET") &&
-                                                <h5><CBadge color="danger">Dépôt Incomplet</CBadge></h5>
-                                            )}
-                                            {(
-                                                (depotStatus === "" ) &&
-                                                <CButton  color="success"
-                                                          disabled={fileInfos.length !== 4}
-                                                          enabled={fileInfos.length === 4}
-                                                          className="float-right"
-                                                          onClick={() => this.validateMyDepot()}>
-                                                  Je valide 3 - {fileInfos.length}
-                                                </CButton>
-                                            )}
-
-                                            {(
-                                                showSpinnerWaitingDepot &&
-                                                <Backdrop className={classes.backdrop} open={showSpinnerWaitingDepot} >
-                                                  <CircularProgress color="inherit" />
-                                                </Backdrop>
-                                            )}
-
-
-
-                                          </CCol>
-                                        </CRow>
-                                      </CCardFooter>
-                                    </CCard>
-                                )}
-
-                                {( (fileInfos.length === 5) && itsITandEM === "NO" &&
-                                    <CCard accentColor="info">
-
-                                      <CCardBody>
-
-                                        {fileInfos.length >= 0  &&(
-                                            <>
-                                              <CRow>
-                                                <CCol md="3" class="bg-warning py-2">
-                                                  <NotificationContainer/>
-                                                  {(
-                                                      labelRFV === "" && showUploadIconRFV &&
-                                                      <center>
-                                                        <label
-                                                            htmlFor="filePickerRAP"
-                                                            className="custom-file-upload">
-                                                          <img
-                                                              src={redUpload}
-                                                              className="cursorPointer"
-                                                              class="img-fluid"
-                                                              width="100px"
-                                                              height="75px"
-                                                              title="Déposer Rapport Version Finale"
-                                                              alt=""
-                                                          />
-                                                        </label>
-                                                        <br/>
-                                                        <label className="btn btn-default">
-                                                          <input
-                                                              id="filePickerRAP"
-                                                              type="file"
-                                                              className="cursorPointer"
-                                                              style={{ visibility: "hidden" }}
-                                                              accept="application/pdf"
-                                                              onChange={this.selectReportFinalVersion}
-                                                          />
-                                                        </label>
-                                                      </center>
-                                                  )}
-
-                                                  {(
-                                                      labelRFV !== "" &&
-                                                      <CRow>
-                                                        <CCol md="1"/>
-                                                        <CCol md="10">
-                                                          <CCard color="danger" className="text-white">
-                                                            <CCardHeader>
-                                                              <div style={{textAlign: "right"}}>
-                                                                <img  src={espritLogo}
-                                                                      className="cursorPointer"
-                                                                      class="img-fluid"
-                                                                      width="40px"
-                                                                      height="50px"/>
-                                                              </div>
-                                                            </CCardHeader>
-                                                            <CCardBody>
-                                                              <div style={{textAlign: "center"}}>
-                                                                {labelRFV}
-                                                                <br/><br/>
-                                                                <span className="signature">
-                                                By {studentFullName}
-                                              </span>
-                                                                <br/>
-                                                                <span style={{fontSize: "11px", color: "black"}}>
-                                                {dateRFV}
-                                              </span>
-                                                              </div>
-                                                            </CCardBody>
-                                                          </CCard>
-                                                        </CCol>
-                                                        <CCol md="1"/>
-                                                      </CRow>
-                                                  )}
-
-                                                  {(
-                                                      showReloadRFV && depotStatus === "" &&
-                                                      <center>
-                                                        <CButton  shape="pill" color="danger" aria-expanded="true"
-                                                                  onClick={() => this.modifyMyRFV()}>
-                                                          <CTooltip content="Modifier mon Rapport Version Finale" placement="top">
-                                                            <CIcon content={freeSet.cilReload}/>
-                                                          </CTooltip>
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileRFV && !giveOKRFV && (
-                                                      <center>
-                                                        <div className="alert alert-danger" role="alert" style= {{width: "200px"}}>
-                                                          Il ne s'agit pas d'un Fichier PDF !.
-                                                          <br/>
-                                                          Merci de respecter le format demandé.
-                                                        </div>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileRFV && successUploadRFV && (
-                                                      <div className="progress">
-                                                        <div
-                                                            className="progress-bar bg-danger progress-bar-striped progress-bar-animated"
-                                                            role="progressbar"
-                                                            aria-valuenow={progressRFV}
-                                                            aria-valuemin="0"
-                                                            aria-valuemax="100"
-                                                            style={{ width: progressRFV + "%" }}>
-                                                          {progressRFV}%
-                                                        </div>
-                                                      </div>
-                                                  )}
-
-                                                  {showButtonRFV && giveOKRFV && labelRFV !== "" && (
-                                                      <center>
-                                                        <Checkbox
-                                                            checked={this.state.checked}
-                                                            color="secondary"
-                                                            onChange={(e) =>
-                                                                this.reportConfidentialHandler(e)
-                                                            }
-                                                            inputProps={{ "aria-label": "secondary checkbox" }}
-                                                        />
-                                                        &nbsp;&nbsp; Confidendial Upload
-                                                      </center>
-                                                  )}
-
-                                                  {(
-                                                      showButtonRFV &&
-                                                      <center>
-                                                        <CButton  variant="outline" color="danger"
-                                                                  onClick={this.uploadReportFinalVersion}
-                                                                  disabled={labelRFV === ""}
-                                                                  enabled={labelRFV !== ""}>
-                                                          Déposer Rapport Version Finale
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-
-                                                </CCol>
-
-                                                <CCol md="3" class="bg-warning py-2">
-                                                  {(
-                                                      labelRAP === "" && showUploadIconRAP &&
-                                                      <center>
-                                                        <label
-                                                            htmlFor="filePickerASP"
-                                                            className="custom-file-upload">
-                                                          <img
-                                                              src={blueLightUpload}
-                                                              className="cursorPointer"
-                                                              class="img-fluid"
-                                                              width="100px"
-                                                              height="75px"
-                                                              title="Déposer Rapport Anti-Plagiat"
-                                                              alt=""
-                                                          />
-                                                        </label>
-                                                        <br/>
-                                                        <label className="btn btn-default">
-                                                          <input
-                                                              id="filePickerASP"
-                                                              type="file"
-                                                              className="cursorPointer"
-                                                              style={{ visibility: "hidden" }}
-                                                              accept="application/pdf"
-                                                              onChange={this.selectReportAntiPlagiat}
-                                                          />
-                                                        </label>
-                                                      </center>
-                                                  )}
-
-                                                  {(
-                                                      labelRAP !== "" &&
-                                                      <CRow>
-                                                        <CCol md="1"/>
-                                                        <CCol md="10">
-                                                          <CCard color="info" className="text-white">
-                                                            <CCardHeader>
-                                                              <div style={{textAlign: "right"}}>
-                                                                <img  src={espritLogo}
-                                                                      className="cursorPointer"
-                                                                      class="img-fluid"
-                                                                      width="40px"
-                                                                      height="50px"/>
-                                                              </div>
-                                                            </CCardHeader>
-                                                            <CCardBody>
-                                                              <div style={{textAlign: "center"}}>
-                                                                {labelRAP}
-                                                                <br/><br/>
-                                                                <span className="signature">
-                                                By {studentFullName}
-                                              </span>
-                                                                <br/>
-                                                                <span style={{fontSize: "11px", color: "black"}}>
-                                                {dateRAP}
-                                              </span>
-                                                              </div>
-                                                            </CCardBody>
-                                                          </CCard>
-                                                        </CCol>
-                                                        <CCol md="1"/>
-                                                      </CRow>
-                                                  )}
-
-                                                  {(
-                                                      showReloadRAP && depotStatus === "" &&
-                                                      <center>
-                                                        <CButton  shape="pill" color="info" aria-expanded="true"
-                                                                  onClick={() => this.modifyMyRAP()}>
-                                                          <CTooltip content="Modifier mon Rapport Anti-Plagiat" placement="top">
-                                                            <CIcon content={freeSet.cilReload}/>
-                                                          </CTooltip>
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileRAP && !giveOKRAP && (
-                                                      <center>
-                                                        <div className="alert alert-danger" role="alert" style= {{width: "200px"}}>
-                                                          Il ne s'agit pas d'un Fichier PDF !.
-                                                          <br/>
-                                                          Merci de respecter le format demandé.
-                                                        </div>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileRAP && successUploadRAP && (
-                                                      <div className="progress">
-                                                        <div
-                                                            className="progress-bar bg-info progress-bar-striped progress-bar-animated"
-                                                            role="progressbar"
-                                                            aria-valuenow={progressRAP}
-                                                            aria-valuemin="0"
-                                                            aria-valuemax="100"
-                                                            style={{ width: progressRAP + "%" }}>
-                                                          {progressRAP}%
-                                                        </div>
-                                                      </div>
-                                                  )}
-
-                                                  {(
-                                                      showButtonRAP &&
-                                                      <center>
-                                                        <CButton  variant="outline" color="info"
-                                                                  onClick={this.uploadPlagiat}
-                                                                  disabled={labelRAP === ""}
-                                                                  enabled={labelRAP !== ""}>
-                                                          Déposer Rapport Anti-Plagiat
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-                                                </CCol>
-
-                                                <CCol md="3" class="bg-warning py-2">
-
-                                                  {(
-                                                      labelASP === "" && showUploadIconASP &&
-                                                      <center>
-                                                        <label
-                                                            htmlFor="filePickerRFV"
-                                                            className="custom-file-upload">
-                                                          <img
-                                                              src={orangeUpload}
-                                                              className="cursorPointer"
-                                                              class="img-fluid"
-                                                              width="100px"
-                                                              height="75px"
-                                                              title="Déposer Attestation Stage PFE"
-                                                              alt=""
-                                                          />
-                                                        </label>
-                                                        <br/>
-                                                        <label className="btn btn-default">
-                                                          <input
-                                                              id="filePickerRFV"
-                                                              type="file"
-                                                              className="cursorPointer"
-                                                              style={{ visibility: "hidden" }}
-                                                              accept="application/pdf"
-                                                              onChange={this.selectAttestationStagePFE}
-                                                          />
-                                                        </label>
-                                                      </center>
-                                                  )}
-
-                                                  {(
-                                                      labelASP !== "" &&
-                                                      <CRow>
-                                                        <CCol md="1"/>
-                                                        <CCol md="10">
-                                                          <CCard color="warning" className="text-white">
-                                                            <CCardHeader>
-                                                              <div style={{textAlign: "right"}}>
-                                                                <img  src={espritLogo}
-                                                                      className="cursorPointer"
-                                                                      class="img-fluid"
-                                                                      width="40px"
-                                                                      height="50px"/>
-                                                              </div>
-                                                            </CCardHeader>
-                                                            <CCardBody>
-                                                              <div style={{textAlign: "center"}}>
-                                                                {labelASP}
-                                                                <br/><br/>
-                                                                <span className="signature">
-                                                By {studentFullName}
-                                              </span>
-                                                                <br/>
-                                                                <span style={{fontSize: "11px", color: "black"}}>
-                                                {dateASP}
-                                              </span>
-                                                              </div>
-                                                            </CCardBody>
-                                                          </CCard>
-                                                        </CCol>
-                                                        <CCol md="1"/>
-                                                      </CRow>
-                                                  )}
-
-                                                  {(
-                                                      showReloadASP && depotStatus === "" &&
-                                                      <center>
-                                                        <CButton  shape="pill" color="warning" aria-expanded="true"
-                                                                  onClick={() => this.modifyMyASP()}>
-                                                          <CTooltip content="Modifier mon Attestation Stage PFE" placement="top">
-                                                            <CIcon content={freeSet.cilReload}/>
-                                                          </CTooltip>
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileASP && !giveOKASP && (
-                                                      <center>
-                                                        <div className="alert alert-danger" role="alert" style= {{width: "200px"}}>
-                                                          Il ne s'agit pas d'un Fichier PDF !.
-                                                          <br/>
-                                                          Merci de respecter le format demandé.
-                                                        </div>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileASP && successUploadASP && (
-                                                      <div className="progress">
-                                                        <div
-                                                            className="progress-bar bg-warning progress-bar-striped progress-bar-animated"
-                                                            role="progressbar"
-                                                            aria-valuenow={progressASP}
-                                                            aria-valuemin="0"
-                                                            aria-valuemax="100"
-                                                            style={{ width: progressASP + "%" }}>
-                                                          {progressASP}%
-                                                        </div>
-                                                      </div>
-                                                  )}
-
-                                                  {(
-                                                      showButtonASP &&
-                                                      <center>
-                                                        <CButton  variant="outline" color="warning"
-                                                                  onClick={this.uploadTrainingCertif}
-                                                                  disabled={labelASP === ""}
-                                                                  enabled={labelASP !== ""}>
-                                                          Déposer Attestation Stage PFE
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-
-                                                </CCol>
-
-                                                <CCol md="3" class="bg-primary py-2">
-                                                  {(
-                                                      labelDCS === "" && showUploadIconDCS &&
-                                                      <center>
-                                                        <label
-                                                            htmlFor="filePickerDCS"
-                                                            className="custom-file-upload">
-                                                          <img
-                                                              src={blueBoldUpload}
-                                                              className="cursorPointer"
-                                                              class="img-fluid"
-                                                              width="100px"
-                                                              height="75px"
-                                                              title="Déposer Dossier ou Document Optionnel"
-                                                              alt=""
-                                                          />
-                                                        </label>
-                                                        <br/>
-                                                        <label className="btn btn-default">
-                                                          <input
-                                                              id="filePickerDCS"
-                                                              type="file"
-                                                              className="cursorPointer"
-                                                              style={{ visibility: "hidden" }}
-                                                              onChange={this.selectDossierDocumentSupplemenaire}
-                                                          />
-                                                        </label>
-                                                      </center>
-                                                  )}
-
-                                                  {(
-                                                      labelDCS !== "" &&
-                                                      <CRow>
-                                                        <CCol md="1"/>
-                                                        <CCol md="10">
-                                                          <CCard color="primary" className="text-white">
-                                                            <CCardHeader>
-                                                              <div style={{textAlign: "right"}}>
-                                                                <img  src={espritLogo}
-                                                                      className="cursorPointer"
-                                                                      class="img-fluid"
-                                                                      width="40px"
-                                                                      height="50px"/>
-                                                              </div>
-                                                            </CCardHeader>
-                                                            <CCardBody>
-                                                              <div style={{textAlign: "center"}}>
-                                                                {labelDCS}
-                                                                <br/><br/>
-                                                                <span className="signature">
-                                                By {studentFullName}
-                                              </span>
-                                                                <br/>
-                                                                <span style={{fontSize: "11px", color: "black"}}>
-                                                {dateDCS}
-                                              </span>
-                                                              </div>
-                                                            </CCardBody>
-                                                          </CCard>
-                                                        </CCol>
-                                                        <CCol md="1"/>
-                                                      </CRow>
-                                                  )}
-
-                                                  {(
-                                                      showReloadDCS && depotStatus === "" &&
-                                                      <center>
-                                                        <CButton  shape="pill" color="primary" aria-expanded="true"
-                                                                  onClick={() => this.modifyMyDCS()}>
-                                                          <CTooltip content="Modifier mon Supplément Optionnel" placement="top">
-                                                            <CIcon content={freeSet.cilReload}/>
-                                                          </CTooltip>
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileDCS && successUploadDCS && (
-                                                      <div className="progress">
-                                                        <div
-                                                            className="progress-bar progress-bar-striped progress-bar-animated"
-                                                            role="progressbar"
-                                                            aria-valuenow={progressDCS}
-                                                            aria-valuemin="0"
-                                                            aria-valuemax="100"
-                                                            style={{ width: progressDCS + "%" }}>
-                                                          {progressDCS}%
-                                                        </div>
-                                                      </div>
-                                                  )}
-
-                                                  {(
-                                                      showButtonDCS &&
-                                                      <center>
-                                                        <CButton  variant="outline" color="primary"
-                                                                  onClick={this.uploadSupplement}
-                                                                  disabled={labelDCS === ""}
-                                                                  enabled={labelDCS !== ""}>
-                                                          Déposer Dossier Technique 3
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-
-                                                </CCol>
-
-                                              </CRow>
-                                              <br/>
-                                              {(fileInfos.length > 0 &&
-                                                  <Divider />
-                                              )}
-
-                                            </>
-                                        )}
-
-                                        {showPopupSuccessUpload && (
-                                            <Modal
-                                                isOpen={showPopupSuccessUpload}
-                                                contentLabel="Example Modal"
-                                                style={customStyles}
-                                            >
-                                              <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Information</span>
-                                              <hr/>
-                                              <center>
-                                                <br />
-                                                <br />
-                                                {message}
-                                                <br />
-                                                <br />
-                                                <br />
-                                                <button
-                                                    className="btn btn-sm btn-primary"
-                                                    onClick={this.closeModalSuccessUpload}
-                                                >
-                                                  Ok
-                                                </button>
-                                                <br />
-                                                <br />
-                                              </center>
-                                            </Modal>
-                                        )}
-
-                                        {showModalConfirmRelanceDepot && (
-                                            <Modal
-                                                isOpen={showModalConfirmRelanceDepot}
-                                                contentLabel="Example Modal"
-                                                style={customStyles}
-                                            >
-                                              <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Confirmation</span>
-                                              <hr/>
-                                              <center>
-                                                <br />
-                                                <br />
-                                                Êtes-vous sûr de vouloir relancer votre dépôt ?
-                                                <br />
-                                                <br />
-                                                <br />
-                                                <button className="btn btn-sm btn-success"
-                                                        onClick={this.modifyMyDepot}>
-                                                  Oui
-                                                </button>
-                                                &nbsp;
-                                                <button className="btn btn-sm btn-danger"
-                                                        onClick={this.closeModalConfirmRelanceDepot}>
-                                                  Non
-                                                </button>
-                                                <br />
-                                                <br />
-                                              </center>
-                                            </Modal>
-                                        )}
-
-                                        {fileInfos.length >0 && (
-                                            <div>
-
-                                              <CContainer>
-                                                <CRow>
-                                                  <CCol md="9" class="bg-warning py-2">
-                                                    <div className="card-header">
-                                                      <span className="menuTitleGreyReport">Informations sur mes Rapports 6</span>
-                                                    </div>
-
-                                                    <ul className="list-group list-group-flush">
-                                                      {fileInfos.map((file, index) => (
-                                                          <li className="list-group-item" key={index}>
-                                                            <CRow>
-                                                              <CCol md="4" class="bg-warning py-2">
-                                                                {file.includes("RLV") && (
-                                                                    <CListGroup accent>
-                                                                      <CListGroupItem accent="dark"><strong>Rapport Version 1</strong></CListGroupItem>
-                                                                    </CListGroup>
-                                                                )}
-                                                                {file.includes("RFV") && (
-                                                                    <CListGroup accent>
-                                                                      <CListGroupItem accent="danger"><strong>Rapport Version Finale</strong></CListGroupItem>
-                                                                    </CListGroup>
-                                                                )}
-                                                                {file.includes("RAP") && (
-                                                                    <CListGroup accent>
-                                                                      <CListGroupItem accent="info"><strong>Rapport Anti-Plagiat : URKUND</strong></CListGroupItem>
-                                                                    </CListGroup>
-                                                                )}
-                                                                {file.includes("ASP") && (
-                                                                    <CListGroup accent>
-                                                                      <CListGroupItem accent="warning"><strong>Attestation Stage PFE</strong></CListGroupItem>
-                                                                    </CListGroup>
-                                                                )}
-                                                                {file.includes("DCS") && (
-                                                                    <CListGroup accent>
-                                                                      <CListGroupItem accent="primary"><strong>Dossier Technique</strong></CListGroupItem>
-                                                                    </CListGroup>
-                                                                )}
-                                                              </CCol>
-                                                              <CCol md="6" class="bg-warning py-2">
-                                                                <div style={{marginTop: '13px'}}>
-                                                                  {file.substr(0, file.indexOf("UNITR1"))}.pdf
-                                                                </div>
-                                                              </CCol>
-                                                              <CCol md="2" class="bg-warning py-2">
-                                                                <div style={{marginTop: '13px'}}>
-                                                                  {file.substr(file.indexOf("UNITR1") + 9)}
-                                                                </div>
-                                                              </CCol>
-                                                            </CRow>
-                                                          </li>
-                                                      ))}
-                                                    </ul>
-                                                  </CCol>
-                                                  <CCol lg="3">
-                                                    <br/>
-                                                    {(
-                                                        depotStatus === "" &&
-                                                        <center>
-                                                          <br/><br/>
-
-                                                          <span className="text-dark" style={{fontSize: "11px"}}>
-                                      Cliquer sur ce bouton pour <ins>relancer</ins> votre Dépôt.
+                                </VerticalTimelineElement>
+                                <VerticalTimelineElement
+                                  iconStyle={{ background: 'rgb(102, 0, 102)', color: '#fff' }}
+                                  icon={<AccessAlarmIcon />}
+                                />
+                              </VerticalTimeline>
+                              <CRow>
+                                <CCol xs="12">
+                                  <center>
+                                    <span className="float-center" style={{color: "#990099", fontSize: "14px", fontWeight: "bold"}}>
+                                      {dateNewestDebutStageConvAv}
                                     </span>
-                                                          <br/>
-                                                          <Icon icon={handPointingDown} color="grey" width="30" height="30" />
-                                                          <br/><br/>
-
-                                                          <CButton  shape="pill" color="dark" aria-expanded="true"
-                                                                    onClick={() => this.openModalConfirmRelanceDepot()}>
-                                                            <CTooltip content="Relancer mon Dépôt" placement="top">
-                                                              <CIcon content={freeSet.cilReload}/>
-                                                            </CTooltip>
-                                                          </CButton>
-                                                        </center>
-                                                    )}
-                                                    {( depotStatus.includes("DEPOSEE") &&
-                                                        <CAlert color="info">
-                                                          <h5 className="alert-heading"><strong>Dépôt Effectué</strong></h5>
-                                                          <p>
-                                                            Votre requête a été bien déposée le <ins>{depotStatus.substring(7, depotStatus.length)}</ins>.
-                                                          </p>
-                                                          <p>
-                                                            Elle va être traitée le plus tôt possible.
-                                                          </p>
-                                                          <hr />
-                                                          <p className="mb-0">
-                                                            Merci de patienter.
-                                                          </p>
-                                                        </CAlert>
-                                                    )}
-
-                                                    {( depotStatus.includes("VALIDEE") &&
-                                                        <CAlert color="success">
-                                                          <h5 className="alert-heading"><strong>Dépôt Validé</strong></h5>
-                                                          <p>
-                                                            Votre requête a été <ins>validée</ins> le <ins>{depotStatus.substring(7, depotStatus.length)}</ins>.
-                                                          </p>
-                                                          <hr />
-                                                          <p className="mb-0">
-                                                            Bonne Chance.
-                                                          </p>
-                                                        </CAlert>
-                                                    )}
-
-                                                    {( depotStatus.includes("INCOMPLET") &&
-                                                        <CAlert color="danger">
-                                                          <h5 className="alert-heading"><strong>Dépôt Incomplet</strong></h5>
-                                                          <p>
-                                                            Votre requête a été marquée comme <ins>incomplète</ins> le <ins>{depotStatus.substring(9, 19)}</ins>.
-                                                          </p>
-                                                          <strong>Motif: </strong> {depotStatus.substring(19, depotStatus.length)}.
-                                                          <hr />
-                                                          <CButton  variant="outline" color="danger"
-                                                                    onClick={() => this.requestForUpdateMyDepot()}>
-                                                            Mettre à jour mon Dépôt
-                                                          </CButton>
-                                                        </CAlert>
-                                                    )}
-                                                  </CCol>
-                                                </CRow>
-                                              </CContainer>
-                                            </div>
-                                        )}
-
-                                      </CCardBody>
-                                      <CCardFooter>
-                                        <CRow>
-                                          <CCol sm="4" md="3"/>
-                                          <CCol sm="4" md="7">
-                                            {(
-                                                depotStatus === "" && fileInfos.length === 3 &&
-                                                <>
-                                  <span className="text-success" style={{fontSize: "11px"}}>
-                                    Cliquer sur ce bouton pour <strong> valider votre dépôt </strong> ( <ins>PS:</ins> Une fois Cliquer, vous ne pourrez pas modifier votre dépôt ).
-                                  </span>
-                                                  &nbsp;&nbsp;&nbsp;
-                                                  <Icon icon={handPointingRight} color="green" width="30" height="30" />
-                                                </>
-                                            )}
-                                          </CCol>
-                                          <CCol sm="4" md="2">
-                                            {(
-                                                depotStatus.includes("DEPOSEE") &&
-                                                <h5><CBadge color="primary">Requête Envoyée</CBadge></h5>
-                                            )}
-
-                                            {(
-                                                depotStatus.includes("VALIDEE") &&
-                                                <h5><CBadge color="success">Dépôt Validé</CBadge></h5>
-                                            )}
-
-                                            {(
-                                                depotStatus.includes("INCOMPLET") &&
-                                                <h5><CBadge color="danger">Dépôt Incomplet</CBadge></h5>
-                                            )}
-                                            {(
-                                                depotStatus === ""  && itsITandEM === "YES" &&
-                                                <CButton  color="success"
-                                                          disabled={fileInfos.length !== 4}
-                                                          enabled={fileInfos.length === 4}
-                                                          className="float-right"
-                                                          onClick={() => this.validateMyDepot()}>
-                                                  Je valide 2 - {fileInfos.length}
-                                                </CButton>
-                                            )}
-
-                                            {(
-                                                depotStatus === ""  && itsITandEM === "NO" &&
-                                                <CButton  color="success"
-                                                          disabled={fileInfos.length < 5}
-                                                          enabled={fileInfos.length > 4}
-                                                          className="float-right"
-                                                          onClick={() => this.validateMyDepot()}>
-                                                  Je valide 3 - {fileInfos.length}
-                                                </CButton>
-                                            )}
-
-                                            {(
-                                                showSpinnerWaitingDepot &&
-                                                <Backdrop className={classes.backdrop} open={showSpinnerWaitingDepot} >
-                                                  <CircularProgress color="inherit" />
-                                                </Backdrop>
-                                            )}
-
-
-
-                                          </CCol>
-                                        </CRow>
-                                      </CCardFooter>
-                                    </CCard>
-                                )}
-                                <CModal
-                                    show={showPopupUpdateDepot}
-                                    onClose={() => this.updateMyDepotNO()}
-                                    className={classes.backdrop1}
-                                    color="secondary">
-                                  <CModalHeader closeButton>
-                                    <CModalTitle>Confirmation</CModalTitle>
-                                  </CModalHeader>
-                                  <CModalBody>
-                                    Voulez-vous mettre à jour votre dépôt <ins>en tenir compte</ins> la cause de signaler votre requête précédante comme incomplète ?.
-                                    <br/><br/>
-                                  </CModalBody>
-                                  <CModalFooter>
-                                    <CButton color="success" onClick={() => this.updateMyDepotYES()}>
-                                      Oui
-                                    </CButton>
-                                    &nbsp;
-                                    <CButton color="danger" onClick={() => this.updateMyDepotNO()}>
-                                      Pas Maintenant
-                                    </CButton>
-                                  </CModalFooter>
-                                </CModal>
-                              </>
-                            }
-
-                            {
-                              // After v2 + 1
-                              (
-                                  timeForDepotRapportV2.trim() === "AFTERTIMEV2"
-                                  && depotStatus === "METTRE A JOUR"
-                                  && (itsITandEM === "YES" || itsITandEM === "NO")
-                              )
-                              &&
-                              <>
-                                {( itsITandEM === "YES" &&
-                                    <CCard accentColor="info">
-
-                                      <CCardBody>
-
-                                        {fileInfos.length >= 0  &&(
-                                            <>
-                                              <CRow>
-                                                <CCol md="4" class="bg-warning py-2">
-                                                  <NotificationContainer/>
-                                                  {(
-                                                      labelRFV === "" && showUploadIconRFV &&
-                                                      <center>
-                                                        <label
-                                                            htmlFor="filePickerRAP"
-                                                            className="custom-file-upload">
-                                                          <img
-                                                              src={redUpload}
-                                                              className="cursorPointer"
-                                                              class="img-fluid"
-                                                              width="100px"
-                                                              height="75px"
-                                                              title="Déposer Rapport Version Finale"
-                                                              alt=""
-                                                          />
-                                                        </label>
-                                                        <br/>
-                                                        <label className="btn btn-default">
-                                                          <input
-                                                              id="filePickerRAP"
-                                                              type="file"
-                                                              className="cursorPointer"
-                                                              style={{ visibility: "hidden" }}
-                                                              accept="application/pdf"
-                                                              onChange={this.selectReportFinalVersion}
-                                                          />
-                                                        </label>
-                                                      </center>
-                                                  )}
-
-                                                  {(
-                                                      labelRFV !== "" &&
-                                                      <CRow>
-                                                        <CCol md="2"/>
-                                                        <CCol md="8">
-                                                          <CCard color="danger" className="text-white">
-                                                            <CCardHeader>
-                                                              <div style={{textAlign: "right"}}>
-                                                                <img  src={espritLogo}
-                                                                      className="cursorPointer"
-                                                                      class="img-fluid"
-                                                                      width="40px"
-                                                                      height="50px"/>
-                                                              </div>
-                                                            </CCardHeader>
-                                                            <CCardBody>
-                                                              <div style={{textAlign: "center"}}>
-                                                                {labelRFV}
-                                                                <br/><br/>
-                                                                <span className="signature">
-                                                By {studentFullName}
-                                              </span>
-                                                                <br/>
-                                                                <span style={{fontSize: "11px", color: "black"}}>
-                                                {dateRFV}
-                                              </span>
-                                                              </div>
-                                                            </CCardBody>
-                                                          </CCard>
-                                                        </CCol>
-                                                        <CCol md="2"/>
-                                                      </CRow>
-                                                  )}
-
-                                                  {(
-                                                      showReloadRFV && depotStatus === "METTRE A JOUR" &&
-                                                      <center>
-                                                        <CButton  shape="pill" color="danger" aria-expanded="true"
-                                                                  onClick={() => this.modifyMyRFV()}>
-                                                          <CTooltip content="Modifier mon Rapport Version Finale" placement="top">
-                                                            <CIcon content={freeSet.cilReload}/>
-                                                          </CTooltip>
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileRFV && !giveOKRFV && (
-                                                      <center>
-                                                        <div className="alert alert-danger" role="alert" style= {{width: "300px"}}>
-                                                          Il ne s'agit pas d'un Fichier PDF !.
-                                                          <br/>
-                                                          Merci de respecter le format demandé.
-                                                        </div>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileRFV && successUploadRFV && (
-                                                      <div className="progress">
-                                                        <div
-                                                            className="progress-bar bg-danger progress-bar-striped progress-bar-animated"
-                                                            role="progressbar"
-                                                            aria-valuenow={progressRFV}
-                                                            aria-valuemin="0"
-                                                            aria-valuemax="100"
-                                                            style={{ width: progressRFV + "%" }}>
-                                                          {progressRFV}%
-                                                        </div>
-                                                      </div>
-                                                  )}
-
-                                                  {showButtonRFV && giveOKRFV && labelRFV !== "" && (
-                                                      <center>
-                                                        <Checkbox
-                                                            checked={this.state.checked}
-                                                            color="secondary"
-                                                            onChange={(e) =>
-                                                                this.reportConfidentialHandler(e)
-                                                            }
-                                                            inputProps={{ "aria-label": "secondary checkbox" }}
-                                                        />
-                                                        &nbsp;&nbsp; Confidendial Upload
-                                                      </center>
-                                                  )}
-
-                                                  {(
-                                                      showButtonRFV &&
-                                                      <center>
-                                                        <CButton  variant="outline" color="danger"
-                                                                  onClick={this.uploadReportFinalVersion}
-                                                                  disabled={labelRFV === ""}
-                                                                  enabled={labelRFV !== ""}>
-                                                          Déposer Rapport Version Finale
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-
-                                                </CCol>
-
-                                                <CCol md="4" class="bg-warning py-2">
-                                                  {(
-                                                      labelRAP === "" && showUploadIconRAP &&
-                                                      <center>
-                                                        <label
-                                                            htmlFor="filePickerASP"
-                                                            className="custom-file-upload">
-                                                          <img
-                                                              src={blueLightUpload}
-                                                              className="cursorPointer"
-                                                              class="img-fluid"
-                                                              width="100px"
-                                                              height="75px"
-                                                              title="Déposer Rapport Anti-Plagiat"
-                                                              alt=""
-                                                          />
-                                                        </label>
-                                                        <br/>
-                                                        <label className="btn btn-default">
-                                                          <input
-                                                              id="filePickerASP"
-                                                              type="file"
-                                                              className="cursorPointer"
-                                                              style={{ visibility: "hidden" }}
-                                                              accept="application/pdf"
-                                                              onChange={this.selectReportAntiPlagiat}
-                                                          />
-                                                        </label>
-                                                      </center>
-                                                  )}
-
-                                                  {(
-                                                      labelRAP !== "" &&
-                                                      <CRow>
-                                                        <CCol md="2"/>
-                                                        <CCol md="8">
-                                                          <CCard color="info" className="text-white">
-                                                            <CCardHeader>
-                                                              <div style={{textAlign: "right"}}>
-                                                                <img  src={espritLogo}
-                                                                      className="cursorPointer"
-                                                                      class="img-fluid"
-                                                                      width="40px"
-                                                                      height="50px"/>
-                                                              </div>
-                                                            </CCardHeader>
-                                                            <CCardBody>
-                                                              <div style={{textAlign: "center"}}>
-                                                                {labelRAP}
-                                                                <br/><br/>
-                                                                <span className="signature">
-                                                By {studentFullName}
-                                              </span>
-                                                                <br/>
-                                                                <span style={{fontSize: "11px", color: "black"}}>
-                                                {dateRAP}
-                                              </span>
-                                                              </div>
-                                                            </CCardBody>
-                                                          </CCard>
-                                                        </CCol>
-                                                        <CCol md="2"/>
-                                                      </CRow>
-                                                  )}
-
-                                                  {(
-                                                      showReloadRAP && depotStatus === "METTRE A JOUR" &&
-                                                      <center>
-                                                        <CButton  shape="pill" color="info" aria-expanded="true"
-                                                                  onClick={() => this.modifyMyRAP()}>
-                                                          <CTooltip content="Modifier mon Rapport Anti-Plagiat" placement="top">
-                                                            <CIcon content={freeSet.cilReload}/>
-                                                          </CTooltip>
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileRAP && !giveOKRAP && (
-                                                      <center>
-                                                        <div className="alert alert-danger" role="alert" style= {{width: "300px"}}>
-                                                          Il ne s'agit pas d'un Fichier PDF !.
-                                                          <br/>
-                                                          Merci de respecter le format demandé.
-                                                        </div>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileRAP && successUploadRAP && (
-                                                      <div className="progress">
-                                                        <div
-                                                            className="progress-bar bg-info progress-bar-striped progress-bar-animated"
-                                                            role="progressbar"
-                                                            aria-valuenow={progressRAP}
-                                                            aria-valuemin="0"
-                                                            aria-valuemax="100"
-                                                            style={{ width: progressRAP + "%" }}>
-                                                          {progressRAP}%
-                                                        </div>
-                                                      </div>
-                                                  )}
-
-                                                  {(
-                                                      showButtonRAP &&
-                                                      <center>
-                                                        <CButton  variant="outline" color="info"
-                                                                  onClick={this.uploadPlagiat}
-                                                                  disabled={labelRAP === ""}
-                                                                  enabled={labelRAP !== ""}>
-                                                          Déposer Rapport Anti-Plagiat
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-                                                </CCol>
-
-                                                <CCol md="4" class="bg-warning py-2">
-
-                                                  {(
-                                                      labelASP === "" && showUploadIconASP &&
-                                                      <center>
-                                                        <label
-                                                            htmlFor="filePickerRFV"
-                                                            className="custom-file-upload">
-                                                          <img
-                                                              src={orangeUpload}
-                                                              className="cursorPointer"
-                                                              class="img-fluid"
-                                                              width="100px"
-                                                              height="75px"
-                                                              title="Déposer Attestation Stage PFE"
-                                                              alt=""
-                                                          />
-                                                        </label>
-                                                        <br/>
-                                                        <label className="btn btn-default">
-                                                          <input
-                                                              id="filePickerRFV"
-                                                              type="file"
-                                                              className="cursorPointer"
-                                                              style={{ visibility: "hidden" }}
-                                                              accept="application/pdf"
-                                                              onChange={this.selectAttestationStagePFE}
-                                                          />
-                                                        </label>
-                                                      </center>
-                                                  )}
-
-                                                  {(
-                                                      labelASP !== "" &&
-                                                      <CRow>
-                                                        <CCol md="2"/>
-                                                        <CCol md="8">
-                                                          <CCard color="warning" className="text-white">
-                                                            <CCardHeader>
-                                                              <div style={{textAlign: "right"}}>
-                                                                <img  src={espritLogo}
-                                                                      className="cursorPointer"
-                                                                      class="img-fluid"
-                                                                      width="40px"
-                                                                      height="50px"/>
-                                                              </div>
-                                                            </CCardHeader>
-                                                            <CCardBody>
-                                                              <div style={{textAlign: "center"}}>
-                                                                {labelASP}
-                                                                <br/><br/>
-                                                                <span className="signature">
-                                                By {studentFullName}
-                                              </span>
-                                                                <br/>
-                                                                <span style={{fontSize: "11px", color: "black"}}>
-                                                {dateASP}
-                                              </span>
-                                                              </div>
-                                                            </CCardBody>
-                                                          </CCard>
-                                                        </CCol>
-                                                        <CCol md="2"/>
-                                                      </CRow>
-                                                  )}
-
-                                                  {(
-                                                      showReloadASP && depotStatus === "METTRE A JOUR" &&
-                                                      <center>
-                                                        <CButton  shape="pill" color="warning" aria-expanded="true"
-                                                                  onClick={() => this.modifyMyASP()}>
-                                                          <CTooltip content="Modifier mon Attestation Stage PFE" placement="top">
-                                                            <CIcon content={freeSet.cilReload}/>
-                                                          </CTooltip>
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileASP && !giveOKASP && (
-                                                      <center>
-                                                        <div className="alert alert-danger" role="alert" style= {{width: "300px"}}>
-                                                          Il ne s'agit pas d'un Fichier PDF !.
-                                                          <br/>
-                                                          Merci de respecter le format demandé.
-                                                        </div>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileASP && successUploadASP && (
-                                                      <div className="progress">
-                                                        <div
-                                                            className="progress-bar bg-warning progress-bar-striped progress-bar-animated"
-                                                            role="progressbar"
-                                                            aria-valuenow={progressASP}
-                                                            aria-valuemin="0"
-                                                            aria-valuemax="100"
-                                                            style={{ width: progressASP + "%" }}>
-                                                          {progressASP}%
-                                                        </div>
-                                                      </div>
-                                                  )}
-
-                                                  {(
-                                                      showButtonASP &&
-                                                      <center>
-                                                        <CButton  variant="outline" color="warning"
-                                                                  onClick={this.uploadTrainingCertif}
-                                                                  disabled={labelASP === ""}
-                                                                  enabled={labelASP !== ""}>
-                                                          Déposer Attestation Stage PFE
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-
-                                                </CCol>
-
-                                                <br/>
-
-                                              </CRow>
-                                              <br/>
-                                              {(fileInfos.length > 0 &&
-                                                  <Divider />
-                                              )}
-
-                                            </>
-                                        )}
-
-                                        {showPopupSuccessUpload && (
-                                            <Modal
-                                                isOpen={showPopupSuccessUpload}
-                                                contentLabel="Example Modal"
-                                                style={customStyles}>
-                                              <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Information</span>
-                                              <hr/>
-                                              <center>
-                                                <br />
-                                                <br />
-                                                {message}
-                                                <br />
-                                                <br />
-                                                <br />
-                                                <button
-                                                    className="btn btn-sm btn-primary"
-                                                    onClick={this.closeModalSuccessUpload}
-                                                >
-                                                  Ok
-                                                </button>
-                                                <br />
-                                                <br />
-                                              </center>
-                                            </Modal>
-                                        )}
-                                        {showModalConfirmRelanceDepot && (
-                                            <Modal
-                                                isOpen={showModalConfirmRelanceDepot}
-                                                contentLabel="Example Modal"
-                                                style={customStyles}>
-                                              <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Confirmation</span>
-                                              <hr/>
-                                              <center>
-                                                <br />
-                                                <br />
-                                                Êtes-vous sûr de vouloir relancer votre dépôt ?
-                                                <br />
-                                                <br />
-                                                <br />
-                                                <button className="btn btn-sm btn-success"
-                                                        onClick={this.modifyMyDepot}>
-                                                  Oui
-                                                </button>
-                                                &nbsp;
-                                                <button className="btn btn-sm btn-danger"
-                                                        onClick={this.closeModalConfirmRelanceDepot}>
-                                                  Non
-                                                </button>
-                                                <br />
-                                                <br />
-                                              </center>
-                                            </Modal>
-                                        )}
-
-                                        {fileInfos.length >0 && (
-                                            <div>
-
-                                              <CContainer>
-                                                <CRow>
-                                                  <CCol md="9" class="bg-warning py-2">
-                                                    <div className="card-header">
-                                                      <span className="menuTitleBleuReport">Informations sur mes Rapports 7</span>
-                                                    </div>
-
-                                                    <ul className="list-group list-group-flush">
-                                                      {fileInfos.map((file, index) => (
-                                                          <li className="list-group-item" key={index}>
-                                                            <CRow>
-                                                              <CCol md="4" class="bg-warning py-2">
-                                                                {file.includes("RLV") && (
-                                                                    <CListGroup accent>
-                                                                      <CListGroupItem accent="dark"><strong>Rapport Version 1</strong></CListGroupItem>
-                                                                    </CListGroup>
-                                                                )}
-                                                                {file.includes("RFV") && (
-                                                                    <CListGroup accent>
-                                                                      <CListGroupItem accent="danger"><strong>Rapport Version Finale</strong></CListGroupItem>
-                                                                    </CListGroup>
-                                                                )}
-                                                                {file.includes("RAP") && (
-                                                                    <CListGroup accent>
-                                                                      <CListGroupItem accent="info"><strong>Rapport Anti-Plagiat : URKUND</strong></CListGroupItem>
-                                                                    </CListGroup>
-                                                                )}
-                                                                {file.includes("ASP") && (
-                                                                    <CListGroup accent>
-                                                                      <CListGroupItem accent="warning"><strong>Attestation Stage PFE</strong></CListGroupItem>
-                                                                    </CListGroup>
-                                                                )}
-                                                              </CCol>
-                                                              <CCol md="6" class="bg-warning py-2">
-                                                                <div style={{marginTop: '13px'}}>
-                                                                  {file.substr(0, file.indexOf("UNITR1"))}.pdf
-                                                                </div>
-                                                              </CCol>
-                                                              <CCol md="2" class="bg-warning py-2">
-                                                                <div style={{marginTop: '13px'}}>
-                                                                  {file.substr(file.indexOf("UNITR1") + 9)}
-                                                                </div>
-                                                              </CCol>
-                                                            </CRow>
-                                                          </li>
-                                                      ))}
-                                                    </ul>
-                                                  </CCol>
-                                                  <CCol lg="3">
-                                                    <br/>
-                                                    {(
-                                                        depotStatus === "METTRE A JOUR" && fileInfos.length > 1 &&
-                                                        <center>
-                                                          <br/><br/>
-
-                                                          <span className="text-primary" style={{fontSize: "11px"}}>
-                                      Cliquer sur ce bouton pour <ins>relancer</ins> votre Dépôt.
-                                    </span>
-                                                          <br/>
-                                                          <Icon icon={handPointingDown} color="blue" width="30" height="30" />
-                                                          <br/><br/>
-
-                                                          <CButton  shape="pill" color="primary" aria-expanded="true"
-                                                                    onClick={() => this.openModalConfirmRelanceDepot()}>
-                                                            <CTooltip content="Relancer mon Dépôt" placement="top">
-                                                              <CIcon content={freeSet.cilReload}/>
-                                                            </CTooltip>
-                                                          </CButton>
-                                                        </center>
-                                                    )}
-                                                    {( depotStatus.includes("DEPOSEE") &&
-                                                        <CAlert color="info">
-                                                          <h5 className="alert-heading"><strong>Dépôt Effectué</strong></h5>
-                                                          <p>
-                                                            Votre requête a été bien déposée le <ins>{depotStatus.substring(7, depotStatus.length)}</ins>.
-                                                          </p>
-                                                          <p>
-                                                            Elle va être traitée le plus tôt possible.
-                                                          </p>
-                                                          <hr />
-                                                          <p className="mb-0">
-                                                            Merci de patienter.
-                                                          </p>
-                                                        </CAlert>
-                                                    )}
-
-                                                    {( depotStatus.includes("VALIDEE") &&
-                                                        <CAlert color="success">
-                                                          <h5 className="alert-heading"><strong>Dépôt Validé</strong></h5>
-                                                          <p>
-                                                            Votre requête a été <ins>validée</ins> le <ins>{depotStatus.substring(7, depotStatus.length)}</ins>.
-                                                          </p>
-                                                          <hr />
-                                                          <p className="mb-0">
-                                                            Bonne Chance.
-                                                          </p>
-                                                        </CAlert>
-                                                    )}
-
-                                                    {( depotStatus.includes("INCOMPLET") &&
-                                                        <CAlert color="danger">
-                                                          <h5 className="alert-heading"><strong>Dépôt Incomplet</strong></h5>
-                                                          <p>
-                                                            Votre requête a été marquée comme <ins>incomplète</ins> le <ins>{depotStatus.substring(9, 19)}</ins>.
-                                                          </p>
-                                                          <strong>Motif: </strong> {depotStatus.substring(19, depotStatus.length)}.
-                                                          <hr />
-                                                          <CButton  variant="outline" color="danger"
-                                                                    onClick={() => this.requestForUpdateMyDepot()}>
-                                                            Mettre à jour mon Dépôt
-                                                          </CButton>
-                                                        </CAlert>
-                                                    )}
-                                                  </CCol>
-                                                </CRow>
-                                              </CContainer>
-                                            </div>
-                                        )}
-
-                                      </CCardBody>
-                                      <CCardFooter>
-                                        <CRow>
-                                          <CCol sm="4" md="3"/>
-                                          <CCol sm="4" md="7">
-                                            {(
-                                                depotStatus === "METTRE A JOUR" && fileInfos.length === 3 &&
-                                                <>
-                                  <span className="text-success" style={{fontSize: "11px"}}>
-                                    Cliquer sur ce bouton pour <strong> valider votre dépôt </strong> ( <ins>PS:</ins> Une fois Cliquer, vous ne pourrez pas modifier votre dépôt ).
-                                  </span>
-                                                  &nbsp;&nbsp;&nbsp;
-                                                  <Icon icon={handPointingRight} color="green" width="30" height="30" />
-                                                </>
-                                            )}
-                                          </CCol>
-                                          <CCol sm="4" md="2">
-                                            {(
-                                                depotStatus.includes("DEPOSEE") &&
-                                                <h5><CBadge color="primary">Requête Envoyée</CBadge></h5>
-                                            )}
-
-                                            {(
-                                                depotStatus.includes("VALIDEE") &&
-                                                <h5><CBadge color="success">Dépôt Validé</CBadge></h5>
-                                            )}
-
-                                            {(
-                                                depotStatus.includes("INCOMPLET") &&
-                                                <h5><CBadge color="danger">Dépôt Incomplet</CBadge></h5>
-                                            )}
-                                            {(
-                                                (depotStatus === "METTRE A JOUR" ) &&
-                                                <CButton  color="success"
-                                                          disabled={fileInfos.length !== 4}
-                                                          enabled={fileInfos.length === 4}
-                                                          className="float-right"
-                                                          onClick={() => this.validateMyDepot()}>
-                                                  Je valide 4 - {fileInfos.length}
-                                                </CButton>
-                                            )}
-
-                                            {(
-                                                showSpinnerWaitingDepot &&
-                                                <Backdrop className={classes.backdrop} open={showSpinnerWaitingDepot} >
-                                                  <CircularProgress color="inherit" />
-                                                </Backdrop>
-                                            )}
-
-
-
-                                          </CCol>
-                                        </CRow>
-                                      </CCardFooter>
-                                    </CCard>
-                                )}
-
-                                {( itsITandEM === "NO" &&
-                                    <CCard accentColor="info">
-
-                                      <CCardBody>
-
-                                        {fileInfos.length >= 0  &&(
-                                            <>
-                                              <CRow>
-                                                <CCol md="3" class="bg-warning py-2">
-                                                  <NotificationContainer/>
-                                                  {(
-                                                      labelRFV === "" && showUploadIconRFV &&
-                                                      <center>
-                                                        <label
-                                                            htmlFor="filePickerRAP"
-                                                            className="custom-file-upload">
-                                                          <img
-                                                              src={redUpload}
-                                                              className="cursorPointer"
-                                                              class="img-fluid"
-                                                              width="100px"
-                                                              height="75px"
-                                                              title="Déposer Rapport Version Finale"
-                                                              alt=""
-                                                          />
-                                                        </label>
-                                                        <br/>
-                                                        <label className="btn btn-default">
-                                                          <input
-                                                              id="filePickerRAP"
-                                                              type="file"
-                                                              className="cursorPointer"
-                                                              style={{ visibility: "hidden" }}
-                                                              accept="application/pdf"
-                                                              onChange={this.selectReportFinalVersion}
-                                                          />
-                                                        </label>
-                                                      </center>
-                                                  )}
-
-                                                  {(
-                                                      labelRFV !== "" &&
-                                                      <CRow>
-                                                        <CCol md="1"/>
-                                                        <CCol md="10">
-                                                          <CCard color="danger" className="text-white">
-                                                            <CCardHeader>
-                                                              <div style={{textAlign: "right"}}>
-                                                                <img  src={espritLogo}
-                                                                      className="cursorPointer"
-                                                                      class="img-fluid"
-                                                                      width="40px"
-                                                                      height="50px"/>
-                                                              </div>
-                                                            </CCardHeader>
-                                                            <CCardBody>
-                                                              <div style={{textAlign: "center"}}>
-                                                                {labelRFV}
-                                                                <br/><br/>
-                                                                <span className="signature">
-                                                By {studentFullName}
-                                              </span>
-                                                                <br/>
-                                                                <span style={{fontSize: "11px", color: "black"}}>
-                                                {dateRFV}
-                                              </span>
-                                                              </div>
-                                                            </CCardBody>
-                                                          </CCard>
-                                                        </CCol>
-                                                        <CCol md="1"/>
-                                                      </CRow>
-                                                  )}
-
-                                                  {(
-                                                      showReloadRFV && depotStatus === "METTRE A JOUR" &&
-                                                      <center>
-                                                        <CButton  shape="pill" color="danger" aria-expanded="true"
-                                                                  onClick={() => this.modifyMyRFV()}>
-                                                          <CTooltip content="Modifier mon Rapport Version Finale" placement="top">
-                                                            <CIcon content={freeSet.cilReload}/>
-                                                          </CTooltip>
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileRFV && !giveOKRFV && (
-                                                      <center>
-                                                        <div className="alert alert-danger" role="alert" style= {{width: "200px"}}>
-                                                          Il ne s'agit pas d'un Fichier PDF !.
-                                                          <br/>
-                                                          Merci de respecter le format demandé.
-                                                        </div>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileRFV && successUploadRFV && (
-                                                      <div className="progress">
-                                                        <div
-                                                            className="progress-bar bg-danger progress-bar-striped progress-bar-animated"
-                                                            role="progressbar"
-                                                            aria-valuenow={progressRFV}
-                                                            aria-valuemin="0"
-                                                            aria-valuemax="100"
-                                                            style={{ width: progressRFV + "%" }}>
-                                                          {progressRFV}%
-                                                        </div>
-                                                      </div>
-                                                  )}
-
-                                                  {showButtonRFV && giveOKRFV && labelRFV !== "" && (
-                                                      <center>
-                                                        <Checkbox
-                                                            checked={this.state.checked}
-                                                            color="secondary"
-                                                            onChange={(e) =>
-                                                                this.reportConfidentialHandler(e)
-                                                            }
-                                                            inputProps={{ "aria-label": "secondary checkbox" }}
-                                                        />
-                                                        &nbsp;&nbsp; Confidendial Upload
-                                                      </center>
-                                                  )}
-
-                                                  {(
-                                                      showButtonRFV &&
-                                                      <center>
-                                                        <CButton  variant="outline" color="danger"
-                                                                  onClick={this.uploadReportFinalVersion}
-                                                                  disabled={labelRFV === ""}
-                                                                  enabled={labelRFV !== ""}>
-                                                          Déposer Rapport Version Finale
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-
-                                                </CCol>
-
-                                                <CCol md="3" class="bg-warning py-2">
-                                                  {(
-                                                      labelRAP === "" && showUploadIconRAP &&
-                                                      <center>
-                                                        <label
-                                                            htmlFor="filePickerASP"
-                                                            className="custom-file-upload">
-                                                          <img
-                                                              src={blueLightUpload}
-                                                              className="cursorPointer"
-                                                              class="img-fluid"
-                                                              width="100px"
-                                                              height="75px"
-                                                              title="Déposer Rapport Anti-Plagiat"
-                                                              alt=""
-                                                          />
-                                                        </label>
-                                                        <br/>
-                                                        <label className="btn btn-default">
-                                                          <input
-                                                              id="filePickerASP"
-                                                              type="file"
-                                                              className="cursorPointer"
-                                                              style={{ visibility: "hidden" }}
-                                                              accept="application/pdf"
-                                                              onChange={this.selectReportAntiPlagiat}
-                                                          />
-                                                        </label>
-                                                      </center>
-                                                  )}
-
-                                                  {(
-                                                      labelRAP !== "" &&
-                                                      <CRow>
-                                                        <CCol md="1"/>
-                                                        <CCol md="10">
-                                                          <CCard color="info" className="text-white">
-                                                            <CCardHeader>
-                                                              <div style={{textAlign: "right"}}>
-                                                                <img  src={espritLogo}
-                                                                      className="cursorPointer"
-                                                                      class="img-fluid"
-                                                                      width="40px"
-                                                                      height="50px"/>
-                                                              </div>
-                                                            </CCardHeader>
-                                                            <CCardBody>
-                                                              <div style={{textAlign: "center"}}>
-                                                                {labelRAP}
-                                                                <br/><br/>
-                                                                <span className="signature">
-                                                By {studentFullName}
-                                              </span>
-                                                                <br/>
-                                                                <span style={{fontSize: "11px", color: "black"}}>
-                                                {dateRAP}
-                                              </span>
-                                                              </div>
-                                                            </CCardBody>
-                                                          </CCard>
-                                                        </CCol>
-                                                        <CCol md="1"/>
-                                                      </CRow>
-                                                  )}
-
-                                                  {(
-                                                      showReloadRAP && depotStatus === "METTRE A JOUR" &&
-                                                      <center>
-                                                        <CButton  shape="pill" color="info" aria-expanded="true"
-                                                                  onClick={() => this.modifyMyRAP()}>
-                                                          <CTooltip content="Modifier mon Rapport Anti-Plagiat" placement="top">
-                                                            <CIcon content={freeSet.cilReload}/>
-                                                          </CTooltip>
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileRAP && !giveOKRAP && (
-                                                      <center>
-                                                        <div className="alert alert-danger" role="alert" style= {{width: "200px"}}>
-                                                          Il ne s'agit pas d'un Fichier PDF !.
-                                                          <br/>
-                                                          Merci de respecter le format demandé.
-                                                        </div>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileRAP && successUploadRAP && (
-                                                      <div className="progress">
-                                                        <div
-                                                            className="progress-bar bg-info progress-bar-striped progress-bar-animated"
-                                                            role="progressbar"
-                                                            aria-valuenow={progressRAP}
-                                                            aria-valuemin="0"
-                                                            aria-valuemax="100"
-                                                            style={{ width: progressRAP + "%" }}>
-                                                          {progressRAP}%
-                                                        </div>
-                                                      </div>
-                                                  )}
-
-                                                  {(
-                                                      showButtonRAP &&
-                                                      <center>
-                                                        <CButton  variant="outline" color="info"
-                                                                  onClick={this.uploadPlagiat}
-                                                                  disabled={labelRAP === ""}
-                                                                  enabled={labelRAP !== ""}>
-                                                          Déposer Rapport Anti-Plagiat
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-                                                </CCol>
-
-                                                <CCol md="3" class="bg-warning py-2">
-
-                                                  {(
-                                                      labelASP === "" && showUploadIconASP &&
-                                                      <center>
-                                                        <label
-                                                            htmlFor="filePickerRFV"
-                                                            className="custom-file-upload">
-                                                          <img
-                                                              src={orangeUpload}
-                                                              className="cursorPointer"
-                                                              class="img-fluid"
-                                                              width="100px"
-                                                              height="75px"
-                                                              title="Déposer Attestation Stage PFE"
-                                                              alt=""
-                                                          />
-                                                        </label>
-                                                        <br/>
-                                                        <label className="btn btn-default">
-                                                          <input
-                                                              id="filePickerRFV"
-                                                              type="file"
-                                                              className="cursorPointer"
-                                                              style={{ visibility: "hidden" }}
-                                                              accept="application/pdf"
-                                                              onChange={this.selectAttestationStagePFE}
-                                                          />
-                                                        </label>
-                                                      </center>
-                                                  )}
-
-                                                  {(
-                                                      labelASP !== "" &&
-                                                      <CRow>
-                                                        <CCol md="1"/>
-                                                        <CCol md="10">
-                                                          <CCard color="warning" className="text-white">
-                                                            <CCardHeader>
-                                                              <div style={{textAlign: "right"}}>
-                                                                <img  src={espritLogo}
-                                                                      className="cursorPointer"
-                                                                      class="img-fluid"
-                                                                      width="40px"
-                                                                      height="50px"/>
-                                                              </div>
-                                                            </CCardHeader>
-                                                            <CCardBody>
-                                                              <div style={{textAlign: "center"}}>
-                                                                {labelASP}
-                                                                <br/><br/>
-                                                                <span className="signature">
-                                                By {studentFullName}
-                                              </span>
-                                                                <br/>
-                                                                <span style={{fontSize: "11px", color: "black"}}>
-                                                {dateASP}
-                                              </span>
-                                                              </div>
-                                                            </CCardBody>
-                                                          </CCard>
-                                                        </CCol>
-                                                        <CCol md="1"/>
-                                                      </CRow>
-                                                  )}
-
-                                                  {(
-                                                      showReloadASP && depotStatus === "METTRE A JOUR" &&
-                                                      <center>
-                                                        <CButton  shape="pill" color="warning" aria-expanded="true"
-                                                                  onClick={() => this.modifyMyASP()}>
-                                                          <CTooltip content="Modifier mon Attestation Stage PFE" placement="top">
-                                                            <CIcon content={freeSet.cilReload}/>
-                                                          </CTooltip>
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileASP && !giveOKASP && (
-                                                      <center>
-                                                        <div className="alert alert-danger" role="alert" style= {{width: "200px"}}>
-                                                          Il ne s'agit pas d'un Fichier PDF !.
-                                                          <br/>
-                                                          Merci de respecter le format demandé.
-                                                        </div>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileASP && successUploadASP && (
-                                                      <div className="progress">
-                                                        <div
-                                                            className="progress-bar bg-warning progress-bar-striped progress-bar-animated"
-                                                            role="progressbar"
-                                                            aria-valuenow={progressASP}
-                                                            aria-valuemin="0"
-                                                            aria-valuemax="100"
-                                                            style={{ width: progressASP + "%" }}>
-                                                          {progressASP}%
-                                                        </div>
-                                                      </div>
-                                                  )}
-
-                                                  {(
-                                                      showButtonASP &&
-                                                      <center>
-                                                        <CButton  variant="outline" color="warning"
-                                                                  onClick={this.uploadTrainingCertif}
-                                                                  disabled={labelASP === ""}
-                                                                  enabled={labelASP !== ""}>
-                                                          Déposer Attestation Stage PFE
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-
-                                                </CCol>
-
-                                                <CCol md="3" class="bg-primary py-2">
-                                                  {(
-                                                      labelDCS === "" && showUploadIconDCS &&
-                                                      <center>
-                                                        <label
-                                                            htmlFor="filePickerDCS"
-                                                            className="custom-file-upload">
-                                                          <img
-                                                              src={blueBoldUpload}
-                                                              className="cursorPointer"
-                                                              class="img-fluid"
-                                                              width="100px"
-                                                              height="75px"
-                                                              title="Déposer Dossier ou Document Optionnel"
-                                                              alt=""
-                                                          />
-                                                        </label>
-                                                        <br/>
-                                                        <label className="btn btn-default">
-                                                          <input
-                                                              id="filePickerDCS"
-                                                              type="file"
-                                                              className="cursorPointer"
-                                                              style={{ visibility: "hidden" }}
-                                                              onChange={this.selectDossierDocumentSupplemenaire}
-                                                          />
-                                                        </label>
-                                                      </center>
-                                                  )}
-
-                                                  {(
-                                                      labelDCS !== "" &&
-                                                      <CRow>
-                                                        <CCol md="1"/>
-                                                        <CCol md="10">
-                                                          <CCard color="primary" className="text-white">
-                                                            <CCardHeader>
-                                                              <div style={{textAlign: "right"}}>
-                                                                <img  src={espritLogo}
-                                                                      className="cursorPointer"
-                                                                      class="img-fluid"
-                                                                      width="40px"
-                                                                      height="50px"/>
-                                                              </div>
-                                                            </CCardHeader>
-                                                            <CCardBody>
-                                                              <div style={{textAlign: "center"}}>
-                                                                {labelDCS}
-                                                                <br/><br/>
-                                                                <span className="signature">
-                                                By {studentFullName}
-                                              </span>
-                                                                <br/>
-                                                                <span style={{fontSize: "11px", color: "black"}}>
-                                                {dateDCS}
-                                              </span>
-                                                              </div>
-                                                            </CCardBody>
-                                                          </CCard>
-                                                        </CCol>
-                                                        <CCol md="1"/>
-                                                      </CRow>
-                                                  )}
-
-                                                  {(
-                                                      showReloadDCS && depotStatus === "METTRE A JOUR" &&
-                                                      <center>
-                                                        <CButton  shape="pill" color="primary" aria-expanded="true"
-                                                                  onClick={() => this.modifyMyDCS()}>
-                                                          <CTooltip content="Modifier mon Supplément Optionnel" placement="top">
-                                                            <CIcon content={freeSet.cilReload}/>
-                                                          </CTooltip>
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-                                                  {currentFileDCS && successUploadDCS && (
-                                                      <div className="progress">
-                                                        <div
-                                                            className="progress-bar progress-bar-striped progress-bar-animated"
-                                                            role="progressbar"
-                                                            aria-valuenow={progressDCS}
-                                                            aria-valuemin="0"
-                                                            aria-valuemax="100"
-                                                            style={{ width: progressDCS + "%" }}>
-                                                          {progressDCS}%
-                                                        </div>
-                                                      </div>
-                                                  )}
-
-                                                  {(
-                                                      showButtonDCS &&
-                                                      <center>
-                                                        <CButton  variant="outline" color="primary"
-                                                                  onClick={this.uploadSupplement}
-                                                                  disabled={labelDCS === ""}
-                                                                  enabled={labelDCS !== ""}>
-                                                          Déposer Dossier Technique 4
-                                                        </CButton>
-                                                      </center>
-                                                  )}
-
-
-                                                </CCol>
-
-                                              </CRow>
-                                              <br/>
-                                              {(fileInfos.length > 0 &&
-                                                  <Divider />
-                                              )}
-
-                                            </>
-                                        )}
-
-                                        {showPopupSuccessUpload && (
-                                            <Modal
-                                                isOpen={showPopupSuccessUpload}
-                                                contentLabel="Example Modal"
-                                                style={customStyles}
-                                            >
-                                              <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Information</span>
-                                              <hr/>
-                                              <center>
-                                                <br />
-                                                <br />
-                                                {message}
-                                                <br />
-                                                <br />
-                                                <br />
-                                                <button
-                                                    className="btn btn-sm btn-primary"
-                                                    onClick={this.closeModalSuccessUpload}
-                                                >
-                                                  Ok
-                                                </button>
-                                                <br />
-                                                <br />
-                                              </center>
-                                            </Modal>
-                                        )}
-
-                                        {showModalConfirmRelanceDepot && (
-                                            <Modal
-                                                isOpen={showModalConfirmRelanceDepot}
-                                                contentLabel="Example Modal"
-                                                style={customStyles}
-                                            >
-                                              <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Confirmation</span>
-                                              <hr/>
-                                              <center>
-                                                <br />
-                                                <br />
-                                                Êtes-vous sûr de vouloir relancer votre dépôt ?
-                                                <br />
-                                                <br />
-                                                <br />
-                                                <button className="btn btn-sm btn-success"
-                                                        onClick={this.modifyMyDepot}>
-                                                  Oui
-                                                </button>
-                                                &nbsp;
-                                                <button className="btn btn-sm btn-danger"
-                                                        onClick={this.closeModalConfirmRelanceDepot}>
-                                                  Non
-                                                </button>
-                                                <br />
-                                                <br />
-                                              </center>
-                                            </Modal>
-                                        )}
-
-                                        {fileInfos.length >0 && (
-                                            <div>
-
-                                              <CContainer>
-                                                <CRow>
-                                                  <CCol md="9" class="bg-warning py-2">
-                                                    <div className="card-header">
-                                                      <span className="menuTitleGreyReport">Informations sur mes Rapports 8</span>
-                                                    </div>
-
-                                                    <ul className="list-group list-group-flush">
-                                                      {fileInfos.map((file, index) => (
-                                                          <li className="list-group-item" key={index}>
-                                                            <CRow>
-                                                              <CCol md="4" class="bg-warning py-2">
-                                                                {file.includes("RLV") && (
-                                                                    <CListGroup accent>
-                                                                      <CListGroupItem accent="dark"><strong>Rapport Version 1</strong></CListGroupItem>
-                                                                    </CListGroup>
-                                                                )}
-                                                                {file.includes("RFV") && (
-                                                                    <CListGroup accent>
-                                                                      <CListGroupItem accent="danger"><strong>Rapport Version Finale</strong></CListGroupItem>
-                                                                    </CListGroup>
-                                                                )}
-                                                                {file.includes("RAP") && (
-                                                                    <CListGroup accent>
-                                                                      <CListGroupItem accent="info"><strong>Rapport Anti-Plagiat : URKUND</strong></CListGroupItem>
-                                                                    </CListGroup>
-                                                                )}
-                                                                {file.includes("ASP") && (
-                                                                    <CListGroup accent>
-                                                                      <CListGroupItem accent="warning"><strong>Attestation Stage PFE</strong></CListGroupItem>
-                                                                    </CListGroup>
-                                                                )}
-                                                                {file.includes("DCS") && (
-                                                                    <CListGroup accent>
-                                                                      <CListGroupItem accent="primary"><strong>Dossier Technique</strong></CListGroupItem>
-                                                                    </CListGroup>
-                                                                )}
-                                                              </CCol>
-                                                              <CCol md="6" class="bg-warning py-2">
-                                                                <div style={{marginTop: '13px'}}>
-                                                                  {file.substr(0, file.indexOf("UNITR1"))}.pdf
-                                                                </div>
-                                                              </CCol>
-                                                              <CCol md="2" class="bg-warning py-2">
-                                                                <div style={{marginTop: '13px'}}>
-                                                                  {file.substr(file.indexOf("UNITR1") + 9)}
-                                                                </div>
-                                                              </CCol>
-                                                            </CRow>
-                                                          </li>
-                                                      ))}
-                                                    </ul>
-                                                  </CCol>
-                                                  <CCol lg="3">
-                                                    <br/>
-                                                    {(
-                                                        depotStatus === "METTRE A JOUR" &&
-                                                        <center>
-                                                          <br/><br/>
-
-                                                          <span className="text-dark" style={{fontSize: "11px"}}>
-                                      Cliquer sur ce bouton pour <ins>relancer</ins> votre Dépôt.
-                                    </span>
-                                                          <br/>
-                                                          <Icon icon={handPointingDown} color="grey" width="30" height="30" />
-                                                          <br/><br/>
-
-                                                          <CButton  shape="pill" color="dark" aria-expanded="true"
-                                                                    onClick={() => this.openModalConfirmRelanceDepot()}>
-                                                            <CTooltip content="Relancer mon Dépôt" placement="top">
-                                                              <CIcon content={freeSet.cilReload}/>
-                                                            </CTooltip>
-                                                          </CButton>
-                                                        </center>
-                                                    )}
-                                                    {( depotStatus.includes("DEPOSEE") &&
-                                                        <CAlert color="info">
-                                                          <h5 className="alert-heading"><strong>Dépôt Effectué</strong></h5>
-                                                          <p>
-                                                            Votre requête a été bien déposée le <ins>{depotStatus.substring(7, depotStatus.length)}</ins>.
-                                                          </p>
-                                                          <p>
-                                                            Elle va être traitée le plus tôt possible.
-                                                          </p>
-                                                          <hr />
-                                                          <p className="mb-0">
-                                                            Merci de patienter.
-                                                          </p>
-                                                        </CAlert>
-                                                    )}
-
-                                                    {( depotStatus.includes("VALIDEE") &&
-                                                        <CAlert color="success">
-                                                          <h5 className="alert-heading"><strong>Dépôt Validé</strong></h5>
-                                                          <p>
-                                                            Votre requête a été <ins>validée</ins> le <ins>{depotStatus.substring(7, depotStatus.length)}</ins>.
-                                                          </p>
-                                                          <hr />
-                                                          <p className="mb-0">
-                                                            Bonne Chance.
-                                                          </p>
-                                                        </CAlert>
-                                                    )}
-
-                                                    {( depotStatus.includes("INCOMPLET") &&
-                                                        <CAlert color="danger">
-                                                          <h5 className="alert-heading"><strong>Dépôt Incomplet</strong></h5>
-                                                          <p>
-                                                            Votre requête a été marquée comme <ins>incomplète</ins> le <ins>{depotStatus.substring(9, 19)}</ins>.
-                                                          </p>
-                                                          <strong>Motif: </strong> {depotStatus.substring(19, depotStatus.length)}.
-                                                          <hr />
-                                                          <CButton  variant="outline" color="danger"
-                                                                    onClick={() => this.requestForUpdateMyDepot()}>
-                                                            Mettre à jour mon Dépôt
-                                                          </CButton>
-                                                        </CAlert>
-                                                    )}
-                                                  </CCol>
-                                                </CRow>
-                                              </CContainer>
-                                            </div>
-                                        )}
-
-                                      </CCardBody>
-                                      <CCardFooter>
-                                        <CRow>
-                                          <CCol sm="4" md="3"/>
-                                          <CCol sm="4" md="7">
-                                            {(
-                                                depotStatus === "METTRE A JOUR" && fileInfos.length === 3 &&
-                                                <>
-                                  <span className="text-success" style={{fontSize: "11px"}}>
-                                    Cliquer sur ce bouton pour <strong> valider votre dépôt </strong> ( <ins>PS:</ins> Une fois Cliquer, vous ne pourrez pas modifier votre dépôt ).
-                                  </span>
-                                                  &nbsp;&nbsp;&nbsp;
-                                                  <Icon icon={handPointingRight} color="green" width="30" height="30" />
-                                                </>
-                                            )}
-                                          </CCol>
-                                          <CCol sm="4" md="2">
-                                            {(
-                                                depotStatus.includes("DEPOSEE") &&
-                                                <h5><CBadge color="primary">Requête Envoyée</CBadge></h5>
-                                            )}
-
-                                            {(
-                                                depotStatus.includes("VALIDEE") &&
-                                                <h5><CBadge color="success">Dépôt Validé</CBadge></h5>
-                                            )}
-
-                                            {(
-                                                depotStatus.includes("INCOMPLET") &&
-                                                <h5><CBadge color="danger">Dépôt Incomplet</CBadge></h5>
-                                            )}
-                                            {(
-                                                depotStatus === "METTRE A JOUR"  && itsITandEM === "YES" &&
-                                                <CButton  color="success"
-                                                          disabled={fileInfos.length !== 4}
-                                                          enabled={fileInfos.length === 4}
-                                                          className="float-right"
-                                                          onClick={() => this.validateMyDepot()}>
-                                                  Je valide 2 - {fileInfos.length}
-                                                </CButton>
-                                            )}
-
-                                            {(
-                                                depotStatus === "METTRE A JOUR"  && itsITandEM === "NO" &&
-                                                <CButton  color="success"
-                                                          disabled={fileInfos.length < 5}
-                                                          enabled={fileInfos.length > 4}
-                                                          className="float-right"
-                                                          onClick={() => this.validateMyDepot()}>
-                                                  Je valide 3 - {fileInfos.length}
-                                                </CButton>
-                                            )}
-
-                                            {(
-                                                showSpinnerWaitingDepot &&
-                                                <Backdrop className={classes.backdrop} open={showSpinnerWaitingDepot} >
-                                                  <CircularProgress color="inherit" />
-                                                </Backdrop>
-                                            )}
-
-
-
-                                          </CCol>
-                                        </CRow>
-                                      </CCardFooter>
-                                    </CCard>
-                                )}
-
-                                <CModal
-                                    show={showPopupSuccessDepot}
-                                    onClose={() => this.closeShowPopupSuccessDepot()}
-                                    className={classes.backdrop1}
-                                    color="primary">
-                                  <CModalHeader closeButton>
-                                    <CModalTitle>Information</CModalTitle>
-                                  </CModalHeader>
-                                  <CModalBody>
-                                    <center>
-                                      <br/><br/>
-                                      Vous avez validé le dépôt de vos documents.
-                                      <br/>
-                                      Merci de patienter jusqu'au le traitement de votre requête.
-                                    </center>
-                                    <br/><br/>
-                                  </CModalBody>
-                                  <CModalFooter>
-                                    <CButton color="primary" onClick={() => this.closeShowPopupSuccessDepot()}>
-                                      Ok
-                                    </CButton>
-                                  </CModalFooter>
-                                </CModal>
-
-                                <CModal
-                                    show={showPopupUpdateDepot}
-                                    onClose={() => this.updateMyDepotNO()}
-                                    className={classes.backdrop1}
-                                    color="secondary">
-                                  <CModalHeader closeButton>
-                                    <CModalTitle>Confirmation</CModalTitle>
-                                  </CModalHeader>
-                                  <CModalBody>
-                                    Voulez-vous mettre à jour votre dépôt <ins>en tenir compte</ins> la cause de signaler votre requête précédante comme incomplète ?.
-                                    <br/><br/>
-                                  </CModalBody>
-                                  <CModalFooter>
-                                    <CButton color="success" onClick={() => this.updateMyDepotYES()}>
-                                      Oui
-                                    </CButton>
-                                    &nbsp;
-                                    <CButton color="danger" onClick={() => this.updateMyDepotNO()}>
-                                      Pas Maintenant
-                                    </CButton>
-                                  </CModalFooter>
-                                </CModal>
-                              </>
-                            }
-
-                            {
-                                fileInfos.length >0 && fichePFEStatus === "06" && timeForDepotRapportV2 === "ITISTIMEV2" &&
+                                  </center>
+                                </CCol>
+                              </CRow>
+                            </CCol>
+                          </CRow>
+                        }
+                      </>
+                    }
+
+                    {
+                      // Upload Rapport v2 lol-1703 && timeForDepotRapportV2.trim() === "ITISTIMEV2" &&
+                      fichePFEStatus === "03" && timeForDepotRapportV2.trim() === "ITISTIMEV2" &&
+                      <>
+                        {( (fileInfos.length === 3 || fileInfos.length > 0) && itsITandEM === "YES" &&
+                          <CCard accentColor="info">
+
+                            <CCardBody>
+
+                              {fileInfos.length >= 0  &&(
                                 <>
+                                  <CRow>
+                                    <CCol md="4" class="bg-warning py-2">
+                                      <NotificationContainer/>
+                                      {(
+                                        labelRFV === "" && showUploadIconRFV &&
+                                        <center>
+                                          <label
+                                            htmlFor="filePickerRAP"
+                                            className="custom-file-upload">
+                                            <img
+                                              src={redUpload}
+                                              className="cursorPointer"
+                                              class="img-fluid"
+                                              width="100px"
+                                              height="75px"
+                                              title="Déposer Rapport Version Finale"
+                                              alt=""
+                                            />
+                                          </label>
+                                          <br/>
+                                          <label className="btn btn-default">
+                                            <input
+                                              id="filePickerRAP"
+                                              type="file"
+                                              className="cursorPointer"
+                                              style={{ visibility: "hidden" }}
+                                              accept="application/pdf"
+                                              onChange={this.selectReportFinalVersion}
+                                            />
+                                          </label>
+                                        </center>
+                                      )}
+
+                                      {(
+                                        labelRFV !== "" &&
+                                        <CRow>
+                                          <CCol md="2"/>
+                                          <CCol md="8">
+                                            <CCard color="danger" className="text-white">
+                                              <CCardHeader>
+                                                <div style={{textAlign: "right"}}>
+                                                  <img  src={espritLogo}
+                                                        className="cursorPointer"
+                                                        class="img-fluid"
+                                                        width="40px"
+                                                        height="50px"/>
+                                                </div>
+                                              </CCardHeader>
+                                              <CCardBody>
+                                                <div style={{textAlign: "center"}}>
+                                                  {labelRFV}
+                                                  <br/><br/>
+                                                  <span className="signature">
+                                                By {studentFullName}
+                                              </span>
+                                                  <br/>
+                                                  <span style={{fontSize: "11px", color: "black"}}>
+                                                {dateRFV}
+                                              </span>
+                                                </div>
+                                              </CCardBody>
+                                            </CCard>
+                                          </CCol>
+                                          <CCol md="2"/>
+                                        </CRow>
+                                      )}
+
+                                      {(
+                                        showReloadRFV && (depotStatus === "" || depotStatus === "METTRE A JOUR") &&
+                                        <center>
+                                          <CButton  shape="pill" color="danger" aria-expanded="true"
+                                                    onClick={() => this.modifyMyRFV()}>
+                                            <CTooltip content="Modifier mon Rapport Version Finale" placement="top">
+                                              <CIcon content={freeSet.cilReload}/>
+                                            </CTooltip>
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                      {currentFileRFV && !giveOKRFV && (
+                                        <center>
+                                          <div className="alert alert-danger" role="alert" style= {{width: "300px"}}>
+                                            Il ne s'agit pas d'un Fichier PDF !.
+                                            <br/>
+                                            Merci de respecter le format demandé.
+                                          </div>
+                                        </center>
+                                      )}
+
+                                      {currentFileRFV && successUploadRFV && (
+                                        <div className="progress">
+                                          <div
+                                            className="progress-bar bg-danger progress-bar-striped progress-bar-animated"
+                                            role="progressbar"
+                                            aria-valuenow={progressRFV}
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"
+                                            style={{ width: progressRFV + "%" }}>
+                                            {progressRFV}%
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {showButtonRFV && giveOKRFV && labelRFV !== "" && (
+                                        <center>
+                                          <Checkbox
+                                            checked={this.state.checked}
+                                            color="secondary"
+                                            onChange={(e) =>
+                                              this.reportConfidentialHandler(e)
+                                            }
+                                            inputProps={{ "aria-label": "secondary checkbox" }}
+                                          />
+                                          &nbsp;&nbsp; Confidendial Upload
+                                        </center>
+                                      )}
+
+                                      {(
+                                        showButtonRFV &&
+                                        <center>
+                                          <CButton  variant="outline" color="danger"
+                                                    onClick={this.uploadReportFinalVersion}
+                                                    disabled={labelRFV === ""}
+                                                    enabled={labelRFV !== ""}>
+                                            Déposer Rapport Version Finale
+                                          </CButton>
+                                        </center>
+                                      )}
+
+
+                                    </CCol>
+
+                                    <CCol md="4" class="bg-warning py-2">
+                                      {(
+                                        labelRAP === "" && showUploadIconRAP &&
+                                        <center>
+                                          <label
+                                            htmlFor="filePickerASP"
+                                            className="custom-file-upload">
+                                            <img
+                                              src={blueLightUpload}
+                                              className="cursorPointer"
+                                              class="img-fluid"
+                                              width="100px"
+                                              height="75px"
+                                              title="Déposer Rapport Anti-Plagiat"
+                                              alt=""
+                                            />
+                                          </label>
+                                          <br/>
+                                          <label className="btn btn-default">
+                                            <input
+                                              id="filePickerASP"
+                                              type="file"
+                                              className="cursorPointer"
+                                              style={{ visibility: "hidden" }}
+                                              accept="application/pdf"
+                                              onChange={this.selectReportAntiPlagiat}
+                                            />
+                                          </label>
+                                        </center>
+                                      )}
+
+                                      {(
+                                        labelRAP !== "" &&
+                                        <CRow>
+                                          <CCol md="2"/>
+                                          <CCol md="8">
+                                            <CCard color="info" className="text-white">
+                                              <CCardHeader>
+                                                <div style={{textAlign: "right"}}>
+                                                  <img  src={espritLogo}
+                                                        className="cursorPointer"
+                                                        class="img-fluid"
+                                                        width="40px"
+                                                        height="50px"/>
+                                                </div>
+                                              </CCardHeader>
+                                              <CCardBody>
+                                                <div style={{textAlign: "center"}}>
+                                                  {labelRAP}
+                                                  <br/><br/>
+                                                  <span className="signature">
+                                                By {studentFullName}
+                                              </span>
+                                                  <br/>
+                                                  <span style={{fontSize: "11px", color: "black"}}>
+                                                {dateRAP}
+                                              </span>
+                                                </div>
+                                              </CCardBody>
+                                            </CCard>
+                                          </CCol>
+                                          <CCol md="2"/>
+                                        </CRow>
+                                      )}
+
+                                      {(
+                                        showReloadRAP && (depotStatus === "" || depotStatus === "METTRE A JOUR") &&
+                                        <center>
+                                          <CButton  shape="pill" color="info" aria-expanded="true"
+                                                    onClick={() => this.modifyMyRAP()}>
+                                            <CTooltip content="Modifier mon Rapport Anti-Plagiat" placement="top">
+                                              <CIcon content={freeSet.cilReload}/>
+                                            </CTooltip>
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                      {currentFileRAP && !giveOKRAP && (
+                                        <center>
+                                          <div className="alert alert-danger" role="alert" style= {{width: "300px"}}>
+                                            Il ne s'agit pas d'un Fichier PDF !.
+                                            <br/>
+                                            Merci de respecter le format demandé.
+                                          </div>
+                                        </center>
+                                      )}
+
+                                      {currentFileRAP && successUploadRAP && (
+                                        <div className="progress">
+                                          <div
+                                            className="progress-bar bg-info progress-bar-striped progress-bar-animated"
+                                            role="progressbar"
+                                            aria-valuenow={progressRAP}
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"
+                                            style={{ width: progressRAP + "%" }}>
+                                            {progressRAP}%
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {(
+                                        showButtonRAP &&
+                                        <center>
+                                          <CButton  variant="outline" color="info"
+                                                    onClick={this.uploadPlagiat}
+                                                    disabled={labelRAP === ""}
+                                                    enabled={labelRAP !== ""}>
+                                            Déposer Rapport Anti-Plagiat
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                    </CCol>
+
+                                    <CCol md="4" class="bg-warning py-2">
+
+                                      {(
+                                        labelASP === "" && showUploadIconASP &&
+                                        <center>
+                                          <label
+                                            htmlFor="filePickerRFV"
+                                            className="custom-file-upload">
+                                            <img
+                                              src={orangeUpload}
+                                              className="cursorPointer"
+                                              class="img-fluid"
+                                              width="100px"
+                                              height="75px"
+                                              title="Déposer Attestation Stage PFE"
+                                              alt=""
+                                            />
+                                          </label>
+                                          <br/>
+                                          <label className="btn btn-default">
+                                            <input
+                                              id="filePickerRFV"
+                                              type="file"
+                                              className="cursorPointer"
+                                              style={{ visibility: "hidden" }}
+                                              accept="application/pdf"
+                                              onChange={this.selectAttestationStagePFE}
+                                            />
+                                          </label>
+                                        </center>
+                                      )}
+
+                                      {(
+                                        labelASP !== "" &&
+                                        <CRow>
+                                          <CCol md="2"/>
+                                          <CCol md="8">
+                                            <CCard color="warning" className="text-white">
+                                              <CCardHeader>
+                                                <div style={{textAlign: "right"}}>
+                                                  <img  src={espritLogo}
+                                                        className="cursorPointer"
+                                                        class="img-fluid"
+                                                        width="40px"
+                                                        height="50px"/>
+                                                </div>
+                                              </CCardHeader>
+                                              <CCardBody>
+                                                <div style={{textAlign: "center"}}>
+                                                  {labelASP}
+                                                  <br/><br/>
+                                                  <span className="signature">
+                                                By {studentFullName}
+                                              </span>
+                                                  <br/>
+                                                  <span style={{fontSize: "11px", color: "black"}}>
+                                                {dateASP}
+                                              </span>
+                                                </div>
+                                              </CCardBody>
+                                            </CCard>
+                                          </CCol>
+                                          <CCol md="2"/>
+                                        </CRow>
+                                      )}
+
+                                      {(
+                                        showReloadASP && (depotStatus === "" || depotStatus === "METTRE A JOUR") &&
+                                        <center>
+                                          <CButton  shape="pill" color="warning" aria-expanded="true"
+                                                    onClick={() => this.modifyMyASP()}>
+                                            <CTooltip content="Modifier mon Attestation Stage PFE" placement="top">
+                                              <CIcon content={freeSet.cilReload}/>
+                                            </CTooltip>
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                      {currentFileASP && !giveOKASP && (
+                                        <center>
+                                          <div className="alert alert-danger" role="alert" style= {{width: "300px"}}>
+                                            Il ne s'agit pas d'un Fichier PDF !.
+                                            <br/>
+                                            Merci de respecter le format demandé.
+                                          </div>
+                                        </center>
+                                      )}
+
+                                      {currentFileASP && successUploadASP && (
+                                        <div className="progress">
+                                          <div
+                                            className="progress-bar bg-warning progress-bar-striped progress-bar-animated"
+                                            role="progressbar"
+                                            aria-valuenow={progressASP}
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"
+                                            style={{ width: progressASP + "%" }}>
+                                            {progressASP}%
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {(
+                                        showButtonASP &&
+                                        <center>
+                                          <CButton  variant="outline" color="warning"
+                                                    onClick={this.uploadTrainingCertif}
+                                                    disabled={labelASP === ""}
+                                                    enabled={labelASP !== ""}>
+                                            Déposer Attestation Stage PFE
+                                          </CButton>
+                                        </center>
+                                      )}
+
+
+                                    </CCol>
+
+                                    <br/>
+
+                                  </CRow>
+                                  <br/>
+                                  {(fileInfos.length > 0 &&
+                                    <Divider />
+                                  )}
+
+                                </>
+                              )}
+
+                              {showPopupSuccessUpload && (
+                                <Modal
+                                  isOpen={showPopupSuccessUpload}
+                                  contentLabel="Example Modal"
+                                  style={customStyles}>
+                                  <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Information</span>
+                                  <hr/>
+                                  <center>
+                                    <br />
+                                    <br />
+                                    {message}
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <button
+                                      className="btn btn-sm btn-primary"
+                                      onClick={this.closeModalSuccessUpload}
+                                    >
+                                      Ok
+                                    </button>
+                                    <br />
+                                    <br />
+                                  </center>
+                                </Modal>
+                              )}
+                              {showModalConfirmRelanceDepot && (
+                                <Modal
+                                  isOpen={showModalConfirmRelanceDepot}
+                                  contentLabel="Example Modal"
+                                  style={customStyles}>
+                                  <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Confirmation</span>
+                                  <hr/>
+                                  <center>
+                                    <br />
+                                    <br />
+                                    Êtes-vous sûr de vouloir relancer votre dépôt ?
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <button className="btn btn-sm btn-success"
+                                            onClick={this.modifyMyDepot}>
+                                      Oui
+                                    </button>
+                                    &nbsp;
+                                    <button className="btn btn-sm btn-danger"
+                                            onClick={this.closeModalConfirmRelanceDepot}>
+                                      Non
+                                    </button>
+                                    <br />
+                                    <br />
+                                  </center>
+                                </Modal>
+                              )}
+
+                              {fileInfos.length >0 && (
+                                <div>
                                   <CContainer>
                                     <CRow>
                                       <CCol md="9" class="bg-warning py-2">
                                         <div className="card-header">
                                           <span className="menuTitleBleuReport">Informations sur mes Rapports</span>
                                         </div>
+
                                         <ul className="list-group list-group-flush">
                                           {
                                             fileInfos.map((file, index) => (
-                                                <li className="list-group-item" key={index}>
-                                                  <CRow>
-                                                    <CCol md="3" class="bg-warning py-2">
-                                                      {file.includes("RLV") && (
-                                                          <CListGroup accent>
-                                                            <CListGroupItem accent="dark"><strong>Rapport Version 1</strong></CListGroupItem>
-                                                          </CListGroup>
-                                                      )}
-                                                      {file.includes("RFV") && (
-                                                          <CListGroup accent>
-                                                            <CListGroupItem accent="danger"><strong>Rapport Version Finale</strong></CListGroupItem>
-                                                          </CListGroup>
-                                                      )}
-                                                      {file.includes("RAP") && (
-                                                          <CListGroup accent>
-                                                            <CListGroupItem accent="info"><strong>Rapport Anti-Plagiat : URKUND</strong></CListGroupItem>
-                                                          </CListGroup>
-                                                      )}
-                                                      {file.includes("ASP") && (
-                                                          <CListGroup accent>
-                                                            <CListGroupItem accent="warning"><strong>Attestation Stage PFE</strong></CListGroupItem>
-                                                          </CListGroup>
-                                                      )}
-                                                    </CCol>
-                                                    <CCol md="6" class="bg-warning py-2">
-                                                      <div style={{marginTop: '13px'}}>
-                                                        {file.substr(0, file.indexOf("UNITR1"))}.pdf
-                                                      </div>
-                                                    </CCol>
-                                                    <CCol md="2" class="bg-warning py-2">
-                                                      <div style={{marginTop: '13px'}}>
-                                                        {file.substr(file.indexOf("UNITR1") + 9)}
-                                                      </div>
-                                                    </CCol>
-                                                  </CRow>
-                                                </li>
+                                              <li className="list-group-item" key={index}>
+                                                <CRow>
+                                                  <CCol md="3" class="bg-warning py-2">
+                                                    {file.includes("RLV") && (
+                                                      <CListGroup accent>
+                                                        <CListGroupItem accent="dark"><strong>Rapport Version 1</strong></CListGroupItem>
+                                                      </CListGroup>
+                                                    )}
+                                                    {file.includes("RFV") && (
+                                                      <CListGroup accent>
+                                                        <CListGroupItem accent="danger"><strong>Rapport Version Finale</strong></CListGroupItem>
+                                                      </CListGroup>
+                                                    )}
+                                                    {file.includes("RAP") && (
+                                                      <CListGroup accent>
+                                                        <CListGroupItem accent="info"><strong>Rapport Anti-Plagiat : URKUND</strong></CListGroupItem>
+                                                      </CListGroup>
+                                                    )}
+                                                    {file.includes("ASP") && (
+                                                      <CListGroup accent>
+                                                        <CListGroupItem accent="warning"><strong>Attestation Stage PFE</strong></CListGroupItem>
+                                                      </CListGroup>
+                                                    )}
+                                                  </CCol>
+                                                  <CCol md="6" class="bg-warning py-2">
+                                                    <div style={{marginTop: '13px'}}>
+                                                      {file.substr(0, file.indexOf("UNITR1"))}.pdf
+                                                    </div>
+                                                  </CCol>
+                                                  <CCol md="2" class="bg-warning py-2">
+                                                    <div style={{marginTop: '13px'}}>
+                                                      {file.substr(file.indexOf("UNITR1") + 9)}
+                                                    </div>
+                                                  </CCol>
+                                                  <CCol md="1" class="bg-warning py-2">
+                                                    <div style={{marginTop: '13px'}}>
+                                                      {
+                                                        fileInfos.length === 1 &&
+                                                        <CButton  shape="pill" color="primary" aria-expanded="true"
+                                                                  onClick={() => this.modifyMyRLV()}>
+                                                          <CTooltip content="Modifier mon Rapport Version 1" placement="top">
+                                                            <CIcon content={freeSet.cilReload}/>
+                                                          </CTooltip>
+                                                        </CButton>
+                                                      }
+                                                    </div>
+                                                  </CCol>
+                                                </CRow>
+                                              </li>
                                             ))}
                                         </ul>
                                       </CCol>
                                       <CCol lg="3">
+                                        <br/>
+                                        {(
+                                          (depotStatus === "" || depotStatus === "METTRE A JOUR") && fileInfos.length > 1 &&
+                                          <center>
+                                            <br/><br/>
+
+                                            <span className="text-primary" style={{fontSize: "11px"}}>
+                                                  Cliquer sur ce bouton pour <ins>relancer</ins> votre Dépôt.
+                                                </span>
+                                            <br/>
+                                            <Icon icon={handPointingDown} color="blue" width="30" height="30" />
+                                            <br/><br/>
+
+                                            <CButton  shape="pill" color="primary" aria-expanded="true"
+                                                      onClick={() => this.openModalConfirmRelanceDepot()}>
+                                              <CTooltip content="Relancer mon Dépôt" placement="top">
+                                                <CIcon content={freeSet.cilReload}/>
+                                              </CTooltip>
+                                            </CButton>
+                                          </center>
+                                        )}
                                         {( depotStatus.includes("DEPOSEE") &&
+                                          <CAlert color="info">
+                                            <h5 className="alert-heading"><strong>Dépôt Effectué</strong></h5>
+                                            <p>
+                                              Votre requête a été bien déposée le <ins>{depotStatus.substring(7, depotStatus.length)}</ins>.
+                                            </p>
+                                            <p>
+                                              Elle va être traitée le plus tôt possible.
+                                            </p>
+                                            <hr />
+                                            <p className="mb-0">
+                                              Merci de patienter.
+                                            </p>
+                                          </CAlert>
+                                        )}
+
+                                        {( depotStatus.includes("VALIDEE") &&
+                                          <CAlert color="success">
+                                            <h5 className="alert-heading"><strong>Dépôt Validé</strong></h5>
+                                            <p>
+                                              Votre requête a été <ins>validée</ins> le <ins>{depotStatus.substring(7, depotStatus.length)}</ins>.
+                                            </p>
+                                            <hr />
+                                            <p className="mb-0">
+                                              Bonne Chance.
+                                            </p>
+                                          </CAlert>
+                                        )}
+
+                                        {( depotStatus.includes("INCOMPLET") &&
+                                          <CAlert color="danger">
+                                            <h5 className="alert-heading"><strong>Dépôt Incomplet</strong></h5>
+                                            <p>
+                                              Votre requête a été marquée comme <ins>incomplète</ins> le <ins>{depotStatus.substring(9, 19)}</ins>.
+                                            </p>
+                                            <strong>Motif: </strong> {depotStatus.substring(19, depotStatus.length)}.
+                                            <hr />
+                                            <CButton  variant="outline" color="danger"
+                                                      onClick={() => this.requestForUpdateMyDepot()}>
+                                              Mettre à jour mon Dépôt
+                                            </CButton>
+                                          </CAlert>
+                                        )}
+                                      </CCol>
+                                    </CRow>
+                                  </CContainer>
+                                </div>
+                              )}
+
+                            </CCardBody>
+                            <CCardFooter>
+                              <CRow>
+                                <CCol sm="4" md="3"/>
+                                <CCol sm="4" md="7">
+                                  {(
+                                    (depotStatus === "" || depotStatus === "METTRE A JOUR") && fileInfos.length === 3 &&
+                                    <>
+                                  <span className="text-success" style={{fontSize: "11px"}}>
+                                    Cliquer sur ce bouton pour <strong> valider votre dépôt </strong> ( <ins>PS:</ins> Une fois Cliquer, vous ne pourrez pas modifier votre dépôt ).
+                                  </span>
+                                      &nbsp;&nbsp;&nbsp;
+                                      <Icon icon={handPointingRight} color="green" width="30" height="30" />
+                                    </>
+                                  )}
+                                </CCol>
+                                <CCol sm="4" md="2">
+                                  {(
+                                    depotStatus.includes("DEPOSEE") &&
+                                    <h5><CBadge color="primary">Requête Envoyée</CBadge></h5>
+                                  )}
+
+                                  {(
+                                    depotStatus.includes("VALIDEE") &&
+                                    <h5><CBadge color="success">Dépôt Validé</CBadge></h5>
+                                  )}
+
+                                  {(
+                                    depotStatus.includes("INCOMPLET") &&
+                                    <h5><CBadge color="danger">Dépôt Incomplet</CBadge></h5>
+                                  )}
+
+                                  {(
+                                    showSpinnerWaitingDepot &&
+                                    <Backdrop className={classes.backdrop} open={showSpinnerWaitingDepot} >
+                                      <CircularProgress color="inherit" />
+                                    </Backdrop>
+                                  )}
+
+                                </CCol>
+                              </CRow>
+                              <CRow>
+                                <CCol md={8}/>
+                                <CCol md={3}>
+                                  {(
+                                    (
+                                      (surveyFirstJob !== "DONE") &&
+                                      (depotStatus === "" || depotStatus === "METTRE A JOUR")
+                                    ) &&
+                                    <CButton  color="primary"
+                                      //style={{width: "300px"}}
+                                      //variant="ghost"
+                                              disabled={fileInfos.length !== 4}
+                                              enabled={fileInfos.length === 4}
+                                              className="float-left"
+                                              onClick={() => this.redirectToJalon()}>
+                                      Je passe à l'Enquête puis Confirmer mon Dépôt
+                                    </CButton>
+                                  )}
+                                </CCol>
+                                <CCol md={1}>
+                                  {(
+                                    (depotStatus === "" || depotStatus === "METTRE A JOUR") &&
+                                    <CButton  color="success"
+                                              style={{width: "100px"}}
+                                              disabled={fileInfos.length !== 4 || surveyFirstJob !== "DONE"}
+                                              enabled={fileInfos.length === 4}
+                                              className="float-right"
+                                              onClick={() => this.validateMyDepot()}>
+                                      Confirmer mon Dépôt
+                                    </CButton>
+                                  )}
+                                </CCol>
+                              </CRow>
+                            </CCardFooter>
+                          </CCard>
+                        )}
+
+                        {( (fileInfos.length === 3 || fileInfos.length > 0) && itsITandEM === "NO" &&
+                          <CCard accentColor="info">
+
+                            <CCardBody>
+
+                              {fileInfos.length >= 0  &&(
+                                <>
+                                  <CRow>
+                                    <CCol md="3" class="bg-warning py-2">
+                                      <NotificationContainer/>
+                                      {(
+                                        labelRFV === "" && showUploadIconRFV &&
+                                        <center>
+                                          <label
+                                            htmlFor="filePickerRAP"
+                                            className="custom-file-upload">
+                                            <img
+                                              src={redUpload}
+                                              className="cursorPointer"
+                                              class="img-fluid"
+                                              width="100px"
+                                              height="75px"
+                                              title="Déposer Rapport Version Finale"
+                                              alt=""
+                                            />
+                                          </label>
+                                          <br/>
+                                          <label className="btn btn-default">
+                                            <input
+                                              id="filePickerRAP"
+                                              type="file"
+                                              className="cursorPointer"
+                                              style={{ visibility: "hidden" }}
+                                              accept="application/pdf"
+                                              onChange={this.selectReportFinalVersion}
+                                            />
+                                          </label>
+                                        </center>
+                                      )}
+
+                                      {(
+                                        labelRFV !== "" &&
+                                        <CRow>
+                                          <CCol md="1"/>
+                                          <CCol md="10">
+                                            <CCard color="danger" className="text-white">
+                                              <CCardHeader>
+                                                <div style={{textAlign: "right"}}>
+                                                  <img  src={espritLogo}
+                                                        className="cursorPointer"
+                                                        class="img-fluid"
+                                                        width="40px"
+                                                        height="50px"/>
+                                                </div>
+                                              </CCardHeader>
+                                              <CCardBody>
+                                                <div style={{textAlign: "center"}}>
+                                                  {labelRFV}
+                                                  <br/><br/>
+                                                  <span className="signature">
+                                                By {studentFullName}
+                                              </span>
+                                                  <br/>
+                                                  <span style={{fontSize: "11px", color: "black"}}>
+                                                {dateRFV}
+                                              </span>
+                                                </div>
+                                              </CCardBody>
+                                            </CCard>
+                                          </CCol>
+                                          <CCol md="1"/>
+                                        </CRow>
+                                      )}
+
+                                      {(
+                                        showReloadRFV && (depotStatus === "" || depotStatus === "METTRE A JOUR") &&
+                                        <center>
+                                          <CButton  shape="pill" color="danger" aria-expanded="true"
+                                                    onClick={() => this.modifyMyRFV()}>
+                                            <CTooltip content="Modifier mon Rapport Version Finale" placement="top">
+                                              <CIcon content={freeSet.cilReload}/>
+                                            </CTooltip>
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                      {currentFileRFV && !giveOKRFV && (
+                                        <center>
+                                          <div className="alert alert-danger" role="alert" style= {{width: "200px"}}>
+                                            Il ne s'agit pas d'un Fichier PDF !.
+                                            <br/>
+                                            Merci de respecter le format demandé.
+                                          </div>
+                                        </center>
+                                      )}
+
+                                      {currentFileRFV && successUploadRFV && (
+                                        <div className="progress">
+                                          <div
+                                            className="progress-bar bg-danger progress-bar-striped progress-bar-animated"
+                                            role="progressbar"
+                                            aria-valuenow={progressRFV}
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"
+                                            style={{ width: progressRFV + "%" }}>
+                                            {progressRFV}%
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {showButtonRFV && giveOKRFV && labelRFV !== "" && (
+                                        <center>
+                                          <Checkbox
+                                            checked={this.state.checked}
+                                            color="secondary"
+                                            onChange={(e) =>
+                                              this.reportConfidentialHandler(e)
+                                            }
+                                            inputProps={{ "aria-label": "secondary checkbox" }}
+                                          />
+                                          &nbsp;&nbsp; Confidendial Upload
+                                        </center>
+                                      )}
+
+                                      {(
+                                        showButtonRFV &&
+                                        <center>
+                                          <CButton  variant="outline" color="danger"
+                                                    onClick={this.uploadReportFinalVersion}
+                                                    disabled={labelRFV === ""}
+                                                    enabled={labelRFV !== ""}>
+                                            Déposer Rapport Version Finale
+                                          </CButton>
+                                        </center>
+                                      )}
+
+
+                                    </CCol>
+
+                                    <CCol md="3" class="bg-warning py-2">
+                                      {(
+                                        labelRAP === "" && showUploadIconRAP &&
+                                        <center>
+                                          <label
+                                            htmlFor="filePickerASP"
+                                            className="custom-file-upload">
+                                            <img
+                                              src={blueLightUpload}
+                                              className="cursorPointer"
+                                              class="img-fluid"
+                                              width="100px"
+                                              height="75px"
+                                              title="Déposer Rapport Anti-Plagiat"
+                                              alt=""
+                                            />
+                                          </label>
+                                          <br/>
+                                          <label className="btn btn-default">
+                                            <input
+                                              id="filePickerASP"
+                                              type="file"
+                                              className="cursorPointer"
+                                              style={{ visibility: "hidden" }}
+                                              accept="application/pdf"
+                                              onChange={this.selectReportAntiPlagiat}
+                                            />
+                                          </label>
+                                        </center>
+                                      )}
+
+                                      {(
+                                        labelRAP !== "" &&
+                                        <CRow>
+                                          <CCol md="1"/>
+                                          <CCol md="10">
+                                            <CCard color="info" className="text-white">
+                                              <CCardHeader>
+                                                <div style={{textAlign: "right"}}>
+                                                  <img  src={espritLogo}
+                                                        className="cursorPointer"
+                                                        class="img-fluid"
+                                                        width="40px"
+                                                        height="50px"/>
+                                                </div>
+                                              </CCardHeader>
+                                              <CCardBody>
+                                                <div style={{textAlign: "center"}}>
+                                                  {labelRAP}
+                                                  <br/><br/>
+                                                  <span className="signature">
+                                                By {studentFullName}
+                                              </span>
+                                                  <br/>
+                                                  <span style={{fontSize: "11px", color: "black"}}>
+                                                {dateRAP}
+                                              </span>
+                                                </div>
+                                              </CCardBody>
+                                            </CCard>
+                                          </CCol>
+                                          <CCol md="1"/>
+                                        </CRow>
+                                      )}
+
+                                      {(
+                                        showReloadRAP && (depotStatus === "" || depotStatus === "METTRE A JOUR") &&
+                                        <center>
+                                          <CButton  shape="pill" color="info" aria-expanded="true"
+                                                    onClick={() => this.modifyMyRAP()}>
+                                            <CTooltip content="Modifier mon Rapport Anti-Plagiat" placement="top">
+                                              <CIcon content={freeSet.cilReload}/>
+                                            </CTooltip>
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                      {currentFileRAP && !giveOKRAP && (
+                                        <center>
+                                          <div className="alert alert-danger" role="alert" style= {{width: "200px"}}>
+                                            Il ne s'agit pas d'un Fichier PDF !.
+                                            <br/>
+                                            Merci de respecter le format demandé.
+                                          </div>
+                                        </center>
+                                      )}
+
+                                      {currentFileRAP && successUploadRAP && (
+                                        <div className="progress">
+                                          <div
+                                            className="progress-bar bg-info progress-bar-striped progress-bar-animated"
+                                            role="progressbar"
+                                            aria-valuenow={progressRAP}
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"
+                                            style={{ width: progressRAP + "%" }}>
+                                            {progressRAP}%
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {(
+                                        showButtonRAP &&
+                                        <center>
+                                          <CButton  variant="outline" color="info"
+                                                    onClick={this.uploadPlagiat}
+                                                    disabled={labelRAP === ""}
+                                                    enabled={labelRAP !== ""}>
+                                            Déposer Rapport Anti-Plagiat
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                    </CCol>
+
+                                    <CCol md="3" class="bg-warning py-2">
+
+                                      {(
+                                        labelASP === "" && showUploadIconASP &&
+                                        <center>
+                                          <label
+                                            htmlFor="filePickerRFV"
+                                            className="custom-file-upload">
+                                            <img
+                                              src={orangeUpload}
+                                              className="cursorPointer"
+                                              class="img-fluid"
+                                              width="100px"
+                                              height="75px"
+                                              title="Déposer Attestation Stage PFE"
+                                              alt=""
+                                            />
+                                          </label>
+                                          <br/>
+                                          <label className="btn btn-default">
+                                            <input
+                                              id="filePickerRFV"
+                                              type="file"
+                                              className="cursorPointer"
+                                              style={{ visibility: "hidden" }}
+                                              accept="application/pdf"
+                                              onChange={this.selectAttestationStagePFE}
+                                            />
+                                          </label>
+                                        </center>
+                                      )}
+
+                                      {(
+                                        labelASP !== "" &&
+                                        <CRow>
+                                          <CCol md="1"/>
+                                          <CCol md="10">
+                                            <CCard color="warning" className="text-white">
+                                              <CCardHeader>
+                                                <div style={{textAlign: "right"}}>
+                                                  <img  src={espritLogo}
+                                                        className="cursorPointer"
+                                                        class="img-fluid"
+                                                        width="40px"
+                                                        height="50px"/>
+                                                </div>
+                                              </CCardHeader>
+                                              <CCardBody>
+                                                <div style={{textAlign: "center"}}>
+                                                  {labelASP}
+                                                  <br/><br/>
+                                                  <span className="signature">
+                                                By {studentFullName}
+                                              </span>
+                                                  <br/>
+                                                  <span style={{fontSize: "11px", color: "black"}}>
+                                                {dateASP}
+                                              </span>
+                                                </div>
+                                              </CCardBody>
+                                            </CCard>
+                                          </CCol>
+                                          <CCol md="1"/>
+                                        </CRow>
+                                      )}
+
+                                      {(
+                                        showReloadASP && (depotStatus === "" || depotStatus === "METTRE A JOUR") &&
+                                        <center>
+                                          <CButton  shape="pill" color="warning" aria-expanded="true"
+                                                    onClick={() => this.modifyMyASP()}>
+                                            <CTooltip content="Modifier mon Attestation Stage PFE" placement="top">
+                                              <CIcon content={freeSet.cilReload}/>
+                                            </CTooltip>
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                      {currentFileASP && !giveOKASP && (
+                                        <center>
+                                          <div className="alert alert-danger" role="alert" style= {{width: "200px"}}>
+                                            Il ne s'agit pas d'un Fichier PDF !.
+                                            <br/>
+                                            Merci de respecter le format demandé.
+                                          </div>
+                                        </center>
+                                      )}
+
+                                      {currentFileASP && successUploadASP && (
+                                        <div className="progress">
+                                          <div
+                                            className="progress-bar bg-warning progress-bar-striped progress-bar-animated"
+                                            role="progressbar"
+                                            aria-valuenow={progressASP}
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"
+                                            style={{ width: progressASP + "%" }}>
+                                            {progressASP}%
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {(
+                                        showButtonASP &&
+                                        <center>
+                                          <CButton  variant="outline" color="warning"
+                                                    onClick={this.uploadTrainingCertif}
+                                                    disabled={labelASP === ""}
+                                                    enabled={labelASP !== ""}>
+                                            Déposer Attestation Stage PFE
+                                          </CButton>
+                                        </center>
+                                      )}
+
+
+                                    </CCol>
+
+                                    <CCol md="3" class="bg-primary py-2">
+                                      {(
+                                        labelDCS === "" && showUploadIconDCS &&
+                                        <center>
+                                          <label
+                                            htmlFor="filePickerDCS"
+                                            className="custom-file-upload">
+                                            <img
+                                              src={blueBoldUpload}
+                                              className="cursorPointer"
+                                              class="img-fluid"
+                                              width="100px"
+                                              height="75px"
+                                              title="Déposer Dossier ou Document Optionnel"
+                                              alt=""
+                                            />
+                                          </label>
+                                          <br/>
+                                          <label className="btn btn-default">
+                                            <input
+                                              id="filePickerDCS"
+                                              type="file"
+                                              className="cursorPointer"
+                                              style={{ visibility: "hidden" }}
+                                              onChange={this.selectDossierDocumentSupplemenaire}
+                                            />
+                                          </label>
+                                        </center>
+                                      )}
+
+                                      {(
+                                        labelDCS !== "" &&
+                                        <CRow>
+                                          <CCol md="1"/>
+                                          <CCol md="10">
+                                            <CCard color="primary" className="text-white">
+                                              <CCardHeader>
+                                                <div style={{textAlign: "right"}}>
+                                                  <img  src={espritLogo}
+                                                        className="cursorPointer"
+                                                        class="img-fluid"
+                                                        width="40px"
+                                                        height="50px"/>
+                                                </div>
+                                              </CCardHeader>
+                                              <CCardBody>
+                                                <div style={{textAlign: "center"}}>
+                                                  {labelDCS}
+                                                  <br/><br/>
+                                                  <span className="signature">
+                                                By {studentFullName}
+                                              </span>
+                                                  <br/>
+                                                  <span style={{fontSize: "11px", color: "black"}}>
+                                                {dateDCS}
+                                              </span>
+                                                </div>
+                                              </CCardBody>
+                                            </CCard>
+                                          </CCol>
+                                          <CCol md="1"/>
+                                        </CRow>
+                                      )}
+
+                                      {(
+                                        showReloadDCS && (depotStatus === "" || depotStatus === "METTRE A JOUR") &&
+                                        <center>
+                                          <CButton  shape="pill" color="primary" aria-expanded="true"
+                                                    onClick={() => this.modifyMyDCS()}>
+                                            <CTooltip content="Modifier mon Supplément Optionnel" placement="top">
+                                              <CIcon content={freeSet.cilReload}/>
+                                            </CTooltip>
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                      {currentFileDCS && successUploadDCS && (
+                                        <div className="progress">
+                                          <div
+                                            className="progress-bar progress-bar-striped progress-bar-animated"
+                                            role="progressbar"
+                                            aria-valuenow={progressDCS}
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"
+                                            style={{ width: progressDCS + "%" }}>
+                                            {progressDCS}%
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {(
+                                        showButtonDCS &&
+                                        <center>
+                                          <CButton  variant="outline" color="primary"
+                                                    onClick={this.uploadSupplement}
+                                                    disabled={labelDCS === ""}
+                                                    enabled={labelDCS !== ""}>
+                                            Déposer Dossier Technique 1
+                                          </CButton>
+                                        </center>
+                                      )}
+
+
+                                    </CCol>
+
+                                  </CRow>
+                                  <br/>
+                                  {(fileInfos.length > 0 &&
+                                    <Divider />
+                                  )}
+
+                                </>
+                              )}
+
+                              {showPopupSuccessUpload && (
+                                <Modal
+                                  isOpen={showPopupSuccessUpload}
+                                  contentLabel="Example Modal"
+                                  style={customStyles}
+                                >
+                                  <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Information</span>
+                                  <hr/>
+                                  <center>
+                                    <br />
+                                    <br />
+                                    {message}
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <button
+                                      className="btn btn-sm btn-primary"
+                                      onClick={this.closeModalSuccessUpload}
+                                    >
+                                      Ok
+                                    </button>
+                                    <br />
+                                    <br />
+                                  </center>
+                                </Modal>
+                              )}
+
+                              {showModalConfirmRelanceDepot && (
+                                <Modal
+                                  isOpen={showModalConfirmRelanceDepot}
+                                  contentLabel="Example Modal"
+                                  style={customStyles}
+                                >
+                                  <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Confirmation</span>
+                                  <hr/>
+                                  <center>
+                                    <br />
+                                    <br />
+                                    Êtes-vous sûr de vouloir relancer votre dépôt ?
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <button className="btn btn-sm btn-success"
+                                            onClick={this.modifyMyDepot}>
+                                      Oui
+                                    </button>
+                                    &nbsp;
+                                    <button className="btn btn-sm btn-danger"
+                                            onClick={this.closeModalConfirmRelanceDepot}>
+                                      Non
+                                    </button>
+                                    <br />
+                                    <br />
+                                  </center>
+                                </Modal>
+                              )}
+
+                              {fileInfos.length >0 && (
+                                <div>
+
+                                  <CContainer>
+                                    <CRow>
+                                      <CCol md="9" class="bg-warning py-2">
+
+                                        <div className="card-header">
+                                          <span className="menuTitleGreyReport">Informations sur mes Rapports 2</span>
+                                        </div>
+
+                                        <ul className="list-group list-group-flush">
+                                          {fileInfos.map((file, index) => (
+                                            <li className="list-group-item" key={index}>
+                                              <CRow>
+                                                <CCol md="4" class="bg-warning py-2">
+                                                  {file.includes("RLV") && (
+                                                    <CListGroup accent>
+                                                      <CListGroupItem accent="dark"><strong>Rapport Version 1</strong></CListGroupItem>
+                                                    </CListGroup>
+                                                  )}
+                                                  {file.includes("RFV") && (
+                                                    <CListGroup accent>
+                                                      <CListGroupItem accent="danger"><strong>Rapport Version Finale</strong></CListGroupItem>
+                                                    </CListGroup>
+                                                  )}
+                                                  {file.includes("RAP") && (
+                                                    <CListGroup accent>
+                                                      <CListGroupItem accent="info"><strong>Rapport Anti-Plagiat : URKUND</strong></CListGroupItem>
+                                                    </CListGroup>
+                                                  )}
+                                                  {file.includes("ASP") && (
+                                                    <CListGroup accent>
+                                                      <CListGroupItem accent="warning"><strong>Attestation Stage PFE</strong></CListGroupItem>
+                                                    </CListGroup>
+                                                  )}
+                                                  {file.includes("DCS") && (
+                                                    <CListGroup accent>
+                                                      <CListGroupItem accent="primary"><strong>Dossier Technique</strong></CListGroupItem>
+                                                    </CListGroup>
+                                                  )}
+                                                </CCol>
+                                                <CCol md="6" class="bg-warning py-2">
+                                                  <div style={{marginTop: '13px'}}>
+                                                    {file.substr(0, file.indexOf("UNITR1"))}.pdf
+                                                  </div>
+                                                </CCol>
+                                                <CCol md="2" class="bg-warning py-2">
+                                                  <div style={{marginTop: '13px'}}>
+                                                    {file.substr(file.indexOf("UNITR1") + 9)}
+                                                  </div>
+                                                </CCol>
+                                              </CRow>
+                                            </li>
+                                          ))}
+                                        </ul>
+
+                                      </CCol>
+                                      <CCol md="3">
+                                        <br/>
+                                        {(
+                                          (depotStatus === "" || depotStatus === "METTRE A JOUR") &&
+                                          <center>
+                                            <br/><br/>
+
+                                            <span className="text-dark" style={{fontSize: "11px"}}>
+                                                  Cliquer sur ce bouton pour <ins>relancer</ins> votre Dépôt.
+                                                </span>
+                                            <br/>
+                                            <Icon icon={handPointingDown} color="grey" width="30" height="30" />
+                                            <br/><br/>
+
+                                            <CButton  shape="pill" color="dark" aria-expanded="true"
+                                                      onClick={() => this.openModalConfirmRelanceDepot()}>
+                                              <CTooltip content="Relancer mon Dépôt" placement="top">
+                                                <CIcon content={freeSet.cilReload}/>
+                                              </CTooltip>
+                                            </CButton>
+                                          </center>
+                                        )}
+                                        {( depotStatus.includes("DEPOSEE") &&
+                                          <CAlert color="info">
+                                            <h5 className="alert-heading"><strong>Dépôt Effectué</strong></h5>
+                                            <p>
+                                              Votre requête a été bien déposée le <ins>{depotStatus.substring(7, depotStatus.length)}</ins>.
+                                            </p>
+                                            <p>
+                                              Elle va être traitée le plus tôt possible.
+                                            </p>
+                                            <hr />
+                                            <p className="mb-0">
+                                              Merci de patienter.
+                                            </p>
+                                          </CAlert>
+                                        )}
+
+                                        {( depotStatus.includes("VALIDEE") &&
+                                          <CAlert color="success">
+                                            <h5 className="alert-heading"><strong>Dépôt Validé</strong></h5>
+                                            <p>
+                                              Votre requête a été <ins>validée</ins> le <ins>{depotStatus.substring(7, depotStatus.length)}</ins>.
+                                            </p>
+                                            <hr />
+                                            <p className="mb-0">
+                                              Bonne Chance.
+                                            </p>
+                                          </CAlert>
+                                        )}
+
+                                        {( depotStatus.includes("INCOMPLET") &&
+                                          <CAlert color="danger">
+                                            <h5 className="alert-heading"><strong>Dépôt Incomplet</strong></h5>
+                                            <p>
+                                              Votre requête a été marquée comme <ins>incomplète</ins> le <ins>{depotStatus.substring(9, 19)}</ins>.
+                                            </p>
+                                            <strong>Motif: </strong> {depotStatus.substring(19, depotStatus.length)}.
+                                            <hr />
+                                            <CButton  variant="outline" color="danger"
+                                                      onClick={() => this.requestForUpdateMyDepot()}>
+                                              Mettre à jour mon Dépôt
+                                            </CButton>
+                                          </CAlert>
+                                        )}
+                                      </CCol>
+                                    </CRow>
+                                  </CContainer>
+                                </div>
+                              )}
+
+                            </CCardBody>
+                            <CCardFooter>
+                              <CRow>
+                                <CCol sm="4" md="3"/>
+                                <CCol sm="4" md="7">
+                                  {(
+                                    (depotStatus === "" || depotStatus === "METTRE A JOUR") && fileInfos.length === 3 &&
+                                    <>
+                                  <span className="text-success" style={{fontSize: "11px"}}>
+                                    Cliquer sur ce bouton pour <strong> valider votre dépôt </strong> ( <ins>PS:</ins> Une fois Cliquer, vous ne pourrez pas modifier votre dépôt ).
+                                  </span>
+                                      &nbsp;&nbsp;&nbsp;
+                                      <Icon icon={handPointingRight} color="green" width="30" height="30" />
+                                    </>
+                                  )}
+                                </CCol>
+                                <CCol sm="4" md="2">
+                                  {(
+                                    depotStatus.includes("DEPOSEE") &&
+                                    <h5><CBadge color="primary">Requête Envoyée</CBadge></h5>
+                                  )}
+
+                                  {(
+                                    depotStatus.includes("VALIDEE") &&
+                                    <h5><CBadge color="success">Dépôt Validé</CBadge></h5>
+                                  )}
+
+                                  {(
+                                    depotStatus.includes("INCOMPLET") &&
+                                    <h5><CBadge color="danger">Dépôt Incomplet</CBadge></h5>
+                                  )}
+                                  {(
+                                    (depotStatus === "" || depotStatus === "METTRE A JOUR")  && itsITandEM === "YES" &&
+                                    <CButton  color="success"
+                                              disabled={fileInfos.length !== 4}
+                                              enabled={fileInfos.length === 4}
+                                              className="float-right"
+                                              onClick={() => this.validateMyDepot()}>
+                                      Je valide 2 - {fileInfos.length}
+                                    </CButton>
+                                  )}
+
+                                  {(
+                                    (depotStatus === "" || depotStatus === "METTRE A JOUR")  && itsITandEM === "NO" &&
+                                    <CButton  color="success"
+                                              disabled={fileInfos.length < 5}
+                                              enabled={fileInfos.length > 4}
+                                              className="float-right"
+                                              onClick={() => this.validateMyDepot()}>
+                                      Je valide 3 - {fileInfos.length}
+                                    </CButton>
+                                  )}
+
+                                  {(
+                                    showSpinnerWaitingDepot &&
+                                    <Backdrop className={classes.backdrop} open={showSpinnerWaitingDepot} >
+                                      <CircularProgress color="inherit" />
+                                    </Backdrop>
+                                  )}
+
+
+
+                                </CCol>
+                              </CRow>
+                            </CCardFooter>
+                          </CCard>
+                        )}
+
+                        <CModal
+                          show={showPopupSuccessDepot}
+                          onClose={() => this.closeShowPopupSuccessDepot()}
+                          className={classes.backdrop1}
+                          color="primary">
+                          <CModalHeader closeButton>
+                            <CModalTitle>Information</CModalTitle>
+                          </CModalHeader>
+                          <CModalBody>
+                            <center>
+                              <br/><br/>
+                              Vous avez validé le dépôt de vos documents.
+                              <br/>
+                              Merci de patienter jusqu'au le traitement de votre requête.
+                            </center>
+                            <br/><br/>
+                          </CModalBody>
+                          <CModalFooter>
+                            <CButton color="primary" onClick={() => this.closeShowPopupSuccessDepot()}>
+                              Ok
+                            </CButton>
+                          </CModalFooter>
+                        </CModal>
+
+                        <CModal
+                          show={showPopupUpdateDepot}
+                          onClose={() => this.updateMyDepotNO()}
+                          className={classes.backdrop1}
+                          color="secondary">
+                          <CModalHeader closeButton>
+                            <CModalTitle>Confirmation</CModalTitle>
+                          </CModalHeader>
+                          <CModalBody>
+                            Voulez-vous mettre à jour votre dépôt <ins>en tenir compte</ins> la cause de signaler votre requête précédante comme incomplète ?.
+                            <br/><br/>
+                          </CModalBody>
+                          <CModalFooter>
+                            <CButton color="success" onClick={() => this.updateMyDepotYES()}>
+                              Oui
+                            </CButton>
+                            &nbsp;
+                            <CButton color="danger" onClick={() => this.updateMyDepotNO()}>
+                              Pas Maintenant
+                            </CButton>
+                          </CModalFooter>
+                        </CModal>
+                      </>
+                    }
+
+                    {
+                      // Before v1
+                      fichePFEStatus === "03" && fileInfos.length === 0 &&
+                      <CRow>
+                        <CCol md="8">
+                          <br/>
+                          <CAlert color="info" closeButton>
+                            <center>
+                              <AccessAlarmIcon style={{ color: "#990099", fontSize: 30 }} />
+                              <br /><br />
+                              <span className="reportClignoteMark">
+                                  NORMALEMENT
+                                </span>
+                              &nbsp;
+                              <span className="info2InDiv">
+                                  les dates programmées pour publier vos
+                                &nbsp;
+                                <span className="reportMark">
+                                    Rapports
+                                  </span>
+                                &nbsp;
+                                sont planifiées comme présenté par le Timeline à droite.
+                                </span>
+                              <br />
+                              Mais quand même, le dépôt est possible dès maintenant à tout moment.
+                              <br/>
+                              <br/>
+                            </center>
+                          </CAlert>
+                          <br/>
+                          {
+                            ( fileInfos.length === 0 || giveOkModifyRLV ) &&
+                            <CCard accentColor="primary">
+                              <CCardBody>
+                                <CRow>
+                                  <CCol>
+                                    <div style={{ textAlign: "left" }}>
+                                     <span className="titleReport">
+                                       Dépôt Rapport Version 1
+                                     </span>
+                                    </div>
+                                  </CCol>
+                                  <CCol>
+                                    <div style={{ textAlign: "right" }}>
+                                    <span className="noteDepotReport">
+                                       Vous devez choisir un fichier PDF.
+                                    </span>
+                                    </div>
+                                  </CCol>
+                                </CRow>
+
+                                <NotificationContainer/>
+
+                                <div>
+                                  <center>
+                                    <label
+                                      htmlFor="filePicker"
+                                      className="custom-file-upload"
+                                    >
+                                      <img
+                                        src={uploadIcon}
+                                        className="cursorPointer"
+                                        width="80px"
+                                        height="50px"
+                                        title="Choose your Report version 1"
+                                        alt=""
+                                      />
+                                    </label>
+                                    <br />
+                                    <label className="btn btn-default">
+                                      <input
+                                        id="filePicker"
+                                        type="file"
+                                        style={{ visibility: "hidden" }}
+                                        accept="application/pdf"
+                                        onChange={this.selectFile}
+                                      />
+                                    </label>
+                                    <br />
+
+                                    {selectedFiles && !giveOKRLV && (
+                                      <center>
+                                        <div className="alert alert-danger" role="alert" style= {{width: "300px"}}>
+                                          Il ne s'agit pas d'un Fichier PDF !.
+                                          <br/>
+                                          Merci de respecter le format demandé.
+                                        </div>
+                                      </center>
+                                    )}
+
+                                    {currentFile && successUpload && (
+                                      <div className="progress" style={{ width: "500px" }}>
+                                        <div  className="progress-bar bg-primary progress-bar-striped progress-bar-animated"
+                                              role="progressbar"
+                                              aria-valuenow={progress}
+                                              aria-valuemin="0"
+                                              aria-valuemax="100"
+                                              style={{ width: progress + "%" }}>
+                                          {progress}%
+                                        </div>
+                                      </div>
+                                    )}
+
+                                    {showUploadReportV1Button && selectedFiles && giveOKRLV && (
+                                      <button
+                                        className="btn btn-primary"
+                                        onClick={this.uploadReportV1}
+                                      >
+                                        Déposer Rapport v1
+                                      </button>
+                                    )}
+                                  </center>
+                                </div>
+                              </CCardBody>
+                              <CCardFooter>
+                              <span style={{color: "#666666", fontSize: "11px", fontStyle: "italic"}} className="float-right">
+                                Today is {currentDay}
+                              </span>
+                              </CCardFooter>
+                            </CCard>
+                          }
+
+                          {
+                            showPopupSuccessUploadRV1 &&
+                            <Modal isOpen={showPopupSuccessUploadRV1} contentLabel="Example Modal" style={customStyles}>
+                              <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Information</span>
+                              <center>
+                                <br />
+                                <br />
+                                {message}
+                                <br />
+                                <br />
+                                <br />
+                                <button
+                                  className="btn btn-sm btn-primary"
+                                  onClick={this.closeModalSuccessUploadRV1}
+                                >
+                                  Ok
+                                </button>
+                                <br />
+                                <br />
+                              </center>
+                            </Modal>
+                          }
+
+                        </CCol>
+                        <CCol md="4">
+                          <VerticalTimeline>
+                            <VerticalTimelineElement
+                              className="vertical-timeline-element--work"
+                              date={dateDepotRapportFormedV2}
+                              contentStyle={{ background: 'rgb(204, 0, 204)', color: '#000000' }}
+                              contentArrowStyle={{ borderRight: '10px solid  rgb(204, 0, 204)' }}
+                              iconStyle={{ background: 'rgb(204, 0, 204)', color: '#fff', width: '10px' , height: '10px', marginLeft: '-4px', marginTop: '27px'}}>
+                              <h6 className="vertical-timeline-element-title">Date Dépôt Rapport Version 2</h6>
+                              <span style={{color: "#d9d9d9", fontSize: "11px", fontStyle: "italic"}}>
+                              24ème Semaine
+                            </span>
+                            </VerticalTimelineElement>
+
+                            <VerticalTimelineElement
+                              className="vertical-timeline-element--education"
+                              date={dateDepotRapportFormedV1}
+                              contentStyle={{ background: 'rgb(153, 0, 153)', color: '#000000' }}
+                              contentArrowStyle={{ borderRight: '7px solid  rgb(153, 0, 153)' }}
+                              iconStyle={{ background: 'rgb(153, 0, 153)', color: '#fff', width: '10px' , height: '10px', marginLeft: '-4px', marginTop: '27px' }}>
+                              <h6 className="vertical-timeline-element-title">Date Dépôt Rapport Version 1</h6>
+                              <span style={{color: "#d9d9d9", fontSize: "11px", fontStyle: "italic"}}>
+                              18ème Semaine
+                            </span>
+                            </VerticalTimelineElement>
+                            <VerticalTimelineElement
+                              iconStyle={{ background: 'rgb(102, 0, 102)', color: '#fff' }}
+                              icon={<AccessAlarmIcon />}
+                            />
+                          </VerticalTimeline>
+                          <CRow>
+                            <CCol xs="12">
+                              <center>
+                          <span className="float-center" style={{color: "#990099", fontSize: "14px", fontWeight: "bold"}}>
+                            {dateNewestDebutStageConvAv}
+                          </span>
+                              </center>
+                            </CCol>
+                          </CRow>
+                        </CCol>
+                      </CRow>
+                    }
+
+                    {
+                      // After v2 + INCOMPLETE
+                      (
+                        (timeForDepotRapportV2.trim() === "AFTERTIMEV2" && depotStatus.includes("INCOMPLET"))
+                        ||
+                        (timeForDepotRapportV2.trim() === "AFTERTIMEV2" && depotStatus.includes("VALIDEE"))
+                      ) &&
+                      <>
+
+                        {(
+                          fileInfos.length === 4 && itsITandEM === "YES" &&
+                          <CCard accentColor="info">
+
+                            <CCardBody>
+                              {
+                                fileInfos.length > 1  &&  // Upload Report v2 + URKUND + AS
+                                <>
+                                  <CRow>
+                                    <CCol md="4" class="bg-warning py-2">
+                                      <NotificationContainer/>
+                                      {(
+                                        labelRFV === "" && showUploadIconRFV &&
+                                        <center>
+                                          <label
+                                            htmlFor="filePickerRAP"
+                                            className="custom-file-upload">
+                                            <img
+                                              src={redUpload}
+                                              className="cursorPointer"
+                                              class="img-fluid"
+                                              width="100px"
+                                              height="75px"
+                                              title="Déposer Rapport Version Finale"
+                                              alt=""
+                                            />
+                                          </label>
+                                          <br/>
+                                          <label className="btn btn-default">
+                                            <input
+                                              id="filePickerRAP"
+                                              type="file"
+                                              className="cursorPointer"
+                                              style={{ visibility: "hidden" }}
+                                              accept="application/pdf"
+                                              onChange={this.selectReportFinalVersion}
+                                            />
+                                          </label>
+                                        </center>
+                                      )}
+
+                                      {(
+                                        labelRFV !== "" &&
+                                        <CRow>
+                                          <CCol md="2"/>
+                                          <CCol md="8">
+                                            <CCard color="danger" className="text-white">
+                                              <CCardHeader>
+                                                <div style={{textAlign: "right"}}>
+                                                  <img  src={espritLogo}
+                                                        className="cursorPointer"
+                                                        class="img-fluid"
+                                                        width="40px"
+                                                        height="50px"/>
+                                                </div>
+                                              </CCardHeader>
+                                              <CCardBody>
+                                                <div style={{textAlign: "center"}}>
+                                                  {labelRFV}
+                                                  <br/><br/>
+                                                  <span className="signature">
+                                                By {studentFullName}
+                                              </span>
+                                                  <br/>
+                                                  <span style={{fontSize: "11px", color: "black"}}>
+                                                {dateRFV}
+                                              </span>
+                                                </div>
+                                              </CCardBody>
+                                            </CCard>
+                                          </CCol>
+                                          <CCol md="2"/>
+                                        </CRow>
+                                      )}
+
+                                      {(
+                                        showReloadRFV && depotStatus === "" &&
+                                        <center>
+                                          <CButton  shape="pill" color="danger" aria-expanded="true"
+                                                    onClick={() => this.modifyMyRFV()}>
+                                            <CTooltip content="Modifier mon Rapport Version Finale" placement="top">
+                                              <CIcon content={freeSet.cilReload}/>
+                                            </CTooltip>
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                      {currentFileRFV && !giveOKRFV && (
+                                        <center>
+                                          <div className="alert alert-danger" role="alert" style= {{width: "300px"}}>
+                                            Il ne s'agit pas d'un Fichier PDF !.
+                                            <br/>
+                                            Merci de respecter le format demandé.
+                                          </div>
+                                        </center>
+                                      )}
+
+                                      {currentFileRFV && successUploadRFV && (
+                                        <div className="progress">
+                                          <div
+                                            className="progress-bar bg-danger progress-bar-striped progress-bar-animated"
+                                            role="progressbar"
+                                            aria-valuenow={progressRFV}
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"
+                                            style={{ width: progressRFV + "%" }}>
+                                            {progressRFV}%
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {showButtonRFV && giveOKRFV && labelRFV !== "" && (
+                                        <center>
+                                          <Checkbox
+                                            checked={this.state.checked}
+                                            color="secondary"
+                                            onChange={(e) =>
+                                              this.reportConfidentialHandler(e)
+                                            }
+                                            inputProps={{ "aria-label": "secondary checkbox" }}
+                                          />
+                                          &nbsp;&nbsp; Confidendial Upload
+                                        </center>
+                                      )}
+
+                                      {(
+                                        showButtonRFV &&
+                                        <center>
+                                          <CButton  variant="outline" color="danger"
+                                                    onClick={this.uploadReportFinalVersion}
+                                                    disabled={labelRFV === ""}
+                                                    enabled={labelRFV !== ""}>
+                                            Déposer Rapport Version Finale
+                                          </CButton>
+                                        </center>
+                                      )}
+
+
+                                    </CCol>
+
+                                    <CCol md="4" class="bg-warning py-2">
+                                      {(
+                                        labelRAP === "" && showUploadIconRAP &&
+                                        <center>
+                                          <label
+                                            htmlFor="filePickerASP"
+                                            className="custom-file-upload">
+                                            <img
+                                              src={blueLightUpload}
+                                              className="cursorPointer"
+                                              class="img-fluid"
+                                              width="100px"
+                                              height="75px"
+                                              title="Déposer Rapport Anti-Plagiat"
+                                              alt=""
+                                            />
+                                          </label>
+                                          <br/>
+                                          <label className="btn btn-default">
+                                            <input
+                                              id="filePickerASP"
+                                              type="file"
+                                              className="cursorPointer"
+                                              style={{ visibility: "hidden" }}
+                                              accept="application/pdf"
+                                              onChange={this.selectReportAntiPlagiat}
+                                            />
+                                          </label>
+                                        </center>
+                                      )}
+
+                                      {(
+                                        labelRAP !== "" &&
+                                        <CRow>
+                                          <CCol md="2"/>
+                                          <CCol md="8">
+                                            <CCard color="info" className="text-white">
+                                              <CCardHeader>
+                                                <div style={{textAlign: "right"}}>
+                                                  <img  src={espritLogo}
+                                                        className="cursorPointer"
+                                                        class="img-fluid"
+                                                        width="40px"
+                                                        height="50px"/>
+                                                </div>
+                                              </CCardHeader>
+                                              <CCardBody>
+                                                <div style={{textAlign: "center"}}>
+                                                  {labelRAP}
+                                                  <br/><br/>
+                                                  <span className="signature">
+                                                By {studentFullName}
+                                              </span>
+                                                  <br/>
+                                                  <span style={{fontSize: "11px", color: "black"}}>
+                                                {dateRAP}
+                                              </span>
+                                                </div>
+                                              </CCardBody>
+                                            </CCard>
+                                          </CCol>
+                                          <CCol md="2"/>
+                                        </CRow>
+                                      )}
+
+                                      {(
+                                        showReloadRAP && depotStatus === "" &&
+                                        <center>
+                                          <CButton  shape="pill" color="info" aria-expanded="true"
+                                                    onClick={() => this.modifyMyRAP()}>
+                                            <CTooltip content="Modifier mon Rapport Anti-Plagiat" placement="top">
+                                              <CIcon content={freeSet.cilReload}/>
+                                            </CTooltip>
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                      {currentFileRAP && !giveOKRAP && (
+                                        <center>
+                                          <div className="alert alert-danger" role="alert" style= {{width: "300px"}}>
+                                            Il ne s'agit pas d'un Fichier PDF !.
+                                            <br/>
+                                            Merci de respecter le format demandé.
+                                          </div>
+                                        </center>
+                                      )}
+
+                                      {currentFileRAP && successUploadRAP && (
+                                        <div className="progress">
+                                          <div
+                                            className="progress-bar bg-info progress-bar-striped progress-bar-animated"
+                                            role="progressbar"
+                                            aria-valuenow={progressRAP}
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"
+                                            style={{ width: progressRAP + "%" }}>
+                                            {progressRAP}%
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {(
+                                        showButtonRAP &&
+                                        <center>
+                                          <CButton  variant="outline" color="info"
+                                                    onClick={this.uploadPlagiat}
+                                                    disabled={labelRAP === ""}
+                                                    enabled={labelRAP !== ""}>
+                                            Déposer Rapport Anti-Plagiat
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                    </CCol>
+
+                                    <CCol md="4" class="bg-warning py-2">
+
+                                      {(
+                                        labelASP === "" && showUploadIconASP &&
+                                        <center>
+                                          <label
+                                            htmlFor="filePickerRFV"
+                                            className="custom-file-upload">
+                                            <img
+                                              src={orangeUpload}
+                                              className="cursorPointer"
+                                              class="img-fluid"
+                                              width="100px"
+                                              height="75px"
+                                              title="Déposer Attestation Stage PFE"
+                                              alt=""
+                                            />
+                                          </label>
+                                          <br/>
+                                          <label className="btn btn-default">
+                                            <input
+                                              id="filePickerRFV"
+                                              type="file"
+                                              className="cursorPointer"
+                                              style={{ visibility: "hidden" }}
+                                              accept="application/pdf"
+                                              onChange={this.selectAttestationStagePFE}
+                                            />
+                                          </label>
+                                        </center>
+                                      )}
+
+                                      {(
+                                        labelASP !== "" &&
+                                        <CRow>
+                                          <CCol md="2"/>
+                                          <CCol md="8">
+                                            <CCard color="warning" className="text-white">
+                                              <CCardHeader>
+                                                <div style={{textAlign: "right"}}>
+                                                  <img  src={espritLogo}
+                                                        className="cursorPointer"
+                                                        class="img-fluid"
+                                                        width="40px"
+                                                        height="50px"/>
+                                                </div>
+                                              </CCardHeader>
+                                              <CCardBody>
+                                                <div style={{textAlign: "center"}}>
+                                                  {labelASP}
+                                                  <br/><br/>
+                                                  <span className="signature">
+                                                By {studentFullName}
+                                              </span>
+                                                  <br/>
+                                                  <span style={{fontSize: "11px", color: "black"}}>
+                                                {dateASP}
+                                              </span>
+                                                </div>
+                                              </CCardBody>
+                                            </CCard>
+                                          </CCol>
+                                          <CCol md="2"/>
+                                        </CRow>
+                                      )}
+
+                                      {(
+                                        showReloadASP && depotStatus === "" &&
+                                        <center>
+                                          <CButton  shape="pill" color="warning" aria-expanded="true"
+                                                    onClick={() => this.modifyMyASP()}>
+                                            <CTooltip content="Modifier mon Attestation Stage PFE" placement="top">
+                                              <CIcon content={freeSet.cilReload}/>
+                                            </CTooltip>
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                      {currentFileASP && !giveOKASP && (
+                                        <center>
+                                          <div className="alert alert-danger" role="alert" style= {{width: "300px"}}>
+                                            Il ne s'agit pas d'un Fichier PDF !.
+                                            <br/>
+                                            Merci de respecter le format demandé.
+                                          </div>
+                                        </center>
+                                      )}
+
+                                      {currentFileASP && successUploadASP && (
+                                        <div className="progress">
+                                          <div
+                                            className="progress-bar bg-warning progress-bar-striped progress-bar-animated"
+                                            role="progressbar"
+                                            aria-valuenow={progressASP}
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"
+                                            style={{ width: progressASP + "%" }}>
+                                            {progressASP}%
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {(
+                                        showButtonASP &&
+                                        <center>
+                                          <CButton  variant="outline" color="warning"
+                                                    onClick={this.uploadTrainingCertif}
+                                                    disabled={labelASP === ""}
+                                                    enabled={labelASP !== ""}>
+                                            Déposer Attestation Stage PFE
+                                          </CButton>
+                                        </center>
+                                      )}
+
+
+                                    </CCol>
+
+                                    <br/>
+
+                                  </CRow>
+                                  <br/>
+                                  <Divider />
+                                </>
+                              }
+
+                              {
+                                // Show Alert DEPOSEE-VALIDEE-INCOMPLET
+                                fileInfos.length > 1 && (
+                                  <div>
+
+                                    <CContainer>
+                                      <CRow>
+                                        <CCol md="9" class="bg-warning py-2">
+                                          <div className="card-header">
+                                            <span className="menuTitleBleuReport">Informations sur mes Rapports 3</span>
+                                          </div>
+
+                                          <ul className="list-group list-group-flush">
+                                            {fileInfos.map((file, index) => (
+                                              <li className="list-group-item" key={index}>
+                                                <CRow>
+                                                  <CCol md="4" class="bg-warning py-2">
+                                                    {file.includes("RLV") && (
+                                                      <CListGroup accent>
+                                                        <CListGroupItem accent="dark"><strong>Rapport Version 1</strong></CListGroupItem>
+                                                      </CListGroup>
+                                                    )}
+                                                    {file.includes("RFV") && (
+                                                      <CListGroup accent>
+                                                        <CListGroupItem accent="danger"><strong>Rapport Version Finale</strong></CListGroupItem>
+                                                      </CListGroup>
+                                                    )}
+                                                    {file.includes("RAP") && (
+                                                      <CListGroup accent>
+                                                        <CListGroupItem accent="info"><strong>Rapport Anti-Plagiat : URKUND</strong></CListGroupItem>
+                                                      </CListGroup>
+                                                    )}
+                                                    {file.includes("ASP") && (
+                                                      <CListGroup accent>
+                                                        <CListGroupItem accent="warning"><strong>Attestation Stage PFE</strong></CListGroupItem>
+                                                      </CListGroup>
+                                                    )}
+                                                  </CCol>
+                                                  <CCol md="6" class="bg-warning py-2">
+                                                    <div style={{marginTop: '13px'}}>
+                                                      {file.substr(0, file.indexOf("UNITR1"))}.pdf
+                                                    </div>
+                                                  </CCol>
+                                                  <CCol md="2" class="bg-warning py-2">
+                                                    <div style={{marginTop: '13px'}}>
+                                                      {file.substr(file.indexOf("UNITR1") + 9)}
+                                                    </div>
+                                                  </CCol>
+                                                </CRow>
+                                              </li>
+                                            ))}
+                                          </ul>
+                                        </CCol>
+                                        <CCol lg="3">
+                                          <br/>
+                                          {(
+                                            depotStatus === "" && fileInfos.length > 1 &&
+                                            <center>
+                                              <br/><br/>
+
+                                              <span className="text-primary" style={{fontSize: "11px"}}>
+                                      Cliquer sur ce bouton pour <ins>relancer</ins> votre Dépôt.
+                                    </span>
+                                              <br/>
+                                              <Icon icon={handPointingDown} color="blue" width="30" height="30" />
+                                              <br/><br/>
+
+                                              <CButton  shape="pill" color="primary" aria-expanded="true"
+                                                        onClick={() => this.openModalConfirmRelanceDepot()}>
+                                                <CTooltip content="Relancer mon Dépôt" placement="top">
+                                                  <CIcon content={freeSet.cilReload}/>
+                                                </CTooltip>
+                                              </CButton>
+                                            </center>
+                                          )}
+                                          {( depotStatus.includes("DEPOSEE") &&
                                             <CAlert color="info">
                                               <h5 className="alert-heading"><strong>Dépôt Effectué</strong></h5>
                                               <p>
@@ -7665,9 +3890,9 @@ class UploadReport extends Component {
                                                 Merci de patienter.
                                               </p>
                                             </CAlert>
-                                        )}
+                                          )}
 
-                                        {( depotStatus.includes("VALIDEE") &&
+                                          {( depotStatus.includes("VALIDEE") &&
                                             <CAlert color="success">
                                               <h5 className="alert-heading"><strong>Dépôt Validé</strong></h5>
                                               <p>
@@ -7678,9 +3903,9 @@ class UploadReport extends Component {
                                                 Bonne Chance.
                                               </p>
                                             </CAlert>
-                                        )}
+                                          )}
 
-                                        {( depotStatus.includes("INCOMPLET") &&
+                                          {( depotStatus.includes("INCOMPLET") &&
                                             <CAlert color="danger">
                                               <h5 className="alert-heading"><strong>Dépôt Incomplet</strong></h5>
                                               <p>
@@ -7693,86 +3918,3852 @@ class UploadReport extends Component {
                                                 Mettre à jour mon Dépôt
                                               </CButton>
                                             </CAlert>
+                                          )}
+                                        </CCol>
+                                      </CRow>
+                                    </CContainer>
+                                  </div>
+                                )}
+
+                              {showPopupSuccessUpload && (
+                                <Modal
+                                  isOpen={showPopupSuccessUpload}
+                                  contentLabel="Example Modal"
+                                  style={customStyles}
+                                >
+                                  <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Information</span>
+                                  <hr/>
+                                  <center>
+                                    <br />
+                                    <br />
+                                    {message}
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <button
+                                      className="btn btn-sm btn-primary"
+                                      onClick={this.closeModalSuccessUpload}
+                                    >
+                                      Ok
+                                    </button>
+                                    <br />
+                                    <br />
+                                  </center>
+                                </Modal>
+                              )}
+                              {showModalConfirmRelanceDepot && (
+                                <Modal
+                                  isOpen={showModalConfirmRelanceDepot}
+                                  contentLabel="Example Modal"
+                                  style={customStyles}>
+                                  <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Confirmation</span>
+                                  <hr/>
+                                  <center>
+                                    <br />
+                                    <br />
+                                    Êtes-vous sûr de vouloir relancer votre dépôt ?
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <button className="btn btn-sm btn-success"
+                                            onClick={this.modifyMyDepot}>
+                                      Oui
+                                    </button>
+                                    &nbsp;
+                                    <button className="btn btn-sm btn-danger"
+                                            onClick={this.closeModalConfirmRelanceDepot}>
+                                      Non
+                                    </button>
+                                    <br />
+                                    <br />
+                                  </center>
+                                </Modal>
+                              )}
+
+                            </CCardBody>
+                            <CCardFooter>
+                              <CRow>
+                                <CCol sm="4" md="3"/>
+                                <CCol sm="4" md="7">
+                                  {(
+                                    depotStatus === "" && fileInfos.length === 3 &&
+                                    <>
+                                  <span className="text-success" style={{fontSize: "11px"}}>
+                                    Cliquer sur ce bouton pour <strong> valider votre dépôt </strong> ( <ins>PS:</ins> Une fois Cliquer, vous ne pourrez pas modifier votre dépôt ).
+                                  </span>
+                                      &nbsp;&nbsp;&nbsp;
+                                      <Icon icon={handPointingRight} color="green" width="30" height="30" />
+                                    </>
+                                  )}
+                                </CCol>
+                                <CCol sm="4" md="2">
+                                  {(
+                                    depotStatus.includes("DEPOSEE") &&
+                                    <h5><CBadge color="primary">Requête Envoyée</CBadge></h5>
+                                  )}
+
+                                  {(
+                                    depotStatus.includes("VALIDEE") &&
+                                    <h5><CBadge color="success">Dépôt Validé</CBadge></h5>
+                                  )}
+
+                                  {(
+                                    depotStatus.includes("INCOMPLET") &&
+                                    <h5><CBadge color="danger">Dépôt Incomplet</CBadge></h5>
+                                  )}
+                                  {(
+                                    (depotStatus === "" ) &&
+                                    <CButton  color="success"
+                                              disabled={fileInfos.length !== 4}
+                                              enabled={fileInfos.length === 4}
+                                              className="float-right"
+                                              onClick={() => this.validateMyDepot()}>
+                                      Je valide 2 - {fileInfos.length}
+                                    </CButton>
+                                  )}
+
+                                  {(
+                                    showSpinnerWaitingDepot &&
+                                    <Backdrop className={classes.backdrop} open={showSpinnerWaitingDepot} >
+                                      <CircularProgress color="inherit" />
+                                    </Backdrop>
+                                  )}
+
+
+
+                                </CCol>
+                              </CRow>
+                            </CCardFooter>
+                          </CCard>
+                        )}
+
+                        {( (fileInfos.length === 5) && itsITandEM === "NO" &&
+                          <CCard accentColor="info">
+
+                            <CCardBody>
+
+                              {fileInfos.length >= 0  &&(
+                                <>
+                                  <CRow>
+                                    <CCol md="3" class="bg-warning py-2">
+                                      <NotificationContainer/>
+                                      {(
+                                        labelRFV === "" && showUploadIconRFV &&
+                                        <center>
+                                          <label
+                                            htmlFor="filePickerRAP"
+                                            className="custom-file-upload">
+                                            <img
+                                              src={redUpload}
+                                              className="cursorPointer"
+                                              class="img-fluid"
+                                              width="100px"
+                                              height="75px"
+                                              title="Déposer Rapport Version Finale"
+                                              alt=""
+                                            />
+                                          </label>
+                                          <br/>
+                                          <label className="btn btn-default">
+                                            <input
+                                              id="filePickerRAP"
+                                              type="file"
+                                              className="cursorPointer"
+                                              style={{ visibility: "hidden" }}
+                                              accept="application/pdf"
+                                              onChange={this.selectReportFinalVersion}
+                                            />
+                                          </label>
+                                        </center>
+                                      )}
+
+                                      {(
+                                        labelRFV !== "" &&
+                                        <CRow>
+                                          <CCol md="1"/>
+                                          <CCol md="10">
+                                            <CCard color="danger" className="text-white">
+                                              <CCardHeader>
+                                                <div style={{textAlign: "right"}}>
+                                                  <img  src={espritLogo}
+                                                        className="cursorPointer"
+                                                        class="img-fluid"
+                                                        width="40px"
+                                                        height="50px"/>
+                                                </div>
+                                              </CCardHeader>
+                                              <CCardBody>
+                                                <div style={{textAlign: "center"}}>
+                                                  {labelRFV}
+                                                  <br/><br/>
+                                                  <span className="signature">
+                                                By {studentFullName}
+                                              </span>
+                                                  <br/>
+                                                  <span style={{fontSize: "11px", color: "black"}}>
+                                                {dateRFV}
+                                              </span>
+                                                </div>
+                                              </CCardBody>
+                                            </CCard>
+                                          </CCol>
+                                          <CCol md="1"/>
+                                        </CRow>
+                                      )}
+
+                                      {(
+                                        showReloadRFV && depotStatus === "" &&
+                                        <center>
+                                          <CButton  shape="pill" color="danger" aria-expanded="true"
+                                                    onClick={() => this.modifyMyRFV()}>
+                                            <CTooltip content="Modifier mon Rapport Version Finale" placement="top">
+                                              <CIcon content={freeSet.cilReload}/>
+                                            </CTooltip>
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                      {currentFileRFV && !giveOKRFV && (
+                                        <center>
+                                          <div className="alert alert-danger" role="alert" style= {{width: "200px"}}>
+                                            Il ne s'agit pas d'un Fichier PDF !.
+                                            <br/>
+                                            Merci de respecter le format demandé.
+                                          </div>
+                                        </center>
+                                      )}
+
+                                      {currentFileRFV && successUploadRFV && (
+                                        <div className="progress">
+                                          <div
+                                            className="progress-bar bg-danger progress-bar-striped progress-bar-animated"
+                                            role="progressbar"
+                                            aria-valuenow={progressRFV}
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"
+                                            style={{ width: progressRFV + "%" }}>
+                                            {progressRFV}%
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {showButtonRFV && giveOKRFV && labelRFV !== "" && (
+                                        <center>
+                                          <Checkbox
+                                            checked={this.state.checked}
+                                            color="secondary"
+                                            onChange={(e) =>
+                                              this.reportConfidentialHandler(e)
+                                            }
+                                            inputProps={{ "aria-label": "secondary checkbox" }}
+                                          />
+                                          &nbsp;&nbsp; Confidendial Upload
+                                        </center>
+                                      )}
+
+                                      {(
+                                        showButtonRFV &&
+                                        <center>
+                                          <CButton  variant="outline" color="danger"
+                                                    onClick={this.uploadReportFinalVersion}
+                                                    disabled={labelRFV === ""}
+                                                    enabled={labelRFV !== ""}>
+                                            Déposer Rapport Version Finale
+                                          </CButton>
+                                        </center>
+                                      )}
+
+
+                                    </CCol>
+
+                                    <CCol md="3" class="bg-warning py-2">
+                                      {(
+                                        labelRAP === "" && showUploadIconRAP &&
+                                        <center>
+                                          <label
+                                            htmlFor="filePickerASP"
+                                            className="custom-file-upload">
+                                            <img
+                                              src={blueLightUpload}
+                                              className="cursorPointer"
+                                              class="img-fluid"
+                                              width="100px"
+                                              height="75px"
+                                              title="Déposer Rapport Anti-Plagiat"
+                                              alt=""
+                                            />
+                                          </label>
+                                          <br/>
+                                          <label className="btn btn-default">
+                                            <input
+                                              id="filePickerASP"
+                                              type="file"
+                                              className="cursorPointer"
+                                              style={{ visibility: "hidden" }}
+                                              accept="application/pdf"
+                                              onChange={this.selectReportAntiPlagiat}
+                                            />
+                                          </label>
+                                        </center>
+                                      )}
+
+                                      {(
+                                        labelRAP !== "" &&
+                                        <CRow>
+                                          <CCol md="1"/>
+                                          <CCol md="10">
+                                            <CCard color="info" className="text-white">
+                                              <CCardHeader>
+                                                <div style={{textAlign: "right"}}>
+                                                  <img  src={espritLogo}
+                                                        className="cursorPointer"
+                                                        class="img-fluid"
+                                                        width="40px"
+                                                        height="50px"/>
+                                                </div>
+                                              </CCardHeader>
+                                              <CCardBody>
+                                                <div style={{textAlign: "center"}}>
+                                                  {labelRAP}
+                                                  <br/><br/>
+                                                  <span className="signature">
+                                                By {studentFullName}
+                                              </span>
+                                                  <br/>
+                                                  <span style={{fontSize: "11px", color: "black"}}>
+                                                {dateRAP}
+                                              </span>
+                                                </div>
+                                              </CCardBody>
+                                            </CCard>
+                                          </CCol>
+                                          <CCol md="1"/>
+                                        </CRow>
+                                      )}
+
+                                      {(
+                                        showReloadRAP && depotStatus === "" &&
+                                        <center>
+                                          <CButton  shape="pill" color="info" aria-expanded="true"
+                                                    onClick={() => this.modifyMyRAP()}>
+                                            <CTooltip content="Modifier mon Rapport Anti-Plagiat" placement="top">
+                                              <CIcon content={freeSet.cilReload}/>
+                                            </CTooltip>
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                      {currentFileRAP && !giveOKRAP && (
+                                        <center>
+                                          <div className="alert alert-danger" role="alert" style= {{width: "200px"}}>
+                                            Il ne s'agit pas d'un Fichier PDF !.
+                                            <br/>
+                                            Merci de respecter le format demandé.
+                                          </div>
+                                        </center>
+                                      )}
+
+                                      {currentFileRAP && successUploadRAP && (
+                                        <div className="progress">
+                                          <div
+                                            className="progress-bar bg-info progress-bar-striped progress-bar-animated"
+                                            role="progressbar"
+                                            aria-valuenow={progressRAP}
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"
+                                            style={{ width: progressRAP + "%" }}>
+                                            {progressRAP}%
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {(
+                                        showButtonRAP &&
+                                        <center>
+                                          <CButton  variant="outline" color="info"
+                                                    onClick={this.uploadPlagiat}
+                                                    disabled={labelRAP === ""}
+                                                    enabled={labelRAP !== ""}>
+                                            Déposer Rapport Anti-Plagiat
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                    </CCol>
+
+                                    <CCol md="3" class="bg-warning py-2">
+
+                                      {(
+                                        labelASP === "" && showUploadIconASP &&
+                                        <center>
+                                          <label
+                                            htmlFor="filePickerRFV"
+                                            className="custom-file-upload">
+                                            <img
+                                              src={orangeUpload}
+                                              className="cursorPointer"
+                                              class="img-fluid"
+                                              width="100px"
+                                              height="75px"
+                                              title="Déposer Attestation Stage PFE"
+                                              alt=""
+                                            />
+                                          </label>
+                                          <br/>
+                                          <label className="btn btn-default">
+                                            <input
+                                              id="filePickerRFV"
+                                              type="file"
+                                              className="cursorPointer"
+                                              style={{ visibility: "hidden" }}
+                                              accept="application/pdf"
+                                              onChange={this.selectAttestationStagePFE}
+                                            />
+                                          </label>
+                                        </center>
+                                      )}
+
+                                      {(
+                                        labelASP !== "" &&
+                                        <CRow>
+                                          <CCol md="1"/>
+                                          <CCol md="10">
+                                            <CCard color="warning" className="text-white">
+                                              <CCardHeader>
+                                                <div style={{textAlign: "right"}}>
+                                                  <img  src={espritLogo}
+                                                        className="cursorPointer"
+                                                        class="img-fluid"
+                                                        width="40px"
+                                                        height="50px"/>
+                                                </div>
+                                              </CCardHeader>
+                                              <CCardBody>
+                                                <div style={{textAlign: "center"}}>
+                                                  {labelASP}
+                                                  <br/><br/>
+                                                  <span className="signature">
+                                                By {studentFullName}
+                                              </span>
+                                                  <br/>
+                                                  <span style={{fontSize: "11px", color: "black"}}>
+                                                {dateASP}
+                                              </span>
+                                                </div>
+                                              </CCardBody>
+                                            </CCard>
+                                          </CCol>
+                                          <CCol md="1"/>
+                                        </CRow>
+                                      )}
+
+                                      {(
+                                        showReloadASP && depotStatus === "" &&
+                                        <center>
+                                          <CButton  shape="pill" color="warning" aria-expanded="true"
+                                                    onClick={() => this.modifyMyASP()}>
+                                            <CTooltip content="Modifier mon Attestation Stage PFE" placement="top">
+                                              <CIcon content={freeSet.cilReload}/>
+                                            </CTooltip>
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                      {currentFileASP && !giveOKASP && (
+                                        <center>
+                                          <div className="alert alert-danger" role="alert" style= {{width: "200px"}}>
+                                            Il ne s'agit pas d'un Fichier PDF !.
+                                            <br/>
+                                            Merci de respecter le format demandé.
+                                          </div>
+                                        </center>
+                                      )}
+
+                                      {currentFileASP && successUploadASP && (
+                                        <div className="progress">
+                                          <div
+                                            className="progress-bar bg-warning progress-bar-striped progress-bar-animated"
+                                            role="progressbar"
+                                            aria-valuenow={progressASP}
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"
+                                            style={{ width: progressASP + "%" }}>
+                                            {progressASP}%
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {(
+                                        showButtonASP &&
+                                        <center>
+                                          <CButton  variant="outline" color="warning"
+                                                    onClick={this.uploadTrainingCertif}
+                                                    disabled={labelASP === ""}
+                                                    enabled={labelASP !== ""}>
+                                            Déposer Attestation Stage PFE
+                                          </CButton>
+                                        </center>
+                                      )}
+
+
+                                    </CCol>
+
+                                    <CCol md="3" class="bg-primary py-2">
+                                      {(
+                                        labelDCS === "" && showUploadIconDCS &&
+                                        <center>
+                                          <label
+                                            htmlFor="filePickerDCS"
+                                            className="custom-file-upload">
+                                            <img
+                                              src={blueBoldUpload}
+                                              className="cursorPointer"
+                                              class="img-fluid"
+                                              width="100px"
+                                              height="75px"
+                                              title="Déposer Dossier ou Document Optionnel"
+                                              alt=""
+                                            />
+                                          </label>
+                                          <br/>
+                                          <label className="btn btn-default">
+                                            <input
+                                              id="filePickerDCS"
+                                              type="file"
+                                              className="cursorPointer"
+                                              style={{ visibility: "hidden" }}
+                                              onChange={this.selectDossierDocumentSupplemenaire}
+                                            />
+                                          </label>
+                                        </center>
+                                      )}
+
+                                      {(
+                                        labelDCS !== "" &&
+                                        <CRow>
+                                          <CCol md="1"/>
+                                          <CCol md="10">
+                                            <CCard color="primary" className="text-white">
+                                              <CCardHeader>
+                                                <div style={{textAlign: "right"}}>
+                                                  <img  src={espritLogo}
+                                                        className="cursorPointer"
+                                                        class="img-fluid"
+                                                        width="40px"
+                                                        height="50px"/>
+                                                </div>
+                                              </CCardHeader>
+                                              <CCardBody>
+                                                <div style={{textAlign: "center"}}>
+                                                  {labelDCS}
+                                                  <br/><br/>
+                                                  <span className="signature">
+                                                By {studentFullName}
+                                              </span>
+                                                  <br/>
+                                                  <span style={{fontSize: "11px", color: "black"}}>
+                                                {dateDCS}
+                                              </span>
+                                                </div>
+                                              </CCardBody>
+                                            </CCard>
+                                          </CCol>
+                                          <CCol md="1"/>
+                                        </CRow>
+                                      )}
+
+                                      {(
+                                        showReloadDCS && depotStatus === "" &&
+                                        <center>
+                                          <CButton  shape="pill" color="primary" aria-expanded="true"
+                                                    onClick={() => this.modifyMyDCS()}>
+                                            <CTooltip content="Modifier mon Supplément Optionnel" placement="top">
+                                              <CIcon content={freeSet.cilReload}/>
+                                            </CTooltip>
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                      {currentFileDCS && successUploadDCS && (
+                                        <div className="progress">
+                                          <div
+                                            className="progress-bar progress-bar-striped progress-bar-animated"
+                                            role="progressbar"
+                                            aria-valuenow={progressDCS}
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"
+                                            style={{ width: progressDCS + "%" }}>
+                                            {progressDCS}%
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {(
+                                        showButtonDCS &&
+                                        <center>
+                                          <CButton  variant="outline" color="primary"
+                                                    onClick={this.uploadSupplement}
+                                                    disabled={labelDCS === ""}
+                                                    enabled={labelDCS !== ""}>
+                                            Déposer Dossier Technique 2
+                                          </CButton>
+                                        </center>
+                                      )}
+
+
+                                    </CCol>
+
+                                  </CRow>
+                                  <br/>
+                                  {(fileInfos.length > 0 &&
+                                    <Divider />
+                                  )}
+
+                                </>
+                              )}
+
+                              {showPopupSuccessUpload && (
+                                <Modal
+                                  isOpen={showPopupSuccessUpload}
+                                  contentLabel="Example Modal"
+                                  style={customStyles}
+                                >
+                                  <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Information</span>
+                                  <hr/>
+                                  <center>
+                                    <br />
+                                    <br />
+                                    {message}
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <button
+                                      className="btn btn-sm btn-primary"
+                                      onClick={this.closeModalSuccessUpload}
+                                    >
+                                      Ok
+                                    </button>
+                                    <br />
+                                    <br />
+                                  </center>
+                                </Modal>
+                              )}
+
+                              {showModalConfirmRelanceDepot && (
+                                <Modal
+                                  isOpen={showModalConfirmRelanceDepot}
+                                  contentLabel="Example Modal"
+                                  style={customStyles}
+                                >
+                                  <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Confirmation</span>
+                                  <hr/>
+                                  <center>
+                                    <br />
+                                    <br />
+                                    Êtes-vous sûr de vouloir relancer votre dépôt ?
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <button className="btn btn-sm btn-success"
+                                            onClick={this.modifyMyDepot}>
+                                      Oui
+                                    </button>
+                                    &nbsp;
+                                    <button className="btn btn-sm btn-danger"
+                                            onClick={this.closeModalConfirmRelanceDepot}>
+                                      Non
+                                    </button>
+                                    <br />
+                                    <br />
+                                  </center>
+                                </Modal>
+                              )}
+
+                              {fileInfos.length >0 && (
+                                <div>
+
+                                  <CContainer>
+                                    <CRow>
+                                      <CCol md="9" class="bg-warning py-2">
+                                        <div className="card-header">
+                                          <span className="menuTitleGreyReport">Informations sur mes Rapports 4</span>
+                                        </div>
+
+                                        <ul className="list-group list-group-flush">
+                                          {fileInfos.map((file, index) => (
+                                            <li className="list-group-item" key={index}>
+                                              <CRow>
+                                                <CCol md="4" class="bg-warning py-2">
+                                                  {file.includes("RLV") && (
+                                                    <CListGroup accent>
+                                                      <CListGroupItem accent="dark"><strong>Rapport Version 1</strong></CListGroupItem>
+                                                    </CListGroup>
+                                                  )}
+                                                  {file.includes("RFV") && (
+                                                    <CListGroup accent>
+                                                      <CListGroupItem accent="danger"><strong>Rapport Version Finale</strong></CListGroupItem>
+                                                    </CListGroup>
+                                                  )}
+                                                  {file.includes("RAP") && (
+                                                    <CListGroup accent>
+                                                      <CListGroupItem accent="info"><strong>Rapport Anti-Plagiat : URKUND</strong></CListGroupItem>
+                                                    </CListGroup>
+                                                  )}
+                                                  {file.includes("ASP") && (
+                                                    <CListGroup accent>
+                                                      <CListGroupItem accent="warning"><strong>Attestation Stage PFE</strong></CListGroupItem>
+                                                    </CListGroup>
+                                                  )}
+                                                  {file.includes("DCS") && (
+                                                    <CListGroup accent>
+                                                      <CListGroupItem accent="primary"><strong>Dossier Technique</strong></CListGroupItem>
+                                                    </CListGroup>
+                                                  )}
+                                                </CCol>
+                                                <CCol md="6" class="bg-warning py-2">
+                                                  <div style={{marginTop: '13px'}}>
+                                                    {file.substr(0, file.indexOf("UNITR1"))}.pdf
+                                                  </div>
+                                                </CCol>
+                                                <CCol md="2" class="bg-warning py-2">
+                                                  <div style={{marginTop: '13px'}}>
+                                                    {file.substr(file.indexOf("UNITR1") + 9)}
+                                                  </div>
+                                                </CCol>
+                                              </CRow>
+                                            </li>
+                                          ))}
+                                        </ul>
+                                      </CCol>
+                                      <CCol lg="3">
+                                        <br/>
+                                        {(
+                                          depotStatus === "" &&
+                                          <center>
+                                            <br/><br/>
+
+                                            <span className="text-dark" style={{fontSize: "11px"}}>
+                                      Cliquer sur ce bouton pour <ins>relancer</ins> votre Dépôt.
+                                    </span>
+                                            <br/>
+                                            <Icon icon={handPointingDown} color="grey" width="30" height="30" />
+                                            <br/><br/>
+
+                                            <CButton  shape="pill" color="dark" aria-expanded="true"
+                                                      onClick={() => this.openModalConfirmRelanceDepot()}>
+                                              <CTooltip content="Relancer mon Dépôt" placement="top">
+                                                <CIcon content={freeSet.cilReload}/>
+                                              </CTooltip>
+                                            </CButton>
+                                          </center>
+                                        )}
+                                        {( depotStatus.includes("DEPOSEE") &&
+                                          <CAlert color="info">
+                                            <h5 className="alert-heading"><strong>Dépôt Effectué</strong></h5>
+                                            <p>
+                                              Votre requête a été bien déposée le <ins>{depotStatus.substring(7, depotStatus.length)}</ins>.
+                                            </p>
+                                            <p>
+                                              Elle va être traitée le plus tôt possible.
+                                            </p>
+                                            <hr />
+                                            <p className="mb-0">
+                                              Merci de patienter.
+                                            </p>
+                                          </CAlert>
+                                        )}
+
+                                        {( depotStatus.includes("VALIDEE") &&
+                                          <CAlert color="success">
+                                            <h5 className="alert-heading"><strong>Dépôt Validé</strong></h5>
+                                            <p>
+                                              Votre requête a été <ins>validée</ins> le <ins>{depotStatus.substring(7, depotStatus.length)}</ins>.
+                                            </p>
+                                            <hr />
+                                            <p className="mb-0">
+                                              Bonne Chance.
+                                            </p>
+                                          </CAlert>
+                                        )}
+
+                                        {( depotStatus.includes("INCOMPLET") &&
+                                          <CAlert color="danger">
+                                            <h5 className="alert-heading"><strong>Dépôt Incomplet</strong></h5>
+                                            <p>
+                                              Votre requête a été marquée comme <ins>incomplète</ins> le <ins>{depotStatus.substring(9, 19)}</ins>.
+                                            </p>
+                                            <strong>Motif: </strong> {depotStatus.substring(19, depotStatus.length)}.
+                                            <hr />
+                                            <CButton  variant="outline" color="danger"
+                                                      onClick={() => this.requestForUpdateMyDepot()}>
+                                              Mettre à jour mon Dépôt
+                                            </CButton>
+                                          </CAlert>
                                         )}
                                       </CCol>
                                     </CRow>
                                   </CContainer>
+                                </div>
+                              )}
+
+                            </CCardBody>
+                            <CCardFooter>
+                              <CRow>
+                                <CCol sm="4" md="3"/>
+                                <CCol sm="4" md="7">
+                                  {(
+                                    depotStatus === "" && fileInfos.length === 3 &&
+                                    <>
+                                  <span className="text-success" style={{fontSize: "11px"}}>
+                                    Cliquer sur ce bouton pour <strong> valider votre dépôt </strong> ( <ins>PS:</ins> Une fois Cliquer, vous ne pourrez pas modifier votre dépôt ).
+                                  </span>
+                                      &nbsp;&nbsp;&nbsp;
+                                      <Icon icon={handPointingRight} color="green" width="30" height="30" />
+                                    </>
+                                  )}
+                                </CCol>
+                                <CCol sm="4" md="2">
+                                  {(
+                                    depotStatus.includes("DEPOSEE") &&
+                                    <h5><CBadge color="primary">Requête Envoyée</CBadge></h5>
+                                  )}
+
+                                  {(
+                                    depotStatus.includes("VALIDEE") &&
+                                    <h5><CBadge color="success">Dépôt Validé</CBadge></h5>
+                                  )}
+
+                                  {(
+                                    depotStatus.includes("INCOMPLET") &&
+                                    <h5><CBadge color="danger">Dépôt Incomplet</CBadge></h5>
+                                  )}
+                                  {(
+                                    depotStatus === ""  && itsITandEM === "YES" &&
+                                    <CButton  color="success"
+                                              disabled={fileInfos.length !== 4}
+                                              enabled={fileInfos.length === 4}
+                                              className="float-right"
+                                              onClick={() => this.validateMyDepot()}>
+                                      Je valide 2 - {fileInfos.length}
+                                    </CButton>
+                                  )}
+
+                                  {(
+                                    depotStatus === ""  && itsITandEM === "NO" &&
+                                    <CButton  color="success"
+                                              disabled={fileInfos.length < 5}
+                                              enabled={fileInfos.length > 4}
+                                              className="float-right"
+                                              onClick={() => this.validateMyDepot()}>
+                                      Je valide 3 - {fileInfos.length}
+                                    </CButton>
+                                  )}
+
+                                  {(
+                                    showSpinnerWaitingDepot &&
+                                    <Backdrop className={classes.backdrop} open={showSpinnerWaitingDepot} >
+                                      <CircularProgress color="inherit" />
+                                    </Backdrop>
+                                  )}
+
+
+
+                                </CCol>
+                              </CRow>
+                            </CCardFooter>
+                          </CCard>
+                        )}
+                        <CModal
+                          show={showPopupUpdateDepot}
+                          onClose={() => this.updateMyDepotNO()}
+                          className={classes.backdrop1}
+                          color="secondary">
+                          <CModalHeader closeButton>
+                            <CModalTitle>Confirmation</CModalTitle>
+                          </CModalHeader>
+                          <CModalBody>
+                            Voulez-vous mettre à jour votre dépôt <ins>en tenir compte</ins> la cause de signaler votre requête précédante comme incomplète ?.
+                            <br/><br/>
+                          </CModalBody>
+                          <CModalFooter>
+                            <CButton color="success" onClick={() => this.updateMyDepotYES()}>
+                              Oui
+                            </CButton>
+                            &nbsp;
+                            <CButton color="danger" onClick={() => this.updateMyDepotNO()}>
+                              Pas Maintenant
+                            </CButton>
+                          </CModalFooter>
+                        </CModal>
+                      </>
+                    }
+
+                    {
+                      // After v2 + INCOMPLETE
+                      timeForDepotRapportV2.trim() === "AFTERTIMEV2" && (depotStatus.includes("DEPOSEE") || depotStatus.includes("NOTYET")) &&
+                      <>
+
+                        {(
+                          fileInfos.length === 4 && itsITandEM === "YES" &&
+                          <CCard accentColor="info">
+
+                            <CCardBody>
+                              {
+                                fileInfos.length > 1  &&  // Upload Report v2 + URKUND + AS
+                                <>
+                                  <CRow>
+                                    <CCol md="4" class="bg-warning py-2">
+                                      <NotificationContainer/>
+                                      {(
+                                        labelRFV === "" && showUploadIconRFV &&
+                                        <center>
+                                          <label
+                                            htmlFor="filePickerRAP"
+                                            className="custom-file-upload">
+                                            <img
+                                              src={redUpload}
+                                              className="cursorPointer"
+                                              class="img-fluid"
+                                              width="100px"
+                                              height="75px"
+                                              title="Déposer Rapport Version Finale"
+                                              alt=""
+                                            />
+                                          </label>
+                                          <br/>
+                                          <label className="btn btn-default">
+                                            <input
+                                              id="filePickerRAP"
+                                              type="file"
+                                              className="cursorPointer"
+                                              style={{ visibility: "hidden" }}
+                                              accept="application/pdf"
+                                              onChange={this.selectReportFinalVersion}
+                                            />
+                                          </label>
+                                        </center>
+                                      )}
+
+                                      {(
+                                        labelRFV !== "" &&
+                                        <CRow>
+                                          <CCol md="2"/>
+                                          <CCol md="8">
+                                            <CCard color="danger" className="text-white">
+                                              <CCardHeader>
+                                                <div style={{textAlign: "right"}}>
+                                                  <img  src={espritLogo}
+                                                        className="cursorPointer"
+                                                        class="img-fluid"
+                                                        width="40px"
+                                                        height="50px"/>
+                                                </div>
+                                              </CCardHeader>
+                                              <CCardBody>
+                                                <div style={{textAlign: "center"}}>
+                                                  {labelRFV}
+                                                  <br/><br/>
+                                                  <span className="signature">
+                                                By {studentFullName}
+                                              </span>
+                                                  <br/>
+                                                  <span style={{fontSize: "11px", color: "black"}}>
+                                                {dateRFV}
+                                              </span>
+                                                </div>
+                                              </CCardBody>
+                                            </CCard>
+                                          </CCol>
+                                          <CCol md="2"/>
+                                        </CRow>
+                                      )}
+
+                                      {(
+                                        showReloadRFV && depotStatus === "" &&
+                                        <center>
+                                          <CButton  shape="pill" color="danger" aria-expanded="true"
+                                                    onClick={() => this.modifyMyRFV()}>
+                                            <CTooltip content="Modifier mon Rapport Version Finale" placement="top">
+                                              <CIcon content={freeSet.cilReload}/>
+                                            </CTooltip>
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                      {currentFileRFV && !giveOKRFV && (
+                                        <center>
+                                          <div className="alert alert-danger" role="alert" style= {{width: "300px"}}>
+                                            Il ne s'agit pas d'un Fichier PDF !.
+                                            <br/>
+                                            Merci de respecter le format demandé.
+                                          </div>
+                                        </center>
+                                      )}
+
+                                      {currentFileRFV && successUploadRFV && (
+                                        <div className="progress">
+                                          <div
+                                            className="progress-bar bg-danger progress-bar-striped progress-bar-animated"
+                                            role="progressbar"
+                                            aria-valuenow={progressRFV}
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"
+                                            style={{ width: progressRFV + "%" }}>
+                                            {progressRFV}%
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {showButtonRFV && giveOKRFV && labelRFV !== "" && (
+                                        <center>
+                                          <Checkbox
+                                            checked={this.state.checked}
+                                            color="secondary"
+                                            onChange={(e) =>
+                                              this.reportConfidentialHandler(e)
+                                            }
+                                            inputProps={{ "aria-label": "secondary checkbox" }}
+                                          />
+                                          &nbsp;&nbsp; Confidendial Upload
+                                        </center>
+                                      )}
+
+                                      {(
+                                        showButtonRFV &&
+                                        <center>
+                                          <CButton  variant="outline" color="danger"
+                                                    onClick={this.uploadReportFinalVersion}
+                                                    disabled={labelRFV === ""}
+                                                    enabled={labelRFV !== ""}>
+                                            Déposer Rapport Version Finale
+                                          </CButton>
+                                        </center>
+                                      )}
+
+
+                                    </CCol>
+
+                                    <CCol md="4" class="bg-warning py-2">
+                                      {(
+                                        labelRAP === "" && showUploadIconRAP &&
+                                        <center>
+                                          <label
+                                            htmlFor="filePickerASP"
+                                            className="custom-file-upload">
+                                            <img
+                                              src={blueLightUpload}
+                                              className="cursorPointer"
+                                              class="img-fluid"
+                                              width="100px"
+                                              height="75px"
+                                              title="Déposer Rapport Anti-Plagiat"
+                                              alt=""
+                                            />
+                                          </label>
+                                          <br/>
+                                          <label className="btn btn-default">
+                                            <input
+                                              id="filePickerASP"
+                                              type="file"
+                                              className="cursorPointer"
+                                              style={{ visibility: "hidden" }}
+                                              accept="application/pdf"
+                                              onChange={this.selectReportAntiPlagiat}
+                                            />
+                                          </label>
+                                        </center>
+                                      )}
+
+                                      {(
+                                        labelRAP !== "" &&
+                                        <CRow>
+                                          <CCol md="2"/>
+                                          <CCol md="8">
+                                            <CCard color="info" className="text-white">
+                                              <CCardHeader>
+                                                <div style={{textAlign: "right"}}>
+                                                  <img  src={espritLogo}
+                                                        className="cursorPointer"
+                                                        class="img-fluid"
+                                                        width="40px"
+                                                        height="50px"/>
+                                                </div>
+                                              </CCardHeader>
+                                              <CCardBody>
+                                                <div style={{textAlign: "center"}}>
+                                                  {labelRAP}
+                                                  <br/><br/>
+                                                  <span className="signature">
+                                                By {studentFullName}
+                                              </span>
+                                                  <br/>
+                                                  <span style={{fontSize: "11px", color: "black"}}>
+                                                {dateRAP}
+                                              </span>
+                                                </div>
+                                              </CCardBody>
+                                            </CCard>
+                                          </CCol>
+                                          <CCol md="2"/>
+                                        </CRow>
+                                      )}
+
+                                      {(
+                                        showReloadRAP && depotStatus === "" &&
+                                        <center>
+                                          <CButton  shape="pill" color="info" aria-expanded="true"
+                                                    onClick={() => this.modifyMyRAP()}>
+                                            <CTooltip content="Modifier mon Rapport Anti-Plagiat" placement="top">
+                                              <CIcon content={freeSet.cilReload}/>
+                                            </CTooltip>
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                      {currentFileRAP && !giveOKRAP && (
+                                        <center>
+                                          <div className="alert alert-danger" role="alert" style= {{width: "300px"}}>
+                                            Il ne s'agit pas d'un Fichier PDF !.
+                                            <br/>
+                                            Merci de respecter le format demandé.
+                                          </div>
+                                        </center>
+                                      )}
+
+                                      {currentFileRAP && successUploadRAP && (
+                                        <div className="progress">
+                                          <div
+                                            className="progress-bar bg-info progress-bar-striped progress-bar-animated"
+                                            role="progressbar"
+                                            aria-valuenow={progressRAP}
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"
+                                            style={{ width: progressRAP + "%" }}>
+                                            {progressRAP}%
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {(
+                                        showButtonRAP &&
+                                        <center>
+                                          <CButton  variant="outline" color="info"
+                                                    onClick={this.uploadPlagiat}
+                                                    disabled={labelRAP === ""}
+                                                    enabled={labelRAP !== ""}>
+                                            Déposer Rapport Anti-Plagiat
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                    </CCol>
+
+                                    <CCol md="4" class="bg-warning py-2">
+
+                                      {(
+                                        labelASP === "" && showUploadIconASP &&
+                                        <center>
+                                          <label
+                                            htmlFor="filePickerRFV"
+                                            className="custom-file-upload">
+                                            <img
+                                              src={orangeUpload}
+                                              className="cursorPointer"
+                                              class="img-fluid"
+                                              width="100px"
+                                              height="75px"
+                                              title="Déposer Attestation Stage PFE"
+                                              alt=""
+                                            />
+                                          </label>
+                                          <br/>
+                                          <label className="btn btn-default">
+                                            <input
+                                              id="filePickerRFV"
+                                              type="file"
+                                              className="cursorPointer"
+                                              style={{ visibility: "hidden" }}
+                                              accept="application/pdf"
+                                              onChange={this.selectAttestationStagePFE}
+                                            />
+                                          </label>
+                                        </center>
+                                      )}
+
+                                      {(
+                                        labelASP !== "" &&
+                                        <CRow>
+                                          <CCol md="2"/>
+                                          <CCol md="8">
+                                            <CCard color="warning" className="text-white">
+                                              <CCardHeader>
+                                                <div style={{textAlign: "right"}}>
+                                                  <img  src={espritLogo}
+                                                        className="cursorPointer"
+                                                        class="img-fluid"
+                                                        width="40px"
+                                                        height="50px"/>
+                                                </div>
+                                              </CCardHeader>
+                                              <CCardBody>
+                                                <div style={{textAlign: "center"}}>
+                                                  {labelASP}
+                                                  <br/><br/>
+                                                  <span className="signature">
+                                                By {studentFullName}
+                                              </span>
+                                                  <br/>
+                                                  <span style={{fontSize: "11px", color: "black"}}>
+                                                {dateASP}
+                                              </span>
+                                                </div>
+                                              </CCardBody>
+                                            </CCard>
+                                          </CCol>
+                                          <CCol md="2"/>
+                                        </CRow>
+                                      )}
+
+                                      {(
+                                        showReloadASP && depotStatus === "" &&
+                                        <center>
+                                          <CButton  shape="pill" color="warning" aria-expanded="true"
+                                                    onClick={() => this.modifyMyASP()}>
+                                            <CTooltip content="Modifier mon Attestation Stage PFE" placement="top">
+                                              <CIcon content={freeSet.cilReload}/>
+                                            </CTooltip>
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                      {currentFileASP && !giveOKASP && (
+                                        <center>
+                                          <div className="alert alert-danger" role="alert" style= {{width: "300px"}}>
+                                            Il ne s'agit pas d'un Fichier PDF !.
+                                            <br/>
+                                            Merci de respecter le format demandé.
+                                          </div>
+                                        </center>
+                                      )}
+
+                                      {currentFileASP && successUploadASP && (
+                                        <div className="progress">
+                                          <div
+                                            className="progress-bar bg-warning progress-bar-striped progress-bar-animated"
+                                            role="progressbar"
+                                            aria-valuenow={progressASP}
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"
+                                            style={{ width: progressASP + "%" }}>
+                                            {progressASP}%
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {(
+                                        showButtonASP &&
+                                        <center>
+                                          <CButton  variant="outline" color="warning"
+                                                    onClick={this.uploadTrainingCertif}
+                                                    disabled={labelASP === ""}
+                                                    enabled={labelASP !== ""}>
+                                            Déposer Attestation Stage PFE
+                                          </CButton>
+                                        </center>
+                                      )}
+
+
+                                    </CCol>
+
+                                    <br/>
+
+                                  </CRow>
+                                  <br/>
+                                  <Divider />
                                 </>
-                            }
-                          </>
-                          :
-                          <CRow>
-                            <CCol md="2"/>
-                            <CCol md="8">
-                              <br/><br/>
-                              <CCard accentColor="danger">
-                                <CCardBody>
+                              }
+
+                              {
+                                // Show Alert DEPOSEE-VALIDEE-INCOMPLET
+                                fileInfos.length > 1 && (
+                                  <div>
+
+                                    <CContainer>
+                                      <CRow>
+                                        <CCol md="9" class="bg-warning py-2">
+                                          <div className="card-header">
+                                            <span className="menuTitleBleuReport">Informations sur mes Rapports 5</span>
+                                          </div>
+
+                                          <ul className="list-group list-group-flush">
+                                            {fileInfos.map((file, index) => (
+                                              <li className="list-group-item" key={index}>
+                                                <CRow>
+                                                  <CCol md="4" class="bg-warning py-2">
+                                                    {file.includes("RLV") && (
+                                                      <CListGroup accent>
+                                                        <CListGroupItem accent="dark"><strong>Rapport Version 1</strong></CListGroupItem>
+                                                      </CListGroup>
+                                                    )}
+                                                    {file.includes("RFV") && (
+                                                      <CListGroup accent>
+                                                        <CListGroupItem accent="danger"><strong>Rapport Version Finale</strong></CListGroupItem>
+                                                      </CListGroup>
+                                                    )}
+                                                    {file.includes("RAP") && (
+                                                      <CListGroup accent>
+                                                        <CListGroupItem accent="info"><strong>Rapport Anti-Plagiat : URKUND</strong></CListGroupItem>
+                                                      </CListGroup>
+                                                    )}
+                                                    {file.includes("ASP") && (
+                                                      <CListGroup accent>
+                                                        <CListGroupItem accent="warning"><strong>Attestation Stage PFE</strong></CListGroupItem>
+                                                      </CListGroup>
+                                                    )}
+                                                  </CCol>
+                                                  <CCol md="6" class="bg-warning py-2">
+                                                    <div style={{marginTop: '13px'}}>
+                                                      {file.substr(0, file.indexOf("UNITR1"))}.pdf
+                                                    </div>
+                                                  </CCol>
+                                                  <CCol md="2" class="bg-warning py-2">
+                                                    <div style={{marginTop: '13px'}}>
+                                                      {file.substr(file.indexOf("UNITR1") + 9)}
+                                                    </div>
+                                                  </CCol>
+                                                </CRow>
+                                              </li>
+                                            ))}
+                                          </ul>
+                                        </CCol>
+                                        <CCol lg="3">
+                                          <br/>
+                                          {(
+                                            depotStatus === "" && fileInfos.length > 1 &&
+                                            <center>
+                                              <br/><br/>
+
+                                              <span className="text-primary" style={{fontSize: "11px"}}>
+                                      Cliquer sur ce bouton pour <ins>relancer</ins> votre Dépôt.
+                                    </span>
+                                              <br/>
+                                              <Icon icon={handPointingDown} color="blue" width="30" height="30" />
+                                              <br/><br/>
+
+                                              <CButton  shape="pill" color="primary" aria-expanded="true"
+                                                        onClick={() => this.openModalConfirmRelanceDepot()}>
+                                                <CTooltip content="Relancer mon Dépôt" placement="top">
+                                                  <CIcon content={freeSet.cilReload}/>
+                                                </CTooltip>
+                                              </CButton>
+                                            </center>
+                                          )}
+                                          {( depotStatus.includes("DEPOSEE") &&
+                                            <CAlert color="info">
+                                              <h5 className="alert-heading"><strong>Dépôt Effectué</strong></h5>
+                                              <p>
+                                                Votre requête a été bien déposée le <ins>{depotStatus.substring(7, depotStatus.length)}</ins>.
+                                              </p>
+                                              <p>
+                                                Elle va être traitée le plus tôt possible.
+                                              </p>
+                                              <hr />
+                                              <p className="mb-0">
+                                                Merci de patienter.
+                                              </p>
+                                            </CAlert>
+                                          )}
+
+                                          {( depotStatus.includes("VALIDEE") &&
+                                            <CAlert color="success">
+                                              <h5 className="alert-heading"><strong>Dépôt Validé</strong></h5>
+                                              <p>
+                                                Votre requête a été <ins>validée</ins> le <ins>{depotStatus.substring(7, depotStatus.length)}</ins>.
+                                              </p>
+                                              <hr />
+                                              <p className="mb-0">
+                                                Bonne Chance.
+                                              </p>
+                                            </CAlert>
+                                          )}
+
+                                          {( depotStatus.includes("INCOMPLET") &&
+                                            <CAlert color="danger">
+                                              <h5 className="alert-heading"><strong>Dépôt Incomplet</strong></h5>
+                                              <p>
+                                                Votre requête a été marquée comme <ins>incomplète</ins> le <ins>{depotStatus.substring(9, 19)}</ins>.
+                                              </p>
+                                              <strong>Motif: </strong> {depotStatus.substring(19, depotStatus.length)}.
+                                              <hr />
+                                              <CButton  variant="outline" color="danger"
+                                                        onClick={() => this.requestForUpdateMyDepot()}>
+                                                Mettre à jour mon Dépôt
+                                              </CButton>
+                                            </CAlert>
+                                          )}
+                                        </CCol>
+                                      </CRow>
+                                    </CContainer>
+                                  </div>
+                                )}
+
+                              {showPopupSuccessUpload && (
+                                <Modal
+                                  isOpen={showPopupSuccessUpload}
+                                  contentLabel="Example Modal"
+                                  style={customStyles}
+                                >
+                                  <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Information</span>
+                                  <hr/>
                                   <center>
-                                    <br /><br />
-                                    <span className="info2InDiv">
+                                    <br />
+                                    <br />
+                                    {message}
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <button
+                                      className="btn btn-sm btn-primary"
+                                      onClick={this.closeModalSuccessUpload}
+                                    >
+                                      Ok
+                                    </button>
+                                    <br />
+                                    <br />
+                                  </center>
+                                </Modal>
+                              )}
+                              {showModalConfirmRelanceDepot && (
+                                <Modal
+                                  isOpen={showModalConfirmRelanceDepot}
+                                  contentLabel="Example Modal"
+                                  style={customStyles}>
+                                  <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Confirmation</span>
+                                  <hr/>
+                                  <center>
+                                    <br />
+                                    <br />
+                                    Êtes-vous sûr de vouloir relancer votre dépôt ?
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <button className="btn btn-sm btn-success"
+                                            onClick={this.modifyMyDepot}>
+                                      Oui
+                                    </button>
+                                    &nbsp;
+                                    <button className="btn btn-sm btn-danger"
+                                            onClick={this.closeModalConfirmRelanceDepot}>
+                                      Non
+                                    </button>
+                                    <br />
+                                    <br />
+                                  </center>
+                                </Modal>
+                              )}
+
+                            </CCardBody>
+                            <CCardFooter>
+                              <CRow>
+                                <CCol sm="4" md="3"/>
+                                <CCol sm="4" md="7">
+                                  {(
+                                    depotStatus === "" && fileInfos.length === 3 &&
+                                    <>
+                                  <span className="text-success" style={{fontSize: "11px"}}>
+                                    Cliquer sur ce bouton pour <strong> valider votre dépôt </strong> ( <ins>PS:</ins> Une fois Cliquer, vous ne pourrez pas modifier votre dépôt ).
+                                  </span>
+                                      &nbsp;&nbsp;&nbsp;
+                                      <Icon icon={handPointingRight} color="green" width="30" height="30" />
+                                    </>
+                                  )}
+                                </CCol>
+                                <CCol sm="4" md="2">
+                                  {(
+                                    depotStatus.includes("DEPOSEE") &&
+                                    <h5><CBadge color="primary">Requête Envoyée</CBadge></h5>
+                                  )}
+
+                                  {(
+                                    depotStatus.includes("VALIDEE") &&
+                                    <h5><CBadge color="success">Dépôt Validé</CBadge></h5>
+                                  )}
+
+                                  {(
+                                    depotStatus.includes("INCOMPLET") &&
+                                    <h5><CBadge color="danger">Dépôt Incomplet</CBadge></h5>
+                                  )}
+                                  {(
+                                    (depotStatus === "" ) &&
+                                    <CButton  color="success"
+                                              disabled={fileInfos.length !== 4}
+                                              enabled={fileInfos.length === 4}
+                                              className="float-right"
+                                              onClick={() => this.validateMyDepot()}>
+                                      Je valide 3 - {fileInfos.length}
+                                    </CButton>
+                                  )}
+
+                                  {(
+                                    showSpinnerWaitingDepot &&
+                                    <Backdrop className={classes.backdrop} open={showSpinnerWaitingDepot} >
+                                      <CircularProgress color="inherit" />
+                                    </Backdrop>
+                                  )}
+
+
+
+                                </CCol>
+                              </CRow>
+                            </CCardFooter>
+                          </CCard>
+                        )}
+
+                        {( (fileInfos.length === 5) && itsITandEM === "NO" &&
+                          <CCard accentColor="info">
+
+                            <CCardBody>
+
+                              {fileInfos.length >= 0  &&(
+                                <>
+                                  <CRow>
+                                    <CCol md="3" class="bg-warning py-2">
+                                      <NotificationContainer/>
+                                      {(
+                                        labelRFV === "" && showUploadIconRFV &&
+                                        <center>
+                                          <label
+                                            htmlFor="filePickerRAP"
+                                            className="custom-file-upload">
+                                            <img
+                                              src={redUpload}
+                                              className="cursorPointer"
+                                              class="img-fluid"
+                                              width="100px"
+                                              height="75px"
+                                              title="Déposer Rapport Version Finale"
+                                              alt=""
+                                            />
+                                          </label>
+                                          <br/>
+                                          <label className="btn btn-default">
+                                            <input
+                                              id="filePickerRAP"
+                                              type="file"
+                                              className="cursorPointer"
+                                              style={{ visibility: "hidden" }}
+                                              accept="application/pdf"
+                                              onChange={this.selectReportFinalVersion}
+                                            />
+                                          </label>
+                                        </center>
+                                      )}
+
+                                      {(
+                                        labelRFV !== "" &&
+                                        <CRow>
+                                          <CCol md="1"/>
+                                          <CCol md="10">
+                                            <CCard color="danger" className="text-white">
+                                              <CCardHeader>
+                                                <div style={{textAlign: "right"}}>
+                                                  <img  src={espritLogo}
+                                                        className="cursorPointer"
+                                                        class="img-fluid"
+                                                        width="40px"
+                                                        height="50px"/>
+                                                </div>
+                                              </CCardHeader>
+                                              <CCardBody>
+                                                <div style={{textAlign: "center"}}>
+                                                  {labelRFV}
+                                                  <br/><br/>
+                                                  <span className="signature">
+                                                By {studentFullName}
+                                              </span>
+                                                  <br/>
+                                                  <span style={{fontSize: "11px", color: "black"}}>
+                                                {dateRFV}
+                                              </span>
+                                                </div>
+                                              </CCardBody>
+                                            </CCard>
+                                          </CCol>
+                                          <CCol md="1"/>
+                                        </CRow>
+                                      )}
+
+                                      {(
+                                        showReloadRFV && depotStatus === "" &&
+                                        <center>
+                                          <CButton  shape="pill" color="danger" aria-expanded="true"
+                                                    onClick={() => this.modifyMyRFV()}>
+                                            <CTooltip content="Modifier mon Rapport Version Finale" placement="top">
+                                              <CIcon content={freeSet.cilReload}/>
+                                            </CTooltip>
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                      {currentFileRFV && !giveOKRFV && (
+                                        <center>
+                                          <div className="alert alert-danger" role="alert" style= {{width: "200px"}}>
+                                            Il ne s'agit pas d'un Fichier PDF !.
+                                            <br/>
+                                            Merci de respecter le format demandé.
+                                          </div>
+                                        </center>
+                                      )}
+
+                                      {currentFileRFV && successUploadRFV && (
+                                        <div className="progress">
+                                          <div
+                                            className="progress-bar bg-danger progress-bar-striped progress-bar-animated"
+                                            role="progressbar"
+                                            aria-valuenow={progressRFV}
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"
+                                            style={{ width: progressRFV + "%" }}>
+                                            {progressRFV}%
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {showButtonRFV && giveOKRFV && labelRFV !== "" && (
+                                        <center>
+                                          <Checkbox
+                                            checked={this.state.checked}
+                                            color="secondary"
+                                            onChange={(e) =>
+                                              this.reportConfidentialHandler(e)
+                                            }
+                                            inputProps={{ "aria-label": "secondary checkbox" }}
+                                          />
+                                          &nbsp;&nbsp; Confidendial Upload
+                                        </center>
+                                      )}
+
+                                      {(
+                                        showButtonRFV &&
+                                        <center>
+                                          <CButton  variant="outline" color="danger"
+                                                    onClick={this.uploadReportFinalVersion}
+                                                    disabled={labelRFV === ""}
+                                                    enabled={labelRFV !== ""}>
+                                            Déposer Rapport Version Finale
+                                          </CButton>
+                                        </center>
+                                      )}
+
+
+                                    </CCol>
+
+                                    <CCol md="3" class="bg-warning py-2">
+                                      {(
+                                        labelRAP === "" && showUploadIconRAP &&
+                                        <center>
+                                          <label
+                                            htmlFor="filePickerASP"
+                                            className="custom-file-upload">
+                                            <img
+                                              src={blueLightUpload}
+                                              className="cursorPointer"
+                                              class="img-fluid"
+                                              width="100px"
+                                              height="75px"
+                                              title="Déposer Rapport Anti-Plagiat"
+                                              alt=""
+                                            />
+                                          </label>
+                                          <br/>
+                                          <label className="btn btn-default">
+                                            <input
+                                              id="filePickerASP"
+                                              type="file"
+                                              className="cursorPointer"
+                                              style={{ visibility: "hidden" }}
+                                              accept="application/pdf"
+                                              onChange={this.selectReportAntiPlagiat}
+                                            />
+                                          </label>
+                                        </center>
+                                      )}
+
+                                      {(
+                                        labelRAP !== "" &&
+                                        <CRow>
+                                          <CCol md="1"/>
+                                          <CCol md="10">
+                                            <CCard color="info" className="text-white">
+                                              <CCardHeader>
+                                                <div style={{textAlign: "right"}}>
+                                                  <img  src={espritLogo}
+                                                        className="cursorPointer"
+                                                        class="img-fluid"
+                                                        width="40px"
+                                                        height="50px"/>
+                                                </div>
+                                              </CCardHeader>
+                                              <CCardBody>
+                                                <div style={{textAlign: "center"}}>
+                                                  {labelRAP}
+                                                  <br/><br/>
+                                                  <span className="signature">
+                                                By {studentFullName}
+                                              </span>
+                                                  <br/>
+                                                  <span style={{fontSize: "11px", color: "black"}}>
+                                                {dateRAP}
+                                              </span>
+                                                </div>
+                                              </CCardBody>
+                                            </CCard>
+                                          </CCol>
+                                          <CCol md="1"/>
+                                        </CRow>
+                                      )}
+
+                                      {(
+                                        showReloadRAP && depotStatus === "" &&
+                                        <center>
+                                          <CButton  shape="pill" color="info" aria-expanded="true"
+                                                    onClick={() => this.modifyMyRAP()}>
+                                            <CTooltip content="Modifier mon Rapport Anti-Plagiat" placement="top">
+                                              <CIcon content={freeSet.cilReload}/>
+                                            </CTooltip>
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                      {currentFileRAP && !giveOKRAP && (
+                                        <center>
+                                          <div className="alert alert-danger" role="alert" style= {{width: "200px"}}>
+                                            Il ne s'agit pas d'un Fichier PDF !.
+                                            <br/>
+                                            Merci de respecter le format demandé.
+                                          </div>
+                                        </center>
+                                      )}
+
+                                      {currentFileRAP && successUploadRAP && (
+                                        <div className="progress">
+                                          <div
+                                            className="progress-bar bg-info progress-bar-striped progress-bar-animated"
+                                            role="progressbar"
+                                            aria-valuenow={progressRAP}
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"
+                                            style={{ width: progressRAP + "%" }}>
+                                            {progressRAP}%
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {(
+                                        showButtonRAP &&
+                                        <center>
+                                          <CButton  variant="outline" color="info"
+                                                    onClick={this.uploadPlagiat}
+                                                    disabled={labelRAP === ""}
+                                                    enabled={labelRAP !== ""}>
+                                            Déposer Rapport Anti-Plagiat
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                    </CCol>
+
+                                    <CCol md="3" class="bg-warning py-2">
+
+                                      {(
+                                        labelASP === "" && showUploadIconASP &&
+                                        <center>
+                                          <label
+                                            htmlFor="filePickerRFV"
+                                            className="custom-file-upload">
+                                            <img
+                                              src={orangeUpload}
+                                              className="cursorPointer"
+                                              class="img-fluid"
+                                              width="100px"
+                                              height="75px"
+                                              title="Déposer Attestation Stage PFE"
+                                              alt=""
+                                            />
+                                          </label>
+                                          <br/>
+                                          <label className="btn btn-default">
+                                            <input
+                                              id="filePickerRFV"
+                                              type="file"
+                                              className="cursorPointer"
+                                              style={{ visibility: "hidden" }}
+                                              accept="application/pdf"
+                                              onChange={this.selectAttestationStagePFE}
+                                            />
+                                          </label>
+                                        </center>
+                                      )}
+
+                                      {(
+                                        labelASP !== "" &&
+                                        <CRow>
+                                          <CCol md="1"/>
+                                          <CCol md="10">
+                                            <CCard color="warning" className="text-white">
+                                              <CCardHeader>
+                                                <div style={{textAlign: "right"}}>
+                                                  <img  src={espritLogo}
+                                                        className="cursorPointer"
+                                                        class="img-fluid"
+                                                        width="40px"
+                                                        height="50px"/>
+                                                </div>
+                                              </CCardHeader>
+                                              <CCardBody>
+                                                <div style={{textAlign: "center"}}>
+                                                  {labelASP}
+                                                  <br/><br/>
+                                                  <span className="signature">
+                                                By {studentFullName}
+                                              </span>
+                                                  <br/>
+                                                  <span style={{fontSize: "11px", color: "black"}}>
+                                                {dateASP}
+                                              </span>
+                                                </div>
+                                              </CCardBody>
+                                            </CCard>
+                                          </CCol>
+                                          <CCol md="1"/>
+                                        </CRow>
+                                      )}
+
+                                      {(
+                                        showReloadASP && depotStatus === "" &&
+                                        <center>
+                                          <CButton  shape="pill" color="warning" aria-expanded="true"
+                                                    onClick={() => this.modifyMyASP()}>
+                                            <CTooltip content="Modifier mon Attestation Stage PFE" placement="top">
+                                              <CIcon content={freeSet.cilReload}/>
+                                            </CTooltip>
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                      {currentFileASP && !giveOKASP && (
+                                        <center>
+                                          <div className="alert alert-danger" role="alert" style= {{width: "200px"}}>
+                                            Il ne s'agit pas d'un Fichier PDF !.
+                                            <br/>
+                                            Merci de respecter le format demandé.
+                                          </div>
+                                        </center>
+                                      )}
+
+                                      {currentFileASP && successUploadASP && (
+                                        <div className="progress">
+                                          <div
+                                            className="progress-bar bg-warning progress-bar-striped progress-bar-animated"
+                                            role="progressbar"
+                                            aria-valuenow={progressASP}
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"
+                                            style={{ width: progressASP + "%" }}>
+                                            {progressASP}%
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {(
+                                        showButtonASP &&
+                                        <center>
+                                          <CButton  variant="outline" color="warning"
+                                                    onClick={this.uploadTrainingCertif}
+                                                    disabled={labelASP === ""}
+                                                    enabled={labelASP !== ""}>
+                                            Déposer Attestation Stage PFE
+                                          </CButton>
+                                        </center>
+                                      )}
+
+
+                                    </CCol>
+
+                                    <CCol md="3" class="bg-primary py-2">
+                                      {(
+                                        labelDCS === "" && showUploadIconDCS &&
+                                        <center>
+                                          <label
+                                            htmlFor="filePickerDCS"
+                                            className="custom-file-upload">
+                                            <img
+                                              src={blueBoldUpload}
+                                              className="cursorPointer"
+                                              class="img-fluid"
+                                              width="100px"
+                                              height="75px"
+                                              title="Déposer Dossier ou Document Optionnel"
+                                              alt=""
+                                            />
+                                          </label>
+                                          <br/>
+                                          <label className="btn btn-default">
+                                            <input
+                                              id="filePickerDCS"
+                                              type="file"
+                                              className="cursorPointer"
+                                              style={{ visibility: "hidden" }}
+                                              onChange={this.selectDossierDocumentSupplemenaire}
+                                            />
+                                          </label>
+                                        </center>
+                                      )}
+
+                                      {(
+                                        labelDCS !== "" &&
+                                        <CRow>
+                                          <CCol md="1"/>
+                                          <CCol md="10">
+                                            <CCard color="primary" className="text-white">
+                                              <CCardHeader>
+                                                <div style={{textAlign: "right"}}>
+                                                  <img  src={espritLogo}
+                                                        className="cursorPointer"
+                                                        class="img-fluid"
+                                                        width="40px"
+                                                        height="50px"/>
+                                                </div>
+                                              </CCardHeader>
+                                              <CCardBody>
+                                                <div style={{textAlign: "center"}}>
+                                                  {labelDCS}
+                                                  <br/><br/>
+                                                  <span className="signature">
+                                                By {studentFullName}
+                                              </span>
+                                                  <br/>
+                                                  <span style={{fontSize: "11px", color: "black"}}>
+                                                {dateDCS}
+                                              </span>
+                                                </div>
+                                              </CCardBody>
+                                            </CCard>
+                                          </CCol>
+                                          <CCol md="1"/>
+                                        </CRow>
+                                      )}
+
+                                      {(
+                                        showReloadDCS && depotStatus === "" &&
+                                        <center>
+                                          <CButton  shape="pill" color="primary" aria-expanded="true"
+                                                    onClick={() => this.modifyMyDCS()}>
+                                            <CTooltip content="Modifier mon Supplément Optionnel" placement="top">
+                                              <CIcon content={freeSet.cilReload}/>
+                                            </CTooltip>
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                      {currentFileDCS && successUploadDCS && (
+                                        <div className="progress">
+                                          <div
+                                            className="progress-bar progress-bar-striped progress-bar-animated"
+                                            role="progressbar"
+                                            aria-valuenow={progressDCS}
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"
+                                            style={{ width: progressDCS + "%" }}>
+                                            {progressDCS}%
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {(
+                                        showButtonDCS &&
+                                        <center>
+                                          <CButton  variant="outline" color="primary"
+                                                    onClick={this.uploadSupplement}
+                                                    disabled={labelDCS === ""}
+                                                    enabled={labelDCS !== ""}>
+                                            Déposer Dossier Technique 3
+                                          </CButton>
+                                        </center>
+                                      )}
+
+
+                                    </CCol>
+
+                                  </CRow>
+                                  <br/>
+                                  {(fileInfos.length > 0 &&
+                                    <Divider />
+                                  )}
+
+                                </>
+                              )}
+
+                              {showPopupSuccessUpload && (
+                                <Modal
+                                  isOpen={showPopupSuccessUpload}
+                                  contentLabel="Example Modal"
+                                  style={customStyles}
+                                >
+                                  <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Information</span>
+                                  <hr/>
+                                  <center>
+                                    <br />
+                                    <br />
+                                    {message}
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <button
+                                      className="btn btn-sm btn-primary"
+                                      onClick={this.closeModalSuccessUpload}
+                                    >
+                                      Ok
+                                    </button>
+                                    <br />
+                                    <br />
+                                  </center>
+                                </Modal>
+                              )}
+
+                              {showModalConfirmRelanceDepot && (
+                                <Modal
+                                  isOpen={showModalConfirmRelanceDepot}
+                                  contentLabel="Example Modal"
+                                  style={customStyles}
+                                >
+                                  <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Confirmation</span>
+                                  <hr/>
+                                  <center>
+                                    <br />
+                                    <br />
+                                    Êtes-vous sûr de vouloir relancer votre dépôt ?
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <button className="btn btn-sm btn-success"
+                                            onClick={this.modifyMyDepot}>
+                                      Oui
+                                    </button>
+                                    &nbsp;
+                                    <button className="btn btn-sm btn-danger"
+                                            onClick={this.closeModalConfirmRelanceDepot}>
+                                      Non
+                                    </button>
+                                    <br />
+                                    <br />
+                                  </center>
+                                </Modal>
+                              )}
+
+                              {fileInfos.length >0 && (
+                                <div>
+
+                                  <CContainer>
+                                    <CRow>
+                                      <CCol md="9" class="bg-warning py-2">
+                                        <div className="card-header">
+                                          <span className="menuTitleGreyReport">Informations sur mes Rapports 6</span>
+                                        </div>
+
+                                        <ul className="list-group list-group-flush">
+                                          {fileInfos.map((file, index) => (
+                                            <li className="list-group-item" key={index}>
+                                              <CRow>
+                                                <CCol md="4" class="bg-warning py-2">
+                                                  {file.includes("RLV") && (
+                                                    <CListGroup accent>
+                                                      <CListGroupItem accent="dark"><strong>Rapport Version 1</strong></CListGroupItem>
+                                                    </CListGroup>
+                                                  )}
+                                                  {file.includes("RFV") && (
+                                                    <CListGroup accent>
+                                                      <CListGroupItem accent="danger"><strong>Rapport Version Finale</strong></CListGroupItem>
+                                                    </CListGroup>
+                                                  )}
+                                                  {file.includes("RAP") && (
+                                                    <CListGroup accent>
+                                                      <CListGroupItem accent="info"><strong>Rapport Anti-Plagiat : URKUND</strong></CListGroupItem>
+                                                    </CListGroup>
+                                                  )}
+                                                  {file.includes("ASP") && (
+                                                    <CListGroup accent>
+                                                      <CListGroupItem accent="warning"><strong>Attestation Stage PFE</strong></CListGroupItem>
+                                                    </CListGroup>
+                                                  )}
+                                                  {file.includes("DCS") && (
+                                                    <CListGroup accent>
+                                                      <CListGroupItem accent="primary"><strong>Dossier Technique</strong></CListGroupItem>
+                                                    </CListGroup>
+                                                  )}
+                                                </CCol>
+                                                <CCol md="6" class="bg-warning py-2">
+                                                  <div style={{marginTop: '13px'}}>
+                                                    {file.substr(0, file.indexOf("UNITR1"))}.pdf
+                                                  </div>
+                                                </CCol>
+                                                <CCol md="2" class="bg-warning py-2">
+                                                  <div style={{marginTop: '13px'}}>
+                                                    {file.substr(file.indexOf("UNITR1") + 9)}
+                                                  </div>
+                                                </CCol>
+                                              </CRow>
+                                            </li>
+                                          ))}
+                                        </ul>
+                                      </CCol>
+                                      <CCol lg="3">
+                                        <br/>
+                                        {(
+                                          depotStatus === "" &&
+                                          <center>
+                                            <br/><br/>
+
+                                            <span className="text-dark" style={{fontSize: "11px"}}>
+                                      Cliquer sur ce bouton pour <ins>relancer</ins> votre Dépôt.
+                                    </span>
+                                            <br/>
+                                            <Icon icon={handPointingDown} color="grey" width="30" height="30" />
+                                            <br/><br/>
+
+                                            <CButton  shape="pill" color="dark" aria-expanded="true"
+                                                      onClick={() => this.openModalConfirmRelanceDepot()}>
+                                              <CTooltip content="Relancer mon Dépôt" placement="top">
+                                                <CIcon content={freeSet.cilReload}/>
+                                              </CTooltip>
+                                            </CButton>
+                                          </center>
+                                        )}
+                                        {( depotStatus.includes("DEPOSEE") &&
+                                          <CAlert color="info">
+                                            <h5 className="alert-heading"><strong>Dépôt Effectué</strong></h5>
+                                            <p>
+                                              Votre requête a été bien déposée le <ins>{depotStatus.substring(7, depotStatus.length)}</ins>.
+                                            </p>
+                                            <p>
+                                              Elle va être traitée le plus tôt possible.
+                                            </p>
+                                            <hr />
+                                            <p className="mb-0">
+                                              Merci de patienter.
+                                            </p>
+                                          </CAlert>
+                                        )}
+
+                                        {( depotStatus.includes("VALIDEE") &&
+                                          <CAlert color="success">
+                                            <h5 className="alert-heading"><strong>Dépôt Validé</strong></h5>
+                                            <p>
+                                              Votre requête a été <ins>validée</ins> le <ins>{depotStatus.substring(7, depotStatus.length)}</ins>.
+                                            </p>
+                                            <hr />
+                                            <p className="mb-0">
+                                              Bonne Chance.
+                                            </p>
+                                          </CAlert>
+                                        )}
+
+                                        {( depotStatus.includes("INCOMPLET") &&
+                                          <CAlert color="danger">
+                                            <h5 className="alert-heading"><strong>Dépôt Incomplet</strong></h5>
+                                            <p>
+                                              Votre requête a été marquée comme <ins>incomplète</ins> le <ins>{depotStatus.substring(9, 19)}</ins>.
+                                            </p>
+                                            <strong>Motif: </strong> {depotStatus.substring(19, depotStatus.length)}.
+                                            <hr />
+                                            <CButton  variant="outline" color="danger"
+                                                      onClick={() => this.requestForUpdateMyDepot()}>
+                                              Mettre à jour mon Dépôt
+                                            </CButton>
+                                          </CAlert>
+                                        )}
+                                      </CCol>
+                                    </CRow>
+                                  </CContainer>
+                                </div>
+                              )}
+
+                            </CCardBody>
+                            <CCardFooter>
+                              <CRow>
+                                <CCol sm="4" md="3"/>
+                                <CCol sm="4" md="7">
+                                  {(
+                                    depotStatus === "" && fileInfos.length === 3 &&
+                                    <>
+                                  <span className="text-success" style={{fontSize: "11px"}}>
+                                    Cliquer sur ce bouton pour <strong> valider votre dépôt </strong> ( <ins>PS:</ins> Une fois Cliquer, vous ne pourrez pas modifier votre dépôt ).
+                                  </span>
+                                      &nbsp;&nbsp;&nbsp;
+                                      <Icon icon={handPointingRight} color="green" width="30" height="30" />
+                                    </>
+                                  )}
+                                </CCol>
+                                <CCol sm="4" md="2">
+                                  {(
+                                    depotStatus.includes("DEPOSEE") &&
+                                    <h5><CBadge color="primary">Requête Envoyée</CBadge></h5>
+                                  )}
+
+                                  {(
+                                    depotStatus.includes("VALIDEE") &&
+                                    <h5><CBadge color="success">Dépôt Validé</CBadge></h5>
+                                  )}
+
+                                  {(
+                                    depotStatus.includes("INCOMPLET") &&
+                                    <h5><CBadge color="danger">Dépôt Incomplet</CBadge></h5>
+                                  )}
+                                  {(
+                                    depotStatus === ""  && itsITandEM === "YES" &&
+                                    <CButton  color="success"
+                                              disabled={fileInfos.length !== 4}
+                                              enabled={fileInfos.length === 4}
+                                              className="float-right"
+                                              onClick={() => this.validateMyDepot()}>
+                                      Je valide 2 - {fileInfos.length}
+                                    </CButton>
+                                  )}
+
+                                  {(
+                                    depotStatus === ""  && itsITandEM === "NO" &&
+                                    <CButton  color="success"
+                                              disabled={fileInfos.length < 5}
+                                              enabled={fileInfos.length > 4}
+                                              className="float-right"
+                                              onClick={() => this.validateMyDepot()}>
+                                      Je valide 3 - {fileInfos.length}
+                                    </CButton>
+                                  )}
+
+                                  {(
+                                    showSpinnerWaitingDepot &&
+                                    <Backdrop className={classes.backdrop} open={showSpinnerWaitingDepot} >
+                                      <CircularProgress color="inherit" />
+                                    </Backdrop>
+                                  )}
+
+
+
+                                </CCol>
+                              </CRow>
+                            </CCardFooter>
+                          </CCard>
+                        )}
+                        <CModal
+                          show={showPopupUpdateDepot}
+                          onClose={() => this.updateMyDepotNO()}
+                          className={classes.backdrop1}
+                          color="secondary">
+                          <CModalHeader closeButton>
+                            <CModalTitle>Confirmation</CModalTitle>
+                          </CModalHeader>
+                          <CModalBody>
+                            Voulez-vous mettre à jour votre dépôt <ins>en tenir compte</ins> la cause de signaler votre requête précédante comme incomplète ?.
+                            <br/><br/>
+                          </CModalBody>
+                          <CModalFooter>
+                            <CButton color="success" onClick={() => this.updateMyDepotYES()}>
+                              Oui
+                            </CButton>
+                            &nbsp;
+                            <CButton color="danger" onClick={() => this.updateMyDepotNO()}>
+                              Pas Maintenant
+                            </CButton>
+                          </CModalFooter>
+                        </CModal>
+                      </>
+                    }
+
+                    {
+                      // After v2 + 1
+                      (
+                        timeForDepotRapportV2.trim() === "AFTERTIMEV2"
+                        && depotStatus === "METTRE A JOUR"
+                        && (itsITandEM === "YES" || itsITandEM === "NO")
+                      )
+                      &&
+                      <>
+                        {( itsITandEM === "YES" &&
+                          <CCard accentColor="info">
+
+                            <CCardBody>
+
+                              {fileInfos.length >= 0  &&(
+                                <>
+                                  <CRow>
+                                    <CCol md="4" class="bg-warning py-2">
+                                      <NotificationContainer/>
+                                      {(
+                                        labelRFV === "" && showUploadIconRFV &&
+                                        <center>
+                                          <label
+                                            htmlFor="filePickerRAP"
+                                            className="custom-file-upload">
+                                            <img
+                                              src={redUpload}
+                                              className="cursorPointer"
+                                              class="img-fluid"
+                                              width="100px"
+                                              height="75px"
+                                              title="Déposer Rapport Version Finale"
+                                              alt=""
+                                            />
+                                          </label>
+                                          <br/>
+                                          <label className="btn btn-default">
+                                            <input
+                                              id="filePickerRAP"
+                                              type="file"
+                                              className="cursorPointer"
+                                              style={{ visibility: "hidden" }}
+                                              accept="application/pdf"
+                                              onChange={this.selectReportFinalVersion}
+                                            />
+                                          </label>
+                                        </center>
+                                      )}
+
+                                      {(
+                                        labelRFV !== "" &&
+                                        <CRow>
+                                          <CCol md="2"/>
+                                          <CCol md="8">
+                                            <CCard color="danger" className="text-white">
+                                              <CCardHeader>
+                                                <div style={{textAlign: "right"}}>
+                                                  <img  src={espritLogo}
+                                                        className="cursorPointer"
+                                                        class="img-fluid"
+                                                        width="40px"
+                                                        height="50px"/>
+                                                </div>
+                                              </CCardHeader>
+                                              <CCardBody>
+                                                <div style={{textAlign: "center"}}>
+                                                  {labelRFV}
+                                                  <br/><br/>
+                                                  <span className="signature">
+                                                By {studentFullName}
+                                              </span>
+                                                  <br/>
+                                                  <span style={{fontSize: "11px", color: "black"}}>
+                                                {dateRFV}
+                                              </span>
+                                                </div>
+                                              </CCardBody>
+                                            </CCard>
+                                          </CCol>
+                                          <CCol md="2"/>
+                                        </CRow>
+                                      )}
+
+                                      {(
+                                        showReloadRFV && depotStatus === "METTRE A JOUR" &&
+                                        <center>
+                                          <CButton  shape="pill" color="danger" aria-expanded="true"
+                                                    onClick={() => this.modifyMyRFV()}>
+                                            <CTooltip content="Modifier mon Rapport Version Finale" placement="top">
+                                              <CIcon content={freeSet.cilReload}/>
+                                            </CTooltip>
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                      {currentFileRFV && !giveOKRFV && (
+                                        <center>
+                                          <div className="alert alert-danger" role="alert" style= {{width: "300px"}}>
+                                            Il ne s'agit pas d'un Fichier PDF !.
+                                            <br/>
+                                            Merci de respecter le format demandé.
+                                          </div>
+                                        </center>
+                                      )}
+
+                                      {currentFileRFV && successUploadRFV && (
+                                        <div className="progress">
+                                          <div
+                                            className="progress-bar bg-danger progress-bar-striped progress-bar-animated"
+                                            role="progressbar"
+                                            aria-valuenow={progressRFV}
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"
+                                            style={{ width: progressRFV + "%" }}>
+                                            {progressRFV}%
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {showButtonRFV && giveOKRFV && labelRFV !== "" && (
+                                        <center>
+                                          <Checkbox
+                                            checked={this.state.checked}
+                                            color="secondary"
+                                            onChange={(e) =>
+                                              this.reportConfidentialHandler(e)
+                                            }
+                                            inputProps={{ "aria-label": "secondary checkbox" }}
+                                          />
+                                          &nbsp;&nbsp; Confidendial Upload
+                                        </center>
+                                      )}
+
+                                      {(
+                                        showButtonRFV &&
+                                        <center>
+                                          <CButton  variant="outline" color="danger"
+                                                    onClick={this.uploadReportFinalVersion}
+                                                    disabled={labelRFV === ""}
+                                                    enabled={labelRFV !== ""}>
+                                            Déposer Rapport Version Finale
+                                          </CButton>
+                                        </center>
+                                      )}
+
+
+                                    </CCol>
+
+                                    <CCol md="4" class="bg-warning py-2">
+                                      {(
+                                        labelRAP === "" && showUploadIconRAP &&
+                                        <center>
+                                          <label
+                                            htmlFor="filePickerASP"
+                                            className="custom-file-upload">
+                                            <img
+                                              src={blueLightUpload}
+                                              className="cursorPointer"
+                                              class="img-fluid"
+                                              width="100px"
+                                              height="75px"
+                                              title="Déposer Rapport Anti-Plagiat"
+                                              alt=""
+                                            />
+                                          </label>
+                                          <br/>
+                                          <label className="btn btn-default">
+                                            <input
+                                              id="filePickerASP"
+                                              type="file"
+                                              className="cursorPointer"
+                                              style={{ visibility: "hidden" }}
+                                              accept="application/pdf"
+                                              onChange={this.selectReportAntiPlagiat}
+                                            />
+                                          </label>
+                                        </center>
+                                      )}
+
+                                      {(
+                                        labelRAP !== "" &&
+                                        <CRow>
+                                          <CCol md="2"/>
+                                          <CCol md="8">
+                                            <CCard color="info" className="text-white">
+                                              <CCardHeader>
+                                                <div style={{textAlign: "right"}}>
+                                                  <img  src={espritLogo}
+                                                        className="cursorPointer"
+                                                        class="img-fluid"
+                                                        width="40px"
+                                                        height="50px"/>
+                                                </div>
+                                              </CCardHeader>
+                                              <CCardBody>
+                                                <div style={{textAlign: "center"}}>
+                                                  {labelRAP}
+                                                  <br/><br/>
+                                                  <span className="signature">
+                                                By {studentFullName}
+                                              </span>
+                                                  <br/>
+                                                  <span style={{fontSize: "11px", color: "black"}}>
+                                                {dateRAP}
+                                              </span>
+                                                </div>
+                                              </CCardBody>
+                                            </CCard>
+                                          </CCol>
+                                          <CCol md="2"/>
+                                        </CRow>
+                                      )}
+
+                                      {(
+                                        showReloadRAP && depotStatus === "METTRE A JOUR" &&
+                                        <center>
+                                          <CButton  shape="pill" color="info" aria-expanded="true"
+                                                    onClick={() => this.modifyMyRAP()}>
+                                            <CTooltip content="Modifier mon Rapport Anti-Plagiat" placement="top">
+                                              <CIcon content={freeSet.cilReload}/>
+                                            </CTooltip>
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                      {currentFileRAP && !giveOKRAP && (
+                                        <center>
+                                          <div className="alert alert-danger" role="alert" style= {{width: "300px"}}>
+                                            Il ne s'agit pas d'un Fichier PDF !.
+                                            <br/>
+                                            Merci de respecter le format demandé.
+                                          </div>
+                                        </center>
+                                      )}
+
+                                      {currentFileRAP && successUploadRAP && (
+                                        <div className="progress">
+                                          <div
+                                            className="progress-bar bg-info progress-bar-striped progress-bar-animated"
+                                            role="progressbar"
+                                            aria-valuenow={progressRAP}
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"
+                                            style={{ width: progressRAP + "%" }}>
+                                            {progressRAP}%
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {(
+                                        showButtonRAP &&
+                                        <center>
+                                          <CButton  variant="outline" color="info"
+                                                    onClick={this.uploadPlagiat}
+                                                    disabled={labelRAP === ""}
+                                                    enabled={labelRAP !== ""}>
+                                            Déposer Rapport Anti-Plagiat
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                    </CCol>
+
+                                    <CCol md="4" class="bg-warning py-2">
+
+                                      {(
+                                        labelASP === "" && showUploadIconASP &&
+                                        <center>
+                                          <label
+                                            htmlFor="filePickerRFV"
+                                            className="custom-file-upload">
+                                            <img
+                                              src={orangeUpload}
+                                              className="cursorPointer"
+                                              class="img-fluid"
+                                              width="100px"
+                                              height="75px"
+                                              title="Déposer Attestation Stage PFE"
+                                              alt=""
+                                            />
+                                          </label>
+                                          <br/>
+                                          <label className="btn btn-default">
+                                            <input
+                                              id="filePickerRFV"
+                                              type="file"
+                                              className="cursorPointer"
+                                              style={{ visibility: "hidden" }}
+                                              accept="application/pdf"
+                                              onChange={this.selectAttestationStagePFE}
+                                            />
+                                          </label>
+                                        </center>
+                                      )}
+
+                                      {(
+                                        labelASP !== "" &&
+                                        <CRow>
+                                          <CCol md="2"/>
+                                          <CCol md="8">
+                                            <CCard color="warning" className="text-white">
+                                              <CCardHeader>
+                                                <div style={{textAlign: "right"}}>
+                                                  <img  src={espritLogo}
+                                                        className="cursorPointer"
+                                                        class="img-fluid"
+                                                        width="40px"
+                                                        height="50px"/>
+                                                </div>
+                                              </CCardHeader>
+                                              <CCardBody>
+                                                <div style={{textAlign: "center"}}>
+                                                  {labelASP}
+                                                  <br/><br/>
+                                                  <span className="signature">
+                                                By {studentFullName}
+                                              </span>
+                                                  <br/>
+                                                  <span style={{fontSize: "11px", color: "black"}}>
+                                                {dateASP}
+                                              </span>
+                                                </div>
+                                              </CCardBody>
+                                            </CCard>
+                                          </CCol>
+                                          <CCol md="2"/>
+                                        </CRow>
+                                      )}
+
+                                      {(
+                                        showReloadASP && depotStatus === "METTRE A JOUR" &&
+                                        <center>
+                                          <CButton  shape="pill" color="warning" aria-expanded="true"
+                                                    onClick={() => this.modifyMyASP()}>
+                                            <CTooltip content="Modifier mon Attestation Stage PFE" placement="top">
+                                              <CIcon content={freeSet.cilReload}/>
+                                            </CTooltip>
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                      {currentFileASP && !giveOKASP && (
+                                        <center>
+                                          <div className="alert alert-danger" role="alert" style= {{width: "300px"}}>
+                                            Il ne s'agit pas d'un Fichier PDF !.
+                                            <br/>
+                                            Merci de respecter le format demandé.
+                                          </div>
+                                        </center>
+                                      )}
+
+                                      {currentFileASP && successUploadASP && (
+                                        <div className="progress">
+                                          <div
+                                            className="progress-bar bg-warning progress-bar-striped progress-bar-animated"
+                                            role="progressbar"
+                                            aria-valuenow={progressASP}
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"
+                                            style={{ width: progressASP + "%" }}>
+                                            {progressASP}%
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {(
+                                        showButtonASP &&
+                                        <center>
+                                          <CButton  variant="outline" color="warning"
+                                                    onClick={this.uploadTrainingCertif}
+                                                    disabled={labelASP === ""}
+                                                    enabled={labelASP !== ""}>
+                                            Déposer Attestation Stage PFE
+                                          </CButton>
+                                        </center>
+                                      )}
+
+
+                                    </CCol>
+
+                                    <br/>
+
+                                  </CRow>
+                                  <br/>
+                                  {(fileInfos.length > 0 &&
+                                    <Divider />
+                                  )}
+
+                                </>
+                              )}
+
+                              {showPopupSuccessUpload && (
+                                <Modal
+                                  isOpen={showPopupSuccessUpload}
+                                  contentLabel="Example Modal"
+                                  style={customStyles}>
+                                  <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Information</span>
+                                  <hr/>
+                                  <center>
+                                    <br />
+                                    <br />
+                                    {message}
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <button
+                                      className="btn btn-sm btn-primary"
+                                      onClick={this.closeModalSuccessUpload}
+                                    >
+                                      Ok
+                                    </button>
+                                    <br />
+                                    <br />
+                                  </center>
+                                </Modal>
+                              )}
+                              {showModalConfirmRelanceDepot && (
+                                <Modal
+                                  isOpen={showModalConfirmRelanceDepot}
+                                  contentLabel="Example Modal"
+                                  style={customStyles}>
+                                  <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Confirmation</span>
+                                  <hr/>
+                                  <center>
+                                    <br />
+                                    <br />
+                                    Êtes-vous sûr de vouloir relancer votre dépôt ?
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <button className="btn btn-sm btn-success"
+                                            onClick={this.modifyMyDepot}>
+                                      Oui
+                                    </button>
+                                    &nbsp;
+                                    <button className="btn btn-sm btn-danger"
+                                            onClick={this.closeModalConfirmRelanceDepot}>
+                                      Non
+                                    </button>
+                                    <br />
+                                    <br />
+                                  </center>
+                                </Modal>
+                              )}
+
+                              {fileInfos.length >0 && (
+                                <div>
+
+                                  <CContainer>
+                                    <CRow>
+                                      <CCol md="9" class="bg-warning py-2">
+                                        <div className="card-header">
+                                          <span className="menuTitleBleuReport">Informations sur mes Rapports 7</span>
+                                        </div>
+
+                                        <ul className="list-group list-group-flush">
+                                          {fileInfos.map((file, index) => (
+                                            <li className="list-group-item" key={index}>
+                                              <CRow>
+                                                <CCol md="4" class="bg-warning py-2">
+                                                  {file.includes("RLV") && (
+                                                    <CListGroup accent>
+                                                      <CListGroupItem accent="dark"><strong>Rapport Version 1</strong></CListGroupItem>
+                                                    </CListGroup>
+                                                  )}
+                                                  {file.includes("RFV") && (
+                                                    <CListGroup accent>
+                                                      <CListGroupItem accent="danger"><strong>Rapport Version Finale</strong></CListGroupItem>
+                                                    </CListGroup>
+                                                  )}
+                                                  {file.includes("RAP") && (
+                                                    <CListGroup accent>
+                                                      <CListGroupItem accent="info"><strong>Rapport Anti-Plagiat : URKUND</strong></CListGroupItem>
+                                                    </CListGroup>
+                                                  )}
+                                                  {file.includes("ASP") && (
+                                                    <CListGroup accent>
+                                                      <CListGroupItem accent="warning"><strong>Attestation Stage PFE</strong></CListGroupItem>
+                                                    </CListGroup>
+                                                  )}
+                                                </CCol>
+                                                <CCol md="6" class="bg-warning py-2">
+                                                  <div style={{marginTop: '13px'}}>
+                                                    {file.substr(0, file.indexOf("UNITR1"))}.pdf
+                                                  </div>
+                                                </CCol>
+                                                <CCol md="2" class="bg-warning py-2">
+                                                  <div style={{marginTop: '13px'}}>
+                                                    {file.substr(file.indexOf("UNITR1") + 9)}
+                                                  </div>
+                                                </CCol>
+                                              </CRow>
+                                            </li>
+                                          ))}
+                                        </ul>
+                                      </CCol>
+                                      <CCol lg="3">
+                                        <br/>
+                                        {(
+                                          depotStatus === "METTRE A JOUR" && fileInfos.length > 1 &&
+                                          <center>
+                                            <br/><br/>
+
+                                            <span className="text-primary" style={{fontSize: "11px"}}>
+                                      Cliquer sur ce bouton pour <ins>relancer</ins> votre Dépôt.
+                                    </span>
+                                            <br/>
+                                            <Icon icon={handPointingDown} color="blue" width="30" height="30" />
+                                            <br/><br/>
+
+                                            <CButton  shape="pill" color="primary" aria-expanded="true"
+                                                      onClick={() => this.openModalConfirmRelanceDepot()}>
+                                              <CTooltip content="Relancer mon Dépôt" placement="top">
+                                                <CIcon content={freeSet.cilReload}/>
+                                              </CTooltip>
+                                            </CButton>
+                                          </center>
+                                        )}
+                                        {( depotStatus.includes("DEPOSEE") &&
+                                          <CAlert color="info">
+                                            <h5 className="alert-heading"><strong>Dépôt Effectué</strong></h5>
+                                            <p>
+                                              Votre requête a été bien déposée le <ins>{depotStatus.substring(7, depotStatus.length)}</ins>.
+                                            </p>
+                                            <p>
+                                              Elle va être traitée le plus tôt possible.
+                                            </p>
+                                            <hr />
+                                            <p className="mb-0">
+                                              Merci de patienter.
+                                            </p>
+                                          </CAlert>
+                                        )}
+
+                                        {( depotStatus.includes("VALIDEE") &&
+                                          <CAlert color="success">
+                                            <h5 className="alert-heading"><strong>Dépôt Validé</strong></h5>
+                                            <p>
+                                              Votre requête a été <ins>validée</ins> le <ins>{depotStatus.substring(7, depotStatus.length)}</ins>.
+                                            </p>
+                                            <hr />
+                                            <p className="mb-0">
+                                              Bonne Chance.
+                                            </p>
+                                          </CAlert>
+                                        )}
+
+                                        {( depotStatus.includes("INCOMPLET") &&
+                                          <CAlert color="danger">
+                                            <h5 className="alert-heading"><strong>Dépôt Incomplet</strong></h5>
+                                            <p>
+                                              Votre requête a été marquée comme <ins>incomplète</ins> le <ins>{depotStatus.substring(9, 19)}</ins>.
+                                            </p>
+                                            <strong>Motif: </strong> {depotStatus.substring(19, depotStatus.length)}.
+                                            <hr />
+                                            <CButton  variant="outline" color="danger"
+                                                      onClick={() => this.requestForUpdateMyDepot()}>
+                                              Mettre à jour mon Dépôt
+                                            </CButton>
+                                          </CAlert>
+                                        )}
+                                      </CCol>
+                                    </CRow>
+                                  </CContainer>
+                                </div>
+                              )}
+
+                            </CCardBody>
+                            <CCardFooter>
+                              <CRow>
+                                <CCol sm="4" md="3"/>
+                                <CCol sm="4" md="7">
+                                  {(
+                                    depotStatus === "METTRE A JOUR" && fileInfos.length === 3 &&
+                                    <>
+                                  <span className="text-success" style={{fontSize: "11px"}}>
+                                    Cliquer sur ce bouton pour <strong> valider votre dépôt </strong> ( <ins>PS:</ins> Une fois Cliquer, vous ne pourrez pas modifier votre dépôt ).
+                                  </span>
+                                      &nbsp;&nbsp;&nbsp;
+                                      <Icon icon={handPointingRight} color="green" width="30" height="30" />
+                                    </>
+                                  )}
+                                </CCol>
+                                <CCol sm="4" md="2">
+                                  {(
+                                    depotStatus.includes("DEPOSEE") &&
+                                    <h5><CBadge color="primary">Requête Envoyée</CBadge></h5>
+                                  )}
+
+                                  {(
+                                    depotStatus.includes("VALIDEE") &&
+                                    <h5><CBadge color="success">Dépôt Validé</CBadge></h5>
+                                  )}
+
+                                  {(
+                                    depotStatus.includes("INCOMPLET") &&
+                                    <h5><CBadge color="danger">Dépôt Incomplet</CBadge></h5>
+                                  )}
+                                  {(
+                                    (depotStatus === "METTRE A JOUR" ) &&
+                                    <CButton  color="success"
+                                              disabled={fileInfos.length !== 4}
+                                              enabled={fileInfos.length === 4}
+                                              className="float-right"
+                                              onClick={() => this.validateMyDepot()}>
+                                      Je valide 4 - {fileInfos.length}
+                                    </CButton>
+                                  )}
+
+                                  {(
+                                    showSpinnerWaitingDepot &&
+                                    <Backdrop className={classes.backdrop} open={showSpinnerWaitingDepot} >
+                                      <CircularProgress color="inherit" />
+                                    </Backdrop>
+                                  )}
+
+
+
+                                </CCol>
+                              </CRow>
+                            </CCardFooter>
+                          </CCard>
+                        )}
+
+                        {( itsITandEM === "NO" &&
+                          <CCard accentColor="info">
+
+                            <CCardBody>
+
+                              {fileInfos.length >= 0  &&(
+                                <>
+                                  <CRow>
+                                    <CCol md="3" class="bg-warning py-2">
+                                      <NotificationContainer/>
+                                      {(
+                                        labelRFV === "" && showUploadIconRFV &&
+                                        <center>
+                                          <label
+                                            htmlFor="filePickerRAP"
+                                            className="custom-file-upload">
+                                            <img
+                                              src={redUpload}
+                                              className="cursorPointer"
+                                              class="img-fluid"
+                                              width="100px"
+                                              height="75px"
+                                              title="Déposer Rapport Version Finale"
+                                              alt=""
+                                            />
+                                          </label>
+                                          <br/>
+                                          <label className="btn btn-default">
+                                            <input
+                                              id="filePickerRAP"
+                                              type="file"
+                                              className="cursorPointer"
+                                              style={{ visibility: "hidden" }}
+                                              accept="application/pdf"
+                                              onChange={this.selectReportFinalVersion}
+                                            />
+                                          </label>
+                                        </center>
+                                      )}
+
+                                      {(
+                                        labelRFV !== "" &&
+                                        <CRow>
+                                          <CCol md="1"/>
+                                          <CCol md="10">
+                                            <CCard color="danger" className="text-white">
+                                              <CCardHeader>
+                                                <div style={{textAlign: "right"}}>
+                                                  <img  src={espritLogo}
+                                                        className="cursorPointer"
+                                                        class="img-fluid"
+                                                        width="40px"
+                                                        height="50px"/>
+                                                </div>
+                                              </CCardHeader>
+                                              <CCardBody>
+                                                <div style={{textAlign: "center"}}>
+                                                  {labelRFV}
+                                                  <br/><br/>
+                                                  <span className="signature">
+                                                By {studentFullName}
+                                              </span>
+                                                  <br/>
+                                                  <span style={{fontSize: "11px", color: "black"}}>
+                                                {dateRFV}
+                                              </span>
+                                                </div>
+                                              </CCardBody>
+                                            </CCard>
+                                          </CCol>
+                                          <CCol md="1"/>
+                                        </CRow>
+                                      )}
+
+                                      {(
+                                        showReloadRFV && depotStatus === "METTRE A JOUR" &&
+                                        <center>
+                                          <CButton  shape="pill" color="danger" aria-expanded="true"
+                                                    onClick={() => this.modifyMyRFV()}>
+                                            <CTooltip content="Modifier mon Rapport Version Finale" placement="top">
+                                              <CIcon content={freeSet.cilReload}/>
+                                            </CTooltip>
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                      {currentFileRFV && !giveOKRFV && (
+                                        <center>
+                                          <div className="alert alert-danger" role="alert" style= {{width: "200px"}}>
+                                            Il ne s'agit pas d'un Fichier PDF !.
+                                            <br/>
+                                            Merci de respecter le format demandé.
+                                          </div>
+                                        </center>
+                                      )}
+
+                                      {currentFileRFV && successUploadRFV && (
+                                        <div className="progress">
+                                          <div
+                                            className="progress-bar bg-danger progress-bar-striped progress-bar-animated"
+                                            role="progressbar"
+                                            aria-valuenow={progressRFV}
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"
+                                            style={{ width: progressRFV + "%" }}>
+                                            {progressRFV}%
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {showButtonRFV && giveOKRFV && labelRFV !== "" && (
+                                        <center>
+                                          <Checkbox
+                                            checked={this.state.checked}
+                                            color="secondary"
+                                            onChange={(e) =>
+                                              this.reportConfidentialHandler(e)
+                                            }
+                                            inputProps={{ "aria-label": "secondary checkbox" }}
+                                          />
+                                          &nbsp;&nbsp; Confidendial Upload
+                                        </center>
+                                      )}
+
+                                      {(
+                                        showButtonRFV &&
+                                        <center>
+                                          <CButton  variant="outline" color="danger"
+                                                    onClick={this.uploadReportFinalVersion}
+                                                    disabled={labelRFV === ""}
+                                                    enabled={labelRFV !== ""}>
+                                            Déposer Rapport Version Finale
+                                          </CButton>
+                                        </center>
+                                      )}
+
+
+                                    </CCol>
+
+                                    <CCol md="3" class="bg-warning py-2">
+                                      {(
+                                        labelRAP === "" && showUploadIconRAP &&
+                                        <center>
+                                          <label
+                                            htmlFor="filePickerASP"
+                                            className="custom-file-upload">
+                                            <img
+                                              src={blueLightUpload}
+                                              className="cursorPointer"
+                                              class="img-fluid"
+                                              width="100px"
+                                              height="75px"
+                                              title="Déposer Rapport Anti-Plagiat"
+                                              alt=""
+                                            />
+                                          </label>
+                                          <br/>
+                                          <label className="btn btn-default">
+                                            <input
+                                              id="filePickerASP"
+                                              type="file"
+                                              className="cursorPointer"
+                                              style={{ visibility: "hidden" }}
+                                              accept="application/pdf"
+                                              onChange={this.selectReportAntiPlagiat}
+                                            />
+                                          </label>
+                                        </center>
+                                      )}
+
+                                      {(
+                                        labelRAP !== "" &&
+                                        <CRow>
+                                          <CCol md="1"/>
+                                          <CCol md="10">
+                                            <CCard color="info" className="text-white">
+                                              <CCardHeader>
+                                                <div style={{textAlign: "right"}}>
+                                                  <img  src={espritLogo}
+                                                        className="cursorPointer"
+                                                        class="img-fluid"
+                                                        width="40px"
+                                                        height="50px"/>
+                                                </div>
+                                              </CCardHeader>
+                                              <CCardBody>
+                                                <div style={{textAlign: "center"}}>
+                                                  {labelRAP}
+                                                  <br/><br/>
+                                                  <span className="signature">
+                                                By {studentFullName}
+                                              </span>
+                                                  <br/>
+                                                  <span style={{fontSize: "11px", color: "black"}}>
+                                                {dateRAP}
+                                              </span>
+                                                </div>
+                                              </CCardBody>
+                                            </CCard>
+                                          </CCol>
+                                          <CCol md="1"/>
+                                        </CRow>
+                                      )}
+
+                                      {(
+                                        showReloadRAP && depotStatus === "METTRE A JOUR" &&
+                                        <center>
+                                          <CButton  shape="pill" color="info" aria-expanded="true"
+                                                    onClick={() => this.modifyMyRAP()}>
+                                            <CTooltip content="Modifier mon Rapport Anti-Plagiat" placement="top">
+                                              <CIcon content={freeSet.cilReload}/>
+                                            </CTooltip>
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                      {currentFileRAP && !giveOKRAP && (
+                                        <center>
+                                          <div className="alert alert-danger" role="alert" style= {{width: "200px"}}>
+                                            Il ne s'agit pas d'un Fichier PDF !.
+                                            <br/>
+                                            Merci de respecter le format demandé.
+                                          </div>
+                                        </center>
+                                      )}
+
+                                      {currentFileRAP && successUploadRAP && (
+                                        <div className="progress">
+                                          <div
+                                            className="progress-bar bg-info progress-bar-striped progress-bar-animated"
+                                            role="progressbar"
+                                            aria-valuenow={progressRAP}
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"
+                                            style={{ width: progressRAP + "%" }}>
+                                            {progressRAP}%
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {(
+                                        showButtonRAP &&
+                                        <center>
+                                          <CButton  variant="outline" color="info"
+                                                    onClick={this.uploadPlagiat}
+                                                    disabled={labelRAP === ""}
+                                                    enabled={labelRAP !== ""}>
+                                            Déposer Rapport Anti-Plagiat
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                    </CCol>
+
+                                    <CCol md="3" class="bg-warning py-2">
+
+                                      {(
+                                        labelASP === "" && showUploadIconASP &&
+                                        <center>
+                                          <label
+                                            htmlFor="filePickerRFV"
+                                            className="custom-file-upload">
+                                            <img
+                                              src={orangeUpload}
+                                              className="cursorPointer"
+                                              class="img-fluid"
+                                              width="100px"
+                                              height="75px"
+                                              title="Déposer Attestation Stage PFE"
+                                              alt=""
+                                            />
+                                          </label>
+                                          <br/>
+                                          <label className="btn btn-default">
+                                            <input
+                                              id="filePickerRFV"
+                                              type="file"
+                                              className="cursorPointer"
+                                              style={{ visibility: "hidden" }}
+                                              accept="application/pdf"
+                                              onChange={this.selectAttestationStagePFE}
+                                            />
+                                          </label>
+                                        </center>
+                                      )}
+
+                                      {(
+                                        labelASP !== "" &&
+                                        <CRow>
+                                          <CCol md="1"/>
+                                          <CCol md="10">
+                                            <CCard color="warning" className="text-white">
+                                              <CCardHeader>
+                                                <div style={{textAlign: "right"}}>
+                                                  <img  src={espritLogo}
+                                                        className="cursorPointer"
+                                                        class="img-fluid"
+                                                        width="40px"
+                                                        height="50px"/>
+                                                </div>
+                                              </CCardHeader>
+                                              <CCardBody>
+                                                <div style={{textAlign: "center"}}>
+                                                  {labelASP}
+                                                  <br/><br/>
+                                                  <span className="signature">
+                                                By {studentFullName}
+                                              </span>
+                                                  <br/>
+                                                  <span style={{fontSize: "11px", color: "black"}}>
+                                                {dateASP}
+                                              </span>
+                                                </div>
+                                              </CCardBody>
+                                            </CCard>
+                                          </CCol>
+                                          <CCol md="1"/>
+                                        </CRow>
+                                      )}
+
+                                      {(
+                                        showReloadASP && depotStatus === "METTRE A JOUR" &&
+                                        <center>
+                                          <CButton  shape="pill" color="warning" aria-expanded="true"
+                                                    onClick={() => this.modifyMyASP()}>
+                                            <CTooltip content="Modifier mon Attestation Stage PFE" placement="top">
+                                              <CIcon content={freeSet.cilReload}/>
+                                            </CTooltip>
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                      {currentFileASP && !giveOKASP && (
+                                        <center>
+                                          <div className="alert alert-danger" role="alert" style= {{width: "200px"}}>
+                                            Il ne s'agit pas d'un Fichier PDF !.
+                                            <br/>
+                                            Merci de respecter le format demandé.
+                                          </div>
+                                        </center>
+                                      )}
+
+                                      {currentFileASP && successUploadASP && (
+                                        <div className="progress">
+                                          <div
+                                            className="progress-bar bg-warning progress-bar-striped progress-bar-animated"
+                                            role="progressbar"
+                                            aria-valuenow={progressASP}
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"
+                                            style={{ width: progressASP + "%" }}>
+                                            {progressASP}%
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {(
+                                        showButtonASP &&
+                                        <center>
+                                          <CButton  variant="outline" color="warning"
+                                                    onClick={this.uploadTrainingCertif}
+                                                    disabled={labelASP === ""}
+                                                    enabled={labelASP !== ""}>
+                                            Déposer Attestation Stage PFE
+                                          </CButton>
+                                        </center>
+                                      )}
+
+
+                                    </CCol>
+
+                                    <CCol md="3" class="bg-primary py-2">
+                                      {(
+                                        labelDCS === "" && showUploadIconDCS &&
+                                        <center>
+                                          <label
+                                            htmlFor="filePickerDCS"
+                                            className="custom-file-upload">
+                                            <img
+                                              src={blueBoldUpload}
+                                              className="cursorPointer"
+                                              class="img-fluid"
+                                              width="100px"
+                                              height="75px"
+                                              title="Déposer Dossier ou Document Optionnel"
+                                              alt=""
+                                            />
+                                          </label>
+                                          <br/>
+                                          <label className="btn btn-default">
+                                            <input
+                                              id="filePickerDCS"
+                                              type="file"
+                                              className="cursorPointer"
+                                              style={{ visibility: "hidden" }}
+                                              onChange={this.selectDossierDocumentSupplemenaire}
+                                            />
+                                          </label>
+                                        </center>
+                                      )}
+
+                                      {(
+                                        labelDCS !== "" &&
+                                        <CRow>
+                                          <CCol md="1"/>
+                                          <CCol md="10">
+                                            <CCard color="primary" className="text-white">
+                                              <CCardHeader>
+                                                <div style={{textAlign: "right"}}>
+                                                  <img  src={espritLogo}
+                                                        className="cursorPointer"
+                                                        class="img-fluid"
+                                                        width="40px"
+                                                        height="50px"/>
+                                                </div>
+                                              </CCardHeader>
+                                              <CCardBody>
+                                                <div style={{textAlign: "center"}}>
+                                                  {labelDCS}
+                                                  <br/><br/>
+                                                  <span className="signature">
+                                                By {studentFullName}
+                                              </span>
+                                                  <br/>
+                                                  <span style={{fontSize: "11px", color: "black"}}>
+                                                {dateDCS}
+                                              </span>
+                                                </div>
+                                              </CCardBody>
+                                            </CCard>
+                                          </CCol>
+                                          <CCol md="1"/>
+                                        </CRow>
+                                      )}
+
+                                      {(
+                                        showReloadDCS && depotStatus === "METTRE A JOUR" &&
+                                        <center>
+                                          <CButton  shape="pill" color="primary" aria-expanded="true"
+                                                    onClick={() => this.modifyMyDCS()}>
+                                            <CTooltip content="Modifier mon Supplément Optionnel" placement="top">
+                                              <CIcon content={freeSet.cilReload}/>
+                                            </CTooltip>
+                                          </CButton>
+                                        </center>
+                                      )}
+
+                                      {currentFileDCS && successUploadDCS && (
+                                        <div className="progress">
+                                          <div
+                                            className="progress-bar progress-bar-striped progress-bar-animated"
+                                            role="progressbar"
+                                            aria-valuenow={progressDCS}
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"
+                                            style={{ width: progressDCS + "%" }}>
+                                            {progressDCS}%
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {(
+                                        showButtonDCS &&
+                                        <center>
+                                          <CButton  variant="outline" color="primary"
+                                                    onClick={this.uploadSupplement}
+                                                    disabled={labelDCS === ""}
+                                                    enabled={labelDCS !== ""}>
+                                            Déposer Dossier Technique 4
+                                          </CButton>
+                                        </center>
+                                      )}
+
+
+                                    </CCol>
+
+                                  </CRow>
+                                  <br/>
+                                  {(fileInfos.length > 0 &&
+                                    <Divider />
+                                  )}
+
+                                </>
+                              )}
+
+                              {showPopupSuccessUpload && (
+                                <Modal
+                                  isOpen={showPopupSuccessUpload}
+                                  contentLabel="Example Modal"
+                                  style={customStyles}
+                                >
+                                  <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Information</span>
+                                  <hr/>
+                                  <center>
+                                    <br />
+                                    <br />
+                                    {message}
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <button
+                                      className="btn btn-sm btn-primary"
+                                      onClick={this.closeModalSuccessUpload}
+                                    >
+                                      Ok
+                                    </button>
+                                    <br />
+                                    <br />
+                                  </center>
+                                </Modal>
+                              )}
+
+                              {showModalConfirmRelanceDepot && (
+                                <Modal
+                                  isOpen={showModalConfirmRelanceDepot}
+                                  contentLabel="Example Modal"
+                                  style={customStyles}
+                                >
+                                  <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Confirmation</span>
+                                  <hr/>
+                                  <center>
+                                    <br />
+                                    <br />
+                                    Êtes-vous sûr de vouloir relancer votre dépôt ?
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <button className="btn btn-sm btn-success"
+                                            onClick={this.modifyMyDepot}>
+                                      Oui
+                                    </button>
+                                    &nbsp;
+                                    <button className="btn btn-sm btn-danger"
+                                            onClick={this.closeModalConfirmRelanceDepot}>
+                                      Non
+                                    </button>
+                                    <br />
+                                    <br />
+                                  </center>
+                                </Modal>
+                              )}
+
+                              {fileInfos.length >0 && (
+                                <div>
+
+                                  <CContainer>
+                                    <CRow>
+                                      <CCol md="9" class="bg-warning py-2">
+                                        <div className="card-header">
+                                          <span className="menuTitleGreyReport">Informations sur mes Rapports 8</span>
+                                        </div>
+
+                                        <ul className="list-group list-group-flush">
+                                          {fileInfos.map((file, index) => (
+                                            <li className="list-group-item" key={index}>
+                                              <CRow>
+                                                <CCol md="4" class="bg-warning py-2">
+                                                  {file.includes("RLV") && (
+                                                    <CListGroup accent>
+                                                      <CListGroupItem accent="dark"><strong>Rapport Version 1</strong></CListGroupItem>
+                                                    </CListGroup>
+                                                  )}
+                                                  {file.includes("RFV") && (
+                                                    <CListGroup accent>
+                                                      <CListGroupItem accent="danger"><strong>Rapport Version Finale</strong></CListGroupItem>
+                                                    </CListGroup>
+                                                  )}
+                                                  {file.includes("RAP") && (
+                                                    <CListGroup accent>
+                                                      <CListGroupItem accent="info"><strong>Rapport Anti-Plagiat : URKUND</strong></CListGroupItem>
+                                                    </CListGroup>
+                                                  )}
+                                                  {file.includes("ASP") && (
+                                                    <CListGroup accent>
+                                                      <CListGroupItem accent="warning"><strong>Attestation Stage PFE</strong></CListGroupItem>
+                                                    </CListGroup>
+                                                  )}
+                                                  {file.includes("DCS") && (
+                                                    <CListGroup accent>
+                                                      <CListGroupItem accent="primary"><strong>Dossier Technique</strong></CListGroupItem>
+                                                    </CListGroup>
+                                                  )}
+                                                </CCol>
+                                                <CCol md="6" class="bg-warning py-2">
+                                                  <div style={{marginTop: '13px'}}>
+                                                    {file.substr(0, file.indexOf("UNITR1"))}.pdf
+                                                  </div>
+                                                </CCol>
+                                                <CCol md="2" class="bg-warning py-2">
+                                                  <div style={{marginTop: '13px'}}>
+                                                    {file.substr(file.indexOf("UNITR1") + 9)}
+                                                  </div>
+                                                </CCol>
+                                              </CRow>
+                                            </li>
+                                          ))}
+                                        </ul>
+                                      </CCol>
+                                      <CCol lg="3">
+                                        <br/>
+                                        {(
+                                          depotStatus === "METTRE A JOUR" &&
+                                          <center>
+                                            <br/><br/>
+
+                                            <span className="text-dark" style={{fontSize: "11px"}}>
+                                      Cliquer sur ce bouton pour <ins>relancer</ins> votre Dépôt.
+                                    </span>
+                                            <br/>
+                                            <Icon icon={handPointingDown} color="grey" width="30" height="30" />
+                                            <br/><br/>
+
+                                            <CButton  shape="pill" color="dark" aria-expanded="true"
+                                                      onClick={() => this.openModalConfirmRelanceDepot()}>
+                                              <CTooltip content="Relancer mon Dépôt" placement="top">
+                                                <CIcon content={freeSet.cilReload}/>
+                                              </CTooltip>
+                                            </CButton>
+                                          </center>
+                                        )}
+                                        {( depotStatus.includes("DEPOSEE") &&
+                                          <CAlert color="info">
+                                            <h5 className="alert-heading"><strong>Dépôt Effectué</strong></h5>
+                                            <p>
+                                              Votre requête a été bien déposée le <ins>{depotStatus.substring(7, depotStatus.length)}</ins>.
+                                            </p>
+                                            <p>
+                                              Elle va être traitée le plus tôt possible.
+                                            </p>
+                                            <hr />
+                                            <p className="mb-0">
+                                              Merci de patienter.
+                                            </p>
+                                          </CAlert>
+                                        )}
+
+                                        {( depotStatus.includes("VALIDEE") &&
+                                          <CAlert color="success">
+                                            <h5 className="alert-heading"><strong>Dépôt Validé</strong></h5>
+                                            <p>
+                                              Votre requête a été <ins>validée</ins> le <ins>{depotStatus.substring(7, depotStatus.length)}</ins>.
+                                            </p>
+                                            <hr />
+                                            <p className="mb-0">
+                                              Bonne Chance.
+                                            </p>
+                                          </CAlert>
+                                        )}
+
+                                        {( depotStatus.includes("INCOMPLET") &&
+                                          <CAlert color="danger">
+                                            <h5 className="alert-heading"><strong>Dépôt Incomplet</strong></h5>
+                                            <p>
+                                              Votre requête a été marquée comme <ins>incomplète</ins> le <ins>{depotStatus.substring(9, 19)}</ins>.
+                                            </p>
+                                            <strong>Motif: </strong> {depotStatus.substring(19, depotStatus.length)}.
+                                            <hr />
+                                            <CButton  variant="outline" color="danger"
+                                                      onClick={() => this.requestForUpdateMyDepot()}>
+                                              Mettre à jour mon Dépôt
+                                            </CButton>
+                                          </CAlert>
+                                        )}
+                                      </CCol>
+                                    </CRow>
+                                  </CContainer>
+                                </div>
+                              )}
+
+                            </CCardBody>
+                            <CCardFooter>
+                              <CRow>
+                                <CCol sm="4" md="3"/>
+                                <CCol sm="4" md="7">
+                                  {(
+                                    depotStatus === "METTRE A JOUR" && fileInfos.length === 3 &&
+                                    <>
+                                  <span className="text-success" style={{fontSize: "11px"}}>
+                                    Cliquer sur ce bouton pour <strong> valider votre dépôt </strong> ( <ins>PS:</ins> Une fois Cliquer, vous ne pourrez pas modifier votre dépôt ).
+                                  </span>
+                                      &nbsp;&nbsp;&nbsp;
+                                      <Icon icon={handPointingRight} color="green" width="30" height="30" />
+                                    </>
+                                  )}
+                                </CCol>
+                                <CCol sm="4" md="2">
+                                  {(
+                                    depotStatus.includes("DEPOSEE") &&
+                                    <h5><CBadge color="primary">Requête Envoyée</CBadge></h5>
+                                  )}
+
+                                  {(
+                                    depotStatus.includes("VALIDEE") &&
+                                    <h5><CBadge color="success">Dépôt Validé</CBadge></h5>
+                                  )}
+
+                                  {(
+                                    depotStatus.includes("INCOMPLET") &&
+                                    <h5><CBadge color="danger">Dépôt Incomplet</CBadge></h5>
+                                  )}
+                                  {(
+                                    depotStatus === "METTRE A JOUR"  && itsITandEM === "YES" &&
+                                    <CButton  color="success"
+                                              disabled={fileInfos.length !== 4}
+                                              enabled={fileInfos.length === 4}
+                                              className="float-right"
+                                              onClick={() => this.validateMyDepot()}>
+                                      Je valide 2 - {fileInfos.length}
+                                    </CButton>
+                                  )}
+
+                                  {(
+                                    depotStatus === "METTRE A JOUR"  && itsITandEM === "NO" &&
+                                    <CButton  color="success"
+                                              disabled={fileInfos.length < 5}
+                                              enabled={fileInfos.length > 4}
+                                              className="float-right"
+                                              onClick={() => this.validateMyDepot()}>
+                                      Je valide 3 - {fileInfos.length}
+                                    </CButton>
+                                  )}
+
+                                  {(
+                                    showSpinnerWaitingDepot &&
+                                    <Backdrop className={classes.backdrop} open={showSpinnerWaitingDepot} >
+                                      <CircularProgress color="inherit" />
+                                    </Backdrop>
+                                  )}
+
+
+
+                                </CCol>
+                              </CRow>
+                            </CCardFooter>
+                          </CCard>
+                        )}
+
+                        <CModal
+                          show={showPopupSuccessDepot}
+                          onClose={() => this.closeShowPopupSuccessDepot()}
+                          className={classes.backdrop1}
+                          color="primary">
+                          <CModalHeader closeButton>
+                            <CModalTitle>Information</CModalTitle>
+                          </CModalHeader>
+                          <CModalBody>
+                            <center>
+                              <br/><br/>
+                              Vous avez validé le dépôt de vos documents.
+                              <br/>
+                              Merci de patienter jusqu'au le traitement de votre requête.
+                            </center>
+                            <br/><br/>
+                          </CModalBody>
+                          <CModalFooter>
+                            <CButton color="primary" onClick={() => this.closeShowPopupSuccessDepot()}>
+                              Ok
+                            </CButton>
+                          </CModalFooter>
+                        </CModal>
+
+                        <CModal
+                          show={showPopupUpdateDepot}
+                          onClose={() => this.updateMyDepotNO()}
+                          className={classes.backdrop1}
+                          color="secondary">
+                          <CModalHeader closeButton>
+                            <CModalTitle>Confirmation</CModalTitle>
+                          </CModalHeader>
+                          <CModalBody>
+                            Voulez-vous mettre à jour votre dépôt <ins>en tenir compte</ins> la cause de signaler votre requête précédante comme incomplète ?.
+                            <br/><br/>
+                          </CModalBody>
+                          <CModalFooter>
+                            <CButton color="success" onClick={() => this.updateMyDepotYES()}>
+                              Oui
+                            </CButton>
+                            &nbsp;
+                            <CButton color="danger" onClick={() => this.updateMyDepotNO()}>
+                              Pas Maintenant
+                            </CButton>
+                          </CModalFooter>
+                        </CModal>
+                      </>
+                    }
+
+                    {
+                      fileInfos.length >0 && fichePFEStatus === "06" && timeForDepotRapportV2 === "ITISTIMEV2" &&
+                      <>
+                        <CContainer>
+                          <CRow>
+                            <CCol md="9" class="bg-warning py-2">
+                              <div className="card-header">
+                                <span className="menuTitleBleuReport">Informations sur mes Rapports</span>
+                              </div>
+                              <ul className="list-group list-group-flush">
+                                {
+                                  fileInfos.map((file, index) => (
+                                    <li className="list-group-item" key={index}>
+                                      <CRow>
+                                        <CCol md="3" class="bg-warning py-2">
+                                          {file.includes("RLV") && (
+                                            <CListGroup accent>
+                                              <CListGroupItem accent="dark"><strong>Rapport Version 1</strong></CListGroupItem>
+                                            </CListGroup>
+                                          )}
+                                          {file.includes("RFV") && (
+                                            <CListGroup accent>
+                                              <CListGroupItem accent="danger"><strong>Rapport Version Finale</strong></CListGroupItem>
+                                            </CListGroup>
+                                          )}
+                                          {file.includes("RAP") && (
+                                            <CListGroup accent>
+                                              <CListGroupItem accent="info"><strong>Rapport Anti-Plagiat : URKUND</strong></CListGroupItem>
+                                            </CListGroup>
+                                          )}
+                                          {file.includes("ASP") && (
+                                            <CListGroup accent>
+                                              <CListGroupItem accent="warning"><strong>Attestation Stage PFE</strong></CListGroupItem>
+                                            </CListGroup>
+                                          )}
+                                        </CCol>
+                                        <CCol md="6" class="bg-warning py-2">
+                                          <div style={{marginTop: '13px'}}>
+                                            {file.substr(0, file.indexOf("UNITR1"))}.pdf
+                                          </div>
+                                        </CCol>
+                                        <CCol md="2" class="bg-warning py-2">
+                                          <div style={{marginTop: '13px'}}>
+                                            {file.substr(file.indexOf("UNITR1") + 9)}
+                                          </div>
+                                        </CCol>
+                                      </CRow>
+                                    </li>
+                                  ))}
+                              </ul>
+                            </CCol>
+                            <CCol lg="3">
+                              {( depotStatus.includes("DEPOSEE") &&
+                                <CAlert color="info">
+                                  <h5 className="alert-heading"><strong>Dépôt Effectué</strong></h5>
+                                  <p>
+                                    Votre requête a été bien déposée le <ins>{depotStatus.substring(7, depotStatus.length)}</ins>.
+                                  </p>
+                                  <p>
+                                    Elle va être traitée le plus tôt possible.
+                                  </p>
+                                  <hr />
+                                  <p className="mb-0">
+                                    Merci de patienter.
+                                  </p>
+                                </CAlert>
+                              )}
+
+                              {( depotStatus.includes("VALIDEE") &&
+                                <CAlert color="success">
+                                  <h5 className="alert-heading"><strong>Dépôt Validé</strong></h5>
+                                  <p>
+                                    Votre requête a été <ins>validée</ins> le <ins>{depotStatus.substring(7, depotStatus.length)}</ins>.
+                                  </p>
+                                  <hr />
+                                  <p className="mb-0">
+                                    Bonne Chance.
+                                  </p>
+                                </CAlert>
+                              )}
+
+                              {( depotStatus.includes("INCOMPLET") &&
+                                <CAlert color="danger">
+                                  <h5 className="alert-heading"><strong>Dépôt Incomplet</strong></h5>
+                                  <p>
+                                    Votre requête a été marquée comme <ins>incomplète</ins> le <ins>{depotStatus.substring(9, 19)}</ins>.
+                                  </p>
+                                  <strong>Motif: </strong> {depotStatus.substring(19, depotStatus.length)}.
+                                  <hr />
+                                  <CButton  variant="outline" color="danger"
+                                            onClick={() => this.requestForUpdateMyDepot()}>
+                                    Mettre à jour mon Dépôt
+                                  </CButton>
+                                </CAlert>
+                              )}
+                            </CCol>
+                          </CRow>
+                        </CContainer>
+                      </>
+                    }
+                  </>
+                  :
+                  <CRow>
+                    <CCol md="2"/>
+                    <CCol md="8">
+                      <br/><br/>
+                      <CCard accentColor="danger">
+                        <CCardBody>
+                          <center>
+                            <br /><br />
+                            <span className="info2InDiv">
                                        Vous ne pouvez pas déposer votre Rapport tant que
                                        <br/>
                                        Votre Convention Actuelle &nbsp;
-                                      <span className="clignoteRed">
+                              <span className="clignoteRed">
                                           n'est pas encore VALIDÉE
                                        </span>.
                                     </span>
-                                    <br/><br/>
-                                    <span className="info2InDiv">
+                            <br/><br/>
+                            <span className="info2InDiv">
                                       État Actuel de Convention: &nbsp;
-                                      <span className="clignoteRed">
+                              <span className="clignoteRed">
                                         {
                                           statusConvention === "01" &&
                                           <>DÉPOSÉE</>
                                         }
-                                        {
-                                          statusConvention === "03" &&
-                                          <>ANNULATION VALIDÉE</>
-                                        }
-                                        {
-                                          statusConvention === "04" &&
-                                          <>ANNULATION DEMANDÉE</>
-                                        }
+                                {
+                                  statusConvention === "03" &&
+                                  <>ANNULATION VALIDÉE</>
+                                }
+                                {
+                                  statusConvention === "04" &&
+                                  <>ANNULATION DEMANDÉE</>
+                                }
                                       </span>.
                                     </span>
-                                    <br />
-                                    <br /><br />
-                                  </center>
-                                </CCardBody>
-                                <CCardFooter>
+                            <br />
+                            <br /><br />
+                          </center>
+                        </CCardBody>
+                        <CCardFooter>
                                   <span style={{color: "#666666", fontSize: "11px", fontStyle: "italic"}} className="float-right">
                                     Today is {currentDay}
                                   </span>
-                                </CCardFooter>
-                              </CCard>
-                            </CCol>
-                            <CCol md="2"/>
-                          </CRow>
-                    }
-                  </>
-            }
+                        </CCardFooter>
+                      </CCard>
+                    </CCol>
+                    <CCol md="2"/>
+                  </CRow>
+              }
+            </>
+        }
 
-          <br />
-          <br />
-          <hr />
-          <div style={{ textAlign: "left" }}>
+        <br />
+        <br />
+        <hr />
+        <div style={{ textAlign: "left" }}>
           <span className="note">
             Vous allez publier votre Rapport à la 20ème et 26ème semaine après
             avoir commancer votre stage.
           </span>
-            <br />
-            <span className="note">
+          <br />
+          <span className="note">
             Vous pouvez publier votre Rapport uniquement après l'autorisation de
             votre Encadrant académique.
           </span>
-            <br />
-            <span className="note">
+          <br />
+          <span className="note">
             Votre Entreprise d'accueil doit signer numériquement votre Rapport (de préférance avec cachet d'entreprise).
           </span>
-          </div>
-          <br />
-          <br />
-        </>
+        </div>
+        <br />
+        <br />
+      </>
     );
   }
 }

@@ -690,6 +690,70 @@
   font-style: italic;
 }
 
+.redMark13
+{
+  color: #cc0000;
+  font-family: Arial, monospace;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.blueMark13Cr
+{
+  color: blue;
+  font-family: "Lucida Console", Courier, monospace;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.redMark13Cr
+{
+  color: #cc0000;
+  font-family: "Lucida Console", Courier, monospace;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.redMark11Cr
+{
+  color: #cc0000;
+  font-family: "Lucida Console", Courier, monospace;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.greyMark13Cr
+{
+  color: #595959;
+  font-family: "Lucida Console", Courier, monospace;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.greyMark12Cr
+{
+  color: #595959;
+  font-family: "Lucida Console", Courier, monospace;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.greyMark11Cr
+{
+  color: #595959;
+  font-family: "Lucida Console", Courier, monospace;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.greyMark10Cr
+{
+  color: #595959;
+  font-family: "Lucida Console", Courier, monospace;
+  font-size: 10px;
+  font-weight: bold;
+}
+
 .greyMark11
 {
   color: #999999;
@@ -1810,4 +1874,11 @@
   font-size: 12px;
   font-weight: bold;
   animation: clignote 2s linear infinite;
+}
+.react-datepicker-wrapper,
+.react-datepicker__input-container,
+.react-datepicker__input-container input {
+  display: block;
+  width: 300px;
+  height: 45px
 }
