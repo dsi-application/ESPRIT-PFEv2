@@ -304,6 +304,9 @@ const PFEEnCours = React.lazy(() =>
 const UploadFicheEvalStageING = React.lazy(() =>
   import("./views/components/student/uploadFicheEvalStageING.component")
 );
+const Jalon = React.lazy(() =>
+  import("./views/components/student/jalon")
+);
 
 const routes = [
   {path: "/", exact: true, name: ""},
@@ -759,6 +762,11 @@ const routes = [
     name: "Mettre à Jour Évaluation",
     component: UpdateEvaluation
   },
+  {
+    path: "/Jalon",
+    name: "Enquête Premier Emploi",
+    component: Jalon
+  }
 ];
 
 export default routes;

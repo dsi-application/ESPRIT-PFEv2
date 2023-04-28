@@ -195,7 +195,8 @@ function ColorlibStepIcon(props) {
         9: <MenuBookIcon/>,
         10: <AirplayIcon/>,
         11: <StyleIcon/>,
-        12: <MenuBookIcon/>
+        12: <MenuBookIcon/>,
+        13: <BusinessCenterIcon/>
     };
 
     return (

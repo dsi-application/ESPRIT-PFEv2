@@ -13,7 +13,10 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.esprit.gdp.models.*;
 import com.esprit.gdp.payload.request.PlanTravailRequest;
+import com.esprit.gdp.payload.request.SurveyFirstJobRequest;
+import com.esprit.gdp.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
@@ -56,33 +59,6 @@ import com.esprit.gdp.files.JustificatifStage_PDF;
 import com.esprit.gdp.files.LettreAffectation_PDF;
 import com.esprit.gdp.files.MandatoryInternship_PDF;
 import com.esprit.gdp.files.PlanTravail_PDF;
-import com.esprit.gdp.models.Convention;
-import com.esprit.gdp.models.EncadrantEntreprise;
-import com.esprit.gdp.models.EncadrantEntreprisePK;
-import com.esprit.gdp.models.EntrepriseAccueil;
-import com.esprit.gdp.models.FichePFE;
-import com.esprit.gdp.models.FichePFEPK;
-import com.esprit.gdp.models.Fonctionnalite;
-import com.esprit.gdp.models.FunctionnalityPK;
-import com.esprit.gdp.models.Problematique;
-import com.esprit.gdp.models.ProblematiquePK;
-import com.esprit.gdp.models.Technologie;
-import com.esprit.gdp.models.TraitementFichePFE;
-import com.esprit.gdp.models.TraitementFichePK;
-import com.esprit.gdp.repository.AvenantRepository;
-import com.esprit.gdp.repository.CodeNomenclatureRepository;
-import com.esprit.gdp.repository.ConventionRepository;
-import com.esprit.gdp.repository.EncadrantEntrepriseRepository;
-import com.esprit.gdp.repository.EvaluationEngineeringTrainingRepository;
-import com.esprit.gdp.repository.FichePFERepository;
-import com.esprit.gdp.repository.FunctionnalityRepository;
-import com.esprit.gdp.repository.OptionRepository;
-import com.esprit.gdp.repository.ProblematicRepository;
-import com.esprit.gdp.repository.ResponsableServiceStageRepository;
-import com.esprit.gdp.repository.SessionRepository;
-import com.esprit.gdp.repository.TeacherRepository;
-import com.esprit.gdp.repository.TechnologieRepository;
-import com.esprit.gdp.repository.TraitementFicheRepository;
 import com.esprit.gdp.services.UtilServices;
 
 //@RestController
@@ -145,6 +121,9 @@ public class StudentController {
 
 	@Autowired
 	EvaluationEngineeringTrainingRepository evalEngTrRepository;
+
+	@Autowired
+	SurveyFirstJobRepository surveyFirstJobRepository;
 
 	/******************************************************
 	 * Methods
@@ -1417,6 +1396,7 @@ public class StudentController {
 		stds.add(new StudentTimelineDto("Lancement\n Restitution 2*", dateLancementPresentation2, "/synopsisAndNews"));
 		stds.add(new StudentTimelineDto("Dépôt\n Bilan Version 3", dateRemiseBilanFinStage, "/uploadBalanceSheet"));
 		stds.add(new StudentTimelineDto("Dépôt\n Rapport Version 2", dateDepotRapportVFinale, "/uploadReport"));
+		stds.add(new StudentTimelineDto("Enquête\n Premier Emploi", dateDepotRapportVFinale, "/synopsisAndNews"));
 
 		// List<String> steps = new ArrayList<String>();
 		// steps.add(". " + " " + " " + " " + " " + " " + " " + dateConvention + " " + "
@@ -3120,6 +3100,93 @@ public class StudentController {
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
                 .body(resource);
 
+	}
+
+	@GetMapping("/queryYesSearchJob/{idEt}")
+	public String queryYesSearchJob(@PathVariable String idEt) throws ParseException
+	{
+		SurveyFirstJob surveyFirstJob = new SurveyFirstJob(idEt, true, "2022", new Date());
+		surveyFirstJobRepository.save(surveyFirstJob);
+
+		return "SURVEY YES FINISHED";
+	}
+
+	@PostMapping("/queryNOSearchJobPromesse/{idEt}")
+	public String queryNOSearchJobPromesse(@PathVariable String idEt, @RequestBody SurveyFirstJobRequest surveyFirstJobRequest)
+	{
+		System.out.println("--------------> 1: " + surveyFirstJobRequest.getDateShoosenCriteria());
+		System.out.println("--------------> 2: " + surveyFirstJobRequest.getEntryFirstShoosenCriteria());
+		System.out.println("--------------> 3: " + surveyFirstJobRequest.getEntrySecondShoosenCriteria());
+
+		SurveyFirstJob surveyFirstJob = new SurveyFirstJob(idEt, false, "2022", new Date());
+		surveyFirstJob.setPromesse1(surveyFirstJobRequest.getDateShoosenCriteria());
+		surveyFirstJob.setPromesse2(surveyFirstJobRequest.getEntryFirstShoosenCriteria());
+		surveyFirstJob.setPromesse3(surveyFirstJobRequest.getEntrySecondShoosenCriteria());
+		surveyFirstJobRepository.save(surveyFirstJob);
+
+		return "SURVEY YES FINISHED PROMESSE";
+	}
+
+	@PostMapping("/queryNOSearchJobContrat/{idEt}")
+	public String queryNOSearchJobContrat(@PathVariable String idEt, @RequestBody SurveyFirstJobRequest surveyFirstJobRequest)
+	{
+		System.out.println("--------------> 1: " + surveyFirstJobRequest.getDateShoosenCriteria());
+		System.out.println("--------------> 2: " + surveyFirstJobRequest.getEntryFirstShoosenCriteria());
+		System.out.println("--------------> 3: " + surveyFirstJobRequest.getEntrySecondShoosenCriteria());
+
+		SurveyFirstJob surveyFirstJob = new SurveyFirstJob(idEt, false, "2022", new Date());
+		surveyFirstJob.setContrat1(surveyFirstJobRequest.getDateShoosenCriteria());
+		surveyFirstJob.setContrat2(surveyFirstJobRequest.getEntryFirstShoosenCriteria());
+		surveyFirstJob.setContrat3(surveyFirstJobRequest.getEntrySecondShoosenCriteria());
+		surveyFirstJobRepository.save(surveyFirstJob);
+
+		return "SURVEY YES FINISHED CONTRAT";
+	}
+
+	@PostMapping("/queryNOSearchJobProjet/{idEt}")
+	public String queryNOSearchJobProjet(@PathVariable String idEt, @RequestBody SurveyFirstJobRequest surveyFirstJobRequest)
+	{
+		System.out.println("--------------> 1: " + surveyFirstJobRequest.getDateShoosenCriteria());
+		System.out.println("--------------> 2: " + surveyFirstJobRequest.getEntryFirstShoosenCriteria());
+		System.out.println("--------------> 3: " + surveyFirstJobRequest.getEntrySecondShoosenCriteria());
+
+		SurveyFirstJob surveyFirstJob = new SurveyFirstJob(idEt, false, "2022", new Date());
+		surveyFirstJob.setProjet1(surveyFirstJobRequest.getDateShoosenCriteria());
+		surveyFirstJob.setProjet2(surveyFirstJobRequest.getEntryFirstShoosenCriteria());
+		surveyFirstJobRepository.save(surveyFirstJob);
+
+		return "SURVEY YES FINISHED PROJET";
+	}
+
+	@PostMapping("/queryNOSearchJobEtude/{idEt}")
+	public String queryNOSearchJobEtude(@PathVariable String idEt, @RequestBody SurveyFirstJobRequest surveyFirstJobRequest)
+	{
+		System.out.println("--------------> 1: " + surveyFirstJobRequest.getDateShoosenCriteria());
+		System.out.println("--------------> 2: " + surveyFirstJobRequest.getEntryFirstShoosenCriteria());
+		System.out.println("--------------> 3: " + surveyFirstJobRequest.getEntrySecondShoosenCriteria());
+
+		SurveyFirstJob surveyFirstJob = new SurveyFirstJob(idEt, false, "2022", new Date());
+		surveyFirstJob.setEtude1(surveyFirstJobRequest.getDateShoosenCriteria());
+		surveyFirstJob.setEtude2(surveyFirstJobRequest.getEntryFirstShoosenCriteria());
+		surveyFirstJob.setEtude3(surveyFirstJobRequest.getEntrySecondShoosenCriteria());
+		surveyFirstJobRepository.save(surveyFirstJob);
+
+		return "SURVEY YES FINISHED ETUDE";
+	}
+
+	@GetMapping("/verifySurveyFirstJobDONE/{idEt}")
+	public String verifySurveyFirstJobDONE(@PathVariable String idEt)
+	{
+
+		List<Integer> lis = surveyFirstJobRepository.findIdSurveyByStudent(idEt);
+
+		String surveyFirstJob = "NOTYET";
+		if(!lis.isEmpty())
+		{
+			surveyFirstJob = "DONE";
+		}
+
+		return surveyFirstJob;
 	}
 
 }
