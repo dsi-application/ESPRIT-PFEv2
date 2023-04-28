@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>com.devk.spring.react</groupId>
 	<artifactId>spring-react</artifactId>
-	<version>1.2.0</version>
+	<version>1.2.1</version>
 	<name>spring-react</name>
 	<description>Demo project for Spring Boot</description>
 	<packaging>war</packaging>
@@ -63,7 +63,7 @@
 		<dependency>
 			<groupId>com.devk.spring.react.fe</groupId>
 			<artifactId>spring-react-fe</artifactId>
-			<version>1.2.0</version>
+			<version>1.2.1</version>
 		</dependency>
 
 		<dependency>
