@@ -571,6 +571,28 @@ function ConsultESPFile(props) {
             return ganttDiagramFP;
         }
 
+      function downloadGanttDiagramOFF(gdDecodedFullPath) {
+
+        let encodedURL = encodeURIComponent(encodeURIComponent(gdDecodedFullPath));
+
+        axios.get(`${process.env.REACT_APP_API_URL_STU}` + "downloadAllFilesTypes/" + encodedURL, {responseType: "blob"})
+          .then((response) => {
+
+            // console.log('2910Response Headers:', response.headers);
+            const contentDispo = response.headers['content-disposition'];
+            const fileName = contentDispo.substring(21);
+
+            const file = new File([response.data], fileName);
+            const fileURL = URL.createObjectURL(file);
+
+            let a = document.createElement('a');
+            a.href = fileURL;
+            a.download = fileName;
+            a.click();
+          });
+
+      }
+
         function downloadGanttDiagram(gdDecodedFullPath)
         {
                console.log('--------------PIKO 16.11.22----> 0');
@@ -868,7 +890,11 @@ function ConsultESPFile(props) {
                                                     <br/>
                                                     <span className="greyMarkCourrierSmalLabel">{gotGanttDiagLabel(fPFE.pathDiagrammeGantt)}</span>
                                                     <br/><br/>
-                                                    
+                                                  <LightTooltip title="Télécharger Diagramme de Gantt" placement="right">
+                                                    <span className="downloadPurpleIcon" onClick={() => {
+                                                      downloadGanttDiagramOFF(fPFE.pathDiagrammeGantt);
+                                                    }}/>
+                                                  </LightTooltip>
                                                 </CTabPane>
                                                 <CTabPane data-tab="compSups">
                                                     <br/>

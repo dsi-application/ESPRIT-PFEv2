@@ -682,112 +682,108 @@ public class ServiceStageController {
 
 	@PutMapping(value = "/updateDemandeAnnulationConventionState", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Convention> updateDemandeAnnulationConventionState(@RequestParam("idET") String idEt,
-			@RequestParam("date") String date) throws Exception {
+	public ResponseEntity<Convention> updateDemandeAnnulationConventionState(@RequestParam("idET") String idEt, @RequestParam("date") String date) throws Exception
+	{
 
 		System.out.println("------THIS-1---------- idEt: " + idEt);
-		System.out.println("------THIS-2---------- date: " + date);
+		System.out.println("------THIS-2.1---------- date: " + date);
 
 		String convDt = date.substring(0, 19).replace("T", " ");
+		System.out.println("------THIS-2.2---------- convDt: " + convDt);
 
 		// if (conventionRepository.getConventionById(idEt, convDt).isPresent())
-		if (conventionRepository.getConventionByIdFormedDate(idEt, date).isPresent()) {
+		if (conventionRepository.getConventionByIdFormedDateNew(idEt, convDt).isPresent())
+		{
 			System.out.println("------THIS-3---------- date: " + convDt);
-			/***********************************
-			 * STAR : ANNULL ESP File after ANNULL Convention /
-			 ***********************************/
-			Optional<Convention> conv = conventionRepository.getConventionByIdFormedDate(idEt, date);
-			// Optional<Convention> conv = conventionRepository.getConventionById(idEt,
-			// convDt);ccc
+
+			/*********************************** STAR : ANNULL ESP File after ANNULL Convention /***********************************/
+			Optional<Convention> conv = conventionRepository.getConventionByIdFormedDateNew(idEt, convDt);
+			//Optional<Convention> conv = conventionRepository.getConventionById(idEt, convDt);
+
+			DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
 			// Save in Plan Travail
-			FichePFE fichePFE = fichePFERepository.findFichePFEByStudent(idEt).get(0);
-			fichePFE.setEtatFiche("05");
-			fichePFERepository.save(fichePFE);
+			if(!fichePFERepository.findFichePFEByStudent(idEt).isEmpty())
+			{
+				FichePFE fichePFE = fichePFERepository.findFichePFEByStudent(idEt).get(0);
+				fichePFE.setEtatFiche("05");
+				fichePFERepository.save(fichePFE);
 
-			System.out.println("-----------------------------$$$$$----------------------------> SARS-0: "
-					+ conv.get().getDateSaisieDemande());
-			/*
-			 * // Save in Convention if(typeTrtConvention.equalsIgnoreCase("Oui")) {
-			 * DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss"); String
-			 * dateConvention =
-			 * dateFormata.format(fichePFE.getIdFichePFE().getConventionPK().
-			 * getDateConvention()); Convention c =
-			 * conventionRepository.findConventionByStudentAndDateConvention(idEt,
-			 * dateConvention); c.setTraiter("04"); conventionRepository.save(c); }
-			 */
+				//System.out.println("-----------------------------$$$$$----------------------------> SARS-0: " + conv.get().getDateSaisieDemande());
+				/*
+				// Save in Convention
+				if(typeTrtConvention.equalsIgnoreCase("Oui"))
+				{
+					DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+					String dateConvention = dateFormata.format(fichePFE.getIdFichePFE().getConventionPK().getDateConvention());
+					Convention c = conventionRepository.findConventionByStudentAndDateConvention(idEt, dateConvention);
+					c.setTraiter("04");
+					conventionRepository.save(c);
+				}
+				*/
 
-			System.out.println("-----------------------------$$$$$----------------------------> SARS-0: "
-					+ conv.get().getDateSaisieDemande());
+				//System.out.println("-----------------------------$$$$$----------------------------> SARS-0: " + conv.get().getDateSaisieDemande());
 
-			// Save in Traitement Plan Travail for History
-			DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-			String dateDepotESPFileSTR = dateFormata.format(fichePFE.getIdFichePFE().getDateDepotFiche());
-			String dateSaisieDemandeSTR = dateFormata.format(conv.get().getDateSaisieDemande());
+				// Save in Traitement Plan Travail for History
+				String dateDepotESPFileSTR = dateFormata.format(fichePFE.getIdFichePFE().getDateDepotFiche());
+				String dateSaisieDemandeSTR = dateFormata.format(conv.get().getDateSaisieDemande());
 
-			System.out.println(
-					"---------------------------------------------------------> SARS-1: " + dateDepotESPFileSTR);
-			System.out.println(
-					"---------------------------------------------------------> SARS-2: " + dateSaisieDemandeSTR);
+				System.out.println("---------------------------------------------------------> SARS-1: " + dateDepotESPFileSTR);
+				System.out.println("---------------------------------------------------------> SARS-2: " + dateSaisieDemandeSTR);
 
-			TraitementFichePFE afp = traitementFicheRepository
-					.findTraitementFicheByStudentAndFicheAndDateSaisieDemandeTrt(idEt, dateDepotESPFileSTR,
-							dateSaisieDemandeSTR);
-			System.out.println(
-					"---------------------------------------------------------> SARS-3: " + afp.getDescription());
+				TraitementFichePFE afp = traitementFicheRepository.
+						findTraitementFicheByStudentAndFicheAndDateSaisieDemandeTrt(idEt, dateDepotESPFileSTR, dateSaisieDemandeSTR);
+				System.out.println("---------------------------------------------------------> SARS-3: " + afp.getDescription());
 
-			afp.setEtatTrt("02"); // WRONG CODE ALTERTED ON 03.01.22 [02 -> 12]
-			afp.setDateTrtFiche(new Timestamp(System.currentTimeMillis()));
-			traitementFicheRepository.save(afp);
+				afp.setEtatTrt("02");  // WRONG CODE ALTERTED ON 03.01.22 [02 -> 12]
+				afp.setDateTrtFiche(new Timestamp(System.currentTimeMillis()));
+				traitementFicheRepository.save(afp);
 
-			System.out.println("-------------ffffffffffffffffffffff---> Verify OK VDM: " + afp.getEtatTrt());
+				System.out.println("-------------ffffffffffffffffffffff---> Verify OK VDM: " + afp.getEtatTrt());
 
-			/***********************************
-			 * END : ANNULL ESP File after ANNULL Convention /
-			 ***********************************/
+				/*********************************** END : ANNULL ESP File after ANNULL Convention /***********************************/
+
+			}
 
 			// Send Notification by Mail
 			String convValidationDate = dateFormata.format(new Date());
 
 			String content = "Nous voulons vous informer par le présent mail que votre <strong><font color=grey> Demande Annulation de Convention </font></strong> "
-					+ "a été bien validée par le Responsable des Stages le <font color=blue>" + convValidationDate
-					+ " </font>.<br/>"
+					+ "a été bien validée par le Responsable des Stages le <font color=red>"
+					+ convValidationDate + " </font>.<br/>"
 					+ "Par conséquent, Votre Plan Travail a été annulé <font color=red> automatiquement</font> .";
 
-			String studentMail = utilServices.findStudentMailById(idEt); // Server DEPLOY_SERVER
-			// String studentMail = "student@esprit.tn"; // Local
+			// String studentMail = utilServices.findStudentMailById(idEt);  // Server  DEPLOY_SERVER
+			String studentMail = "student@esprit.tn";   // Local
 
-			String AEMail = utilServices.findMailPedagogicalEncadrant(idEt); // DEPLOY_SERVER
-			// String AEMail = "saria.essid@esprit.tn";
+//			String AEMail = utilServices.findMailPedagogicalEncadrant(idEt);     //DEPLOY_SERVER
+			String AEMail = "saria.essid@esprit.tn";
 
-			String EEMail = conv.get().getEntrepriseAccueilConvention().getAddressMail(); // DEPLOY_SERVER
-			// String EEMail = "saria.essid@esprit.tn";
+//			String EEMail = conv.get().getEntrepriseAccueilConvention().getAddressMail();     //DEPLOY_SERVER
+			String EEMail = "saria.essid@esprit.tn";
 
-			String mailRSS = responsableServiceStageRepository.findRespServStgMailById("SR-STG-IT"); // Server
-																										// DEPLOY_SERVER
-			// String mailRSS = "ramben@esprit.tn";// Local
+			// String mailRSS = responsableServiceStageRepository.findRespServStgMailById("SR-STG-IT"); // Server  DEPLOY_SERVER
+			String mailRSS = "raa@esprit.tn";// Local
 
 			System.out.println("START---------------------------------------------------> Mail SENT TO: " + AEMail);
 			System.out.println("==>StudentCJ Mail : " + utilServices.findStudentMailById(idEt));
 			System.out.println("==>AEMail : " + utilServices.findMailPedagogicalEncadrant(idEt));
-			System.out.println("==>EEMail : " + conv.get().getEntrepriseAccueilConvention().getAddressMail());
-			System.out
-					.println("==>mailRSS : " + responsableServiceStageRepository.findRespServStgMailById("SR-STG-IT"));
+			// System.out.println("==>EEMail : " + conv.get().getEntrepriseAccueilConvention().getAddressMail());
+			System.out.println("==>mailRSS : " + responsableServiceStageRepository.findRespServStgMailById("SR-STG-IT"));
 			System.out.println("END -----------------------------------------------------------------> *");
 
+
 			List<String> receiversCC = new ArrayList<String>();
-			receiversCC.add(AEMail);
-			receiversCC.add(mailRSS);
-			receiversCC.add(EEMail);
+			receiversCC.add(AEMail); receiversCC.add(mailRSS); receiversCC.add(EEMail);
 			String responsibles = receiversCC.stream().collect(Collectors.joining(", "));
 
-			utilServices.sendMailWithManyCC("Validation Demande Annulation de Convention", studentMail, responsibles,
-					content);
-			// utilServices.sendMailWithCC(subject, receiver, receiverCC, content);
+			utilServices.sendMailWithManyCC("Validation Demande Annulation de Convention", studentMail, responsibles, content);
+//			utilServices.sendMailWithCC(subject, receiver, receiverCC, content);
 		}
 
-		return new ResponseEntity<>(serviceStageService.UpdateDemandeAnnulationConventionState(idEt,
-				date.substring(0, 19).replace("T", " ")), HttpStatus.OK);
+		return new ResponseEntity<>(
+				serviceStageService.UpdateDemandeAnnulationConventionState(idEt, date.substring(0, 19).replace("T", " ")),
+				HttpStatus.OK);
 
 	}
 

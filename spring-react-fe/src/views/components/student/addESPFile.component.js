@@ -1410,27 +1410,26 @@ export default class AddESPFile extends Component {
       this.setState({
         hasSupervisorPhoneNumberCheck: true,
       });
-      // console.log('//////////////////////////////////////////////> NOT NULL');
     }
 
     let pass = "no";
     if (
-        this.state.projectSupervisorPhoneNumber.trim() === "" &&
-        !hasSupervisorFirstNameError &&
-        !hasSupervisorLastNameError &&
-        !hasSupervisorEmailError
+      this.state.projectSupervisorPhoneNumber.trim() === "" &&
+      !hasSupervisorFirstNameError &&
+      !hasSupervisorLastNameError &&
+      !hasSupervisorEmailError
     ) {
       pass = "yes";
-      // console.log('---------------------------> NULL');
+      console.log('---------------------------> NULL');
     }
     if (
-        this.state.projectSupervisorPhoneNumber.trim() !== "" &&
-        !hasSupervisorFirstNameError &&
-        !hasSupervisorLastNameError &&
-        !hasSupervisorEmailError
+      this.state.projectSupervisorPhoneNumber.trim() !== "" &&
+      !hasSupervisorFirstNameError &&
+      !hasSupervisorLastNameError &&
+      !hasSupervisorEmailError
     ) {
       pass = "yes";
-      // console.log('---------------------------> NOT NULL');
+      console.log('---------------------------> NOT NULL');
     }
 
     if (pass.trim() === "yes") {
@@ -1455,30 +1454,42 @@ export default class AddESPFile extends Component {
         // console.log('----------2--------> 0712: ', projSupervPhoneNbr);
       }
 
-      let supervList = this.state.supervisorItem.slice(); //creates the clone of the state
-      const obj = {
-        oldSupervMlPass: this.state.projectSupervisorEmail,
-        supervFirstName: this.state.projectSupervisorFirstName,
-        supervLastName: this.state.projectSupervisorLastName,
-        supervPhoneNumber: projSupervPhoneNbr,
-        supervEmail: this.state.projectSupervisorEmail,
-      };
-      supervList.push(obj);
+      // console.log('---> PIKA 1: ' + this.state.projectSupervisorFirstName);
+      // console.log('---> PIKA 2: ' + this.state.projectSupervisorLastName);
+      // console.log('---> PIKA 3: ' + this.state.projectSupervisorEmail);
 
-      this.setState({
-        supervisorItem: supervList,
-        oldSupervMlPass: this.state.projectSupervisorEmail,
-        successAddSupervProfile: true,
-        projectSupervisorFirstName: "",
-        projectSupervisorLastName: "",
-        projectSupervisorPhoneNumber: "",
-        projectSupervisorEmail: "",
-        hasSupervisorFirstNameError: true,
-        hasSupervisorLastNameError: true,
-        hasSupervisorEmailError: true,
-        hasSupervisorPhoneNumberCheck: false,
-      });
+      let supervList = this.state.supervisorItem.slice(); //creates the clone of the state
+
+      if(this.state.projectSupervisorFirstName.length >4 || this.state.projectSupervisorLastName >4 || this.state.projectSupervisorEmail >4)
+      {
+        const obj = {
+          oldSupervMlPass: this.state.projectSupervisorEmail,
+          supervFirstName: this.state.projectSupervisorFirstName,
+          supervLastName: this.state.projectSupervisorLastName,
+          supervPhoneNumber: projSupervPhoneNbr,
+          supervEmail: this.state.projectSupervisorEmail,
+        };
+        supervList.push(obj);
+
+        this.setState({
+          supervisorItem: supervList,
+          oldSupervMlPass: this.state.projectSupervisorEmail,
+          successAddSupervProfile: true,
+          projectSupervisorFirstName: "",
+          projectSupervisorLastName: "",
+          projectSupervisorPhoneNumber: "",
+          projectSupervisorEmail: "",
+          hasSupervisorFirstNameError: true,
+          hasSupervisorLastNameError: true,
+          hasSupervisorEmailError: true,
+          hasSupervisorPhoneNumberCheck: false,
+        });
+      }
+
+      //console.log('--------------> PIKATCHOOO ', supervList)
+
     }
+
   }
 
   changeSupervisorProfile(e) {
