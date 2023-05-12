@@ -245,6 +245,44 @@ public class StudentController {
 
 	}
 
+	@GetMapping("/downloadAllFilesTypes/{pathFile}")
+	public ResponseEntity downloadAllFilesTypes(@PathVariable String pathFile) throws IOException
+	{
+
+		System.out.println("---------------------> encoded path: " + pathFile);
+		String gdFullPath = utilServices.decodeEncodedValue(pathFile);
+
+		System.out.println("---------------------> decoded path: " + gdFullPath);
+
+		String PTPath = gdFullPath.replace("/", "\\");
+
+		File file = new File(PTPath); //"C:\\ESP\\uploads\\sars essid.docx");
+
+		// String all = "C:\\ESP\\uploads\\sars essid.docx";
+		//String fileName = all.substring()
+
+		String fileName = PTPath.substring(15, PTPath.length());
+
+		HttpHeaders header = new HttpHeaders();
+		header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
+		header.add("Cache-Control", "no-cache, no-store, must-revalidate");
+		header.add("Pragma", "no-cache");
+		header.add("Expires", "0");
+
+		// To Got Name Of File With Synchro
+		header.add(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
+
+		Path patha = Paths.get(file.getAbsolutePath());
+		ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(patha));
+
+		return ResponseEntity.ok()
+				.headers(header)
+				.contentLength(file.length())
+				.contentType(MediaType.parseMediaType("application/octet-stream"))
+				.body(resource);
+
+	}
+
 	@GetMapping("/downloadLettreAffectation/{idEt}")
 	public ResponseEntity downloadLettreAffectation(@PathVariable String idEt) throws IOException {
 
@@ -1661,6 +1699,7 @@ public class StudentController {
 				"Historique Bilans", ""));
 		stds.add(new StudentTimelineDto(12, "Dépôt\n Rapport Version 2", dateDepotRapportVFinale, "uploadReport",
 				"Historique Rapports", ""));
+		stds.add(new StudentTimelineDto(13, "Enquête\n Premier Emploi", dateDepotRapportVFinale, "myStudentTimeline", "Enquête Premier Emploi", ""));
 
 		// stds.add(new StudentTimelineDto("Lancement\n" + " " + " " + " " + " " + "
 		// Stage PFE " + " " + " " + " ", dateNewestDebutStageConvAv, "/myDocuments"));

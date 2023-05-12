@@ -296,5 +296,10 @@ public interface ConventionRepository extends JpaRepository<Convention, Conventi
 	
 	@Query(value="SELECT c from Convention c where c.traiter = '02' order by c.conventionPK.dateConvention desc")
 	List<Convention> getAllValidatedConvention();
-	
+
+	@Query(value="SELECT c from Convention c "
+			+ " where (c.conventionPK.idEt=:idET and "
+			+ "FUNCTION('to_char', c.conventionPK.dateConvention,'yyyy-mm-dd HH24:MI:SS')=:date )")
+	Optional<Convention> getConventionByIdFormedDateNew(@Param("idET") String idET , @Param("date") String date);
+
 }
