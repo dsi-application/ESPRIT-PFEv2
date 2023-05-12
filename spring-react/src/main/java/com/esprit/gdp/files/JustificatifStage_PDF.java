@@ -108,7 +108,7 @@ public class JustificatifStage_PDF
         cptt6.add(new Phrase(" est un(e) étudiant(e) inscrit(e) à plein temps à", attributeStyle));
         cptt6.add(new Phrase(" ESPRIT ", subTitleStyleGray));
         cptt6.add(new Phrase("pour l’année universitaire ", attributeStyle));
-        cptt6.add(new Phrase("2021/2022", subTitleStyleGray));
+        cptt6.add(new Phrase("2022/2023", subTitleStyleGray));
         cptt6.add(new Phrase(".", attributeStyle));
         cptt6.setAlignment(Element.ALIGN_JUSTIFIED);
         addEmptyLine(cptt6, 1);

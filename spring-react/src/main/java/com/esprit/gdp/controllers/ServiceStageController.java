@@ -245,7 +245,7 @@ public class ServiceStageController {
 			String studentClasse = utilServices.findCurrentClassByIdEt(idEt);
 			String studentOption = utilServices.findOptionByClass(studentClasse,
 					optionRepository.listOptionsByYear("2021"));
-			String studentDepartment = utilServices.findDepartmentByClassForConv(studentClasse);
+			String studentDepartment = utilServices.findDepartmentByClassForConventionDiplome(studentClasse);
 
 			String path = "C:/ESP-DOCS/Conventions/" + studentFullName + "-" + dat.getTime() + ".pdf";
 
@@ -394,7 +394,7 @@ public class ServiceStageController {
 			String studentClasse = utilServices.findCurrentClassByIdEt(idEt);
 			String studentOption = utilServices.findOptionByClass(studentClasse,
 					optionRepository.listOptionsByYear("2021"));
-			String studentDepartment = utilServices.findDepartmentByClassForConv(studentClasse);
+			String studentDepartment = utilServices.findDepartmentByClassForConventionDiplome(studentClasse);
 
 			String path = "C:/ESP-DOCS/Conventions/" + studentFullName + "-" + dat.getTime() + ".pdf";
 

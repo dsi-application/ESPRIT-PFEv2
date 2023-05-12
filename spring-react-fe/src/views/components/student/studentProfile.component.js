@@ -291,7 +291,7 @@ export default class StudentProfile extends Component {
                     </span>
                       </CCol>
                       <CCol md="7">
-                        <span className="stuProfileInfo">Juin 2022</span>
+                        <span className="stuProfileInfo">Juin 2023</span>
                       </CCol>
                     </CRow>
 

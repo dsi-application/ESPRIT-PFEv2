@@ -34,6 +34,8 @@ public interface TechnologieRepository extends JpaRepository<Technologie, Intege
 	@Modifying
 	@Query("Delete from Technologie t where t.name=?1")
 	void deleteTechnologyByName(String name);
-	
-	
+
+	@Query("Select t from Technologie t where t.etat='A' and t.name=?1")
+	List<Technologie> findTechnologyByLabel(String name);
+
 }

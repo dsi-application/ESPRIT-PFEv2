@@ -324,7 +324,7 @@ export default function SynopsisAndNews() {
                 <CRow>
                 <CCol md="12">
                     <span style={{fontWeight: "bold", fontSize: "15px", color: "#cc0000"}}>
-                        <TextScroller text="Session Juin 2022"/>
+                        <TextScroller text="Session Juin 2023"/>
                     </span>
 
                     {

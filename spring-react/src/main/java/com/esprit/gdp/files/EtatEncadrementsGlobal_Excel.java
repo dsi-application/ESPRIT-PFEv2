@@ -44,7 +44,7 @@ public class EtatEncadrementsGlobal_Excel
 		try
 		{
 			HSSFWorkbook workbook = new HSSFWorkbook();
-			HSSFSheet sheet = workbook.createSheet("Session Juin 2022");
+			HSSFSheet sheet = workbook.createSheet("Session Juin 2023");
 			sheet.setHorizontallyCenter(true);
 			
 			// My Customized Colors

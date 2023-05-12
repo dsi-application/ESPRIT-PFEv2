@@ -339,7 +339,7 @@ public class StudentController {
 
 		List<Optional<Convention>> lconvs = conventionRepository.findConventionOPTByIdEt(idEt);
 		String studentFullName = utilServices.findStudentFullNameById(idEt);
-		String deptLabel = utilServices.findDepartmentByClassForConv(utilServices.findCurrentClassByIdEt(idEt));
+		String deptLabel = utilServices.findDepartmentByClassForConventionDiplome(utilServices.findCurrentClassByIdEt(idEt));
 		String companyLabel = conventionRepository.findCompanyNameByIdEt(idEt).get(0);
 		String optionLabel = utilServices.findOptionByClass(utilServices.findCurrentClassByIdEt(idEt),
 				optionRepository.listOptionsByYear("2021"));
@@ -2447,7 +2447,8 @@ public class StudentController {
 		List<Technologie> listSelectedTechs = new ArrayList<Technologie>();
 		for(String t : planTravailRequest.getListSelectedLibelleTechnologies())
 		{
-			Technologie tech = technologyRepository.findByName(t);
+			Technologie tech = technologyRepository.findTechnologyByLabel(t).get(0);
+			// Technologie tech = technologyRepository.findByName(t);
 			listSelectedTechs.add(tech);
 		}
 		fichePFE.setTechnologies(listSelectedTechs);
@@ -2653,7 +2654,8 @@ public class StudentController {
 		List<Technologie> listSelectedTechs = new ArrayList<Technologie>();
 		for(String t : planTravailRequest.getListSelectedLibelleTechnologies())
 		{
-			Technologie tech = technologyRepository.findByName(t);
+			Technologie tech = technologyRepository.findTechnologyByLabel(t).get(0);
+			// Technologie tech = technologyRepository.findByName(t);
 			listSelectedTechs.add(tech);
 		}
 		fichePFE.setTechnologies(null);
