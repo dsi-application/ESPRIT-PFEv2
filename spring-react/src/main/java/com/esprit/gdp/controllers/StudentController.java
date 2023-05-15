@@ -2536,7 +2536,7 @@ public class StudentController {
 		DateFormat dateFormatz = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		String dateDepotESPFile = dateFormatz.format(new Date());
 
-		String subject = "Sauvegarde Plan de Travail OFF";
+		String subject = "Sauvegarde Plan de Travail";
 
 		String studentMail = utilServices.findStudentMailById(idEt);  // DEPLOY_SERVER
 
