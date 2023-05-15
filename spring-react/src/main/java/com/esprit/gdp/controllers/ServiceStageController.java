@@ -756,14 +756,14 @@ public class ServiceStageController {
 			// String studentMail = utilServices.findStudentMailById(idEt);  // Server  DEPLOY_SERVER
 			String studentMail = "student@esprit.tn";   // Local
 
-//			String AEMail = utilServices.findMailPedagogicalEncadrant(idEt);     //DEPLOY_SERVER
-			String AEMail = "saria.essid@esprit.tn";
+			String AEMail = utilServices.findMailPedagogicalEncadrant(idEt);     //DEPLOY_SERVER
+			// String AEMail = "saria.essid@esprit.tn";
 
-//			String EEMail = conv.get().getEntrepriseAccueilConvention().getAddressMail();     //DEPLOY_SERVER
-			String EEMail = "saria.essid@esprit.tn";
+			String EEMail = conv.get().getEntrepriseAccueilConvention().getAddressMail();     //DEPLOY_SERVER
+			// String EEMail = "saria.essid@esprit.tn";
 
-			// String mailRSS = responsableServiceStageRepository.findRespServStgMailById("SR-STG-IT"); // Server  DEPLOY_SERVER
-			String mailRSS = "raa@esprit.tn";// Local
+			String mailRSS = responsableServiceStageRepository.findRespServStgMailById("SR-STG-IT"); // Server  DEPLOY_SERVER
+			// String mailRSS = "raa@esprit.tn";// Local
 
 			System.out.println("START---------------------------------------------------> Mail SENT TO: " + AEMail);
 			System.out.println("==>StudentCJ Mail : " + utilServices.findStudentMailById(idEt));

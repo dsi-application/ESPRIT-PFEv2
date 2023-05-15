@@ -1731,7 +1731,7 @@ function MyStudentTimeline(props) {
 
       // values.thematicsPIK.length === 0 && values.technologiesPIK.length === 0 &&
       const [res, err] = await queryApi(
-        "academicEncadrant/requestForExpertFormik?idEt=" + studentId + "&themTags=" + selectedThem + "&techTags=" + selectedTech + "&descTags=" + selectedDesc,
+        "academicEncadrant/requestForExpertFormik?idEt=" + studentId + "&themTags=" + encodeURIComponent(encodeURIComponent(selectedThem)) + "&techTags=" + encodeURIComponent(encodeURIComponent(selectedTech)) + "&descTags=" + encodeURIComponent(encodeURIComponent(selectedDesc)),
         {},
         "PUT",
         false
