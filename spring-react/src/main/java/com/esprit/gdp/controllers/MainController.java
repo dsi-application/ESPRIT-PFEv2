@@ -8945,10 +8945,17 @@ public class MainController {
 		if (!studentsCJ.contains(loginRequest.getId()) && !studentsCS.contains(loginRequest.getId())) {
 			System.out.println("NO USERNAME - NO PASSWORD ===> Sign-In ERROR");
 
-			StudentCS studentfa = studentRepository
-					.firstAuthenticationCS(loginRequest.getId(), loginRequest.getPassword())
-					.orElseThrow(() -> new RuntimeException("ERROR ! : Verify your credentials."));
-			if (studentfa != null && studentfa.getPwdJWTEtudiant() == null) {
+			StudentCS studentfa = studentRepository.firstAuthenticationCS(loginRequest.getId(),
+					loginRequest.getPassword()).orElseThrow(() -> new RuntimeException("ERROR ! : Verify your credentials."));
+			if(studentfa != null && studentfa.getPwdJWTEtudiant() == null)
+			{
+				pstudent = new UserResponse(loginRequest.getId(), loginRequest.getPassword());
+			}
+
+			StudentCJ studentfaj= studentRepository.firstAuthentication(loginRequest.getId(),
+					loginRequest.getPassword()).orElseThrow(() -> new RuntimeException("ERROR ! : Verify your credentials."));
+			if(studentfaj != null && studentfaj.getPwdJWTEtudiant() == null)
+			{
 				pstudent = new UserResponse(loginRequest.getId(), loginRequest.getPassword());
 			}
 		}
