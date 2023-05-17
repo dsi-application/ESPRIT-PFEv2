@@ -660,6 +660,64 @@ public class UtilServices {
 
 	}
 
+	public String findDepartmentByClassForConventionDiplome(String codeClOff)
+	{
+		String codeCl = codeClOff.toUpperCase();
+		System.out.println("---------------------------->>>>>>>>>>>>>>>>>>>----- CLASS: " + codeClOff);
+		String codeDept = "";
+		if(
+				codeCl.contains("SE") || codeCl.contains("SAE") || codeCl.contains("DS") ||
+						codeCl.contains("SIM") || codeCl.contains("SLEAM") ||
+						codeCl.contains("GAMIX") || codeCl.contains("NIDS") ||
+						codeCl.contains("5TWIN") || codeCl.contains("INFINI") ||
+						codeCl.contains("BI") || codeCl.contains("CINFO-BI") ||
+						codeCl.contains("ARC") || codeCl.contains("CINFO-ARC") ||
+						// OLD
+						codeCl.contains("GL") || codeCl.contains("CINFO-GL") || codeCl.contains("SIGMA") || codeCl.contains("INFOB")
+		)
+		{
+			codeDept = "01"; // Informatique
+		}
+
+		if(
+				codeCl.contains("IOSYS") || codeCl.contains("5WIN")
+		)
+		{
+			codeDept = "02"; // Télécommunication
+		}
+
+		if(
+				codeCl.contains("EM") || codeCl.contains("MÉCAT") ||
+						codeCl.contains("OGI") || codeCl.contains("CEMMEC") || codeCl.contains("CEMOGI")
+		)
+		{
+			codeDept = "04"; // Electromécanique
+		}
+
+		if(
+				codeCl.contains("GC")
+		)
+		{
+			codeDept = "03"; // Génie-Civil
+		}
+
+		if(
+				codeCl.contains("ALINFO")
+		)
+		{
+			codeDept = "12"; // IT
+		}
+
+		System.out.println("-------------------11-------------- codeDept: " + codeDept);
+
+		String departmentLabel = codeNomenclatureRepository.findLibNomenclatureByCodeStrAndCodeNome("27", codeDept);
+
+		System.out.println("--------------------------------- typeTrtFiche: " + departmentLabel);
+
+		return departmentLabel;
+
+	}
+
 	public String findDepartmentByClassForConv(String codeClOff)
 	{
 		String codeCl = codeClOff.toUpperCase();

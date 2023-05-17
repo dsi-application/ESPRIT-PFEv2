@@ -1500,11 +1500,33 @@ public class AcademicEncadrantController
 													@RequestParam("techTags") List<String> techTags,
 													@RequestParam("descTags") List<String> descTags)
 	{
-		
-    	System.out.println("-----------------------> idEt: " + idEt);
-    	System.out.println("-----------------------> themTags: " + themTags);
-    	System.out.println("-----------------------> techTags: " + techTags);
-    	System.out.println("-----------------------> descTags: " + descTags);
+
+		System.out.println("-----------------------> idEt: " + idEt);
+		System.out.println("-----------------------> themTags: " + themTags);
+		System.out.println("-----------------------> techTags: " + techTags);
+		System.out.println("-----------------------> descTags: " + descTags);
+
+		List<String> decThemTags = new ArrayList<String>();
+		List<String> decTechTags = new ArrayList<String>();
+		List<String> decDescTags = new ArrayList<String>();
+
+		for(String t : themTags)
+		{
+			String u = utilServices.decodeEncodedValue(t);
+			decThemTags.add(u);
+		}
+
+		for(String t : techTags)
+		{
+			String u = utilServices.decodeEncodedValue(t);
+			decTechTags.add(u);
+		}
+
+		for(String t : descTags)
+		{
+			String u = utilServices.decodeEncodedValue(t);
+			decDescTags.add(u);
+		}
     	    	
     	String acadEncFullName = utilServices.findEncadrantPedagogiqueByStudentId(idEt).getNom();
     	String acadEncMail = utilServices.findEncadrantPedagogiqueByStudentId(idEt).getMail();
@@ -1572,9 +1594,9 @@ public class AcademicEncadrantController
 				       + "pour son Étudiant à encadrer <font color=red> " + utilServices.findStudentFullNameById(idEt) + " </font> qui affecté(e) à l'option "
 				       + "<strong><font color=grey> " + studentOption.replace("_01", "") + "</font></strong>.<br/><br/>"
 				       + "Ci-dessous quelques Tags qui peuvent vous aider :<br/>"
-				       + "- <strong><font color=grey> Thématique(s)</font></strong> : " + themTags.stream().map(Object::toString).collect(Collectors.joining(", ")) + "<br/>"
-				       + "- <strong><font color=grey> Technologie(s)</font></strong> : " + techTags.stream().map(Object::toString).collect(Collectors.joining(", ")) + "<br/>"
-				       + "- <strong><font color=grey> Descipline(s)</font></strong> : " + descTags.stream().map(Object::toString).collect(Collectors.joining(", "));
+				       + "- <strong><font color=grey> Thématique(s)</font></strong> : " + decThemTags.stream().map(Object::toString).collect(Collectors.joining(", ")) + "<br/>"
+				       + "- <strong><font color=grey> Technologie(s)</font></strong> : " + decTechTags.stream().map(Object::toString).collect(Collectors.joining(", ")) + "<br/>"
+				       + "- <strong><font color=grey> Descipline(s)</font></strong> : " + decDescTags.stream().map(Object::toString).collect(Collectors.joining(", "));
         
 		// utilServices.sendMail(subject, "saria.essid@esprit.tn", content);  // LOCAL
 		utilServices.sendMailWithCC(subject, mailCPS, acadEncMail, content);  // SERVER

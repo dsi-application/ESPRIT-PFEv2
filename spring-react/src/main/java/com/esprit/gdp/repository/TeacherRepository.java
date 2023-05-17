@@ -136,9 +136,9 @@ public interface TeacherRepository extends JpaRepository<Teacher, String>
 			+ ", InscriptionCS ics "
 			+ "where "
 			+ "("
-			+ "(t.idEns=i.encadrantPedagogique.idEns and i.encadrantPedagogique.idEns is not null and i.id.anneeDeb=?1 and t.typeEns = 'P' and t.etat = 'A') "
+			+ "(t.idEns=i.encadrantPedagogique.idEns and i.encadrantPedagogique.idEns is not null and i.id.anneeDeb=?1 and t.typeEns = 'P' and t.etatFromPE = 'A') "
 			+ "or "
-			+ "(t.idEns=ics.encadrantPedagogiqueCS.idEns and ics.encadrantPedagogiqueCS.idEns is not null and ics.id.anneeDeb=?1 and t.typeEns = 'P' and t.etat = 'A') "
+			+ "(t.idEns=ics.encadrantPedagogiqueCS.idEns and ics.encadrantPedagogiqueCS.idEns is not null and ics.id.anneeDeb=?1 and t.typeEns = 'P' and t.etatFromPE = 'A') "
 			+ ")"
 			+ "")
 	List<String> getAlreadyAcademicEncadrants(String annee);
@@ -174,7 +174,7 @@ saiso.ANNEE_DEB = '2021' and saiso.NUM_SEMESTRE = 2 and
 	@Query(value="SELECT new com.esprit.gdp.dto.TeacherDtoSTN(t1.idEns, t1.up, t1.nomEns, t1.tel1, t1.mailEns, 0) from Teacher t1 where t1.idEns in "
 			+ "( select t.idEns "
 				+ "from Plan p, Teacher t "
-				+ "where t.idEns != 'V-463-12' and t.typeEns = 'P' and t.etat = 'A' and p.id.anneeDeb =?1 and "
+				+ "where t.idEns != 'V-463-12' and t.typeEns = 'P' and t.etatFromPE = 'A' and p.id.anneeDeb =?1 and "
 				+ "(t.idEns = p.idEns or t.idEns = p.idEns2 or t.idEns = p.idEns3 or t.idEns = p.idEns4 or t.idEns = p.idEns5)"
 			+ ") order by t1.nomEns")
 	List<TeacherDtoSTN> allAcademicEncadrants (String anneeDeb);
@@ -206,7 +206,7 @@ saiso.ANNEE_DEB = '2021' and saiso.NUM_SEMESTRE = 2 and
 	@Query(value="SELECT new com.esprit.gdp.dto.TeacherQuotaEncadrementExpertiseDto(t1.idEns, t1.up, t1.nomEns, 0, 0) from Teacher t1 where t1.idEns in "
 			+ "( select t.idEns "
 				+ "from Plan p, Teacher t "
-				+ "where t.idEns != 'V-463-12' and t.typeEns = 'P' and t.etat = 'A' and p.id.anneeDeb =?1 and "
+				+ "where t.idEns != 'V-463-12' and t.typeEns = 'P' and t.etatFromPE = 'A' and p.id.anneeDeb =?1 and "
 				+ "(t.idEns = p.idEns or t.idEns = p.idEns2 or t.idEns = p.idEns3 or t.idEns = p.idEns4 or t.idEns = p.idEns5)"
 			+ ") order by t1.nomEns")
 	List<TeacherQuotaEncadrementExpertiseDto> allAcademicEncadrantsAndExperts (String anneeDeb);
@@ -214,7 +214,7 @@ saiso.ANNEE_DEB = '2021' and saiso.NUM_SEMESTRE = 2 and
 	@Query(value="SELECT new com.esprit.gdp.dto.TeacherQuotaPresidenceMembreDto(t1.idEns, t1.up, t1.nomEns, 0, 0) from Teacher t1 where t1.idEns in "
 			+ "( select t.idEns "
 				+ "from Plan p, Teacher t "
-				+ "where t.idEns != 'V-463-12' and t.typeEns = 'P' and t.etat = 'A' and p.id.anneeDeb =?1 and "
+				+ "where t.idEns != 'V-463-12' and t.typeEns = 'P' and t.etatFromPE = 'A' and p.id.anneeDeb =?1 and "
 				+ "(t.idEns = p.idEns or t.idEns = p.idEns2 or t.idEns = p.idEns3 or t.idEns = p.idEns4 or t.idEns = p.idEns5)"
 			+ ") order by t1.nomEns")
 	List<TeacherQuotaPresidenceMembreDto> allTeachersForSTNByYear (String anneeDeb);

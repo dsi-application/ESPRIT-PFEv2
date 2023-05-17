@@ -599,7 +599,7 @@ public class MainController {
 		String studentClasse = utilServices.findCurrentClassByIdEt(idEt);
 		String studentOption = utilServices.findOptionByClass(studentClasse,
 				optionRepository.listOptionsByYear("2021"));
-		String studentDepartment = utilServices.findDepartmentByClass(studentClasse);
+		String studentDepartment = utilServices.findDepartmentByClassForConventionDiplome(studentClasse);
 
 		String path = "C:/ESP-DOCS/Conventions/" + studentFullName + "-" + dat.getTime() + ".pdf";
 
@@ -2960,7 +2960,7 @@ public class MainController {
 
 		System.out.println("------------------------------------------------------Treatment A: " + new Date());
 		List<String> allTeachers = new ArrayList<String>();
-		allTeachers = weekScheduleRepository.findAllTeachersFromPE("2022", Long.valueOf(1), idPE);
+		allTeachers = weekScheduleRepository.findAllTeachersFromPE("2022", Long.valueOf(2), idPE);
 		System.out.println("------------------------------------------------------Treatment B: " + new Date());
 
 		List<TeacherDtoSTN> teacherDtos = new ArrayList<TeacherDtoSTN>();
@@ -8945,10 +8945,17 @@ public class MainController {
 		if (!studentsCJ.contains(loginRequest.getId()) && !studentsCS.contains(loginRequest.getId())) {
 			System.out.println("NO USERNAME - NO PASSWORD ===> Sign-In ERROR");
 
-			StudentCS studentfa = studentRepository
-					.firstAuthenticationCS(loginRequest.getId(), loginRequest.getPassword())
-					.orElseThrow(() -> new RuntimeException("ERROR ! : Verify your credentials."));
-			if (studentfa != null && studentfa.getPwdJWTEtudiant() == null) {
+			StudentCS studentfa = studentRepository.firstAuthenticationCS(loginRequest.getId(),
+					loginRequest.getPassword()).orElseThrow(() -> new RuntimeException("ERROR ! : Verify your credentials."));
+			if(studentfa != null && studentfa.getPwdJWTEtudiant() == null)
+			{
+				pstudent = new UserResponse(loginRequest.getId(), loginRequest.getPassword());
+			}
+
+			StudentCJ studentfaj= studentRepository.firstAuthentication(loginRequest.getId(),
+					loginRequest.getPassword()).orElseThrow(() -> new RuntimeException("ERROR ! : Verify your credentials."));
+			if(studentfaj != null && studentfaj.getPwdJWTEtudiant() == null)
+			{
 				pstudent = new UserResponse(loginRequest.getId(), loginRequest.getPassword());
 			}
 		}
