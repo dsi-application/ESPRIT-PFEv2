@@ -753,8 +753,8 @@ public class ServiceStageController {
 					+ convValidationDate + " </font>.<br/>"
 					+ "Par conséquent, Votre Plan Travail a été annulé <font color=red> automatiquement</font> .";
 
-			// String studentMail = utilServices.findStudentMailById(idEt);  // Server  DEPLOY_SERVER
-			String studentMail = "student@esprit.tn";   // Local
+			String studentMail = utilServices.findStudentMailById(idEt);  // Server  DEPLOY_SERVER
+			// String studentMail = "student@esprit.tn";   // Local
 
 			String AEMail = utilServices.findMailPedagogicalEncadrant(idEt);     //DEPLOY_SERVER
 			// String AEMail = "saria.essid@esprit.tn";
