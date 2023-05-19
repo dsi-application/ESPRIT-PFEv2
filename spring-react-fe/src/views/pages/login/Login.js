@@ -41,7 +41,7 @@ export default class Login extends Component {
                                 <h1>
                                     <span style={{color: "#cc0000"}}>Plateforme Gestion des Stages</span>
                                 </h1>
-                                <TextScrollerBackground text="Session de Septembre 2022" />
+                                <TextScrollerBackground text="Session Juin 2023" />
                             </CCol>
                             <CCol md="1"/>
                         </CRow>

@@ -1273,58 +1273,38 @@ export default class AddESPFile extends Component {
     }
   }
 
-
   verifyExistEncadrantEntreprise(projectSupervEmailOFF) { // lol123
     // console.log('----------------------------> VERIF EE: ' + projectSupervEmail);
     let projectSupervEmail = projectSupervEmailOFF.trim();
     if (projectSupervEmail !== '') {
+      this.state.verifInternalDuplication = 'INIT';
+      for (let i = 0; i < this.state.supervisorItem.length; i++) {
+        /* console.log('COMPARE -------1102-------> ' + this.state.supervisorItem.length + ' : '
+            + projectSupervEmail + ' - '
+            + this.state.supervisorItem[i].supervEmail);*/
 
-      AuthService.verifyExistMailEncadrantEntreprise(
-          currentStudent.id,
-          encodeURIComponent(projectSupervEmail)
-      ).then(
-          (response) => {
+        if (projectSupervEmail.toLowerCase() === this.state.supervisorItem[i].supervEmail.trim().toLowerCase()) {
+          this.state.verifInternalDuplication = "DUPLICATED";
+          // console.log('-------1102----1---> CATCH IT: ' + this.state.verifExistEncadEntrep);
+        }
+      }
 
-            let result = response.data;
-            // console.log('-------------1102---------------> SIZE: ', this.state.supervisorItem.length);
-            this.state.verifInternalDuplication = 'INIT';
-            for (let i = 0; i < this.state.supervisorItem.length; i++) {
-              /* console.log('COMPARE -------1102-------> ' + this.state.supervisorItem.length + ' : '
-                  + projectSupervEmail + ' - '
-                  + this.state.supervisorItem[i].supervEmail);*/
+      // console.log('-------------1102---------------> VERIF EE: ', this.state.supervisorItem + ' - ' + this.state.verifExistEncadEntrep);
 
-
-              if (projectSupervEmail.toLowerCase() === this.state.supervisorItem[i].supervEmail.trim().toLowerCase()) {
-                this.state.verifInternalDuplication = "DUPLICATED";
-                // console.log('-------1102----1---> CATCH IT: ' + this.state.verifExistEncadEntrep);
-              }
-            }
-
-            // console.log('-------------1102---------------> VERIF EE: ', this.state.supervisorItem + ' - ' + this.state.verifExistEncadEntrep);
-
-            if (this.state.verifInternalDuplication === 'DUPLICATED') {
-              this.verifExistEncadEntrep = true;
-              this.setState({
-                projectSupervisorEmail: projectSupervEmail,
-                verifExistEncadEntrep: true
-              });
-            } else {
-              this.verifExistEncadEntrep = false;
-              this.setState({
-                projectSupervisorEmail: projectSupervEmail,
-                verifExistEncadEntrep: result
-              });
-            }
-
-            // console.log('-------------1102---------------> FINAL RESULT: ', this.state.verifInternalDuplication + ' : ' + this.state.projectSupervisorEmail + ' - ' + this.state.verifExistEncadEntrep);
-
-          },
-          (error) => {
-
-          }
-      );
+      if (this.state.verifInternalDuplication === 'DUPLICATED') {
+        this.verifExistEncadEntrep = true;
+        this.setState({
+          projectSupervisorEmail: projectSupervEmail,
+          verifExistEncadEntrep: true
+        });
+      } else {
+        this.verifExistEncadEntrep = false;
+        this.setState({
+          projectSupervisorEmail: projectSupervEmail,
+          verifExistEncadEntrep: false
+        });
+      }
     }
-
   }
 
   verifyExistEncadrantEntreprisePopup(projectSupervEmailOFF) { // lol12345
