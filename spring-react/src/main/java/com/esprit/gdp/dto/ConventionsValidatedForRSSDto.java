@@ -18,16 +18,18 @@ public class ConventionsValidatedForRSSDto
 	private String pathSignedConvention;
 	private String traiter;
 	private EntrepriseAccueil entrepriseAccueilConvention;
-	
-	
+
+	private String currentClasse;
+
+
 	public ConventionsValidatedForRSSDto() {}
-	
+
 	public ConventionsValidatedForRSSDto(
 			String dateConvention, Date dateDebut, Date dateFin,
 			String idEt, String traiter
 			, String paysConvention, String pathConvention
 			, EntrepriseAccueil entrepriseAccueilConvention
-			) {
+	) {
 		this.dateConvention = dateConvention;
 		this.dateDebut = dateDebut;
 		this.dateFin = dateFin;
@@ -44,7 +46,7 @@ public class ConventionsValidatedForRSSDto
 			String idEt, String traiter
 			, String paysConvention, String pathConvention, String pathSignedConvention
 			, EntrepriseAccueil entrepriseAccueilConvention
-			) {
+	) {
 		this.dateConvention = dateConvention;
 		this.dateDebut = dateDebut;
 		this.dateFin = dateFin;
@@ -145,5 +147,13 @@ public class ConventionsValidatedForRSSDto
 	public void setPathSignedConvention(String pathSignedConvention) {
 		this.pathSignedConvention = pathSignedConvention;
 	}
-	
+
+	public String getCurrentClasse() {
+		return currentClasse;
+	}
+
+	public void setCurrentClasse(String currentClasse) {
+		this.currentClasse = currentClasse;
+	}
+
 }

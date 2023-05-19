@@ -1064,6 +1064,134 @@ public class UtilServices {
 		return students;
 	}
 
+	public List<String> findStudentsByYearAndGroupedOption(String year, String option)
+	{
+
+		System.out.println("---------------------------------------------------> option: " + option);
+		List<String> students = new ArrayList<String>();
+		if(option.equalsIgnoreCase("em"))
+		{
+			List<String> studentsEMCJ = optionRepository.findStudentsByYearAndOptionForEMCJ(year);
+			List<String> studentsEMCS = optionRepository.findStudentsByYearAndOptionForEMCS(year);
+
+			System.out.println("----------------------------------> Student EM CJ: " + studentsEMCJ.size());
+			System.out.println("----------------------------------> Student EM CS: " + studentsEMCS.size());
+
+			if(!studentsEMCJ.isEmpty())
+			{
+				students.addAll(studentsEMCJ);
+			}
+			if(!studentsEMCS.isEmpty())
+			{
+				students.addAll(studentsEMCS);
+			}
+		}
+		if(option.equalsIgnoreCase("gc"))
+		{
+			List<String> studentsGCCJ = optionRepository.findStudentsByYearAndOptionForGCCJ(year);
+
+			System.out.println("----------------------------------> Student GC CJ: " + studentsGCCJ.size());
+
+			if(!studentsGCCJ.isEmpty())
+			{
+				students.addAll(studentsGCCJ);
+			}
+		}
+		if(option.equalsIgnoreCase("arctic"))
+		{
+			List<String> studentsCJ = optionRepository.findStudentsByYearAndOption(year, option);
+			List<String> studentsCJALT = optionStudentALTRepository.findIdStudentsALTByYearAndOption(year, option);
+			List<String> studentsARCCS = optionRepository.findStudentsARCCSByYearAndOption(year);
+
+			System.out.println("----------------------------------> Student ARC CJ: " + studentsCJ.size());
+			System.out.println("----------------------------------> Student ARC ALT: " + studentsCJALT.size());
+			System.out.println("----------------------------------> Student ARC CS: " + studentsARCCS.size());
+
+			if(!studentsCJ.isEmpty())
+			{
+				students.addAll(studentsCJ);
+			}
+			if(!studentsCJALT.isEmpty())
+			{
+				students.addAll(studentsCJALT);
+			}
+			if(!studentsARCCS.isEmpty())
+			{
+				students.addAll(studentsARCCS);
+			}
+		}
+		if(option.equalsIgnoreCase("erp-bi"))
+		{
+			List<String> studentsCJ = optionRepository.findStudentsByYearAndOption(year, option);
+			List<String> studentsCJALT = optionStudentALTRepository.findIdStudentsALTByYearAndOption(year, option);
+			List<String> studentsBICS = optionRepository.findStudentsBICSByYearAndOption(year);
+
+			System.out.println("----------------------------------> Student BI CJ: " + studentsCJ.size());
+			System.out.println("----------------------------------> Student BI ALT: " + studentsCJALT.size());
+			System.out.println("----------------------------------> Student BI CS: " + studentsBICS.size());
+
+			if(!studentsCJ.isEmpty())
+			{
+				students.addAll(studentsCJ);
+			}
+			if(!studentsCJALT.isEmpty())
+			{
+				students.addAll(studentsCJALT);
+			}
+			if(!studentsBICS.isEmpty())
+			{
+				students.addAll(studentsBICS);
+			}
+		}
+		if(option.equalsIgnoreCase("sae"))
+		{
+			List<String> studentsCJ = optionRepository.findStudentsByYearAndOption(year, option);
+			List<String> studentsCJALT = optionStudentALTRepository.findIdStudentsSAEALTByYearAndOption(year);
+			List<String> studentSAECS = optionRepository.findStudentsSAECSByYearAndOption(year);
+
+			System.out.println("--------jj--------------------------> Student SAE CJ: " + studentsCJ.size());
+			System.out.println("----------------------------------> Student SAE ALT: " + studentsCJALT.size());
+			System.out.println("----------------------------------> Student SAE CS: " + studentSAECS.size());
+
+			if(!studentsCJ.isEmpty())
+			{
+				students.addAll(studentsCJ);
+			}
+			if(!studentsCJALT.isEmpty())
+			{
+				students.addAll(studentsCJALT);
+			}
+			if(!studentSAECS.isEmpty())
+			{
+				students.addAll(studentSAECS);
+			}
+		}
+		else
+		{
+			List<String> studentsCJ = optionRepository.findStudentsCJByYearAndOption(year, option);
+			List<String> studentsCJALT = optionStudentALTRepository.findIdStudentsALTByYearAndOption(year, option);
+			List<String> studentsCS = optionRepository.findStudentsCSByYearAndOption(year, option);
+
+			System.out.println("----------------------------------> Student CJ: " + studentsCJ.size());
+			System.out.println("----------------------------------> Student ALT: " + studentsCJALT.size());
+			System.out.println("----------------------------------> Student CS: " + studentsCS.size());
+
+			if(!studentsCJ.isEmpty())
+			{
+				students.addAll(studentsCJ);
+			}
+			if(!studentsCJALT.isEmpty())
+			{
+				students.addAll(studentsCJALT);
+			}
+			if(!studentsCS.isEmpty())
+			{
+				students.addAll(studentsCS);
+			}
+		}
+
+		return students;
+	}
 
 	public List<String> findStudentsByYearAndOption(String year, String option)
 	{

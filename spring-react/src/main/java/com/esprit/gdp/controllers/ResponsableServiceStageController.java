@@ -10,21 +10,16 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import com.esprit.gdp.dto.*;
+import com.esprit.gdp.services.ServiceStageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.esprit.gdp.dto.EncadrementRSSStatusExcelDto;
-import com.esprit.gdp.dto.EncadrementStatusExcelDto;
-import com.esprit.gdp.dto.TeacherQuotaEncadrementExpertiseDto;
-import com.esprit.gdp.dto.TeacherQuotaPresidenceMembreDto;
 import com.esprit.gdp.files.EtatEncadrementsAndExpertisesByYear_Excel;
 import com.esprit.gdp.files.EtatEncadrementsDetailedByYear_Excel;
 import com.esprit.gdp.files.EtatEncadrementsGlobal_Excel;
@@ -71,6 +66,9 @@ public class ResponsableServiceStageController {
 	
 	@Autowired
 	OptionStudentALTRepository optionStudentALTRepository;
+
+	@Autowired
+	ServiceStageService serviceStageService;
 
 	/******************************************************
 	 * Methods
@@ -464,5 +462,44 @@ public class ResponsableServiceStageController {
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
                 .body(resource);
 	}
-	
+
+	@GetMapping("/allOptionsForActivatedYears")
+	public List<String> allOptionsByYear()
+	{
+		List<String> options = optionRepository.allOptionsForActivatedYears();
+		options.replaceAll(s-> s.replace("_01", ""));
+		options.remove("CINFO-ARC");options.remove("CINFO-BI");options.remove("CINFO-GL");options.remove("ME21-GC");
+		options.remove("ALINFO");options.remove("EE");options.remove("PC");options.remove("SO");options.remove("OG");
+		options.remove("CEM");options.remove("MÉCAT");options.remove("OGI");options.remove("GL");
+		return options;
+	}
+
+	@PutMapping(value = "/allValidatedConventionsListByOptionForRSS")
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<List<ConventionsValidatedForRSSDto>> getconventionValidatedListDto(@RequestParam("idRSS") String idRSS, @RequestParam("yearLabel") String yearLabel, @RequestParam("optionLabel") String optionLabel)
+	{
+		System.out.println("--------------1805-----> HELLO : " + idRSS);
+
+		List<String> idStudents = new ArrayList<String>();
+		idStudents.addAll(utilServices.findStudentsByYearAndGroupedOption(yearLabel, optionLabel.toLowerCase()));
+
+		try
+		{
+			// List<ConventionsValidatedForRSSDto> ConventionList = serviceStageService.getAllConventionsValidatedDtoByRSS(idRSS, idMonth);
+			List<ConventionsValidatedForRSSDto> conventionList = serviceStageService.getAllConventionsValidatedDtoByStudentsForRSS(idRSS, idStudents);
+
+			System.out.println("--------------ddddd 3-----> SARS VAL: " + conventionList.size());
+			if (conventionList.isEmpty())
+			{
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+			return new ResponseEntity<>(conventionList, HttpStatus.OK);
+		}
+		catch (Exception e)
+		{
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+
 }

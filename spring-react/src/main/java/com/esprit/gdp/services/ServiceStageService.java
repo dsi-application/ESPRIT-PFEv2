@@ -150,6 +150,53 @@ public class ServiceStageService {
 		return listConventions;
 	}
 
+	// Got All Conv Validated By RSS DTO - By Option
+	public List<ConventionsValidatedForRSSDto> getAllConventionsValidatedDtoByStudentsForRSS(String idRSS, List<String> students)
+	{
+
+		String kindRSS = idRSS.replace("SR-STG-", "");
+		System.out.println("----- 34 -------####################-------- VALIDATED ------> idRSS: " + idRSS + " - " + kindRSS);
+
+		List<ConventionsValidatedForRSSDto> listConventions = null;
+		if(idRSS.contains("IT"))
+		{
+			listConventions = conventionRepository.getAllConventionsValidatedDtoByStudentsForRSS(students);
+			System.out.println("-----####################-----> IT: " + listConventions.size());
+		}
+		if (idRSS.contains("EM") || idRSS.contains("GC"))
+		{
+			listConventions = conventionRepository.getAllConventionsValidatedDtoByStudentsForSpeceficRSS(kindRSS, students);
+			// System.out.println("-----####################-----> EM-GC: " + listConventions.size());
+		}
+
+		for(ConventionsValidatedForRSSDto c : listConventions)
+		{
+			// System.out.println("--------------------------> DATE: " + c.getDateConvention());
+			String idEt = c.getIdEt();
+			String classe = utilServices.findCurrentClassByIdEt(idEt);
+
+			String convCodePays = c.getPaysConvention();
+			if(convCodePays.equalsIgnoreCase("--"))
+			{
+				c.setPaysConvention("EN");
+			}
+			else
+			{
+				c.setPaysConvention(convCodePays);
+			}
+//
+//		    System.out.println("--------------------------> findStudentFullNameById: " + utilServices.findStudentFullNameById(idEt));
+//			System.out.println("--------------------------> findDepartmentAbbByClassWithStat: " + utilServices.findDepartmentAbbByClassWithStat(classe));
+
+			c.setNomEt(utilServices.findStudentFullNameById(idEt));
+			c.setDepartEt(utilServices.findDepartmentAbbByClassWithStat(classe));
+			c.setCurrentClasse(classe);
+		}
+
+		// ess.sort(Comparator.comparing(EncadrementStatusExcelDto::getStudentClasse).thenComparing(EncadrementStatusExcelDto::getStudentFullName));
+		return listConventions;
+	}
+
 	// Got All Conv Validated By RSS DTO
 	public List<ConventionsValidatedForRSSDto> getAllConventionsValidatedDtoByRSS(String idRSS, String idMonth) {
 		String kindRSS = idRSS.replace("SR-STG-", "");

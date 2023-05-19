@@ -43,7 +43,34 @@ public interface OptionRepository extends JpaRepository<Option, OptionPK>
 	@Query("select y.id.idEt from InscriptionCS y where y.id.anneeDeb = '2021' "
 			+ "and (lower(y.saisonClasse.id.codeCl) like CONCAT('4', ?1, '%') or lower(y.saisonClasse.id.codeCl) like CONCAT('4cinfo-', ?1, '%'))") 
 	List<String> findStudentsCSByOption(String codeOption);
-	
+
+	@Query("select y.id.idEt from InscriptionCJ y where y.id.anneeDeb =?1 "
+			+ "and (lower(y.saisonClasse.id.codeCl) like '5mécat%' or lower(y.saisonClasse.id.codeCl) like '5ogi%')") // CAN: CONCAT('5%', ?1, '%')
+	List<String> findStudentsByYearAndOptionForEMCJ(String year);
+
+	@Query("select y.id.idEt from InscriptionCS y where y.id.anneeDeb =?1 "
+			+ "and (lower(y.saisonClasse.id.codeCl) like '4cemmec%' or lower(y.saisonClasse.id.codeCl) like '4cemogi%')") // CAN: CONCAT('5%', ?1, '%')
+	List<String> findStudentsByYearAndOptionForEMCS(String year);
+
+	@Query("select y.id.idEt from InscriptionCJ y where y.id.anneeDeb =?1 "
+			+ "and (lower(y.saisonClasse.id.codeCl) like '5gc%' or lower(y.saisonClasse.id.codeCl) like '5me21-gc%')") // CAN: CONCAT('5%', ?1, '%')
+	List<String> findStudentsByYearAndOptionForGCCJ(String year);
+
+	@Query("select y.id.idEt from InscriptionCS y where y.id.anneeDeb =?1 "
+			+ "and lower(y.saisonClasse.id.codeCl) like '4cinfo-arc%'")
+	List<String> findStudentsARCCSByYearAndOption(String year);
+
+	@Query("select y.id.idEt from InscriptionCS y where y.id.anneeDeb =?1 "
+			+ "and lower(y.saisonClasse.id.codeCl) like '4cinfo-bi%'")
+	List<String> findStudentsBICSByYearAndOption(String year);
+
+	@Query("select y.id.idEt from InscriptionCS y where y.id.anneeDeb =?1 and lower(y.saisonClasse.id.codeCl) like '4cinfo-gl%'")
+	List<String> findStudentsSAECSByYearAndOption(String year);
+
+	@Query("select y.id.idEt from InscriptionCJ y where y.id.anneeDeb =?1 "
+			+ "and lower(y.saisonClasse.id.codeCl) like CONCAT('5', ?2, '%')") // CAN: CONCAT('5%', ?1, '%')
+	List<String> findStudentsCJByYearAndOption(String year, String codeOption);
+
 	@Query("select y.id.idEt from InscriptionCS y where y.id.anneeDeb =?1 "
 			+ "and (lower(y.saisonClasse.id.codeCl) like CONCAT('4', ?2, '%') or lower(y.saisonClasse.id.codeCl) like CONCAT('4cinfo-', ?1, '%'))") 
 	List<String> findStudentsCSByYearAndOption(String year, String codeOption);
@@ -98,6 +125,9 @@ public interface OptionRepository extends JpaRepository<Option, OptionPK>
 	    return query.toString();
 		// return "dfd";
 	}
+
+	@Query("select distinct o.id.codeOption from Option o where o.id.anneeDeb in ('2021', '2022')")
+	List<String> allOptionsForActivatedYears();
 	
 	
 }
