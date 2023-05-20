@@ -155,19 +155,19 @@ public class ServiceStageService {
 	{
 
 		String kindRSS = idRSS.replace("SR-STG-", "");
-		System.out.println("----- 34 -------####################-------- VALIDATED ------> idRSS: " + idRSS + " - " + kindRSS);
+		// System.out.println("----- 34 -------####################-------- VALIDATED ------> idRSS: " + idRSS + " - " + kindRSS);
 
 		List<ConventionsValidatedForRSSDto> listConventions = null;
-		if(idRSS.contains("IT"))
-		{
-			listConventions = conventionRepository.getAllConventionsValidatedDtoByStudentsForRSS(students);
-			System.out.println("-----####################-----> IT: " + listConventions.size());
-		}
-		if (idRSS.contains("EM") || idRSS.contains("GC"))
+		//if(idRSS.contains("IT"))
+		//{
+		listConventions = conventionRepository.getAllConventionsValidatedDtoByStudentsForRSS(students);
+		// System.out.println("-----####################-----> IT: " + listConventions.size());
+		//}
+		/*if (idRSS.contains("EM") || idRSS.contains("GC"))
 		{
 			listConventions = conventionRepository.getAllConventionsValidatedDtoByStudentsForSpeceficRSS(kindRSS, students);
 			// System.out.println("-----####################-----> EM-GC: " + listConventions.size());
-		}
+		}*/
 
 		for(ConventionsValidatedForRSSDto c : listConventions)
 		{

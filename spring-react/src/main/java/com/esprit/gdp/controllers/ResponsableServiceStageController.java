@@ -463,14 +463,27 @@ public class ResponsableServiceStageController {
                 .body(resource);
 	}
 
-	@GetMapping("/allOptionsForActivatedYears")
-	public List<String> allOptionsByYear()
+	@GetMapping("/allOptionsForActivatedYears/{idRSS}")
+	public List<String> allOptionsForActivatedYearsByRSS(@PathVariable String idRSS)
 	{
-		List<String> options = optionRepository.allOptionsForActivatedYears();
-		options.replaceAll(s-> s.replace("_01", ""));
-		options.remove("CINFO-ARC");options.remove("CINFO-BI");options.remove("CINFO-GL");options.remove("ME21-GC");
-		options.remove("ALINFO");options.remove("EE");options.remove("PC");options.remove("SO");options.remove("OG");
-		options.remove("CEM");options.remove("MÉCAT");options.remove("OGI");options.remove("GL");
+		List<String> options = new ArrayList<String>();
+
+		if(idRSS.contains("IT"))
+		{
+			options = optionRepository.allOptionsForActivatedYears();
+			options.replaceAll(s-> s.replace("_01", ""));
+			options.remove("CINFO-ARC");options.remove("CINFO-BI");options.remove("CINFO-GL");options.remove("ME21-GC");
+			options.remove("ALINFO");options.remove("EE");options.remove("PC");options.remove("SO");options.remove("OG");
+			options.remove("CEM");options.remove("MÉCAT");options.remove("OGI");options.remove("GL");
+		}
+		else if (idRSS.contains("EM"))
+		{
+			options.add("EM");
+		}
+		else
+		{
+			options.add("GC");
+		}
 		return options;
 	}
 

@@ -111,6 +111,7 @@ export const getEtat = (etat) => {
   }
 };
 
+const currentResponsableServiceStage = AuthService.getCurrentResponsableServiceStage();
 const API_URL_RSS = process.env.REACT_APP_API_URL_RSS;
 
 const ConventionsValideesManage = () => {
@@ -312,7 +313,7 @@ const ConventionsValideesManage = () => {
 
   useEffect(() => {
     const response1 = axios
-      .get(API_URL_RSS + `allOptionsForActivatedYears`)
+      .get(API_URL_RSS + `allOptionsForActivatedYears/` + currentResponsableServiceStage.id)
       .then((res) => {
         let result = res.data;
         console.log('--------------> HI-HELLO: ', res.data);
@@ -361,7 +362,6 @@ const ConventionsValideesManage = () => {
       // console.log('------------------> yearLabel: ' + values.yearLabel);
       // console.log('------------------> optionLabel: ' + values.optionLabel);
 
-      let currentResponsableServiceStage = AuthService.getCurrentResponsableServiceStage();
       setConventionsForRSS([]);
 
       setShowLoader(true);
