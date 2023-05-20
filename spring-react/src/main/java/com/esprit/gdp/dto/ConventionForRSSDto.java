@@ -16,6 +16,7 @@ public class ConventionForRSSDto
 	private String paysConvention;
 	private String traiter;
 	private String pathConvention;
+	private String currentClasse;
 	private EntrepriseAccueil entrepriseAccueilConvention;
 	
 	
@@ -125,5 +126,13 @@ public class ConventionForRSSDto
 	public void setPathConvention(String pathConvention) {
 		this.pathConvention = pathConvention;
 	}
-	
+
+	public String getCurrentClasse() {
+		return currentClasse;
+	}
+
+	public void setCurrentClasse(String currentClasse) {
+		this.currentClasse = currentClasse;
+	}
+
 }

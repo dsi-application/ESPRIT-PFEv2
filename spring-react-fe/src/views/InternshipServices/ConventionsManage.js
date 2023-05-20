@@ -9,14 +9,16 @@ import {
   CCol,
   CRow,
   CSpinner,
-  CTooltip
+  CTooltip, CSelect, CForm, CFormGroup, CAlert
 } from "@coreui/react";
+
 import axios from "axios";
 import moment from "moment";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import {
+  fetchConventionsForRSS,
   selectConventions, selectConventionsForRSS,
   selectNbrDemandesAnnulationConvention, selectNbrDemandesAnnulationConventionNotTreated,
   selectNbrDepositedConventions, selectNbrValidatedConventions
@@ -33,29 +35,46 @@ import Text from "antd/lib/typography/Text";
 import { createMuiTheme } from "@material-ui/core";
 import { MuiThemeProvider } from "@material-ui/core";
 import TheSidebar from "../../containers/TheSidebar";
+import {
+  fetchActiveStudentTimelineStep,
+  fetchConventionDetails,
+  fetchDepotReportsDetails,
+  fetchFichePFEDetails,
+  fetchTimelineSteps, fetchVerifyAffectPEtoStudent
+} from "../../redux/slices/MyStudentSlice";
+import {useFormik} from "formik";
+import AuthService from "../services/auth.service";
+import {queryApi} from "../../utils/queryApi";
+import * as Yup from "yup";
+
+const validationSchema = Yup.object().shape({
+  yearLabel: Yup.string().required("* Année est un Champ obligatoire !."),
+  optionLabel: Yup.string().required("* Option est un Champ obligatoire !."),
+});
+
 const steps = [
   {
     selector: '[data-tut="reactour__1"]',
-    content: `Içi, Vous allez trouver La 
+    content: `Içi, Vous allez trouver La
     liste des conventions `,
   },
   {
     selector: '[data-tut="reactour__2"]',
     content: () => (
-        <Text>
-          Içi, vous pouvez interpréter l'état de la convention :
-          <strong>DEPOSEE - TRAITEE - ANNULEE</strong>.
-        </Text>
+      <Text>
+        Içi, vous pouvez interpréter l'état de la convention :
+        <strong>DEPOSEE - TRAITEE - ANNULEE</strong>.
+      </Text>
     ),
   },
 
   {
     selector: '[data-tut="reactour__3"]',
     content: () => (
-        <Text>
-          Pour voir les détails de la convention et la traiter cliquer sur ce
-          bouton : <strong> Afficher détails</strong>.
-        </Text>
+      <Text>
+        Pour voir les détails de la convention et la traiter cliquer sur ce
+        bouton : <strong> Afficher détails</strong>.
+      </Text>
     ),
   },
 ];
@@ -82,15 +101,26 @@ export const getEtat = (etat) => {
       return "ANNULEE";
   }
 };
+
+const currentResponsableServiceStage = AuthService.getCurrentResponsableServiceStage();
+const API_URL_RSS = process.env.REACT_APP_API_URL_RSS;
+
 const ConventionsManage = () => {
   const [isTourOpen, setIsTourOpen] = useState(false);
-  const [conventionsForRSS, err] = useSelector(selectConventionsForRSS);
+  // const [conventionsForRSS, err] = useSelector(selectConventionsForRSS);
+  const [conventionsForRSS, setConventionsForRSS] = useState([]);
+
   const [responsive, setResponsive] = useState("vertical");
   const [tableBodyHeight, setTableBodyHeight] = useState("300");
   const [tableBodyMaxHeight, setTableBodyMaxHeight] = useState("");
+  const [studentId, setStudentId] = useState(sessionStorage.getItem("studentId"));
+  const [showLoader, setShowLoader] = useState(false);
+  const [error, setError] = useState({ visible: false, message: "" });
+  const [danger, setDanger] = useState(false);
+  const [allOpts, setAllOpts] = useState([]);
 
   const ConventionsstatusForRSS = useSelector(
-      (state) => state.persistedReducer.conventions.ConventionsstatusForRSS
+    (state) => state.persistedReducer.conventions.ConventionsstatusForRSS
   );
   const dispatch = useDispatch();
   const columnsConventions = [
@@ -105,6 +135,14 @@ const ConventionsManage = () => {
     {
       name: "nomEt",
       label: "Nom & Prénom Étudiant",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "currentClasse",
+      label: "Classe",
       options: {
         filter: true,
         sort: true,
@@ -158,9 +196,9 @@ const ConventionsManage = () => {
         sort: true,
         customBodyRender: (e) => {
           return (
-              <CBadge data-tut="reactour__2" color={getBadge(e)}>
-                {getEtat(e)}
-              </CBadge>
+            <CBadge data-tut="reactour__2" color={getBadge(e)}>
+              {getEtat(e)}
+            </CBadge>
           );
         },
       },
@@ -171,41 +209,41 @@ const ConventionsManage = () => {
       options: {
         filter: true,
         sort: true,
-        customBodyRenderLite: (dataIndex) => {
+        customBodyRender: (value, tableMeta, updateValue) => {
           return (
-              <>
-                <td className="py-2" data-tut="reactour__3">
-                  <Link to={"/ConventionDetails"}>
-                    <CButton
-                        variant="outline"
-                        color="primary"
-                        size="sm"
-                        onClick={() => onClickConv(conventionsForRSS[dataIndex])}
-                    >
-                      <CTooltip content=" Afficher Détails">
-                        <CIcon name="cil-magnifying-glass"></CIcon>
-                      </CTooltip>
-                    </CButton>
-                  </Link>
-                  &nbsp;&nbsp;
-                  {btnDownloadDisplay(conventionsForRSS[dataIndex])}
+            <>
+              <td className="py-2" data-tut="reactour__3">
+                <Link to={"/ConventionDetails"}>
+                  <CButton
+                    variant="outline"
+                    color="primary"
+                    size="sm"
+                    onClick={() => onClickConv(conventionsForRSS[tableMeta.rowIndex])}
+                  >
+                    <CTooltip content=" Afficher Détails">
+                      <CIcon name="cil-magnifying-glass"></CIcon>
+                    </CTooltip>
+                  </CButton>
+                </Link>
+                &nbsp;&nbsp;
+                {btnDownloadDisplay(conventionsForRSS[tableMeta.rowIndex])}
 
-                  &nbsp;&nbsp;
-                  <Link to={"/modifyAgreementByRSS"}>
-                    <CButton
-                        variant="outline"
-                        color="dark"
-                        size="sm"
-                        onClick={() => passStudentId(conventionsForRSS[dataIndex])}
-                    >
-                      <CTooltip content=" Mettre à Jour">
-                        <CIcon name="cil-pencil"></CIcon>
-                      </CTooltip>
-                    </CButton>
-                  </Link>
+                &nbsp;&nbsp;
+                <Link to={"/modifyAgreementByRSS"}>
+                  <CButton
+                    variant="outline"
+                    color="dark"
+                    size="sm"
+                    onClick={() => passStudentId(conventionsForRSS[tableMeta.rowIndex])}
+                  >
+                    <CTooltip content=" Mettre à Jour">
+                      <CIcon name="cil-pencil"></CIcon>
+                    </CTooltip>
+                  </CButton>
+                </Link>
 
-                </td>
-              </>
+              </td>
+            </>
           );
         },
       },
@@ -271,59 +309,59 @@ const ConventionsManage = () => {
   const onClickConv = (i) => {
     dispatch(getEtudiant(i.idEt));
     dispatch(selectConvention(i));
-    dispatch(selectConvention(i));
+    //dispatch(selectConvention(i));
     document.body.style.overflowY = "auto";
   };
 
   const passStudentId = (i) => {
     sessionStorage.setItem("studentId", i.idEt);
-    console.log('-------- 1005 hi 1 -------------> SARS 1: ' + i.idEt);
-    console.log('-------- 1005 hi 2 -------------> SARS 2: ' + sessionStorage.getItem("studentId"));
+    console.log('-------- 1005 SimpleFormExample.js 1 -------------> SARS 1: ' + i.idEt);
+    console.log('-------- 1005 SimpleFormExample.js 2 -------------> SARS 2: ' + sessionStorage.getItem("studentId"));
   };
 
   const Download = (p) => {
     axios
-        .get(
-            `${process.env.REACT_APP_API_URL}` +
-            "encadrement/downloadFD/" + p.idEt + "/" + p.dateConvention,
+      .get(
+        `${process.env.REACT_APP_API_URL}` +
+        "encadrement/downloadFD/" + p.idEt + "/" + p.dateConvention,
 
-            { responseType: "blob" }
-        )
-        .then((response) => {
-          //const filename =  response.headers.get('Content-Disposition').split('filename=')[1];
-          let pathConv = p.pathConvention;
+        { responseType: "blob" }
+      )
+      .then((response) => {
+        //const filename =  response.headers.get('Content-Disposition').split('filename=')[1];
+        let pathConv = p.pathConvention;
 
-          const file = new Blob([response.data], { type: "application/pdf" });
-          let url = window.URL.createObjectURL(file);
+        const file = new Blob([response.data], { type: "application/pdf" });
+        let url = window.URL.createObjectURL(file);
 
-          let a = document.createElement("a");
-          a.href = url;
-          a.download = pathConv.substring(pathConv.lastIndexOf("/") + 1);
-          // console.log(url);
-          window.open(url);
-          a.click();
-        });
+        let a = document.createElement("a");
+        a.href = url;
+        a.download = pathConv.substring(pathConv.lastIndexOf("/") + 1);
+        // console.log(url);
+        window.open(url);
+        a.click();
+      });
   };
 
   const btnDownloadDisplay = (c) => {
     if (c.traiter === "02" || c.traiter === "03") {
       return (
-          <CButton variant="outline"
-                   color="danger"
-                   size="sm"
-                   onClick={() => {Download(c);}}>
-            <CTooltip content="Télécharger Convention">
-              <CIcon name="cil-save"></CIcon>
-            </CTooltip>
-          </CButton>
+        <CButton variant="outline"
+                 color="danger"
+                 size="sm"
+                 onClick={() => {Download(c);}}>
+          <CTooltip content="Télécharger Convention">
+            <CIcon name="cil-save"></CIcon>
+          </CTooltip>
+        </CButton>
       );
     } else {
       return (
-          <CButton variant="outline" color="danger" size="sm" disabled>
-            <CTooltip content="Télécharger Convention">
-              <CIcon name="cil-save"></CIcon>
-            </CTooltip>
-          </CButton>
+        <CButton variant="outline" color="danger" size="sm" disabled>
+          <CTooltip content="Télécharger Convention">
+            <CIcon name="cil-save"></CIcon>
+          </CTooltip>
+        </CButton>
       );
     }
   };
@@ -331,78 +369,215 @@ const ConventionsManage = () => {
   const [nbDemandesAnnulationConvention, errnir] = useSelector(selectNbrDemandesAnnulationConventionNotTreated);
   const [nbDepositedConventions, errndc] = useSelector(selectNbrDepositedConventions);
   const [nbValidatedConventions, errnvc] = useSelector(selectNbrValidatedConventions);
-  
+
+  const loadDataOnlyOnce = () => {
+    console.log('-----------------> HELLO 2 -- 1005')
+    dispatch(fetchConventionsForRSS());
+  };
+
+  useEffect(() => {
+    const response1 = axios
+      .get(API_URL_RSS + `allOptionsForActivatedYears/` + currentResponsableServiceStage.id)
+      .then((res) => {
+        let result = res.data;
+        console.log('--------------> HI-HELLO: ', res.data);
+        setAllOpts(result);
+      })
+  }, [])
+
+  const formik = useFormik({
+    initialValues: {
+      yearLabel: "",
+      optionLabel: "",
+      allYears: ["2021", "2022"]
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (values) => {
+
+      // console.log('------------------> yearLabel: ' + values.yearLabel);
+      // console.log('------------------> optionLabel: ' + values.optionLabel);
+
+      setConventionsForRSS([]);
+
+      setShowLoader(true);
+      // console.log('-----------------1-> 0908 id RSS: ' + currentResponsableServiceStage.id);
+
+      const [res, err] = await queryApi(
+        "respServStg/allConventionsListByOptionForRSS?idRSS=" + currentResponsableServiceStage.id +
+        "&yearLabel=" + values.yearLabel +
+        "&optionLabel=" + values.optionLabel,
+        {},
+        "PUT",
+        false
+      );
+      console.log("********* sars0508", res);
+      setConventionsForRSS([]);
+      setConventionsForRSS(res);
+      //setConventionsForRSS(res.map(result => [result.idEt, result.nomEt, result.departEt, result.paysConvention, result.dateConvention, result.dateDebut, result.dateFin, '']));
+
+      if (err) {
+        setShowLoader(false);
+        // console.log('-----------------1-> 0306')
+        setError({
+          visible: true,
+          message: JSON.stringify(err.errors, null, 2),
+        });
+      } else {
+        // console.log('-----------------2-> 0508')
+
+        /*dispatch(updateFichebydep(res));
+        dispatch(deleteElem(res));
+        dispatch(fetchUploadedReports());
+        dispatch(fetchValidatedReports());
+        dispatch(fetchRefusedReports());
+        dispatch(fetchStudentToSTNStat());*/
+        setDanger(false);
+        setShowLoader(false);
+      }
+    },
+  });
+
   return (
-      <>
+    <>
+      <TheSidebar dataDAC={nbDemandesAnnulationConvention} dataDC={nbDepositedConventions} dataVC={nbValidatedConventions}/>
 
-        <TheSidebar dataDAC={nbDemandesAnnulationConvention} dataDC={nbDepositedConventions} dataVC={nbValidatedConventions}/>
-
-        <Tour
-            steps={steps}
-            isOpen={isTourOpen}
-            onAfterOpen={(target) => (document.body.style.overflowY = "hidden")}
-            onBeforeClose={(target) => (document.body.style.overflowY = "auto")}
-            onRequestClose={() => setIsTourOpen(false)}
-        />
-        {ConventionsstatusForRSS === "loading" || ConventionsstatusForRSS === "noData" ? (
-            <div>
-              <CRow>
-                <CCol md="12">
-                  <center>
-                    <br/><br/>
-                    <span className="waitIcon" /> **
-                    <br></br>
-                  </center>
-                </CCol>
-              </CRow>
-            </div>
-        ) : (
-            <>
-
-              <CRow>
-                <CCol>
-                  <CCard data-tut="reactour__1">
-
-
-                    <CRow>
-                      <CCol xs="12">
-                        <br/>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <span style={{color: "#b30000", fontSize: "14px", fontWeight: "bold"}}>
-                      Liste des Conventions</span>
-                      </CCol>
-                    </CRow>
+      <Tour
+        steps={steps}
+        isOpen={isTourOpen}
+        onAfterOpen={(target) => (document.body.style.overflowY = "hidden")}
+        onBeforeClose={(target) => (document.body.style.overflowY = "auto")}
+        onRequestClose={() => setIsTourOpen(false)}
+      />
+      {ConventionsstatusForRSS === "loading" || ConventionsstatusForRSS === "noData" ? (
+        <div>
+          <CRow>
+            <CCol md="12">
+              <center>
+                <br/><br/>
+                <span className="waitIcon" />
+                <br></br>
+              </center>
+            </CCol>
+          </CRow>
+        </div>
+      ) : (
+        <>
+          <CRow>
+            <CCol>
+              <CCard data-tut="reactour__1">
+                <CRow>
+                  <CCol xs="12">
                     <br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span style={{color: "#b30000", fontSize: "14px", fontWeight: "bold"}}>
+                      Liste des Conventions</span>
+                  </CCol>
+                </CRow>
+                <br/>
 
-                    <CCardBody>
-                      {conventionsForRSS ? (
-                          <MuiThemeProvider theme={theme}>
-                            <MUIDataTable
-                                data={conventionsForRSS}
-                                columns={columnsConventions}
-                                options={options}
-                            />
-                          </MuiThemeProvider>
-                      ) : (
-                          <MuiThemeProvider theme={theme}>
-                            <MUIDataTable
-                                columns={columnsConventions}
-                                options={options}
-                            /> </MuiThemeProvider>
-                      )}
-                    </CCardBody>
+                <CRow>
+                  <CCol md="3"/>
+                  <CCol md="6">
+                    <CForm onSubmit={formik.handleSubmit}>
+                      <CFormGroup>
+                        {error.visible && <p>{error.message}</p>}
+                      </CFormGroup>
+                      <center>
+                        Choisir une Promotion et une Option pour visualiser la liste correspondante :
+                      </center>
+                      <br/>
+                      <CFormGroup row>
+                        <CCol md="1"/>
+                        <CCol md="10">
+                          <CSelect  value={formik.values.yearLabel}
+                                    onChange={formik.handleChange}
+                            //onSelect={gotAllOptionsByPromotion(formik.values.yearLabel)}
+                                    onBlur={formik.handleBlur}
+                                    custom
+                                    size="sm"
+                                    name="yearLabel">
+                            <option style={{ display: "none" }}>
+                              ---- Choisir une Promotion ----
+                            </option>
+                            {formik.values.allYears?.map((e, i) => (
+                              <option value={e} key={i}>
+                                {e}
+                              </option>
+                            ))}
+                          </CSelect>
+                          {
+                            formik.errors.yearLabel && formik.touched.yearLabel &&
+                            <p style={{ color: "red" }}>{formik.errors.yearLabel}</p>
+                          }
+                          <br />
+                        </CCol>
+                        <CCol md="1"/>
+                      </CFormGroup>
+                      <CFormGroup row>
+                        <CCol md="1"/>
+                        <CCol md="10">
+                          <CSelect  value={formik.values.optionLabel}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    custom
+                                    size="sm"
+                                    name="optionLabel">
+                            <option style={{ display: "none" }}>
+                              ---- Choisir une Option ----
+                            </option>
+                            {allOpts?.map((e, i) => (
+                              <option value={e} key={i}>
+                                {e}
+                              </option>
+                            ))}
+                          </CSelect>
+                          {
+                            formik.errors.optionLabel && formik.touched.optionLabel &&
+                            <p style={{ color: "red" }}>{formik.errors.optionLabel}</p>
+                          }
+                          <br />
+                        </CCol>
+                        <CCol md="1"/>
+                        <br/><br/>
+                      </CFormGroup>
+                      <center>
+                        <CButton  color="danger" type="submit">
+                          {showLoader && <CSpinner grow size="sm" />} &nbsp; Confirmer
+                        </CButton>
+                      </center>
+                    </CForm>
+                  </CCol>
+                  <CCol md="3"/>
+                </CRow>
 
-                  </CCard>
-                </CCol>
-              </CRow>
-              {conventionsForRSS ? (
-                  ""
-              ) : (
-                  <></>
-              )}
-            </>
-        )}
-      </>
+                <br/><br/>
+
+                <CCardBody>
+                  {conventionsForRSS ? (
+                    <MUIDataTable
+                      data={conventionsForRSS}
+                      columns={columnsConventions}
+                      options={{
+                        selectableRows: 'none' // <===== will turn off checkboxes in rows
+                      }}
+                    />
+                  ) : (
+                    <>
+                      Sorry, no Data is available
+                    </>
+                  )}
+                </CCardBody>
+              </CCard>
+            </CCol>
+          </CRow>
+          {conventionsForRSS ? (
+            ""
+          ) : (
+            <></>
+          )}
+        </>
+      )}
+    </>
   );
 };
 

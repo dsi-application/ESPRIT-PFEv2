@@ -515,4 +515,32 @@ public class ResponsableServiceStageController {
 
 	}
 
+	@PutMapping(value = "/allConventionsListByOptionForRSS")
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<List<ConventionForRSSDto>> getconventionsListDto(@RequestParam("idRSS") String idRSS, @RequestParam("yearLabel") String yearLabel, @RequestParam("optionLabel") String optionLabel)
+	{
+		System.out.println("--------------PRIM : " + idRSS + " : " + yearLabel + " - " + optionLabel);
+
+		List<String> idStudents = new ArrayList<String>();
+		idStudents.addAll(utilServices.findStudentsByYearAndGroupedOption(yearLabel, optionLabel.toLowerCase()));
+
+		try
+		{
+			// List<ConventionsValidatedForRSSDto> ConventionList = serviceStageService.getAllConventionsValidatedDtoByRSS(idRSS, idMonth);
+			List<ConventionForRSSDto> conventionList = serviceStageService.getAllConventionsDtoByStudentsForRSS(idRSS, idStudents);
+
+			//System.out.println("--------------ddddd 3-----> SARS VAL: " + conventionList.size());
+			if (conventionList.isEmpty())
+			{
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+			return new ResponseEntity<>(conventionList, HttpStatus.OK);
+		}
+		catch (Exception e)
+		{
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+
 }

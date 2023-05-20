@@ -313,6 +313,13 @@ public interface ConventionRepository extends JpaRepository<Convention, Conventi
 		//@Query(value="SELECT new com.esprit.gdp.dto.ConventionsValidatedForRSSDto(FUNCTION('to_char', c.conventionPK.dateConvention,'dd-mm-yyyy HH24:MI:SS'), c.dateDebut, c.dateFin, c.conventionPK.idEt, c.entrepriseAccueilConvention) from Convention c where c.traiter = '02' order by c.conventionPK.dateConvention desc")
 	List<ConventionsValidatedForRSSDto> getAllConventionsValidatedDtoByStudentsForRSS(List<String> students);
 
+	@Query(value="SELECT new com.esprit.gdp.dto.ConventionForRSSDto(FUNCTION('to_char', c.conventionPK.dateConvention,'dd-mm-yyyy HH24:MI:SS'), c.dateDebut, c.dateFin, c.conventionPK.idEt, c.entrepriseAccueilConvention.pays.langueCode, c.traiter, c.pathConvention, c.entrepriseAccueilConvention) " +
+			"from Convention c " +
+			"where c.traiter = '01' " +
+			"and c.conventionPK.idEt IN ?1 " +
+			"order by c.conventionPK.dateConvention desc")
+	List<ConventionForRSSDto> getAllConventionsDtoByStudentsForRSS(List<String> students);
+
 	// Got All Conv Validated DTO By RSS
 	@Query(value="SELECT new com.esprit.gdp.dto.ConventionsValidatedForRSSDto(FUNCTION('to_char', c.conventionPK.dateConvention,'dd-mm-yyyy HH24:MI:SS'), c.dateDebut, c.dateFin, c.conventionPK.idEt, c.traiter, c.entrepriseAccueilConvention.pays.langueCode, c.pathConvention, c.pathSignedConvention, c.entrepriseAccueilConvention) "
 			+ "from Convention c where c.traiter = '02' "

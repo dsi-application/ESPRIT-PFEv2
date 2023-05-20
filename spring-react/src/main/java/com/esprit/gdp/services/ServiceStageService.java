@@ -240,6 +240,44 @@ public class ServiceStageService {
 		return listConventions;
 	}
 
+	// Got All Conv Validated By RSS DTO - By Option
+	public List<ConventionForRSSDto> getAllConventionsDtoByStudentsForRSS(String idRSS, List<String> students)
+	{
+
+		String kindRSS = idRSS.replace("SR-STG-", "");
+		// System.out.println("----- 34 -------####################-------- VALIDATED ------> idRSS: " + idRSS + " - " + kindRSS);
+
+		List<ConventionForRSSDto> listConventions = conventionRepository.getAllConventionsDtoByStudentsForRSS(students);
+		// System.out.println("-----####################-----> IT: " + listConventions.size());
+
+		for(ConventionForRSSDto c : listConventions)
+		{
+			// System.out.println("--------------------------> DATE: " + c.getDateConvention());
+			String idEt = c.getIdEt();
+			String classe = utilServices.findCurrentClassByIdEt(idEt);
+
+			String convCodePays = c.getPaysConvention();
+			if(convCodePays.equalsIgnoreCase("--"))
+			{
+				c.setPaysConvention("EN");
+			}
+			else
+			{
+				c.setPaysConvention(convCodePays);
+			}
+//
+//		    System.out.println("--------------------------> findStudentFullNameById: " + utilServices.findStudentFullNameById(idEt));
+//			System.out.println("--------------------------> findDepartmentAbbByClassWithStat: " + utilServices.findDepartmentAbbByClassWithStat(classe));
+
+			c.setNomEt(utilServices.findStudentFullNameById(idEt));
+			c.setDepartEt(utilServices.findDepartmentAbbByClassWithStat(classe));
+			c.setCurrentClasse(classe);
+		}
+
+		// ess.sort(Comparator.comparing(EncadrementStatusExcelDto::getStudentClasse).thenComparing(EncadrementStatusExcelDto::getStudentFullName));
+		return listConventions;
+	}
+
 	// Got All Demandes Annulation Convention
 	public List<Convention> getAllDemandesAnnulationConvention() {
 		List<Convention> listConvention = conventionRepository.getAllDemandesAnnulationConvention();
