@@ -209,7 +209,7 @@ const ConventionsManage = () => {
       options: {
         filter: true,
         sort: true,
-        customBodyRender: (value, tableMeta, updateValue) => {
+        customBodyRenderLite: (dataIndex) => {
           return (
             <>
               <td className="py-2" data-tut="reactour__3">
@@ -218,7 +218,7 @@ const ConventionsManage = () => {
                     variant="outline"
                     color="primary"
                     size="sm"
-                    onClick={() => onClickConv(conventionsForRSS[tableMeta.rowIndex])}
+                    onClick={() => onClickConv(conventionsForRSS[dataIndex])}
                   >
                     <CTooltip content=" Afficher Détails">
                       <CIcon name="cil-magnifying-glass"></CIcon>
@@ -226,7 +226,7 @@ const ConventionsManage = () => {
                   </CButton>
                 </Link>
                 &nbsp;&nbsp;
-                {btnDownloadDisplay(conventionsForRSS[tableMeta.rowIndex])}
+                {btnDownloadDisplay(conventionsForRSS[dataIndex])}
 
                 &nbsp;&nbsp;
                 <Link to={"/modifyAgreementByRSS"}>
@@ -234,7 +234,7 @@ const ConventionsManage = () => {
                     variant="outline"
                     color="dark"
                     size="sm"
-                    onClick={() => passStudentId(conventionsForRSS[tableMeta.rowIndex])}
+                    onClick={() => passStudentId(conventionsForRSS[dataIndex])}
                   >
                     <CTooltip content=" Mettre à Jour">
                       <CIcon name="cil-pencil"></CIcon>

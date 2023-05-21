@@ -2,7 +2,6 @@ import CIcon from "@coreui/icons-react";
 import {freeSet} from '@coreui/icons';
 import { useFormik } from "formik";
 import GetApp from "@material-ui/icons/GetApp";
-
 import * as Yup from "yup";
 
 import {
@@ -211,7 +210,7 @@ const ConventionsValideesManage = () => {
       options: {
         filter: true,
         sort: true,
-        customBodyRender: (value, tableMeta, updateValue) => {
+        customBodyRenderLite: (dataIndex) => {
           return (
             <>
               <td className="py-2" data-tut="reactour__3">
@@ -220,7 +219,7 @@ const ConventionsValideesManage = () => {
                     variant="outline"
                     color="primary"
                     size="sm"
-                    onClick={() => onClickConv(conventionsForRSS[tableMeta.rowIndex])}
+                    onClick={() => onClickConv(conventionsForRSS[dataIndex])}
                   >
                     <CTooltip content=" Afficher Détails">
                       <CIcon name="cil-magnifying-glass"></CIcon>
@@ -228,16 +227,16 @@ const ConventionsValideesManage = () => {
                   </CButton>
                 </Link>
                 &nbsp;&nbsp;
-                {btnDownloadDisplay(conventionsForRSS[tableMeta.rowIndex])}
+                {btnDownloadDisplay(conventionsForRSS[dataIndex])}
                 &nbsp;&nbsp;
-                {btnDownloadSignedConvDisplay(conventionsForRSS[tableMeta.rowIndex])}
+                {btnDownloadSignedConvDisplay(conventionsForRSS[dataIndex])}
                 &nbsp;&nbsp;
                 <Link to={"/modifyAgreementByRSS"}>
                   <CButton
                     variant="outline"
                     color="danger"
                     size="sm"
-                    onClick={() => passStudentId(conventionsForRSS[tableMeta.rowIndex])}
+                    onClick={() => passStudentId(conventionsForRSS[dataIndex])}
                   >
                     <CTooltip content=" Mettre à Jour">
                       <CIcon name="cil-pencil"></CIcon>
