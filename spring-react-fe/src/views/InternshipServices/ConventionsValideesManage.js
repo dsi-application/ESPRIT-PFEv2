@@ -353,7 +353,7 @@ const ConventionsValideesManage = () => {
     initialValues: {
       yearLabel: "",
       optionLabel: "",
-      allYears: ["2021", "2022"]
+      allYears: ["2022", "2021"]
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {

@@ -38,6 +38,9 @@ import {queryApi} from "../../utils/queryApi";
 
 import axios from "axios";
 
+const currentResponsableServiceStage = AuthService.getCurrentResponsableServiceStage();
+
+
 const API_URL_MESP = process.env.REACT_APP_API_URL_MESP;
 const API_URL_STU = process.env.REACT_APP_API_URL_STU;
 const API_URL_RSS = process.env.REACT_APP_API_URL_RSS;
@@ -74,9 +77,9 @@ const customStylesMANC = {
 const required = (value) => {
   if (!value) {
     return (
-        <div className="alert alert-danger" role="alert">
-          This field is required !.
-        </div>
+      <div className="alert alert-danger" role="alert">
+        This field is required !.
+      </div>
     );
   }
 };
@@ -85,9 +88,9 @@ const adresse = (value) => {
   if (value !== "") {
     if (value.length < 6 || value.length > 200) {
       return (
-          <div className="alert alert-danger" role="alert">
-            The adresse must be between 6 and 200 characters.
-          </div>
+        <div className="alert alert-danger" role="alert">
+          The adresse must be between 6 and 200 characters.
+        </div>
       );
     }
   }
@@ -96,9 +99,9 @@ const adresse = (value) => {
 const responsable = (value) => {
   if (value.length < 6 || value.length > 100) {
     return (
-        <div className="alert alert-danger" role="alert">
-          The responsable must be between 6 and 100 characters.
-        </div>
+      <div className="alert alert-danger" role="alert">
+        The responsable must be between 6 and 100 characters.
+      </div>
     );
   }
 };
@@ -106,9 +109,9 @@ const responsable = (value) => {
 const projectCompanyName = (value) => {
   if (value.length < 5 || value.length > 25) {
     return (
-        <div className="alert alert-danger" role="alert">
-          The projectCompanyName must be between 5 and 25 characters.
-        </div>
+      <div className="alert alert-danger" role="alert">
+        The projectCompanyName must be between 5 and 25 characters.
+      </div>
     );
   }
 };
@@ -117,9 +120,9 @@ const projectCompanyName = (value) => {
 const projectCompanyAddress = (value) => {
   if (value.length < 10 || value.length > 150) {
     return (
-        <div className="alert alert-danger" role="alert">
-          The projectCompanyAddress must be between 10 and 150 characters.
-        </div>
+      <div className="alert alert-danger" role="alert">
+        The projectCompanyAddress must be between 10 and 150 characters.
+      </div>
     );
   }
 };
@@ -128,9 +131,9 @@ const projectCompanyAddress = (value) => {
 const projectCompanyEmail = (value) => {
   if (!isEmail(value)) {
     return (
-        <div className="alert alert-danger" role="alert">
-          It is not a valid projectCompanyEmail form.
-        </div>
+      <div className="alert alert-danger" role="alert">
+        It is not a valid projectCompanyEmail form.
+      </div>
     );
   }
 };
@@ -140,9 +143,9 @@ const projectCompanyPhone = (value) => {
   if (value !== "") {
     if (!isInt(value)) {
       return (
-          <div className="alert alert-danger" role="alert">
-            It is not a valid projectCompanyPhone form.
-          </div>
+        <div className="alert alert-danger" role="alert">
+          It is not a valid projectCompanyPhone form.
+        </div>
       );
     }
   }
@@ -153,9 +156,9 @@ const projectCompanySiegeSociale = (value) => {
   if (value !== "") {
     if (value.length < 5 || value.length > 50) {
       return (
-          <div className="alert alert-danger" role="alert">
-            The projectCompanySiegeSociale must be between 5 and 50 characters.
-          </div>
+        <div className="alert alert-danger" role="alert">
+          The projectCompanySiegeSociale must be between 5 and 50 characters.
+        </div>
       );
     }
   }
@@ -166,9 +169,9 @@ const projectCompanyFax = (value) => {
   if (value !== "") {
     if (!isInt(value)) {
       return (
-          <div className="alert alert-danger" role="alert">
-            It is not a valid projectCompanyFax form.
-          </div>
+        <div className="alert alert-danger" role="alert">
+          It is not a valid projectCompanyFax form.
+        </div>
       );
     }
   }
@@ -179,9 +182,9 @@ const projectCompanyPhoneMin = (value) => {
   if (value !== "") {
     if (value.length < 8) {
       return (
-          <div className="alert alert-danger" role="alert">
-            The projectCompanyPhone must be at least with 8 numbers.
-          </div>
+        <div className="alert alert-danger" role="alert">
+          The projectCompanyPhone must be at least with 8 numbers.
+        </div>
       );
     }
   }
@@ -192,9 +195,9 @@ const projectCompanyFaxMin = (value) => {
   if (value !== "") {
     if (value.length < 8) {
       return (
-          <div className="alert alert-danger" role="alert">
-            The projectCompanyPhone must be at least with 8 numbers.
-          </div>
+        <div className="alert alert-danger" role="alert">
+          The projectCompanyPhone must be at least with 8 numbers.
+        </div>
       );
     }
   }
@@ -319,9 +322,9 @@ export default class ModifyAgreementByRSS extends Component {
 
     var requestc = new XMLHttpRequest();
     requestc.open(
-        "GET",
-        API_URL_MESP + "studentMailEsp/" + this.state.studentId,
-        false
+      "GET",
+      API_URL_MESP + "studentMailEsp/" + this.state.studentId,
+      false
     );
     requestc.send(null);
     this.state.mail = requestc.responseText;
@@ -342,9 +345,9 @@ export default class ModifyAgreementByRSS extends Component {
 
     var requestb = new XMLHttpRequest();
     requestb.open(
-        "GET",
-        API_URL_MESP + "conventionDto/" + this.state.studentId,
-        false
+      "GET",
+      API_URL_MESP + "conventionDto/" + this.state.studentId,
+      false
     ); // return axios.get(API_URL + 'user/' + code);
     requestb.send(null);
     this.state.convention = JSON.parse(requestb.responseText);
@@ -362,9 +365,9 @@ export default class ModifyAgreementByRSS extends Component {
 
     var requestfp = new XMLHttpRequest();
     requestfp.open(
-        "GET",
-        API_URL_STU + "fichePFEStatus/" + this.state.studentId,
-        false
+      "GET",
+      API_URL_STU + "fichePFEStatus/" + this.state.studentId,
+      false
     );//API_URL_FESP
     requestfp.send(null);
 
@@ -379,9 +382,9 @@ export default class ModifyAgreementByRSS extends Component {
     let strIntoObjComp = [];
     var requestComp = new XMLHttpRequest();
     requestComp.open(
-        "GET",
-        API_URL_MESP + "allCompanies",
-        false
+      "GET",
+      API_URL_MESP + "allCompanies",
+      false
     ); // `false` makes the request synchronous
     requestComp.send(null);
     strIntoObjComp = JSON.parse(requestComp.responseText);
@@ -438,9 +441,9 @@ export default class ModifyAgreementByRSS extends Component {
 
       let requestFS = new XMLHttpRequest();
       requestFS.open(
-          "GET",
-          API_URL_MESP + "sectors/" + compSector,
-          false
+        "GET",
+        API_URL_MESP + "sectors/" + compSector,
+        false
       ); // `false` makes the request synchronous
       requestFS.send(null);
 
@@ -458,9 +461,9 @@ export default class ModifyAgreementByRSS extends Component {
 
     var requestFS = new XMLHttpRequest();
     requestFS.open(
-        "GET",
-        API_URL_MESP + "pays/" + compPays,
-        false
+      "GET",
+      API_URL_MESP + "pays/" + compPays,
+      false
     ); // `false` makes the request synchronous
     requestFS.send(null);
     this.state.selectedProjectPays= JSON.parse(requestFS.responseText);
@@ -558,19 +561,19 @@ export default class ModifyAgreementByRSS extends Component {
     });
 
     StudentService.applyForCancelAgreement(this.state.studentId, encodeURIComponent(this.state.justifCancelAgreement)).then(
-        (response) => {
-          let result = response.data;
+      (response) => {
+        let result = response.data;
 
-          // console.log('-----------------------> Affect INSIDE');
+        // console.log('-----------------------> Affect INSIDE');
 
-          this.setState({
-            openPopupJustifyCancelAgreement: false,
-            openPopupSuccessCancelAgreement: true,
-            loadCancelAgreement: false
-          });
-        },
-        (error) => {
-        }
+        this.setState({
+          openPopupJustifyCancelAgreement: false,
+          openPopupSuccessCancelAgreement: true,
+          loadCancelAgreement: false
+        });
+      },
+      (error) => {
+      }
     );
   }
 
@@ -578,33 +581,33 @@ export default class ModifyAgreementByRSS extends Component {
 
     let companyLabel = selectedCompOption.label;
     AuthService.findCompanyByName(
-        encodeURIComponent(companyLabel)
+      encodeURIComponent(companyLabel)
     ).then(
-        (response) => {
+      (response) => {
 
-          let companyObject = response.data;
-          let loadedPhone = companyObject.telephone;
-          let loadedAddress = companyObject.address;
-          let loadedEntrepriseName = companyObject.designation;
+        let companyObject = response.data;
+        let loadedPhone = companyObject.telephone;
+        let loadedAddress = companyObject.address;
+        let loadedEntrepriseName = companyObject.designation;
 
-          if (loadedEntrepriseName === "") {
-            this.state.existEntreprise = "EMPTY";
-          }
-
-          if (loadedEntrepriseName !== "") {
-            this.state.existEntreprise = "FULL";
-          }
-
-          this.setState({
-            telephone: loadedPhone,
-            adresse: loadedAddress,
-            societe: loadedEntrepriseName,
-          });
-
-        },
-        (error) => {
-
+        if (loadedEntrepriseName === "") {
+          this.state.existEntreprise = "EMPTY";
         }
+
+        if (loadedEntrepriseName !== "") {
+          this.state.existEntreprise = "FULL";
+        }
+
+        this.setState({
+          telephone: loadedPhone,
+          adresse: loadedAddress,
+          societe: loadedEntrepriseName,
+        });
+
+      },
+      (error) => {
+
+      }
     );
 
   };
@@ -623,9 +626,9 @@ export default class ModifyAgreementByRSS extends Component {
     let labelSector = selectedSectorOption.label;
     let requestFS = new XMLHttpRequest();
     requestFS.open(
-        "GET",
-        API_URL_MESP + "sectors/" + labelSector,
-        false
+      "GET",
+      API_URL_MESP + "sectors/" + labelSector,
+      false
     ); // `false` makes the request synchronous
     requestFS.send(null);
 
@@ -670,9 +673,9 @@ export default class ModifyAgreementByRSS extends Component {
 
     var requestFS = new XMLHttpRequest();
     requestFS.open(
-        "GET",
-        API_URL_MESP + "pays/" + selectedPaysOption.label,
-        false
+      "GET",
+      API_URL_MESP + "pays/" + selectedPaysOption.label,
+      false
     ); // `false` makes the request synchronous
     requestFS.send(null);
 
@@ -695,10 +698,10 @@ export default class ModifyAgreementByRSS extends Component {
     let strIntoObjStates = [];
     var requestStates = new XMLHttpRequest();
     requestStates.open(
-        "GET",
-        API_URL_MESP + "pays/states/" +
-        this.state.selectedPays[finalIndex].value,
-        false
+      "GET",
+      API_URL_MESP + "pays/states/" +
+      this.state.selectedPays[finalIndex].value,
+      false
     ); // `false` makes the request synchronous
     requestStates.send(null);
     strIntoObjStates = JSON.parse(requestStates.responseText);
@@ -747,7 +750,7 @@ export default class ModifyAgreementByRSS extends Component {
   // lol2021
   addProjectCompany(e)
   {
-    // console.log('--------------------LOOL-----1----> PAYS 0: ',this.state.selectedProjectPays);
+    // console.log('----lol----------------LOOL-----1----> PAYS 0: ',this.state.selectedProjectPays);
 
     // console.log("REG ----------------------------- 1 --> " + this.state.projectCompanyName);
     // // console.log("REG ----------------------------- 2 --> " + this.state.projectCompanyPhone);
@@ -770,9 +773,9 @@ export default class ModifyAgreementByRSS extends Component {
     // console.log('---------30.10--------------------> PHONE NULL : ' + phone + " - " + this.state.projectCompanyPhone);
 
     if (
-        this.state.projectCompanyPhone.length < 11 ||
-        this.state.projectCompanyPhone === undefined ||
-        this.state.projectCompanyPhone.trim() === ""
+      this.state.projectCompanyPhone.length < 11 ||
+      this.state.projectCompanyPhone === undefined ||
+      this.state.projectCompanyPhone.trim() === ""
     ) {
       // console.log('------------30.10-----------------> PHONE NULL');
       this.state.phoneVerify = "EMPTY";
@@ -785,8 +788,8 @@ export default class ModifyAgreementByRSS extends Component {
     // console.log('-------------30.10----------------> PHONE NULL : ' + phone + " - " + this.state.projectCompanyPhone);
 
     if (
-        this.state.projectCompanyFax === undefined ||
-        this.state.projectCompanyFax.trim() === ""
+      this.state.projectCompanyFax === undefined ||
+      this.state.projectCompanyFax.trim() === ""
     ) {
       // console.log('-----------------------------> FAX NULL');
       fax = "--------";
@@ -800,7 +803,7 @@ export default class ModifyAgreementByRSS extends Component {
     // console.log('-----------------5mis---1---------> PAYS 2: ',this.state.companyPaysProject.value);
     // console.log('-----------------5mis---2---------> PAYS 2: ',this.state.selectedProjectPays.nomPays);
     if (
-        this.state.companyPaysProject.value === undefined
+      this.state.companyPaysProject.value === undefined
     ) {//lol2021
       // console.log('-----------------------------> PAYS NULL');
       this.state.companyPaysTBA = "EMPTY";
@@ -822,9 +825,9 @@ export default class ModifyAgreementByRSS extends Component {
       fullAddress = this.state.projectCompanyAddress;
     } else {
       fullAddress =
-          this.state.projectCompanyAddress +
-          ", " +
-          this.state.selectedState.value;
+        this.state.projectCompanyAddress +
+        ", " +
+        this.state.selectedState.value;
       this.state.projectCompanyAddress = fullAddress;
     }
 
@@ -891,43 +894,43 @@ export default class ModifyAgreementByRSS extends Component {
     // console.log('--------------------SECTOR-----FINAL----> PAYS 0: ', sector);
 
     if (
-        //this.state.projectCompanyNameVerify === "yes" &&
-        this.state.projectCompanyAddressVerify === "yes" &&
-        this.state.projectCompanyEmailVerify === "yes" &&
-        this.state.companyPaysTBA !== "EMPTY" &&
-        //this.state.duplicateCompany === "AUTHORIZED" &&
-        this.state.phoneVerify === "FILLED"
+      //this.state.projectCompanyNameVerify === "yes" &&
+      this.state.projectCompanyAddressVerify === "yes" &&
+      this.state.projectCompanyEmailVerify === "yes" &&
+      this.state.companyPaysTBA !== "EMPTY" &&
+      //this.state.duplicateCompany === "AUTHORIZED" &&
+      this.state.phoneVerify === "FILLED"
     ) {
       AuthService.modifyProjectCompany(
-          encodeURIComponent(this.state.projectCompanyName),
-          encodeURIComponent(fullAddress),
-          encodeURIComponent(this.state.projectCompanyEmail),
-          encodeURIComponent(phone),
-          encodeURIComponent(fax),
-          encodeURIComponent(this.state.selectedProjectPays.nomPays),
-          encodeURIComponent(sector),
-          encodeURIComponent(siegesocial)
+        encodeURIComponent(this.state.projectCompanyName),
+        encodeURIComponent(fullAddress),
+        encodeURIComponent(this.state.projectCompanyEmail),
+        encodeURIComponent(phone),
+        encodeURIComponent(fax),
+        encodeURIComponent(this.state.selectedProjectPays.nomPays),
+        encodeURIComponent(sector),
+        encodeURIComponent(siegesocial)
       ).then(
-          (response) => {
-            /*let compAddedList = this.state.allCompanies.slice(); //creates the clone of the state
-            const addedObj = {
-              value: response.data.idEntreprise,
-              label: response.data.designation,
-              color: "#00B8D9",
-            };
-            compAddedList.push(addedObj);*/
+        (response) => {
+          /*let compAddedList = this.state.allCompanies.slice(); //creates the clone of the state
+          const addedObj = {
+            value: response.data.idEntreprise,
+            label: response.data.designation,
+            color: "#00B8D9",
+          };
+          compAddedList.push(addedObj);*/
 
-            // // console.log('Add Project Company ------------- 1: ' + this.state.allCompanies.length);
-            this.setState({
-              //allCompanies: compAddedList,
-              showModalAddNewCompanySuccess: true,
-              selectedProjectSector: {},
-            });
-            // // console.log('Add Project Company ------------- 2: ' + this.state.allCompanies.length);
-          },
-          (error) => {
-            this.setState({successfulRNC: false});
-          }
+          // // console.log('Add Project Company ------------- 1: ' + this.state.allCompanies.length);
+          this.setState({
+            //allCompanies: compAddedList,
+            showModalAddNewCompanySuccess: true,
+            selectedProjectSector: {},
+          });
+          // // console.log('Add Project Company ------------- 2: ' + this.state.allCompanies.length);
+        },
+        (error) => {
+          this.setState({successfulRNC: false});
+        }
       );
     }
   }
@@ -954,7 +957,7 @@ export default class ModifyAgreementByRSS extends Component {
 
     // console.log('---------------------------> 1211: ', this.state.companySectorProject)
     /**---------- Recuperate Company Gov ----------**/
-        // Load list of States
+      // Load list of States
 
     let hello = "";
     if(this.state.companyPaysProject.value !== undefined)
@@ -981,10 +984,10 @@ export default class ModifyAgreementByRSS extends Component {
     let strIntoObjStates = [];
     var requestStates = new XMLHttpRequest();
     requestStates.open(
-        "GET",
-        API_URL_MESP + "pays/states/" +
-        hello,
-        false
+      "GET",
+      API_URL_MESP + "pays/states/" +
+      hello,
+      false
     ); // `false` makes the request synchronous
     requestStates.send(null);
     strIntoObjStates = JSON.parse(requestStates.responseText);
@@ -1038,7 +1041,7 @@ export default class ModifyAgreementByRSS extends Component {
     // console.log('----sars 1011---------- unit cls: ' , allCtrStates);
     // console.log('----sars 1011---------- unit cls: ' , this.state.allStates);
 
-   // this.state.companyGovProject = {value: compGov, label: compGov, color: "#00B8D9"};
+    // this.state.companyGovProject = {value: compGov, label: compGov, color: "#00B8D9"};
     // console.log('-------------------ESSID----> 0905 compPays a: ' , this.state.companyGovProject);
     // console.log('-------------------ESSID----> 0905 compPays z: ' , this.state.companyPaysProject);
 
@@ -1120,9 +1123,9 @@ export default class ModifyAgreementByRSS extends Component {
     let companiesLibs = [];
     var requestComp = new XMLHttpRequest();
     requestComp.open(
-        "GET",
-        API_URL_MESP + "allCompanies",
-        false
+      "GET",
+      API_URL_MESP + "allCompanies",
+      false
     ); // `false` makes the request synchronous
     requestComp.send(null);
     strIntoObjComp = JSON.parse(requestComp.responseText);
@@ -1297,7 +1300,7 @@ export default class ModifyAgreementByRSS extends Component {
 
     let stuId = sessionStorage.getItem("studentId");
     axios.get(
-        `${process.env.REACT_APP_API_URL}` + "serviceStage/gotConvUnit?idET=" + stuId + "&date=" + this.state.convention.dateConvention, {responseType: 'blob'}
+      `${process.env.REACT_APP_API_URL}` + "serviceStage/gotConvUnit?idET=" + stuId + "&date=" + this.state.convention.dateConvention, {responseType: 'blob'}
     ).then((response) => {
       //const filename =  response.headers.get('Content-Disposition').split('filename=')[1];
 
@@ -1382,9 +1385,9 @@ export default class ModifyAgreementByRSS extends Component {
     // console.log('**************************************** Verify 3.3.3: ' + this.state.verifyEmptyDateDebut);
 
     if (
-        this.checkBtnAddConvention.context._errors.length === 0 &&
-        this.state.verifyEmptyDateFin === "true" &&
-        this.state.verifyEmptyDateDebut === "true"
+      this.checkBtnAddConvention.context._errors.length === 0 &&
+      this.state.verifyEmptyDateFin === "true" &&
+      this.state.verifyEmptyDateDebut === "true"
     ) {
       // console.log('**************************************** Verify 3.4: ' + this.state.verifyEmptyDateFin);
       this.setState({
@@ -1411,47 +1414,47 @@ export default class ModifyAgreementByRSS extends Component {
     });
 
     AuthService.modifyConvention(
-        encodeURIComponent(this.state.mail),
-        this.state.dateDebut,
-        this.state.dateFin,
-        encodeURIComponent(this.state.societe),
-        encodeURIComponent(this.state.adresse),
-        encodeURIComponent(this.state.telephone),
-        encodeURIComponent(this.state.responsable)
+      encodeURIComponent(this.state.mail),
+      this.state.dateDebut,
+      this.state.dateFin,
+      encodeURIComponent(this.state.societe),
+      encodeURIComponent(this.state.adresse),
+      encodeURIComponent(this.state.telephone),
+      encodeURIComponent(this.state.responsable)
     ).then(
-        (response) => {
-          // console.log('======================== SUCCESS.');
-          this.setState({
-            message: "",
-            successful: false,
-            ok: false,
-            successConfirmAddConvention: true,
-            dateDebut: new Date(),
-            dateFin: null
-          });
+      (response) => {
+        // console.log('======================== SUCCESS.');
+        this.setState({
+          message: "",
+          successful: false,
+          ok: false,
+          successConfirmAddConvention: true,
+          dateDebut: new Date(),
+          dateFin: null
+        });
 
-          /******************************************************************************************************************/
-          /*var requestefp = new XMLHttpRequest();
-          requestefp.open(
-              "GET",
-              API_URL_RSS + "allConventionListForRSS",
-              false
-          );
-          requestefp.send(null);
-          this.state.allConvsRSS = JSON.parse(requestefp.responseText);*/
+        /******************************************************************************************************************/
+        /*var requestefp = new XMLHttpRequest();
+        requestefp.open(
+            "GET",
+            API_URL_RSS + "allConventionListForRSS",
+            false
+        );
+        requestefp.send(null);
+        this.state.allConvsRSS = JSON.parse(requestefp.responseText);*/
 
 
 
-          /******************************************************************************************************************/
-          this.props.history.push('/ConventionsValideesManagement');
-        },
-        (error) => {
-          // console.log('======================== FAIL.');
-          this.setState({
-            ok: false,
-            failConfirmAddConvention: true,
-          });
-        }
+        /******************************************************************************************************************/
+        this.props.history.push('/ConventionsValideesManagement');
+      },
+      (error) => {
+        // console.log('======================== FAIL.');
+        this.setState({
+          ok: false,
+          failConfirmAddConvention: true,
+        });
+      }
     );
   }
 
@@ -1493,12 +1496,12 @@ export default class ModifyAgreementByRSS extends Component {
     this.formUpdateConvention.validateAll();
 
     if (
-        (this.checkBtnUpdateConvention.context._errors.length === 0 &&
-            this.state.verifyEmptyDateFin === "true" &&
-            this.state.verifyEmptyDateDebut === "true") ||
-        (this.checkBtnUpdateConvention.context._errors.length === 0 &&
-            this.state.verifyEmptyDateFin === "init" &&
-            this.state.verifyEmptyDateDebut === "init")
+      (this.checkBtnUpdateConvention.context._errors.length === 0 &&
+        this.state.verifyEmptyDateFin === "true" &&
+        this.state.verifyEmptyDateDebut === "true") ||
+      (this.checkBtnUpdateConvention.context._errors.length === 0 &&
+        this.state.verifyEmptyDateFin === "init" &&
+        this.state.verifyEmptyDateDebut === "init")
     ) {
       this.setState({
         message: "",
@@ -1508,20 +1511,20 @@ export default class ModifyAgreementByRSS extends Component {
       // console.log("----------------------------- 3 --> " + this.state.telephone);
 
       AuthService.addConvention(
-          this.state.convention.mail,
-          this.state.dateDebut,
-          this.state.dateFin,
-          this.state.convention.nomSociete,
-          this.state.convention.address,
-          this.state.convention.telephone,
-          this.state.responsable
+        this.state.convention.mail,
+        this.state.dateDebut,
+        this.state.dateFin,
+        this.state.convention.nomSociete,
+        this.state.convention.address,
+        this.state.convention.telephone,
+        this.state.responsable
       ).then(
-          (response) => {
-            // console.log('UPDATE ======================== DONE');
-          },
-          (error) => {
-            // console.log('UPDATE ======================== ERROR');
-          }
+        (response) => {
+          // console.log('UPDATE ======================== DONE');
+        },
+        (error) => {
+          // console.log('UPDATE ======================== ERROR');
+        }
       );
     }
   }
@@ -1546,597 +1549,605 @@ export default class ModifyAgreementByRSS extends Component {
     } = this.state;
 
     return (
-        <>
+      <>
 
-          <br/>
-          <CRow>
-            <CCol xs="2"/>
-            <CCol xs="8">
-              <Form
-                  onSubmit={this.handleApplyForAddConvention}
-                  ref={(c) => {
-                    this.formAddConvention = c;
-                  }}
-              >
-                <CRow>
-                  <CCol md="3">
-                    <span className="convFieldLibelle">E-Mail : </span>
-                  </CCol>
-                  <CCol md="9">
-                    <Input
-                        type="text"
+        <br/>
+        <CRow>
+          <CCol xs="2"/>
+          <CCol xs="8">
+            <Form
+              onSubmit={this.handleApplyForAddConvention}
+              ref={(c) => {
+                this.formAddConvention = c;
+              }}
+            >
+              <CRow>
+                <CCol md="3">
+                  <span className="convFieldLibelle">E-Mail : </span>
+                </CCol>
+                <CCol md="9">
+                  <Input
+                    type="text"
+                    className="form-control"
+                    name="mail"
+                    disabled
+                    value={this.state.mail}
+                  />
+                </CCol>
+              </CRow>
+
+              <br/>
+              <CRow>
+                <CCol md="9">
+                  <CRow>
+                    <CCol md="4">
+                      <span className="convFieldLibelle">Date Début</span>
+                      <span className="requiredStar">&nbsp;(*) :</span>
+                    </CCol>
+                    <CCol md="8">
+                      <DatePicker
+                        selected={this.state.dateDebut}
+                        onChange={this.onChangeDateDebut}
+                        isClearable
+                        style={{marginLeft: "2000px"}}
                         className="form-control"
-                        name="mail"
-                        disabled
-                        value={this.state.mail}
-                    />
-                  </CCol>
-                </CRow>
+                        dateFormat="dd-MM-yyyy"/>
+                    </CCol>
+                  </CRow>
 
-                <br/>
-                <CRow>
-                  <CCol md="9">
-                    <CRow>
-                      <CCol md="4">
-                        <span className="convFieldLibelle">Date Début</span>
-                        <span className="requiredStar">&nbsp;(*) :</span>
-                      </CCol>
-                      <CCol md="8">
-                        <DatePicker
-                            selected={this.state.dateDebut}
-                            onChange={this.onChangeDateDebut}
-                            isClearable
-                            style={{marginLeft: "2000px"}}
-                            className="form-control"
-                            dateFormat="dd-MM-yyyy"/>
-                      </CCol>
-                    </CRow>
-
-                    <br/>
-                    <CRow>
-                      <CCol md="4">
-                        <span className="convFieldLibelle">Date Fin</span>
-                        <span className="requiredStar">&nbsp;(*) :</span>
-                      </CCol>
-                      <CCol md="8">
-                        <DatePicker
-                            selected={this.state.dateFin}
-                            onChange={this.onChangeDateFin}
-                            placeholderText=" --/--/--"
-                            isClearable
-                            className="form-control"
-                            dateFormat="dd-MM-yyyy"
-                            minDate={this.state.dateFourMonths}/>
-                        {this.state.verifyEmptyDateFin.trim() === "false" && (
-                            <div className="alert alert-danger" role="alert">
-                              This field is required !.
-                            </div>
-                        )}
-                      </CCol>
-                    </CRow>
-                  </CCol>
-                  <CCol md="3">
+                  <br/>
+                  <CRow>
+                    <CCol md="4">
+                      <span className="convFieldLibelle">Date Fin</span>
+                      <span className="requiredStar">&nbsp;(*) :</span>
+                    </CCol>
+                    <CCol md="8">
+                      <DatePicker
+                        selected={this.state.dateFin}
+                        onChange={this.onChangeDateFin}
+                        placeholderText=" --/--/--"
+                        isClearable
+                        className="form-control"
+                        dateFormat="dd-MM-yyyy"
+                        minDate={this.state.dateFourMonths}/>
+                      {this.state.verifyEmptyDateFin.trim() === "false" && (
+                        <div className="alert alert-danger" role="alert">
+                          This field is required !.
+                        </div>
+                      )}
+                    </CCol>
+                  </CRow>
+                </CCol>
+                <CCol md="3">
                       <span className="alertConvDuration">
                         Pour un cas exceptionnel, vous pouvez insérer une durée inférieure à 6 mois.
                       </span>
-                  </CCol>
-                </CRow>
+                </CCol>
+              </CRow>
 
-                <br/>
-                <CRow>
-                  <CCol md="3">
+              <br/>
+              <CRow>
+                <CCol md="3">
                       <span className="convFieldLibelle">
                           Libellé Entreprise
                         </span>
-                    <span className="requiredStar">&nbsp;(*) :</span>
-                  </CCol>
-                  <CCol md="9">
-                    <CRow>
-                      <CCol md="6">
+                  <span className="requiredStar">&nbsp;(*) :</span>
+                </CCol>
+                <CCol md="9">
+                  <CRow>
+                    <CCol md="6">
                           <span className="noteDivGrey">
                             Choisir l'Entreprise d'Accueil où vous passez votre Stage PFE.
                           </span>
-                        <hr/>
-                        <Select
-                            defaultValue={this.state.companyLibProject}
-                            value={this.state.allCompanies.value}
-                            components={animatedComponents}
-                            options={this.state.allCompanies}
-                            onChange={this.onChangeSelectProjectCompany}
-                            validations={[required]}
-                            isDisabled
-                        />
-                        {this.state.existEntreprise.trim() === "EMPTY" && (
-                            <div className="alert alert-danger" role="alert">
-                              This field is required !.
-                            </div>
-                        )}
-                      </CCol>
-                      <CCol md="6">
+                      <hr/>
+                      <Select
+                        defaultValue={this.state.companyLibProject}
+                        value={this.state.allCompanies.value}
+                        components={animatedComponents}
+                        options={this.state.allCompanies}
+                        onChange={this.onChangeSelectProjectCompany}
+                        validations={[required]}
+                        isDisabled
+                      />
+                      {this.state.existEntreprise.trim() === "EMPTY" && (
+                        <div className="alert alert-danger" role="alert">
+                          This field is required !.
+                        </div>
+                      )}
+                    </CCol>
+                    <CCol md="6">
                               <span className="noteDivGrey">
                                 Pour Mettre À Jour le Profil de cette Entreprise, Cliquez sur ce bouton :
                               </span>
-                        <br/>
-                        <hr/>
-                        <center>
-                          <Button variant="outlined"
-                                  onClick={() => this.openModalAddCompany()}
-                                  color="success" style={{fontSize: "10px"}}>
-                            Modifier Profil Entreprise
-                          </Button>
-                        </center>
-                      </CCol>
-                    </CRow>
-                  </CCol>
-                </CRow>
+                      <br/>
+                      <hr/>
+                      <center>
+                        <Button variant="outlined"
+                                onClick={() => this.openModalAddCompany()}
+                                color="success" style={{fontSize: "10px"}}>
+                          Modifier Profil Entreprise
+                        </Button>
+                      </center>
+                    </CCol>
+                  </CRow>
+                </CCol>
+              </CRow>
 
-                <br/>
-                <CRow>
-                  <CCol md="3">
+              <br/>
+              <CRow>
+                <CCol md="3">
                       <span className="convFieldLibelle">
                           Représentant Entrp.
                         </span>
-                    <span className="requiredStar">&nbsp;(*) :</span>
-                  </CCol>
-                  <CCol md="9">
-                    <Input
-                        type="text"
-                        className="form-control"
-                        name="responsable"
-                        value={this.state.responsable}
-                        onChange={this.onChangeResponsable}
-                        validations={[required, responsable]}/>
-                  </CCol>
-                </CRow>
+                  <span className="requiredStar">&nbsp;(*) :</span>
+                </CCol>
+                <CCol md="9">
+                  <Input
+                    type="text"
+                    className="form-control"
+                    name="responsable"
+                    value={this.state.responsable}
+                    onChange={this.onChangeResponsable}
+                    validations={[required, responsable]}/>
+                </CCol>
+              </CRow>
 
-                <br/>
-                <CRow>
-                  <CCol md="12">
-                    <div className="float-right">
-                      <button className="btn btn-danger">
-                        <span>Sauvegarder</span>
-                      </button>
-                    </div>
-                  </CCol>
-                </CRow>
-                <br/>
-
-
-                <CheckButton
-                    style={{display: "none"}}
-                    ref={(c) => {
-                      this.checkBtnAddConvention = c;
-                    }}
-                />
-              </Form>
               <br/>
-              {ok && (
-                  <Modal
-                      isOpen={ok}
-                      contentLabel="Example Modal"
-                      style={customStyles}
-                  >
-                    <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Confirmation</span>
-                    <hr/>
-                    <center>
-                      <br/>
-                      Êtes vous sûres de vouloir confirmer le(s) mise(s) à jour de cette Convention ?.
-                      <br/>
-                      <br/>
-                      <br/>
-                      {!this.state.loading &&
-                      <button className="btn btn-success"
-                              onClick={this.handleApplyForAddConvention1}>
-                        Yes
-                      </button>
-                      }
-
-                      {this.state.loading &&
-                      <Spinner animation="grow" variant="success"/>
-                      }
-
-                      &nbsp;&nbsp;&nbsp;
-                      {!this.state.loading &&
-                      <button className="btn btn-danger"
-                              onClick={this.closeModalOk}
-                              disabled={this.state.loading}>
-                        No
-                      </button>
-                      }
-                      <br/>
-                      <br/>
-                    </center>
-                  </Modal>
-              )}
-
-              {successConfirmAddConvention && (
-                  <Modal
-                      isOpen={successConfirmAddConvention}
-                      contentLabel="Example Modal"
-                      style={customStyles}
-                  >
-                    <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Confirmation</span>
-                    <hr/>
-                    <center>
-                      <br/>
-                      Mise(s) à jour effectuée(s) avec succès.
-                      <br/>
-                      <br/>
-
-                      <button
-                          className="btn btn-sm btn-primary"
-                          onClick={this.closeModalSuccessConfirmAddConvention}
-                      >
-                        Ok
-                      </button>
-
-                      <br/>
-                      <br/>
-                    </center>
-                  </Modal>
-              )}
-
-              {failConfirmAddConvention && (
-                  <Modal
-                      isOpen={failConfirmAddConvention}
-                      contentLabel="Example Modal"
-                      style={customStyles}
-                  >
-                    <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Confirmation</span>
-                    <hr/>
-                    <center>
-                      <br/>
-                      Erreur d'enregistrement !.
-                      <br/>
-                      <br/>
-                      Prière de verifier les données.
-                      <br/>
-                      <br/>
-                      <br/>
-                      <button
-                          className="btn btn-sm btn-primary"
-                          onClick={this.closeModalFailConfirmAddConvention}
-                      >
-                        {" "}
-                        Ok{" "}
-                      </button>
-                      <br/>
-                      <br/>
-                    </center>
-                  </Modal>
-              )}
-            </CCol>
-            <CCol xs="2"/>
-          </CRow>
-
-          <Dialog
-              fullHight
-              fullWidth
-              maxWidth="md"
-              open={this.state.showModalAddNewCompany}
-              onClose={this.closeModalAddCompany}
-              aria-labelledby="form-dialog-title"
-              PaperProps={{style: {overflowY: 'visible'}}}>
-            <DialogTitle id="form-dialog-title">
               <CRow>
-                <CCol>
+                <CCol md="12">
+                  <div className="float-right">
+                    {
+                      currentResponsableServiceStage.id.includes("IT") ? (
+                        <button className="btn btn-danger">
+                          <span>Sauvegarder</span>
+                        </button>
+                      ) : (
+                        <button disabled className="btn btn-danger">
+                          <span>Sauvegarder</span>
+                        </button>
+                      )
+                    }
+                  </div>
+                </CCol>
+              </CRow>
+              <br/>
+
+
+              <CheckButton
+                style={{display: "none"}}
+                ref={(c) => {
+                  this.checkBtnAddConvention = c;
+                }}
+              />
+            </Form>
+            <br/>
+            {ok && (
+              <Modal
+                isOpen={ok}
+                contentLabel="Example Modal"
+                style={customStyles}
+              >
+                <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Confirmation</span>
+                <hr/>
+                <center>
+                  <br/>
+                  Êtes vous sûres de vouloir confirmer le(s) mise(s) à jour de cette Convention ?.
+                  <br/>
+                  <br/>
+                  <br/>
+                  {!this.state.loading &&
+                    <button className="btn btn-success"
+                            onClick={this.handleApplyForAddConvention1}>
+                      Yes
+                    </button>
+                  }
+
+                  {this.state.loading &&
+                    <Spinner animation="grow" variant="success"/>
+                  }
+
+                  &nbsp;&nbsp;&nbsp;
+                  {!this.state.loading &&
+                    <button className="btn btn-danger"
+                            onClick={this.closeModalOk}
+                            disabled={this.state.loading}>
+                      No
+                    </button>
+                  }
+                  <br/>
+                  <br/>
+                </center>
+              </Modal>
+            )}
+
+            {successConfirmAddConvention && (
+              <Modal
+                isOpen={successConfirmAddConvention}
+                contentLabel="Example Modal"
+                style={customStyles}
+              >
+                <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Confirmation</span>
+                <hr/>
+                <center>
+                  <br/>
+                  Mise(s) à jour effectuée(s) avec succès.
+                  <br/>
+                  <br/>
+
+                  <button
+                    className="btn btn-sm btn-primary"
+                    onClick={this.closeModalSuccessConfirmAddConvention}
+                  >
+                    Ok
+                  </button>
+
+                  <br/>
+                  <br/>
+                </center>
+              </Modal>
+            )}
+
+            {failConfirmAddConvention && (
+              <Modal
+                isOpen={failConfirmAddConvention}
+                contentLabel="Example Modal"
+                style={customStyles}
+              >
+                <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Confirmation</span>
+                <hr/>
+                <center>
+                  <br/>
+                  Erreur d'enregistrement !.
+                  <br/>
+                  <br/>
+                  Prière de verifier les données.
+                  <br/>
+                  <br/>
+                  <br/>
+                  <button
+                    className="btn btn-sm btn-primary"
+                    onClick={this.closeModalFailConfirmAddConvention}
+                  >
+                    {" "}
+                    Ok{" "}
+                  </button>
+                  <br/>
+                  <br/>
+                </center>
+              </Modal>
+            )}
+          </CCol>
+          <CCol xs="2"/>
+        </CRow>
+
+        <Dialog
+          fullHight
+          fullWidth
+          maxWidth="md"
+          open={this.state.showModalAddNewCompany}
+          onClose={this.closeModalAddCompany}
+          aria-labelledby="form-dialog-title"
+          PaperProps={{style: {overflowY: 'visible'}}}>
+          <DialogTitle id="form-dialog-title">
+            <CRow>
+              <CCol>
                 <span className="float-left" style={{color: "#ff6600", fontSize: "15px", fontWeight: "bold"}}>
                   Mettre À Jour Profil Entreprise d'Accueil
                 </span>
 
-                  <Button className="float-right" onClick={this.closeModalAddCompany} color="primary">
-                    X
-                  </Button>
-                </CCol>
-              </CRow>
-              <hr/>
-            </DialogTitle>
-            <DialogContent style={{ overflowY: 'visible' }}>
-              <Form onSubmit={this.addProjectCompany}
-                    ref={(c) => {
-                      this.form = c;
-                    }}>
+                <Button className="float-right" onClick={this.closeModalAddCompany} color="primary">
+                  X
+                </Button>
+              </CCol>
+            </CRow>
+            <hr/>
+          </DialogTitle>
+          <DialogContent style={{ overflowY: 'visible' }}>
+            <Form onSubmit={this.addProjectCompany}
+                  ref={(c) => {
+                    this.form = c;
+                  }}>
 
-                <CRow>
-                  <CCol md="6">
-                    <Input
-                        type="text"
-                        className="form-control"
-                        name="projectCompanyName"
-                        placeholder="Nom Entreprise"
-                        value={this.state.projectCompanyName}
-                        onChange={this.onChangeProjectCompanyName}
-                        validations={[required, projectCompanyName]}
-                        disabled/>
-                    <br/>
-                    {duplicateCompany.trim() ===
-                    "NOTAUTHORIZED" && (
-                        <div>
-                          <p className="confirmPasswordsFail">
-                            This Label already exists. Please
-                            Return Back to select your Company.
-                          </p>
-                        </div>
-                    )}
-                  </CCol>
-                  <CCol md="6">
-                    <Select
-                        defaultValue={this.state.companySectorProject}
-                        placeholder="Secteur Entreprise"
-                        value={this.state.allSectors.value}
-                        components={animatedComponents}
-                        options={this.state.allSectors}
-                        onChange={this.onChangeSelectProjectSector}/>
-                  </CCol>
-                </CRow>
-
-                <br/>
-                <CRow>
-                  <CCol md="6">
-                    <Input
-                        type="text"
-                        className="form-control"
-                        name="projectCompanyEmail"
-                        placeholder="E-Mail Entreprise"
-                        value={this.state.projectCompanyEmail}
-                        onChange={this.onChangeProjectCompanyEmail}
-                        validations={[required, projectCompanyEmail]}
-                        maxLength="100"/>
-                  </CCol>
-                  <CCol md="6">
-                    <Input
-                        className="form-control"
-                        name="projectCompanySiegeSociale"
-                        placeholder="Siège Social Entreprise"
-                        value={this.state.projectCompanySiegeSociale}
-                        onChange={this.onChangeProjectCompanySiegeSociale}
-                        validations={[projectCompanySiegeSociale]}
-                        maxLength="50"/>
-                  </CCol>
-                </CRow>
-
-                <br/>
-                <CRow>
-                  <CCol md="5">
-                    <PhoneInput
-                        country={"tn"}
-                        name="telephone"
-                        placeholder="Téléphone Entreprise"
-                        value={this.state.projectCompanyPhone}
-                        onChange={(projectCompanyPhone) => this.setState({projectCompanyPhone})}
-                        validations={[projectCompanyPhone, projectCompanyPhoneMin]}/>
-                    {
-                      this.state.phoneVerify === "EMPTY" && this.state.projectCompanyPhone.length < 11 &&
-                      <div className="alert alert-danger" role="alert">
-                        This field is required !.
-                      </div>
-                    }
-                  </CCol>
-
-                  <CCol md="1">
-                    <CTooltip content="Saisir le numéro de Téléphone de votre Entreprise" placement="right-end">
-                      <PhoneEnabledIcon style={{color: "#ff6600"}}/>
-                    </CTooltip>
-                  </CCol>
-                  <CCol md="6">
-                    <Input
-                        type="text"
-                        className="form-control"
-                        name="projectCompanyAddress"
-                        placeholder="Adresse Entreprise"
-                        value={this.state.projectCompanyAddress}
-                        onChange={this.onChangeProjectCompanyAddress}
-                        validations={[required, projectCompanyAddress]}
-                        maxLength="150"/>
-                  </CCol>
-                </CRow>
-
-                <br/>
-                <CRow>
-                  <CCol md="5">
-                    <PhoneInput
-                        country={"tn"}
-                        name="projectCompanyFax"
-                        placeholder="Company Fax"
-                        value={this.state.projectCompanyFax}
-                        onChange={(projectCompanyFax) => this.setState({projectCompanyFax})}
-                        validations={[projectCompanyFax, projectCompanyFaxMin]}/>
-                  </CCol>
-                  <CCol md="1">
-                    <CTooltip content="Saisir le numéro de Fax de votre Entreprise" placement="right-end">
-                      <PrintIcon style={{color: "#ff6600"}}/>
-                    </CTooltip>
-                  </CCol>
-                  <CCol md="6">
-                    <Select
-                        defaultValue={this.state.companyPaysProject}
-                        placeholder="Pays Entreprise"
-                        value={this.state.allPays.value}
-                        components={animatedComponents}
-                        options={this.state.allPays}
-                        onChange={this.onChangeSelectProjectPays}
-                    />
-                    {this.state.companyPaysTBA === "EMPTY" && (
-                        <div className="alert alert-danger" role="alert">
-                          This field is required !.
-                        </div>
-                    )}
-
-                    {
-                      (this.state.selectedPays.length !== 0 || this.state.companyPaysProject !== "")&&
-                        <>
-                          <br/>
-                          <Select
-                              defaultValue={this.state.companyGovProject}
-                              placeholder="Gouvernorat Entreprise"
-                              value={this.state.allStates.value}
-                              components={animatedComponents}
-                              options={this.state.allStates}
-                              onChange={this.onChangeSelectProjectStates}
-                              />
-                        </>
-
-                    }
-                  </CCol>
-                </CRow>
-
-                <br/><br/>
-                <CRow>
-                  <CCol md="12">
-                    <div className="float-right">
-                      <button className="btn btn-warning">
-                        <span>Confirmer</span>
-                      </button>
-                    </div>
-                  </CCol>
-                </CRow>
-                <br/>
-              </Form>
-            </DialogContent>
-          </Dialog>
-
-          <Dialog
-              fullHight
-              fullWidth
-              maxWidth="sm"
-              open={this.state.showModalAddNewCompanySuccess}
-              onClose={this.closeModalAddCompany}
-              aria-labelledby="form-dialog-title">
-            <DialogTitle id="form-dialog-title">
-              <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Confirmation</span>
-              <hr/>
-            </DialogTitle>
-            <DialogContent>
               <CRow>
-                <CCol xs="12">
-                  <center>
-                    <br/>
-                    Le profil de votre Entreprise d'Accueil a été ajouté avec succès.
-                    <br/>
-                    Vous allez le trouver dans la liste des Entreprises.
-                    <br/><br/><br/>
-                  </center>
+                <CCol md="6">
+                  <Input
+                    type="text"
+                    className="form-control"
+                    name="projectCompanyName"
+                    placeholder="Nom Entreprise"
+                    value={this.state.projectCompanyName}
+                    onChange={this.onChangeProjectCompanyName}
+                    validations={[required, projectCompanyName]}
+                    disabled/>
+                  <br/>
+                  {duplicateCompany.trim() ===
+                    "NOTAUTHORIZED" && (
+                      <div>
+                        <p className="confirmPasswordsFail">
+                          This Label already exists. Please
+                          Return Back to select your Company.
+                        </p>
+                      </div>
+                    )}
+                </CCol>
+                <CCol md="6">
+                  <Select
+                    defaultValue={this.state.companySectorProject}
+                    placeholder="Secteur Entreprise"
+                    value={this.state.allSectors.value}
+                    components={animatedComponents}
+                    options={this.state.allSectors}
+                    onChange={this.onChangeSelectProjectSector}/>
                 </CCol>
               </CRow>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={this.closeModalAddCompany}
-                      color="primary">
-                Ok
-              </Button>
-            </DialogActions>
-          </Dialog>
 
-          <Dialog fullHight fullWidth
-                  maxWidth="sm"
-                  keepMounted
-                  open={openPopupJustifyCancelAgreement}
-                  onClose={this.handleClosePopupJustifyDeleteAffectation}
-                  aria-labelledby="form-dialog-title"
-                  classes={{paper: dialogStyles.dialogPaper}}>
-            <DialogTitle id="form-dialog-title">
-              <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Confirmation</span>
-              <hr/>
-            </DialogTitle>
-            <DialogContent>
-              <center>
-                Êtes-Vous sûr de vouloir demander une annulation de votre Convention Actuelle ?.
-                <br/><br/><br/>
+              <br/>
+              <CRow>
+                <CCol md="6">
+                  <Input
+                    type="text"
+                    className="form-control"
+                    name="projectCompanyEmail"
+                    placeholder="E-Mail Entreprise"
+                    value={this.state.projectCompanyEmail}
+                    onChange={this.onChangeProjectCompanyEmail}
+                    validations={[required, projectCompanyEmail]}
+                    maxLength="100"/>
+                </CCol>
+                <CCol md="6">
+                  <Input
+                    className="form-control"
+                    name="projectCompanySiegeSociale"
+                    placeholder="Siège Social Entreprise"
+                    value={this.state.projectCompanySiegeSociale}
+                    onChange={this.onChangeProjectCompanySiegeSociale}
+                    validations={[projectCompanySiegeSociale]}
+                    maxLength="50"/>
+                </CCol>
+              </CRow>
 
-                <br/><br/>
-                <CRow>
-                  <CCol md="3">
-                    <span className="greyMark">Mail Encadrant Entreprise (*)</span>:
-                  </CCol>
-                  <CCol md="9">
-                    <input  type="text"
-                            placeholder="Présenter le Mail Encadrant Entreprise"
-                            className="form-control"
-                            value={mailEncadrantEntreprise}
-                            onChange={this.onChangeSupervisorCompanyEmail}
-                            maxLength="100"/>
-                    {
-                      mailEncadrantEntrepriseVerify === "no" &&
-                      <div className="alert alert-danger" role="alert">
-                        It is not a valid Supervisor Company E-Mail form.
-                      </div>
-                    }
-                  </CCol>
-                </CRow>
-                <br/>
-                <CRow>
-                  <CCol md="3">
-                    <span className="greyMark">Motif Annulation (*)</span>:
-                  </CCol>
-                  <CCol md="9">
+              <br/>
+              <CRow>
+                <CCol md="5">
+                  <PhoneInput
+                    country={"tn"}
+                    name="telephone"
+                    placeholder="Téléphone Entreprise"
+                    value={this.state.projectCompanyPhone}
+                    onChange={(projectCompanyPhone) => this.setState({projectCompanyPhone})}
+                    validations={[projectCompanyPhone, projectCompanyPhoneMin]}/>
+                  {
+                    this.state.phoneVerify === "EMPTY" && this.state.projectCompanyPhone.length < 11 &&
+                    <div className="alert alert-danger" role="alert">
+                      This field is required !.
+                    </div>
+                  }
+                </CCol>
+
+                <CCol md="1">
+                  <CTooltip content="Saisir le numéro de Téléphone de votre Entreprise" placement="right-end">
+                    <PhoneEnabledIcon style={{color: "#ff6600"}}/>
+                  </CTooltip>
+                </CCol>
+                <CCol md="6">
+                  <Input
+                    type="text"
+                    className="form-control"
+                    name="projectCompanyAddress"
+                    placeholder="Adresse Entreprise"
+                    value={this.state.projectCompanyAddress}
+                    onChange={this.onChangeProjectCompanyAddress}
+                    validations={[required, projectCompanyAddress]}
+                    maxLength="150"/>
+                </CCol>
+              </CRow>
+
+              <br/>
+              <CRow>
+                <CCol md="5">
+                  <PhoneInput
+                    country={"tn"}
+                    name="projectCompanyFax"
+                    placeholder="Company Fax"
+                    value={this.state.projectCompanyFax}
+                    onChange={(projectCompanyFax) => this.setState({projectCompanyFax})}
+                    validations={[projectCompanyFax, projectCompanyFaxMin]}/>
+                </CCol>
+                <CCol md="1">
+                  <CTooltip content="Saisir le numéro de Fax de votre Entreprise" placement="right-end">
+                    <PrintIcon style={{color: "#ff6600"}}/>
+                  </CTooltip>
+                </CCol>
+                <CCol md="6">
+                  <Select
+                    defaultValue={this.state.companyPaysProject}
+                    placeholder="Pays Entreprise"
+                    value={this.state.allPays.value}
+                    components={animatedComponents}
+                    options={this.state.allPays}
+                    onChange={this.onChangeSelectProjectPays}
+                  />
+                  {this.state.companyPaysTBA === "EMPTY" && (
+                    <div className="alert alert-danger" role="alert">
+                      This field is required !.
+                    </div>
+                  )}
+
+                  {
+                    (this.state.selectedPays.length !== 0 || this.state.companyPaysProject !== "")&&
+                    <>
+                      <br/>
+                      <Select
+                        defaultValue={this.state.companyGovProject}
+                        placeholder="Gouvernorat Entreprise"
+                        value={this.state.allStates.value}
+                        components={animatedComponents}
+                        options={this.state.allStates}
+                        onChange={this.onChangeSelectProjectStates}
+                      />
+                    </>
+
+                  }
+                </CCol>
+              </CRow>
+
+              <br/><br/>
+              <CRow>
+                <CCol md="12">
+                  <div className="float-right">
+                    <button className="btn btn-warning">
+                      <span>Confirmer</span>
+                    </button>
+                  </div>
+                </CCol>
+              </CRow>
+              <br/>
+            </Form>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog
+          fullHight
+          fullWidth
+          maxWidth="sm"
+          open={this.state.showModalAddNewCompanySuccess}
+          onClose={this.closeModalAddCompany}
+          aria-labelledby="form-dialog-title">
+          <DialogTitle id="form-dialog-title">
+            <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Confirmation</span>
+            <hr/>
+          </DialogTitle>
+          <DialogContent>
+            <CRow>
+              <CCol xs="12">
+                <center>
+                  <br/>
+                  Le profil de votre Entreprise d'Accueil a été ajouté avec succès.
+                  <br/>
+                  Vous allez le trouver dans la liste des Entreprises.
+                  <br/><br/><br/>
+                </center>
+              </CCol>
+            </CRow>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.closeModalAddCompany}
+                    color="primary">
+              Ok
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        <Dialog fullHight fullWidth
+                maxWidth="sm"
+                keepMounted
+                open={openPopupJustifyCancelAgreement}
+                onClose={this.handleClosePopupJustifyDeleteAffectation}
+                aria-labelledby="form-dialog-title"
+                classes={{paper: dialogStyles.dialogPaper}}>
+          <DialogTitle id="form-dialog-title">
+            <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Confirmation</span>
+            <hr/>
+          </DialogTitle>
+          <DialogContent>
+            <center>
+              Êtes-Vous sûr de vouloir demander une annulation de votre Convention Actuelle ?.
+              <br/><br/><br/>
+
+              <br/><br/>
+              <CRow>
+                <CCol md="3">
+                  <span className="greyMark">Mail Encadrant Entreprise (*)</span>:
+                </CCol>
+                <CCol md="9">
+                  <input  type="text"
+                          placeholder="Présenter le Mail Encadrant Entreprise"
+                          className="form-control"
+                          value={mailEncadrantEntreprise}
+                          onChange={this.onChangeSupervisorCompanyEmail}
+                          maxLength="100"/>
+                  {
+                    mailEncadrantEntrepriseVerify === "no" &&
+                    <div className="alert alert-danger" role="alert">
+                      It is not a valid Supervisor Company E-Mail form.
+                    </div>
+                  }
+                </CCol>
+              </CRow>
+              <br/>
+              <CRow>
+                <CCol md="3">
+                  <span className="greyMark">Motif Annulation (*)</span>:
+                </CCol>
+                <CCol md="9">
                     <textarea className="form-control"
                               style={{height: 75}}
                               placeholder="Présenter le Motif d'Annulation de votre Convention ..."
                               value={justifCancelAgreement}
                               onChange={(e) => this.onChangeJustifCancelAffectation(e)}
                               maxLength="200"/>
-                  </CCol>
-                </CRow>
+                </CCol>
+              </CRow>
 
-                <br/><br/><br/>
-                <span style={{color: "#cc0000", fontSize: "11px", fontStyle: "italic"}}>
+              <br/><br/><br/>
+              <span style={{color: "#cc0000", fontSize: "11px", fontStyle: "italic"}}>
                    Après validation de votre part, la demande d'Annulation de votre Convention devra être acceptée par votre Entreprise.
                    <br/>
                    Un mail parviendra à votre Encadrant Professionnel lui demandant d'accepter cette demande.
                    <br/>
                    Sans son accord, votre Convention ne pourra être annulée.
                 </span>
-                <br/><br/>
-              </center>
-            </DialogContent>
-            <DialogActions>
-              {
-                !loadCancelAgreement &&
-                <Button onClick={this.handleCancelAgreement} disabled={justifCancelAgreement.length === 0 || mailEncadrantEntrepriseVerify === "no"}
-                        color="primary">
-                  Confirmer l'Annulation
-                </Button>
-              }
-              {
-                loadCancelAgreement &&
-                <Spinner animation="grow" variant="secondary"/>
-              }
-              &nbsp;&nbsp;
-              <Button onClick={this.handleClosePopupJustifyDeleteAffectation} color="primary">
-                Exit
+              <br/><br/>
+            </center>
+          </DialogContent>
+          <DialogActions>
+            {
+              !loadCancelAgreement &&
+              <Button onClick={this.handleCancelAgreement} disabled={justifCancelAgreement.length === 0 || mailEncadrantEntrepriseVerify === "no"}
+                      color="primary">
+                Confirmer l'Annulation
               </Button>
-            </DialogActions>
-          </Dialog>
+            }
+            {
+              loadCancelAgreement &&
+              <Spinner animation="grow" variant="secondary"/>
+            }
+            &nbsp;&nbsp;
+            <Button onClick={this.handleClosePopupJustifyDeleteAffectation} color="primary">
+              Exit
+            </Button>
+          </DialogActions>
+        </Dialog>
 
-          <Dialog fullHight fullWidth
-                  maxWidth="sm"
-                  keepMounted
-                  open={openPopupSuccessCancelAgreement}
-                  onClose={this.handleClosePopupCancelAgreement}
-                  aria-labelledby="form-dialog-title">
-            <DialogTitle id="form-dialog-title">
-              <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Information</span>
-              <hr/>
-            </DialogTitle>
-            <DialogContent>
-              <center>
-                Votre convention &nbsp;
-                <span className="greyMarkCourrier">a été annulée</span>&nbsp;
-                avec succès avec le motif <span className="greyMarkCourrier">{justifCancelAgreement}</span> .
-                <br/><br/>
-              </center>
-            </DialogContent>
-            <DialogActions>
-              <Link to={"/synopsisAndNews"}>
-                <button className="btn btn-sm btn-secondary"
-                        onClick={this.handleClosePopupCancelAgreement}>
-                  EXIT
-                </button>
-              </Link>
-            </DialogActions>
-          </Dialog>
-          <br/><br/><br/><br/>
-        </>
+        <Dialog fullHight fullWidth
+                maxWidth="sm"
+                keepMounted
+                open={openPopupSuccessCancelAgreement}
+                onClose={this.handleClosePopupCancelAgreement}
+                aria-labelledby="form-dialog-title">
+          <DialogTitle id="form-dialog-title">
+            <span className="warningIcon">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Information</span>
+            <hr/>
+          </DialogTitle>
+          <DialogContent>
+            <center>
+              Votre convention &nbsp;
+              <span className="greyMarkCourrier">a été annulée</span>&nbsp;
+              avec succès avec le motif <span className="greyMarkCourrier">{justifCancelAgreement}</span> .
+              <br/><br/>
+            </center>
+          </DialogContent>
+          <DialogActions>
+            <Link to={"/synopsisAndNews"}>
+              <button className="btn btn-sm btn-secondary"
+                      onClick={this.handleClosePopupCancelAgreement}>
+                EXIT
+              </button>
+            </Link>
+          </DialogActions>
+        </Dialog>
+        <br/><br/><br/><br/>
+      </>
     );
   }
 }
