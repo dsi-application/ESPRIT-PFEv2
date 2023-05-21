@@ -35,6 +35,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import com.esprit.gdp.dto.*;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,20 +43,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.esprit.gdp.dto.BinomeIdFullNameDto;
-import com.esprit.gdp.dto.FichePFETitreProjetLabelCompanyDto;
-import com.esprit.gdp.dto.StudentAffectationDetailsDto;
-import com.esprit.gdp.dto.StudentConfigDto;
-import com.esprit.gdp.dto.StudentConvFRDto;
-import com.esprit.gdp.dto.StudentDemandeStageDto;
-import com.esprit.gdp.dto.StudentDto;
-import com.esprit.gdp.dto.StudentExcelDto;
-import com.esprit.gdp.dto.StudentFullNameMailTelDto;
-import com.esprit.gdp.dto.StudentGrilleAcademicEncadrantDto;
-import com.esprit.gdp.dto.StudentJustificatifStageDto;
-import com.esprit.gdp.dto.StudentMailTelDto;
-import com.esprit.gdp.dto.StudentMandatoryInternshipDto;
-import com.esprit.gdp.dto.TeacherEncadrantPedaDto;
 import com.esprit.gdp.models.PedagogicalCoordinator;
 import com.esprit.gdp.models.ResponsableServiceStage;
 import com.esprit.gdp.models.StudentCJ;
@@ -1191,6 +1178,57 @@ public class UtilServices {
 		}
 
 		return students;
+	}
+
+	public List<ConventionForRSSDto> findDemandesAnnulationConventionsByYear(String year)
+	{
+
+		List<ConventionForRSSDto> demandesAnnulationConventions = new ArrayList<ConventionForRSSDto>();
+		System.out.println("---------------------------------------------------> year: " + year);
+
+		List<ConventionForRSSDto> demandesAnnulationConventionsCJ = optionRepository.findStudentsCJWithDemandesAnnulationsConventionsByYear(year);
+		List<ConventionForRSSDto> demandesAnnulationConventionsALT = optionRepository.findStudentsALTWithDemandesAnnulationsConventionsByYear(year);
+		List<ConventionForRSSDto> demandesAnnulationConventionsCS = optionRepository.findStudentsCSWithDemandesAnnulationsConventionsByYear(year);
+
+		System.out.println("----------------------------------> Student CJ: " + demandesAnnulationConventionsCJ.size());
+		System.out.println("----------------------------------> Student ALT: " + demandesAnnulationConventionsALT.size());
+		System.out.println("----------------------------------> Student CS: " + demandesAnnulationConventionsCS.size());
+
+		if(!demandesAnnulationConventionsCJ.isEmpty())
+		{
+			demandesAnnulationConventions.addAll(demandesAnnulationConventionsCJ);
+		}
+		if(!demandesAnnulationConventionsALT.isEmpty())
+		{
+			demandesAnnulationConventions.addAll(demandesAnnulationConventionsALT);
+		}
+		if(!demandesAnnulationConventionsCS.isEmpty())
+		{
+			demandesAnnulationConventions.addAll(demandesAnnulationConventionsCS);
+		}
+
+		for(ConventionForRSSDto c : demandesAnnulationConventions)
+		{
+			// System.out.println("--------------------------> DATE: " + c.getDateConvention());
+			String idEt = c.getIdEt();
+			String classe = findCurrentClassByIdEt(idEt);
+
+			String convCodePays = c.getPaysConvention();
+			if(convCodePays.equalsIgnoreCase("--"))
+			{
+				c.setPaysConvention("EN");
+			}
+			else
+			{
+				c.setPaysConvention(convCodePays);
+			}
+
+			c.setNomEt(findStudentFullNameById(idEt));
+			c.setDepartEt(findDepartmentAbbByClassWithStat(classe));
+			c.setCurrentClasse(classe);
+		}
+
+		return demandesAnnulationConventions;
 	}
 
 	public List<String> findStudentsByYearAndOption(String year, String option)

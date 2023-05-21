@@ -543,4 +543,28 @@ public class ResponsableServiceStageController {
 
 	}
 
+	@PutMapping(value = "/allDemandesAnnulationsConventionsListByOptionForRSS")
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<List<ConventionForRSSDto>> getDemandesAnnulationsConventionsListDto(@RequestParam("idRSS") String idRSS, @RequestParam("yearLabel") String yearLabel)
+	{
+		System.out.println("--------------PRIM : " + idRSS + " : " + yearLabel);
+
+		try
+		{
+			List<ConventionForRSSDto> conventionList = utilServices.findDemandesAnnulationConventionsByYear(yearLabel);
+			// List<ConventionsValidatedForRSSDto> ConventionList = serviceStageService.getAllConventionsValidatedDtoByRSS(idRSS, idMonth);
+
+			if (conventionList.isEmpty())
+			{
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+			return new ResponseEntity<>(conventionList, HttpStatus.OK);
+		}
+		catch (Exception e)
+		{
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+
 }

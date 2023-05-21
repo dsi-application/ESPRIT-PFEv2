@@ -2,6 +2,7 @@ package com.esprit.gdp.repository;
 
 import java.util.List;
 
+import com.esprit.gdp.dto.ConventionForRSSDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -128,6 +129,32 @@ public interface OptionRepository extends JpaRepository<Option, OptionPK>
 
 	@Query("select distinct o.id.codeOption from Option o where o.id.anneeDeb in ('2021', '2022')")
 	List<String> allOptionsForActivatedYears();
-	
-	
+
+
+	@Query(value="SELECT new com.esprit.gdp.dto.ConventionForRSSDto(FUNCTION('to_char', c.conventionPK.dateConvention,'dd-mm-yyyy HH24:MI:SS'), c.dateDebut, c.dateFin, c.conventionPK.idEt, c.entrepriseAccueilConvention.pays.langueCode, c.traiter, c.pathConvention, c.entrepriseAccueilConvention) " +
+			"from Convention c, InscriptionCJ y " +
+			"where c.conventionPK.idEt = y.id.idEt " +
+			"and y.saisonClasse.id.codeCl like '5%'" +
+			"and c.traiter in ('03', '04') " +
+			"and y.id.anneeDeb =?1 " +
+			"order by c.conventionPK.dateConvention desc")
+	List<ConventionForRSSDto> findStudentsCJWithDemandesAnnulationsConventionsByYear(String year);
+
+	@Query(value="SELECT new com.esprit.gdp.dto.ConventionForRSSDto(FUNCTION('to_char', c.conventionPK.dateConvention,'dd-mm-yyyy HH24:MI:SS'), c.dateDebut, c.dateFin, c.conventionPK.idEt, c.entrepriseAccueilConvention.pays.langueCode, c.traiter, c.pathConvention, c.entrepriseAccueilConvention) " +
+			"from Convention c, OptionStudentALT o " +
+			"where c.conventionPK.idEt = o.idOptStuALT.idEt " +
+			"and c.traiter in ('03', '04') " +
+			"and o.idOptStuALT.anneeDeb =?1 " +
+			"order by c.conventionPK.dateConvention desc")
+	List<ConventionForRSSDto> findStudentsALTWithDemandesAnnulationsConventionsByYear(String year);
+
+	@Query(value="SELECT new com.esprit.gdp.dto.ConventionForRSSDto(FUNCTION('to_char', c.conventionPK.dateConvention,'dd-mm-yyyy HH24:MI:SS'), c.dateDebut, c.dateFin, c.conventionPK.idEt, c.entrepriseAccueilConvention.pays.langueCode, c.traiter, c.pathConvention, c.entrepriseAccueilConvention) " +
+			"from Convention c, InscriptionCS y " +
+			"where c.conventionPK.idEt = y.id.idEt " +
+			"and y.saisonClasse.id.codeCl like '4%'" +
+			"and c.traiter in ('03', '04') " +
+			"and y.id.anneeDeb =?1 " +
+			"order by c.conventionPK.dateConvention desc")
+	List<ConventionForRSSDto> findStudentsCSWithDemandesAnnulationsConventionsByYear(String year);
+
 }
