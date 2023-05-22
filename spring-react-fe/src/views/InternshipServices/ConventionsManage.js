@@ -14,26 +14,26 @@ import {
 
 import axios from "axios";
 import moment from "moment";
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import React, {useState, useEffect} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {Link} from "react-router-dom";
 import {
   fetchConventionsForRSS,
   selectConventions, selectConventionsForRSS,
   selectNbrDemandesAnnulationConvention, selectNbrDemandesAnnulationConventionNotTreated,
   selectNbrDepositedConventions, selectNbrValidatedConventions
 } from "../../redux/slices/ConventionSlice";
-import { selectConvention } from "../../redux/slices/ConventionSlice";
+import {selectConvention} from "../../redux/slices/ConventionSlice";
 import MUIDataTable from "mui-datatables";
 import "moment/locale/fr";
-import { getEtudiant } from "../../redux/slices/FichePFESlice";
+import {getEtudiant} from "../../redux/slices/FichePFESlice";
 import Tour from "reactour";
 import LocalLibrary from "@material-ui/icons/LocalLibrary";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import Text from "antd/lib/typography/Text";
-import { createMuiTheme } from "@material-ui/core";
-import { MuiThemeProvider } from "@material-ui/core";
+import {createMuiTheme} from "@material-ui/core";
+import {MuiThemeProvider} from "@material-ui/core";
 import TheSidebar from "../../containers/TheSidebar";
 import {
   fetchActiveStudentTimelineStep,
@@ -115,7 +115,7 @@ const ConventionsManage = () => {
   const [tableBodyMaxHeight, setTableBodyMaxHeight] = useState("");
   const [studentId, setStudentId] = useState(sessionStorage.getItem("studentId"));
   const [showLoader, setShowLoader] = useState(false);
-  const [error, setError] = useState({ visible: false, message: "" });
+  const [error, setError] = useState({visible: false, message: ""});
   const [danger, setDanger] = useState(false);
   const [allOpts, setAllOpts] = useState([]);
 
@@ -325,13 +325,13 @@ const ConventionsManage = () => {
         `${process.env.REACT_APP_API_URL}` +
         "encadrement/downloadFD/" + p.idEt + "/" + p.dateConvention,
 
-        { responseType: "blob" }
+        {responseType: "blob"}
       )
       .then((response) => {
         //const filename =  response.headers.get('Content-Disposition').split('filename=')[1];
         let pathConv = p.pathConvention;
 
-        const file = new Blob([response.data], { type: "application/pdf" });
+        const file = new Blob([response.data], {type: "application/pdf"});
         let url = window.URL.createObjectURL(file);
 
         let a = document.createElement("a");
@@ -349,7 +349,9 @@ const ConventionsManage = () => {
         <CButton variant="outline"
                  color="danger"
                  size="sm"
-                 onClick={() => {Download(c);}}>
+                 onClick={() => {
+                   Download(c);
+                 }}>
           <CTooltip content="Télécharger Convention">
             <CIcon name="cil-save"></CIcon>
           </CTooltip>
@@ -439,7 +441,8 @@ const ConventionsManage = () => {
 
   return (
     <>
-      <TheSidebar dataDAC={nbDemandesAnnulationConvention} dataDC={nbDepositedConventions} dataVC={nbValidatedConventions}/>
+      <TheSidebar dataDAC={nbDemandesAnnulationConvention} dataDC={nbDepositedConventions}
+                  dataVC={nbValidatedConventions}/>
 
       <Tour
         steps={steps}
@@ -454,7 +457,7 @@ const ConventionsManage = () => {
             <CCol md="12">
               <center>
                 <br/><br/>
-                <span className="waitIcon" />
+                <span className="waitIcon"/>
                 <br></br>
               </center>
             </CCol>
@@ -465,16 +468,6 @@ const ConventionsManage = () => {
           <CRow>
             <CCol>
               <CCard data-tut="reactour__1">
-                <CRow>
-                  <CCol xs="12">
-                    <br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <span style={{color: "#b30000", fontSize: "14px", fontWeight: "bold"}}>
-                      Liste des Conventions</span>
-                  </CCol>
-                </CRow>
-                <br/>
-
                 <CRow>
                   <CCol md="3"/>
                   <CCol md="6">
@@ -489,14 +482,14 @@ const ConventionsManage = () => {
                       <CFormGroup row>
                         <CCol md="1"/>
                         <CCol md="10">
-                          <CSelect  value={formik.values.yearLabel}
-                                    onChange={formik.handleChange}
+                          <CSelect value={formik.values.yearLabel}
+                                   onChange={formik.handleChange}
                             //onSelect={gotAllOptionsByPromotion(formik.values.yearLabel)}
-                                    onBlur={formik.handleBlur}
-                                    custom
-                                    size="sm"
-                                    name="yearLabel">
-                            <option style={{ display: "none" }}>
+                                   onBlur={formik.handleBlur}
+                                   custom
+                                   size="sm"
+                                   name="yearLabel">
+                            <option style={{display: "none"}}>
                               ---- Choisir une Promotion ----
                             </option>
                             {formik.values.allYears?.map((e, i) => (
@@ -507,22 +500,22 @@ const ConventionsManage = () => {
                           </CSelect>
                           {
                             formik.errors.yearLabel && formik.touched.yearLabel &&
-                            <p style={{ color: "red" }}>{formik.errors.yearLabel}</p>
+                            <p style={{color: "red"}}>{formik.errors.yearLabel}</p>
                           }
-                          <br />
+                          <br/>
                         </CCol>
                         <CCol md="1"/>
                       </CFormGroup>
                       <CFormGroup row>
                         <CCol md="1"/>
                         <CCol md="10">
-                          <CSelect  value={formik.values.optionLabel}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    custom
-                                    size="sm"
-                                    name="optionLabel">
-                            <option style={{ display: "none" }}>
+                          <CSelect value={formik.values.optionLabel}
+                                   onChange={formik.handleChange}
+                                   onBlur={formik.handleBlur}
+                                   custom
+                                   size="sm"
+                                   name="optionLabel">
+                            <option style={{display: "none"}}>
                               ---- Choisir une Option ----
                             </option>
                             {allOpts?.map((e, i) => (
@@ -533,16 +526,16 @@ const ConventionsManage = () => {
                           </CSelect>
                           {
                             formik.errors.optionLabel && formik.touched.optionLabel &&
-                            <p style={{ color: "red" }}>{formik.errors.optionLabel}</p>
+                            <p style={{color: "red"}}>{formik.errors.optionLabel}</p>
                           }
-                          <br />
+                          <br/>
                         </CCol>
                         <CCol md="1"/>
                         <br/><br/>
                       </CFormGroup>
                       <center>
-                        <CButton  color="danger" type="submit">
-                          {showLoader && <CSpinner grow size="sm" />} &nbsp; Confirmer
+                        <CButton color="danger" type="submit">
+                          {showLoader && <CSpinner grow size="sm"/>} &nbsp; Confirmer
                         </CButton>
                       </center>
                     </CForm>
@@ -550,7 +543,7 @@ const ConventionsManage = () => {
                   <CCol md="3"/>
                 </CRow>
 
-                <br/><br/>
+                <br/>
 
                 <CCardBody>
                   {conventionsForRSS ? (

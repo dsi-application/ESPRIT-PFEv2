@@ -2,45 +2,42 @@ import CIcon from "@coreui/icons-react";
 import {freeSet} from '@coreui/icons';
 
 import {
-  CBadge,
-  CButton,
-  CCard,
-  CCardBody,
-  CCol,
-  CRow,
-  CSpinner,
-  CTooltip, CSelect, CForm, CFormGroup, CAlert
+  CBadge, CButton, CCard, CCardBody, CCol, CRow, CSpinner, CTooltip, CSelect, CForm, CFormGroup, CAlert
 } from "@coreui/react";
 
 import axios from "axios";
 import moment from "moment";
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import React, {useState, useEffect} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {Link} from "react-router-dom";
 import {
   fetchConventionsForRSS,
-  selectConventions, selectConventionsForRSS,
-  selectNbrDemandesAnnulationConvention, selectNbrDemandesAnnulationConventionNotTreated,
-  selectNbrDepositedConventions, selectNbrValidatedConventions
+  selectConventions,
+  selectConventionsForRSS,
+  selectNbrDemandesAnnulationConvention,
+  selectNbrDemandesAnnulationConventionNotTreated,
+  selectNbrDepositedConventions,
+  selectNbrValidatedConventions
 } from "../../redux/slices/ConventionSlice";
-import { selectConvention } from "../../redux/slices/ConventionSlice";
+import {selectConvention} from "../../redux/slices/ConventionSlice";
 import MUIDataTable from "mui-datatables";
 import "moment/locale/fr";
-import { getEtudiant } from "../../redux/slices/FichePFESlice";
+import {getEtudiant} from "../../redux/slices/FichePFESlice";
 import Tour from "reactour";
 import LocalLibrary from "@material-ui/icons/LocalLibrary";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import Text from "antd/lib/typography/Text";
-import { createMuiTheme } from "@material-ui/core";
-import { MuiThemeProvider } from "@material-ui/core";
+import {createMuiTheme} from "@material-ui/core";
+import {MuiThemeProvider} from "@material-ui/core";
 import TheSidebar from "../../containers/TheSidebar";
 import {
   fetchActiveStudentTimelineStep,
   fetchConventionDetails,
   fetchDepotReportsDetails,
   fetchFichePFEDetails,
-  fetchTimelineSteps, fetchVerifyAffectPEtoStudent
+  fetchTimelineSteps,
+  fetchVerifyAffectPEtoStudent
 } from "../../redux/slices/MyStudentSlice";
 import {useFormik} from "formik";
 import AuthService from "../services/auth.service";
@@ -51,32 +48,22 @@ const validationSchema = Yup.object().shape({
   yearLabel: Yup.string().required("* Année est un Champ obligatoire !."),
 });
 
-const steps = [
-  {
-    selector: '[data-tut="reactour__1"]',
-    content: `Içi, Vous allez trouver La
+const steps = [{
+  selector: '[data-tut="reactour__1"]', content: `Içi, Vous allez trouver La
     liste des conventions `,
-  },
-  {
-    selector: '[data-tut="reactour__2"]',
-    content: () => (
-      <Text>
-        Içi, vous pouvez interpréter l'état de la convention :
-        <strong>DEPOSEE - TRAITEE - ANNULEE</strong>.
-      </Text>
-    ),
-  },
+}, {
+  selector: '[data-tut="reactour__2"]', content: () => (<Text>
+    Içi, vous pouvez interpréter l'état de la convention :
+    <strong>DEPOSEE - TRAITEE - ANNULEE</strong>.
+  </Text>),
+},
 
   {
-    selector: '[data-tut="reactour__3"]',
-    content: () => (
-      <Text>
-        Pour voir les détails de la convention et la traiter cliquer sur ce
-        bouton : <strong> Afficher détails</strong>.
-      </Text>
-    ),
-  },
-];
+    selector: '[data-tut="reactour__3"]', content: () => (<Text>
+      Pour voir les détails de la convention et la traiter cliquer sur ce
+      bouton : <strong> Afficher détails</strong>.
+    </Text>),
+  },];
 
 export const getBadge = (traiter) => {
   switch (traiter) {
@@ -113,115 +100,70 @@ const ConventionsDemandesAnnulation = () => {
   const [tableBodyMaxHeight, setTableBodyMaxHeight] = useState("");
   const [studentId, setStudentId] = useState(sessionStorage.getItem("studentId"));
   const [showLoader, setShowLoader] = useState(false);
-  const [error, setError] = useState({ visible: false, message: "" });
+  const [error, setError] = useState({visible: false, message: ""});
   const [danger, setDanger] = useState(false);
   const [allOpts, setAllOpts] = useState([]);
 
-  const ConventionsstatusForRSS = useSelector(
-    (state) => state.persistedReducer.conventions.ConventionsstatusForRSS
-  );
+  const ConventionsstatusForRSS = useSelector((state) => state.persistedReducer.conventions.ConventionsstatusForRSS);
   const dispatch = useDispatch();
-  const columnsConventions = [
-    {
-      name: "idEt",
-      label: "Identifiant Étudiant",
-      options: {
-        filter: true,
-        sort: true,
+  const columnsConventions = [{
+    name: "idEt", label: "Identifiant Étudiant", options: {
+      filter: true, sort: true,
+    },
+  }, {
+    name: "nomEt", label: "Nom & Prénom Étudiant", options: {
+      filter: true, sort: true,
+    },
+  }, {
+    name: "currentClasse", label: "Classe", options: {
+      filter: true, sort: true,
+    },
+  }, {
+    name: "departEt", label: "Département", options: {
+      filter: true, sort: true
+    },
+  }, {
+    name: "paysConvention", label: "Catégorie", options: {
+      filter: true, sort: true
+    },
+  }, {
+    name: "dateDebut", label: "Date Début", options: {
+      filter: true, sort: true,
+    },
+  }, {
+    name: "dateFin", label: "Date Fin", options: {
+      filter: true, sort: true,
+    },
+  }, {
+    name: "traiter", label: "État", options: {
+      filter: true, sort: true, customBodyRender: (e) => {
+        return (<CBadge data-tut="reactour__2" color={getBadge(e)}>
+          {getEtat(e)}
+        </CBadge>);
       },
     },
-    {
-      name: "nomEt",
-      label: "Nom & Prénom Étudiant",
-      options: {
-        filter: true,
-        sort: true,
+  }, {
+    name: "", label: "", options: {
+      filter: true, sort: true, customBodyRenderLite: (dataIndex) => {
+        return (<>
+          <td className="py-2" data-tut="reactour__3">
+            <Link to={"/DemandeAnnulationConventionDetails"}>
+              <CButton
+                variant="outline"
+                color="dark"
+                size="sm"
+                onClick={() => onClickConv(conventionsForRSS[dataIndex])}
+              >
+                <CTooltip content=" Afficher Détails">
+                  <CIcon name="cil-magnifying-glass"></CIcon>
+                </CTooltip>
+              </CButton>
+            </Link>
+          </td>
+        </>);
       },
     },
-    {
-      name: "currentClasse",
-      label: "Classe",
-      options: {
-        filter: true,
-        sort: true,
-      },
-    },
-    {
-      name: "departEt",
-      label: "Département",
-      options: {
-        filter: true,
-        sort: true
-      },
-    },
-    {
-      name: "paysConvention",
-      label: "Catégorie",
-      options: {
-        filter: true,
-        sort: true
-      },
-    },
-    {
-      name: "dateDebut",
-      label: "Date Début",
-      options: {
-        filter: true,
-        sort: true,
-      },
-    },
-    {
-      name: "dateFin",
-      label: "Date Fin",
-      options: {
-        filter: true,
-        sort: true,
-      },
-    },
-    {
-      name: "traiter",
-      label: "État",
-      options: {
-        filter: true,
-        sort: true,
-        customBodyRender: (e) => {
-          return (
-            <CBadge data-tut="reactour__2" color={getBadge(e)}>
-              {getEtat(e)}
-            </CBadge>
-          );
-        },
-      },
-    },
-    {
-      name: "",
-      label: "",
-      options: {
-        filter: true,
-        sort: true,
-        customBodyRenderLite: (dataIndex) => {
-          return (
-            <>
-              <td className="py-2" data-tut="reactour__3">
-                <Link to={"/DemandeAnnulationConventionDetails"}>
-                  <CButton
-                    variant="outline"
-                    color="dark"
-                    size="sm"
-                    onClick={() => onClickConv(conventionsForRSS[dataIndex])}
-                  >
-                    <CTooltip content=" Afficher Détails">
-                      <CIcon name="cil-magnifying-glass"></CIcon>
-                    </CTooltip>
-                  </CButton>
-                </Link>
-              </td>
-            </>
-          );
-        },
-      },
-    },
-  ];
+  },];
 
   const theme = createMuiTheme({
     overrides: {
@@ -249,33 +191,20 @@ const ConventionsDemandesAnnulation = () => {
         noMatch: "Désolé, aucune donnée correspondante n'a été trouvée",
         toolTip: "Sort",
         columnHeaderTooltip: (column) => `Sort for ${column.label}`,
-      },
-      pagination: {
-        next: "Page suivante",
-        previous: "Page précédente",
-        rowsPerPage: "Lignes par page:",
-        displayRows: "de",
-      },
-      toolbar: {
+      }, pagination: {
+        next: "Page suivante", previous: "Page précédente", rowsPerPage: "Lignes par page:", displayRows: "de",
+      }, toolbar: {
         search: "Chercher",
         downloadCsv: "Download CSV",
         print: "Télécharger",
         viewColumns: "Afficher les colonnes",
         filterTable: "Tableau des filtres",
-      },
-      filter: {
-        all: "Tout",
-        title: "FILTRES",
-        reset: "RÉINITIALISER",
-      },
-      viewColumns: {
-        title: "Afficher les colonnes",
-        titleAria: "Afficher / masquer les colonnes du tableau",
-      },
-      selectedRows: {
-        text: "row(s) selected",
-        delete: "Delete",
-        deleteAria: "Delete Selected Rows",
+      }, filter: {
+        all: "Tout", title: "FILTRES", reset: "RÉINITIALISER",
+      }, viewColumns: {
+        title: "Afficher les colonnes", titleAria: "Afficher / masquer les colonnes du tableau",
+      }, selectedRows: {
+        text: "row(s) selected", delete: "Delete", deleteAria: "Delete Selected Rows",
       },
     },
   };
@@ -297,17 +226,14 @@ const ConventionsDemandesAnnulation = () => {
 
   const Download = (p) => {
     axios
-      .get(
-        `${process.env.REACT_APP_API_URL}` +
-        "encadrement/downloadFD/" + p.idEt + "/" + p.dateConvention,
+      .get(`${process.env.REACT_APP_API_URL}` + "encadrement/downloadFD/" + p.idEt + "/" + p.dateConvention,
 
-        { responseType: "blob" }
-      )
+        {responseType: "blob"})
       .then((response) => {
         //const filename =  response.headers.get('Content-Disposition').split('filename=')[1];
         let pathConv = p.pathConvention;
 
-        const file = new Blob([response.data], { type: "application/pdf" });
+        const file = new Blob([response.data], {type: "application/pdf"});
         let url = window.URL.createObjectURL(file);
 
         let a = document.createElement("a");
@@ -321,24 +247,22 @@ const ConventionsDemandesAnnulation = () => {
 
   const btnDownloadDisplay = (c) => {
     if (c.traiter === "02" || c.traiter === "03") {
-      return (
-        <CButton variant="outline"
-                 color="danger"
-                 size="sm"
-                 onClick={() => {Download(c);}}>
-          <CTooltip content="Télécharger Convention">
-            <CIcon name="cil-save"></CIcon>
-          </CTooltip>
-        </CButton>
-      );
+      return (<CButton variant="outline"
+                       color="danger"
+                       size="sm"
+                       onClick={() => {
+                         Download(c);
+                       }}>
+        <CTooltip content="Télécharger Convention">
+          <CIcon name="cil-save"></CIcon>
+        </CTooltip>
+      </CButton>);
     } else {
-      return (
-        <CButton variant="outline" color="danger" size="sm" disabled>
-          <CTooltip content="Télécharger Convention">
-            <CIcon name="cil-save"></CIcon>
-          </CTooltip>
-        </CButton>
-      );
+      return (<CButton variant="outline" color="danger" size="sm" disabled>
+        <CTooltip content="Télécharger Convention">
+          <CIcon name="cil-save"></CIcon>
+        </CTooltip>
+      </CButton>);
     }
   };
 
@@ -363,11 +287,8 @@ const ConventionsDemandesAnnulation = () => {
 
   const formik = useFormik({
     initialValues: {
-      yearLabel: "",
-      allYears: ["2022", "2021"]
-    },
-    validationSchema: validationSchema,
-    onSubmit: async (values) => {
+      yearLabel: "", allYears: ["2022", "2021"]
+    }, validationSchema: validationSchema, onSubmit: async (values) => {
 
       // console.log('------------------> yearLabel: ' + values.yearLabel);
 
@@ -376,13 +297,7 @@ const ConventionsDemandesAnnulation = () => {
       setShowLoader(true);
       // console.log('-----------------1-> 0908 id RSS: ' + currentResponsableServiceStage.id);
 
-      const [res, err] = await queryApi(
-        "respServStg/allDemandesAnnulationsConventionsListByOptionForRSS?idRSS=" + currentResponsableServiceStage.id +
-        "&yearLabel=" + values.yearLabel,
-        {},
-        "PUT",
-        false
-      );
+      const [res, err] = await queryApi("respServStg/allDemandesAnnulationsConventionsListByOptionForRSS?idRSS=" + currentResponsableServiceStage.id + "&yearLabel=" + values.yearLabel, {}, "PUT", false);
       console.log("********* sars0508", res);
       setConventionsForRSS([]);
       setConventionsForRSS(res);
@@ -392,8 +307,7 @@ const ConventionsDemandesAnnulation = () => {
         setShowLoader(false);
         // console.log('-----------------1-> 0306')
         setError({
-          visible: true,
-          message: JSON.stringify(err.errors, null, 2),
+          visible: true, message: JSON.stringify(err.errors, null, 2),
         });
       } else {
         // console.log('-----------------2-> 0508')
@@ -410,121 +324,94 @@ const ConventionsDemandesAnnulation = () => {
     },
   });
 
-  return (
-    <>
-      <TheSidebar dataDAC={nbDemandesAnnulationConvention} dataDC={nbDepositedConventions} dataVC={nbValidatedConventions}/>
+  return (<>
+    <TheSidebar dataDAC={nbDemandesAnnulationConvention} dataDC={nbDepositedConventions}
+                dataVC={nbValidatedConventions}/>
 
-      <Tour
-        steps={steps}
-        isOpen={isTourOpen}
-        onAfterOpen={(target) => (document.body.style.overflowY = "hidden")}
-        onBeforeClose={(target) => (document.body.style.overflowY = "auto")}
-        onRequestClose={() => setIsTourOpen(false)}
-      />
-      {ConventionsstatusForRSS === "loading" || ConventionsstatusForRSS === "noData" ? (
-        <div>
-          <CRow>
-            <CCol md="12">
-              <center>
-                <br/><br/>
-                <span className="waitIcon" />
-                <br></br>
-              </center>
-            </CCol>
-          </CRow>
-        </div>
-      ) : (
-        <>
-          <CRow>
-            <CCol>
-              <CCard data-tut="reactour__1">
-                <CRow>
-                  <CCol xs="12">
-                    <br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <span style={{color: "#b30000", fontSize: "14px", fontWeight: "bold"}}>
-                      Liste des Conventions</span>
-                  </CCol>
-                </CRow>
-                <br/>
-
-                <CRow>
-                  <CCol md="3"/>
-                  <CCol md="6">
-                    <CForm onSubmit={formik.handleSubmit}>
-                      <CFormGroup>
-                        {error.visible && <p>{error.message}</p>}
-                      </CFormGroup>
-                      <center>
-                        Choisir une Promotion pour visualiser la liste correspondante :
-                      </center>
+    <Tour
+      steps={steps}
+      isOpen={isTourOpen}
+      onAfterOpen={(target) => (document.body.style.overflowY = "hidden")}
+      onBeforeClose={(target) => (document.body.style.overflowY = "auto")}
+      onRequestClose={() => setIsTourOpen(false)}
+    />
+    {ConventionsstatusForRSS === "loading" || ConventionsstatusForRSS === "noData" ? (<div>
+      <CRow>
+        <CCol md="12">
+          <center>
+            <br/><br/>
+            <span className="waitIcon"/>
+            <br></br>
+          </center>
+        </CCol>
+      </CRow>
+    </div>) : (<>
+      <CRow>
+        <CCol>
+          <CCard data-tut="reactour__1">
+            <CRow>
+              <CCol md="3"/>
+              <CCol md="6">
+                <CForm onSubmit={formik.handleSubmit}>
+                  <CFormGroup>
+                    {error.visible && <p>{error.message}</p>}
+                  </CFormGroup>
+                  <center>
+                    Choisir une Promotion pour visualiser la liste correspondante :
+                  </center>
+                  <br/>
+                  <CFormGroup row>
+                    <CCol md="1"/>
+                    <CCol md="10">
+                      <CSelect value={formik.values.yearLabel}
+                               onChange={formik.handleChange}
+                        //onSelect={gotAllOptionsByPromotion(formik.values.yearLabel)}
+                               onBlur={formik.handleBlur}
+                               custom
+                               size="sm"
+                               name="yearLabel">
+                        <option style={{display: "none"}}>
+                          ---- Choisir une Promotion ----
+                        </option>
+                        {formik.values.allYears?.map((e, i) => (<option value={e} key={i}>
+                          {e}
+                        </option>))}
+                      </CSelect>
+                      {formik.errors.yearLabel && formik.touched.yearLabel &&
+                        <p style={{color: "red"}}>{formik.errors.yearLabel}</p>}
                       <br/>
-                      <CFormGroup row>
-                        <CCol md="1"/>
-                        <CCol md="10">
-                          <CSelect  value={formik.values.yearLabel}
-                                    onChange={formik.handleChange}
-                            //onSelect={gotAllOptionsByPromotion(formik.values.yearLabel)}
-                                    onBlur={formik.handleBlur}
-                                    custom
-                                    size="sm"
-                                    name="yearLabel">
-                            <option style={{ display: "none" }}>
-                              ---- Choisir une Promotion ----
-                            </option>
-                            {formik.values.allYears?.map((e, i) => (
-                              <option value={e} key={i}>
-                                {e}
-                              </option>
-                            ))}
-                          </CSelect>
-                          {
-                            formik.errors.yearLabel && formik.touched.yearLabel &&
-                            <p style={{ color: "red" }}>{formik.errors.yearLabel}</p>
-                          }
-                          <br />
-                        </CCol>
-                        <CCol md="1"/>
-                      </CFormGroup>
-                      <center>
-                        <CButton  color="danger" type="submit">
-                          {showLoader && <CSpinner grow size="sm" />} &nbsp; Confirmer
-                        </CButton>
-                      </center>
-                    </CForm>
-                  </CCol>
-                  <CCol md="3"/>
-                </CRow>
+                    </CCol>
+                    <CCol md="1"/>
+                  </CFormGroup>
+                  <center>
+                    <CButton color="danger" type="submit">
+                      {showLoader && <CSpinner grow size="sm"/>} &nbsp; Confirmer
+                    </CButton>
+                  </center>
+                </CForm>
+              </CCol>
+              <CCol md="3"/>
+            </CRow>
 
-                <br/><br/>
+            <br/>
 
-                <CCardBody>
-                  {conventionsForRSS ? (
-                    <MUIDataTable
-                      data={conventionsForRSS}
-                      columns={columnsConventions}
-                      options={{
-                        selectableRows: 'none' // <===== will turn off checkboxes in rows
-                      }}
-                    />
-                  ) : (
-                    <>
-                      Sorry, no Data is available
-                    </>
-                  )}
-                </CCardBody>
-              </CCard>
-            </CCol>
-          </CRow>
-          {conventionsForRSS ? (
-            ""
-          ) : (
-            <></>
-          )}
-        </>
-      )}
-    </>
-  );
+            <CCardBody>
+              {conventionsForRSS ? (<MUIDataTable
+                data={conventionsForRSS}
+                columns={columnsConventions}
+                options={{
+                  selectableRows: 'none' // <===== will turn off checkboxes in rows
+                }}
+              />) : (<>
+                Sorry, no Data is available
+              </>)}
+            </CCardBody>
+          </CCard>
+        </CCol>
+      </CRow>
+      {conventionsForRSS ? ("") : (<></>)}
+    </>)}
+  </>);
 };
 
 export default ConventionsDemandesAnnulation;

@@ -11,18 +11,18 @@ import {
 } from "@coreui/react";
 
 import axios from "axios";
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import React, {useState, useEffect} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {Link} from "react-router-dom";
 import MUIDataTable from "mui-datatables";
 import "moment/locale/fr";
-import { getEtudiant } from "../../redux/slices/FichePFESlice";
-import { createMuiTheme } from "@material-ui/core";
+import {getEtudiant} from "../../redux/slices/FichePFESlice";
+import {createMuiTheme} from "@material-ui/core";
 import {useFormik} from "formik";
 import AuthService from "../services/auth.service";
 import {queryApi} from "../../utils/queryApi";
 import * as Yup from "yup";
-import { selectAvenant } from "../../redux/slices/AvenantSlice";
+import {selectAvenant} from "../../redux/slices/AvenantSlice";
 
 const validationSchema = Yup.object().shape({
   yearLabel: Yup.string().required("* Année est un Champ obligatoire !."),
@@ -40,7 +40,7 @@ const AvenantsManage = () => {
   const [tableBodyMaxHeight, setTableBodyMaxHeight] = useState("");
   const [studentId, setStudentId] = useState(sessionStorage.getItem("studentId"));
   const [showLoader, setShowLoader] = useState(false);
-  const [error, setError] = useState({ visible: false, message: "" });
+  const [error, setError] = useState({visible: false, message: ""});
   const [danger, setDanger] = useState(false);
   const [allOpts, setAllOpts] = useState([]);
 
@@ -148,7 +148,7 @@ const AvenantsManage = () => {
               {avenantsForRSS[dataIndex].traiter ? (
                 <CButton
                   variant="outline"
-                  color="danger"Y
+                  color="danger" Y
                   size="sm"
                   onClick={() => {
                     Download(avenantsForRSS[dataIndex].pathAvenant);
@@ -274,7 +274,9 @@ const AvenantsManage = () => {
         <CButton variant="outline"
                  color="danger"
                  size="sm"
-                 onClick={() => {Download(c);}}>
+                 onClick={() => {
+                   Download(c);
+                 }}>
           <CTooltip content="Télécharger Avenant">
             <CIcon name="cil-save"></CIcon>
           </CTooltip>
@@ -357,10 +359,10 @@ const AvenantsManage = () => {
         "encadrement/download?fileName=" +
         encodeURIComponent(encodeURIComponent(p)),
 
-        { responseType: "blob" }
+        {responseType: "blob"}
       )
       .then((response) => {
-        const file = new Blob([response.data], { type: "application/pdf" });
+        const file = new Blob([response.data], {type: "application/pdf"});
         let url = window.URL.createObjectURL(file);
 
         let a = document.createElement("a");
@@ -378,10 +380,10 @@ const AvenantsManage = () => {
       "encadrement/download?fileName=" +
       encodeURIComponent(encodeURIComponent(p)),
 
-      { responseType: "blob" }
+      {responseType: "blob"}
     )
       .then((response) => {
-        const file = new Blob([response.data], { type: "application/pdf" });
+        const file = new Blob([response.data], {type: "application/pdf"});
         let url = window.URL.createObjectURL(file);
 
         let a = document.createElement("a");
@@ -399,7 +401,7 @@ const AvenantsManage = () => {
             <CCol md="12">
               <center>
                 <br/><br/>
-                <span className="waitIcon" />
+                <span className="waitIcon"/>
                 <br></br>
               </center>
             </CCol>
@@ -424,14 +426,14 @@ const AvenantsManage = () => {
                       <CFormGroup row>
                         <CCol md="1"/>
                         <CCol md="10">
-                          <CSelect  value={formik.values.yearLabel}
-                                    onChange={formik.handleChange}
+                          <CSelect value={formik.values.yearLabel}
+                                   onChange={formik.handleChange}
                             //onSelect={gotAllOptionsByPromotion(formik.values.yearLabel)}
-                                    onBlur={formik.handleBlur}
-                                    custom
-                                    size="sm"
-                                    name="yearLabel">
-                            <option style={{ display: "none" }}>
+                                   onBlur={formik.handleBlur}
+                                   custom
+                                   size="sm"
+                                   name="yearLabel">
+                            <option style={{display: "none"}}>
                               ---- Choisir une Promotion ----
                             </option>
                             {formik.values.allYears?.map((e, i) => (
@@ -442,15 +444,15 @@ const AvenantsManage = () => {
                           </CSelect>
                           {
                             formik.errors.yearLabel && formik.touched.yearLabel &&
-                            <p style={{ color: "red" }}>{formik.errors.yearLabel}</p>
+                            <p style={{color: "red"}}>{formik.errors.yearLabel}</p>
                           }
-                          <br />
+                          <br/>
                         </CCol>
                         <CCol md="1"/>
                       </CFormGroup>
                       <center>
-                        <CButton  color="danger" type="submit">
-                          {showLoader && <CSpinner grow size="sm" />} &nbsp; Confirmer
+                        <CButton color="danger" type="submit">
+                          {showLoader && <CSpinner grow size="sm"/>} &nbsp; Confirmer
                         </CButton>
                       </center>
                     </CForm>
@@ -458,7 +460,7 @@ const AvenantsManage = () => {
                   <CCol md="3"/>
                 </CRow>
 
-                <br/><br/>
+                <br/>
 
                 <CCardBody>
                   {avenantsForRSS ? (
