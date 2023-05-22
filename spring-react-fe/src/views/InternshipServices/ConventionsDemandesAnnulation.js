@@ -275,6 +275,7 @@ const ConventionsDemandesAnnulation = () => {
     dispatch(fetchConventionsForRSS());
   };
 
+  /*
   useEffect(() => {
     const response1 = axios
       .get(API_URL_RSS + `allOptionsForActivatedYears/` + currentResponsableServiceStage.id)
@@ -284,6 +285,7 @@ const ConventionsDemandesAnnulation = () => {
         setAllOpts(result);
       })
   }, [])
+*/
 
   const formik = useFormik({
     initialValues: {
