@@ -418,17 +418,14 @@ const ConventionsValideesManage = () => {
 
         let a = document.createElement("a");
         a.href = url;
-        a.download = pathConv.substring(pathConv.lastIndexOf("/") + 1);
-        // console.log(url);
-        window.open(url);
-        a.click();
+        window.open(url, '_blank').focus();
       });
   };
 
   const DownloadSignedConv = (p) => {
 
     let encodedURL = encodeURIComponent(encodeURIComponent(p.pathSignedConvention));
-    axios.get(`${process.env.REACT_APP_API_URL_STU}` + "downloadMyPDF/" + encodedURL, { responseType: "blob" })
+    axios.get(`${process.env.REACT_APP_API_URL}` + "encadrement/downloadFD/" + p.idEt + "/" + p.dateConvention, { responseType: "blob" })
       .then((response) => {
         //const filename =  response.headers.get('Content-Disposition').split('filename=')[1];
         let pathConv = p.pathConvention;
@@ -438,10 +435,7 @@ const ConventionsValideesManage = () => {
 
         let a = document.createElement("a");
         a.href = url;
-        a.download = pathConv.substring(pathConv.lastIndexOf("/") + 1);
-        // console.log(url);
-        window.open(url);
-        a.click();
+        window.open(url, '_blank').focus();
       });
   };
 

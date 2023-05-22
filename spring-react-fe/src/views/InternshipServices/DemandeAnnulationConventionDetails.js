@@ -87,9 +87,9 @@ const DemandeAnnulationConventionDetails = () => {
 
     const [res, err] = await queryApi(
       "serviceStage/updateDemandeAnnulationConventionState?idET=" +
-      Convention.conventionPK.idEt +
+      Convention.idEt +
       "&date=" +
-      Convention.conventionPK.dateConvention,
+      Convention.dateConvention,
       {},
       "PUT",
       false

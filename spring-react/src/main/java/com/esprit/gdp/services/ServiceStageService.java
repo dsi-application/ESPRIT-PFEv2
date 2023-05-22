@@ -355,9 +355,8 @@ public class ServiceStageService {
 	}
 
 	public Avenant UpdateAvenantState(String idET, String dateConvention, String DateAvenant) {
-
-		if (avenantRepository.getAvenant(idET, dateConvention, DateAvenant) != null) {
-			Avenant existingAvenant = avenantRepository.getAvenant(idET, dateConvention, DateAvenant);
+		if (avenantRepository.getAvenantOFF(idET, dateConvention, DateAvenant) != null) {
+			Avenant existingAvenant = avenantRepository.getAvenantOFF(idET, dateConvention, DateAvenant);
 			existingAvenant.setTraiter(true);
 			return avenantRepository.save(existingAvenant);
 		} else
@@ -728,13 +727,12 @@ public class ServiceStageService {
 	}
 
 	public String GenerateAvenant(String idET, String dateconvention, String dateAvenant) throws Exception {
-
 		String pattern = "dd-MM-yyyy";
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 		String datenow = simpleDateFormat.format(new Date());
-		if (avenantRepository.getAvenant(idET, dateconvention, dateAvenant) != null) {
-			Optional<Convention> C = conventionRepository.getConventionById(idET, dateconvention);
-			Avenant A = avenantRepository.getAvenant(idET, dateconvention, dateAvenant);
+		if (avenantRepository.getAvenantOFF(idET, dateconvention, dateAvenant) != null) {
+			Optional<Convention> C = conventionRepository.getConventionByIdOFF(idET, dateconvention);
+			Avenant A = avenantRepository.getAvenantOFF(idET, dateconvention, dateAvenant);
 
 			List<String> los = optionRepository.listOptionsByYear("2021");
 			String Option = utilServices.findOptionByStudent(idET, los);
@@ -753,7 +751,7 @@ public class ServiceStageService {
 			String Mail = C.get().getMail();
 			String numSiren = A.getNumSiren();
 			try {
-				// Create PdfReader instance. C:\\ESP-DOCS\\Avenants
+				// Create PdfReader instance.   C:\\ESP-DOCS\\Avenants
 				PdfReader pdfReader = new PdfReader("C:\\ESP-DOCS\\Avenants\\Avenant.pdf");
 				// Create PdfStamper instance.
 				PdfStamper pdfStamper = new PdfStamper(pdfReader,
@@ -845,6 +843,8 @@ public class ServiceStageService {
 				e.printStackTrace();
 			}
 
+
+
 			DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 			String aveValidationDate = dateFormata.format(new Date());
 
@@ -854,21 +854,20 @@ public class ServiceStageService {
 			String avenantPath = "C:\\ESP-DOCS\\Avenants\\" + idET + "_Avenant_" + datenow + ".pdf";
 			String avenantLabel = idET + "_Avenant_" + datenow + ".pdf";
 
-			String studentMail = utilServices.findStudentMailById(idET); // Server DEPLOY_SERVER
-			// String studentMail = "saria.essid@esprit.tn"; // Local
+			String studentMail = utilServices.findStudentMailById(idET);  // Server  DEPLOY_SERVER
+			//String studentMail = "saria.essid@esprit.tn";   // Local
 
 			System.out.println("---------------------------> Start");
-			utilServices.sendMailWithAttachment(studentMail, "Validation d'Avenant", content, avenantPath,
-					avenantLabel);
+			utilServices.sendMailWithAttachment(studentMail, "Validation d'Avenant", content, avenantPath, avenantLabel);
 
-			System.out.println("---------------------------> End  Send Mail of Avenant: "
-					+ utilServices.findStudentMailById(idET));
+			System.out.println("---------------------------> End  Send Mail of Avenant: " + utilServices.findStudentMailById(idET));
+
+
 
 			return "PDF modified successfully.";
 
 		} else
 			return null;
-
 	}
 
 	/*******************

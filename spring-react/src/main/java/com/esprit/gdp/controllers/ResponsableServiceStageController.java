@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.esprit.gdp.dto.*;
+import com.esprit.gdp.models.Avenant;
 import com.esprit.gdp.services.ServiceStageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -582,6 +583,21 @@ public class ResponsableServiceStageController {
 
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+
+	@PutMapping(value = "/updateAvenantStatus", produces = MediaType.APPLICATION_JSON_VALUE) // 22052023
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Avenant> updateAvenantState(@RequestParam("idET") String idET,
+													  @RequestParam("dateConvention") String dateConvention,
+													  @RequestParam("dateAvenant") String dateAvenant)
+			throws Exception {
+
+		System.out.println("----------------------------> idET: " + idET);
+		System.out.println("----------------------------> dateConvention: " + dateConvention);
+		System.out.println("----------------------------> dateAvenant: " + dateAvenant);
+
+		serviceStageService.GenerateAvenant(idET,dateConvention, dateAvenant);
+		return new ResponseEntity<>(serviceStageService.UpdateAvenantState(idET, dateConvention, dateAvenant), HttpStatus.OK);
 	}
 
 }

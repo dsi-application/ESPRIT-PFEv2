@@ -79,13 +79,14 @@ const AvenantDetails = () => {
 
   const handleUpdateEvent = async () => {
     setShowLoader(true);
+    console.log('************ LOLI: ', Avenant)
     const [res, err] = await queryApi(
-      "serviceStage/updateAvenantState?idET=" +
-      Avenant.avenantPK.conventionPK.idEt +
+      "respServStg.updateAvenantStatus?idET=" +
+      Avenant.idEt +
       "&dateConvention=" +
-      Avenant.avenantPK.conventionPK.dateConvention +
+      Avenant.dateDepotRelatedConvention +
       "&dateAvenant=" +
-      Avenant.avenantPK.dateAvenant,
+      Avenant.dateDepotAvenant,
       {},
       "PUT",
       false

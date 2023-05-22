@@ -193,7 +193,12 @@ public interface ConventionRepository extends JpaRepository<Convention, Conventi
 			+ " where (c.conventionPK.idEt=:idET and "
 			+ "FUNCTION('to_char', c.conventionPK.dateConvention,'yyyy-mm-dd HH24:MI:SS')=:date )")
 	Optional<Convention> getConventionById(@Param("idET") String idET , @Param("date") String date);
-	
+
+	@Query(value="SELECT c from Convention c "
+			+ " where (c.conventionPK.idEt=:idET and "
+			+ "FUNCTION('to_char', c.conventionPK.dateConvention,'dd-mm-yyyy HH24:MI:SS')=:date )")
+	Optional<Convention> getConventionByIdOFF(@Param("idET") String idET , @Param("date") String date);
+
 	@Query(value="SELECT c from Convention c "
 			+ " where (c.conventionPK.idEt=:idET and "
 			+ "FUNCTION('to_char', c.conventionPK.dateConvention,'dd-mm-yyyy HH24:MI:SS')=:date )")

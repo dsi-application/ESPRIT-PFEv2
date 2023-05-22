@@ -65,7 +65,13 @@ public interface AvenantRepository extends JpaRepository<Avenant, Integer>
 			+ " and a.avenantPK.conventionPK.idEt=:idET "
 			+ "and FUNCTION('to_char', a.avenantPK.dateAvenant,'yyyy-mm-dd HH24:MI:SS')=:DateAvenant ) ")
 	Avenant getAvenant(@Param("idET") String idET ,@Param("dateConvention") String dateConvention ,@Param("DateAvenant") String DateAvenant);
-	
+
+	@Query(value="SELECT a from Avenant a "
+			+ " where ( FUNCTION('to_char', a.avenantPK.conventionPK.dateConvention,'dd-mm-yyyy HH24:MI:SS')=:dateConvention "
+			+ " and a.avenantPK.conventionPK.idEt=:idET "
+			+ "and FUNCTION('to_char', a.avenantPK.dateAvenant,'dd-mm-yyyy HH24:MI:SS')=:dateAvenant ) ")
+	Avenant getAvenantOFF(@Param("idET") String idET ,@Param("dateConvention") String dateConvention ,@Param("dateAvenant") String dateAvenant);
+
 	@Query(value="SELECT a from Avenant a  join Convention c "
 			+ "on (a.avenantPK.conventionPK.idEt = c.conventionPK.idEt "
 			+ "and a.avenantPK.conventionPK.dateConvention =c.conventionPK.dateConvention)"
@@ -79,7 +85,7 @@ public interface AvenantRepository extends JpaRepository<Avenant, Integer>
 			+ " order by a.avenantPK.dateAvenant desc")
 	List<Avenant> getAllAvenants();
 
-	@Query(value="SELECT new com.esprit.gdp.dto.AvenantForRSSDto(FUNCTION('to_char', a.avenantPK.dateAvenant,'dd-mm-yyyy HH24:MI:SS'), FUNCTION('to_char', a.avenantPK.conventionPK.dateConvention, 'dd-mm-yyyy HH24:MI:SS'), a.dateDebut, a.dateFin, a.avenantPK.conventionPK.idEt, a.traiter, a.pathAvenant, a.responsableEntreprise, a.qualiteResponsable) " +
+	@Query(value="SELECT new com.esprit.gdp.dto.AvenantForRSSDto(FUNCTION('to_char', a.avenantPK.dateAvenant,'dd-mm-yyyy HH24:MI:SS'), FUNCTION('to_char', a.avenantPK.conventionPK.dateConvention, 'dd-mm-yyyy HH24:MI:SS'), a.dateDebut, a.dateFin, a.avenantPK.conventionPK.idEt, a.traiter, a.pathAvenant, a.pathSignedAvenant, a.responsableEntreprise, a.qualiteResponsable) " +
 			"from InscriptionCJ y, Avenant a  join Convention c " +
 			"on (a.avenantPK.conventionPK.idEt = c.conventionPK.idEt and a.avenantPK.conventionPK.dateConvention = c.conventionPK.dateConvention)" +
 			"where a.avenantPK.conventionPK.idEt = y.id.idEt " +
@@ -89,7 +95,7 @@ public interface AvenantRepository extends JpaRepository<Avenant, Integer>
 			"order by a.avenantPK.dateAvenant desc")
 	List<AvenantForRSSDto> findAllAvenantsCJByYear(String idRSS, String year);
 
-	@Query(value="SELECT new com.esprit.gdp.dto.AvenantForRSSDto(FUNCTION('to_char', a.avenantPK.dateAvenant,'dd-mm-yyyy HH24:MI:SS'), FUNCTION('to_char', a.avenantPK.conventionPK.dateConvention, 'dd-mm-yyyy HH24:MI:SS'), a.dateDebut, a.dateFin, a.avenantPK.conventionPK.idEt, a.traiter, a.pathAvenant, a.responsableEntreprise, a.qualiteResponsable) " +
+	@Query(value="SELECT new com.esprit.gdp.dto.AvenantForRSSDto(FUNCTION('to_char', a.avenantPK.dateAvenant,'dd-mm-yyyy HH24:MI:SS'), FUNCTION('to_char', a.avenantPK.conventionPK.dateConvention, 'dd-mm-yyyy HH24:MI:SS'), a.dateDebut, a.dateFin, a.avenantPK.conventionPK.idEt, a.traiter, a.pathAvenant, a.pathSignedAvenant, a.responsableEntreprise, a.qualiteResponsable) " +
 			"from OptionStudentALT o, Avenant a  join Convention c " +
 			"on (a.avenantPK.conventionPK.idEt = c.conventionPK.idEt and a.avenantPK.conventionPK.dateConvention = c.conventionPK.dateConvention)" +
 			"where a.avenantPK.conventionPK.idEt = o.idOptStuALT.idEt " +
@@ -98,7 +104,7 @@ public interface AvenantRepository extends JpaRepository<Avenant, Integer>
 			"order by a.avenantPK.dateAvenant desc")
 	List<AvenantForRSSDto> findAllAvenantsALTByYear(String idRSS, String year);
 
-	@Query(value="SELECT new com.esprit.gdp.dto.AvenantForRSSDto(FUNCTION('to_char', a.avenantPK.dateAvenant,'dd-mm-yyyy HH24:MI:SS'), FUNCTION('to_char', a.avenantPK.conventionPK.dateConvention, 'dd-mm-yyyy HH24:MI:SS'), a.dateDebut, a.dateFin, a.avenantPK.conventionPK.idEt, a.traiter, a.pathAvenant, a.responsableEntreprise, a.qualiteResponsable) " +
+	@Query(value="SELECT new com.esprit.gdp.dto.AvenantForRSSDto(FUNCTION('to_char', a.avenantPK.dateAvenant,'dd-mm-yyyy HH24:MI:SS'), FUNCTION('to_char', a.avenantPK.conventionPK.dateConvention, 'dd-mm-yyyy HH24:MI:SS'), a.dateDebut, a.dateFin, a.avenantPK.conventionPK.idEt, a.traiter, a.pathAvenant, a.pathSignedAvenant, a.responsableEntreprise, a.qualiteResponsable) " +
 			"from InscriptionCS y, Avenant a  join Convention c " +
 			"on (a.avenantPK.conventionPK.idEt = c.conventionPK.idEt and a.avenantPK.conventionPK.dateConvention = c.conventionPK.dateConvention)" +
 			"where a.avenantPK.conventionPK.idEt = y.id.idEt " +

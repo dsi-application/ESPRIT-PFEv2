@@ -360,36 +360,33 @@ const AvenantsManage = () => {
         { responseType: "blob" }
       )
       .then((response) => {
-        //const filename =  response.headers.get('Content-Disposition').split('filename=')[1];
-
         const file = new Blob([response.data], { type: "application/pdf" });
         let url = window.URL.createObjectURL(file);
 
         let a = document.createElement("a");
         a.href = url;
-        a.download = p.substring(p.lastIndexOf("/") + 1);
-        // console.log(url);
-        window.open(url);
-        a.click();
+        window.open(url, '_blank').focus();
+
       });
   };
 
   const DownloadSignedAvenant = (p) => {
     console.log('--------------------> 19.09.22' + p);
     let encodedURL = encodeURIComponent(encodeURIComponent(p));
-    axios.get(`${process.env.REACT_APP_API_URL_STU}` + "downloadMyPDF/" + encodedURL, { responseType: "blob" })
-      .then((response) => {
-        //const filename =  response.headers.get('Content-Disposition').split('filename=')[1];
+    axios.get(
+      `${process.env.REACT_APP_API_URL}` +
+      "encadrement/download?fileName=" +
+      encodeURIComponent(encodeURIComponent(p)),
 
+      { responseType: "blob" }
+    )
+      .then((response) => {
         const file = new Blob([response.data], { type: "application/pdf" });
         let url = window.URL.createObjectURL(file);
 
         let a = document.createElement("a");
         a.href = url;
-        a.download = p.substring(p.lastIndexOf("/") + 1);
-        // console.log(url);
-        window.open(url);
-        a.click();
+        window.open(url, '_blank').focus();
       });
   };
 
