@@ -2,6 +2,7 @@ package com.esprit.gdp.repository;
 import java.util.Date;
 import java.util.List;
 
+import com.esprit.gdp.dto.AvenantForRSSDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -77,7 +78,34 @@ public interface AvenantRepository extends JpaRepository<Avenant, Integer>
 			+ "and a.avenantPK.conventionPK.dateConvention =c.conventionPK.dateConvention)"
 			+ " order by a.avenantPK.dateAvenant desc")
 	List<Avenant> getAllAvenants();
-	
-	
-	
+
+	@Query(value="SELECT new com.esprit.gdp.dto.AvenantForRSSDto(FUNCTION('to_char', a.avenantPK.dateAvenant,'dd-mm-yyyy HH24:MI:SS'), FUNCTION('to_char', a.avenantPK.conventionPK.dateConvention, 'dd-mm-yyyy HH24:MI:SS'), a.dateDebut, a.dateFin, a.avenantPK.conventionPK.idEt, a.traiter, a.pathAvenant, a.responsableEntreprise, a.qualiteResponsable) " +
+			"from InscriptionCJ y, Avenant a  join Convention c " +
+			"on (a.avenantPK.conventionPK.idEt = c.conventionPK.idEt and a.avenantPK.conventionPK.dateConvention = c.conventionPK.dateConvention)" +
+			"where a.avenantPK.conventionPK.idEt = y.id.idEt " +
+			"and y.saisonClasse.id.codeCl like '5%'" +
+			"and c.responsableServiceStage.idUserSce =?1 " +
+			"and y.id.anneeDeb =?2 " +
+			"order by a.avenantPK.dateAvenant desc")
+	List<AvenantForRSSDto> findAllAvenantsCJByYear(String idRSS, String year);
+
+	@Query(value="SELECT new com.esprit.gdp.dto.AvenantForRSSDto(FUNCTION('to_char', a.avenantPK.dateAvenant,'dd-mm-yyyy HH24:MI:SS'), FUNCTION('to_char', a.avenantPK.conventionPK.dateConvention, 'dd-mm-yyyy HH24:MI:SS'), a.dateDebut, a.dateFin, a.avenantPK.conventionPK.idEt, a.traiter, a.pathAvenant, a.responsableEntreprise, a.qualiteResponsable) " +
+			"from OptionStudentALT o, Avenant a  join Convention c " +
+			"on (a.avenantPK.conventionPK.idEt = c.conventionPK.idEt and a.avenantPK.conventionPK.dateConvention = c.conventionPK.dateConvention)" +
+			"where a.avenantPK.conventionPK.idEt = o.idOptStuALT.idEt " +
+			"and c.responsableServiceStage.idUserSce =?1 " +
+			"and o.idOptStuALT.anneeDeb =?2 " +
+			"order by a.avenantPK.dateAvenant desc")
+	List<AvenantForRSSDto> findAllAvenantsALTByYear(String idRSS, String year);
+
+	@Query(value="SELECT new com.esprit.gdp.dto.AvenantForRSSDto(FUNCTION('to_char', a.avenantPK.dateAvenant,'dd-mm-yyyy HH24:MI:SS'), FUNCTION('to_char', a.avenantPK.conventionPK.dateConvention, 'dd-mm-yyyy HH24:MI:SS'), a.dateDebut, a.dateFin, a.avenantPK.conventionPK.idEt, a.traiter, a.pathAvenant, a.responsableEntreprise, a.qualiteResponsable) " +
+			"from InscriptionCS y, Avenant a  join Convention c " +
+			"on (a.avenantPK.conventionPK.idEt = c.conventionPK.idEt and a.avenantPK.conventionPK.dateConvention = c.conventionPK.dateConvention)" +
+			"where a.avenantPK.conventionPK.idEt = y.id.idEt " +
+			"and y.saisonClasse.id.codeCl like '4%'" +
+			"and c.responsableServiceStage.idUserSce =?1 " +
+			"and y.id.anneeDeb =?2 " +
+			"order by a.avenantPK.dateAvenant desc")
+	List<AvenantForRSSDto> findAllAvenantsCSByYear(String idRSS, String year);
+
 }

@@ -14,15 +14,10 @@ import java.util.Optional;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 
+import com.esprit.gdp.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.esprit.gdp.dto.ConventionForRSSDto;
-import com.esprit.gdp.dto.ConventionsValidatedForRSSDto;
-import com.esprit.gdp.dto.DepotRapport;
-import com.esprit.gdp.dto.StudentForSoutenance;
-import com.esprit.gdp.dto.StudentIdNomPrenomDto;
-import com.esprit.gdp.dto.StudentPFEDepasse;
 import com.esprit.gdp.models.Avenant;
 import com.esprit.gdp.models.Convention;
 import com.esprit.gdp.models.EntrepriseAccueil;
@@ -282,6 +277,48 @@ public class ServiceStageService {
 	public List<Convention> getAllDemandesAnnulationConvention() {
 		List<Convention> listConvention = conventionRepository.getAllDemandesAnnulationConvention();
 		return listConvention;
+	}
+
+	// Got All Avenants DTO
+	public List<AvenantForRSSDto> findAllAvenantDTOByYear(String idRSS, String year)
+	{
+
+		List<AvenantForRSSDto> allAvenants = new ArrayList<AvenantForRSSDto>();
+		System.out.println("---------------------------------------------------> Data: " + idRSS + " - " + year);
+
+		List<AvenantForRSSDto> allAvenantsCJ = avenantRepository.findAllAvenantsCJByYear(idRSS, year);
+		List<AvenantForRSSDto> allAvenantsALT = avenantRepository.findAllAvenantsALTByYear(idRSS, year);
+		List<AvenantForRSSDto> allAvenantsCS = avenantRepository.findAllAvenantsCSByYear(idRSS, year);
+
+		System.out.println("----------------------------------> Student CJ: " + allAvenantsCJ.size());
+		System.out.println("----------------------------------> Student ALT: " + allAvenantsALT.size());
+		System.out.println("----------------------------------> Student CS: " + allAvenantsCS.size());
+
+		if(!allAvenantsCJ.isEmpty())
+		{
+			allAvenants.addAll(allAvenantsCJ);
+		}
+		if(!allAvenantsALT.isEmpty())
+		{
+			allAvenants.addAll(allAvenantsALT);
+		}
+		if(!allAvenantsCS.isEmpty())
+		{
+			allAvenants.addAll(allAvenantsCS);
+		}
+
+		for(AvenantForRSSDto c : allAvenants)
+		{
+			// System.out.println("--------------------------> DATE: " + c.getDateConvention());
+			String idEt = c.getIdEt();
+			String classe = utilServices.findCurrentClassByIdEt(idEt);
+
+			c.setNomEt(utilServices.findStudentFullNameById(idEt));
+			c.setDepartEt(utilServices.findDepartmentAbbByClassWithStat(classe));
+			c.setCurrentClasse(classe);
+		}
+
+		return allAvenants;
 	}
 
 	public List<Avenant> getAvenants(String id) {

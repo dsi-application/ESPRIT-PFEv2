@@ -7,93 +7,51 @@ import {
   CCol,
   CRow,
   CSpinner,
-  CTooltip,
+  CTooltip, CSelect, CForm, CFormGroup, CAlert
 } from "@coreui/react";
+
 import axios from "axios";
-import moment from "moment";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { selectAvenant, selectAvenants } from "../../redux/slices/AvenantSlice";
 import MUIDataTable from "mui-datatables";
 import "moment/locale/fr";
 import { getEtudiant } from "../../redux/slices/FichePFESlice";
-import Tour from "reactour";
-import LocalLibrary from "@material-ui/icons/LocalLibrary";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
-import Text from "antd/lib/typography/Text";
 import { createMuiTheme } from "@material-ui/core";
-import { MuiThemeProvider } from "@material-ui/core";
-const steps = [
-  {
-    selector: '[data-tut="reactour__1"]',
-    content: `Içi, Vous allez trouver La liste des avenants `,
-  },
-  {
-    selector: '[data-tut="reactour__2"]',
-    content: () => (
-      <Text>
-        Içi, vous pouvez interpréter l'état de l'avenant :
-        <strong>EN ATTENTE - TRAITE</strong>.
-      </Text>
-    ),
-  },
+import {useFormik} from "formik";
+import AuthService from "../services/auth.service";
+import {queryApi} from "../../utils/queryApi";
+import * as Yup from "yup";
+import { selectAvenant } from "../../redux/slices/AvenantSlice";
 
-  {
-    selector: '[data-tut="reactour__3"]',
-    content: () => (
-      <Text>
-        Pour voir les détails de l'avenant et la traiter cliquer sur ce bouton :
-        <strong> Afficher détails</strong>.
-      </Text>
-    ),
-  },
-];
-export const getBadge = (traiter) => {
-  switch (traiter) {
-    case "01":
-      return "warning";
-    case "02":
-      return "success";
+const validationSchema = Yup.object().shape({
+  yearLabel: Yup.string().required("* Année est un Champ obligatoire !."),
+});
 
-    default:
-      return "danger";
-  }
-};
-export const getEtat = (etat) => {
-  switch (etat) {
-    case "01":
-      return "DEPOSEE";
-    case "02":
-      return "TRAITER";
+const currentResponsableServiceStage = AuthService.getCurrentResponsableServiceStage();
+const API_URL_RSS = process.env.REACT_APP_API_URL_RSS;
 
-    default:
-      return "ANNULEE";
-  }
-};
 const AvenantsManage = () => {
   const [isTourOpen, setIsTourOpen] = useState(false);
-  const [avenants, errAv] = useSelector(selectAvenants);
+  const [avenantsForRSS, setAvenantsForRSS] = useState([]);
+
   const [responsive, setResponsive] = useState("vertical");
   const [tableBodyHeight, setTableBodyHeight] = useState("300");
   const [tableBodyMaxHeight, setTableBodyMaxHeight] = useState("");
+  const [studentId, setStudentId] = useState(sessionStorage.getItem("studentId"));
+  const [showLoader, setShowLoader] = useState(false);
+  const [error, setError] = useState({ visible: false, message: "" });
+  const [danger, setDanger] = useState(false);
+  const [allOpts, setAllOpts] = useState([]);
+
   const avenantsstatus = useSelector(
     (state) => state.persistedReducer.avenants.avenantsstatus
   );
+
   const dispatch = useDispatch();
-  const theme = createMuiTheme({
-    overrides: {
-      MuiTableCell: {
-        root: {
-          padding: "2px 2px 2px 20px",
-        },
-      },
-    },
-  });
   const columnsAvenants = [
     {
-      name: "avenantPK.conventionPK.idEt",
+      name: "idEt",
       label: "Identifiant Étudiant",
       options: {
         filter: true,
@@ -101,25 +59,43 @@ const AvenantsManage = () => {
       },
     },
     {
-      name: "avenantPK.conventionPK.dateConvention",
-      label: "Date dépôt Convention",
+      name: "nomEt",
+      label: "Nom & Prénom Étudiant",
       options: {
         filter: true,
         sort: true,
-        customBodyRender: (e) => {
-          return <td> {moment(e).format("LLLL")} </td>;
-        },
       },
     },
     {
-      name: "avenantPK.dateAvenant",
-      label: "Date dépôt Avenant",
+      name: "currentClasse",
+      label: "Classe",
       options: {
         filter: true,
         sort: true,
-        customBodyRender: (e) => {
-          return <td>{moment(e).format("LLLL")}</td>;
-        },
+      },
+    },
+    {
+      name: "departEt",
+      label: "Département",
+      options: {
+        filter: true,
+        sort: true
+      },
+    },
+    {
+      name: "dateDebut",
+      label: "Date Début",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "dateFin",
+      label: "Date Fin",
+      options: {
+        filter: true,
+        sort: true,
       },
     },
     {
@@ -131,7 +107,7 @@ const AvenantsManage = () => {
         customBodyRender: (e) => {
           return (
             <td data-tut="reactour__2">
-              
+
               {e ? (
                 <CBadge color="success">TRAITE</CBadge>
               ) : (
@@ -151,81 +127,91 @@ const AvenantsManage = () => {
         customBodyRenderLite: (dataIndex) => {
           return (
             <>
-            
-                  <Link to={"/AvenantDetails"}>
-                    <CButton
-                      variant="outline"
-                      color="dark"
-                      size="sm"
-                      onClick={() => onClickAven(avenants[dataIndex])}
-                      data-tut="reactour__3"
-                    >
-                      
-                      <CTooltip content=" Afficher détails">
-                        <CIcon name="cil-magnifying-glass"></CIcon>
-                      </CTooltip>
-                    </CButton>
-                  </Link>
-                  &nbsp; &nbsp;
-             
-                
-                  {avenants[dataIndex].traiter ? (
-                    <CButton
-                      variant="outline"
-                      color="danger"
-                      size="sm"
-                      onClick={() => {
-                        Download(avenants[dataIndex].pathAvenant);
-                      }}
-                    >
-                      <CTooltip content="Télécharger Avenant">
-                        <CIcon name="cil-save"></CIcon>
-                      </CTooltip>
-                      &nbsp;
-                    </CButton>
-                  ) : (
-                    <CButton
-                      variant="outline"
-                      color="danger"
-                      size="sm"
-                      disabled
-                    >
-                      <CTooltip content="Télécharger Avenant">
-                        <CIcon name="cil-save"></CIcon>
-                      </CTooltip>
-                    </CButton>
-                  )}
+
+              <Link to={"/AvenantDetails"}>
+                <CButton
+                  variant="outline"
+                  color="dark"
+                  size="sm"
+                  onClick={() => onClickAvenant(avenantsForRSS[dataIndex])}
+                  data-tut="reactour__3"
+                >
+
+                  <CTooltip content=" Afficher détails">
+                    <CIcon name="cil-magnifying-glass"></CIcon>
+                  </CTooltip>
+                </CButton>
+              </Link>
+              &nbsp; &nbsp;
+
+
+              {avenantsForRSS[dataIndex].traiter ? (
+                <CButton
+                  variant="outline"
+                  color="danger"Y
+                  size="sm"
+                  onClick={() => {
+                    Download(avenantsForRSS[dataIndex].pathAvenant);
+                  }}
+                >
+                  <CTooltip content="Télécharger Avenant">
+                    <CIcon name="cil-save"></CIcon>
+                  </CTooltip>
+                  &nbsp;
+                </CButton>
+              ) : (
+                <CButton
+                  variant="outline"
+                  color="danger"
+                  size="sm"
+                  disabled
+                >
+                  <CTooltip content="Télécharger Avenant">
+                    <CIcon name="cil-save"></CIcon>
+                  </CTooltip>
+                </CButton>
+              )}
 
               &nbsp; &nbsp;
 
 
-              {avenants[dataIndex].pathSignedAvenant !== null ? (
-                  <CButton
-                      variant="outline"
-                      color="success"
-                      size="sm"
-                      onClick={() => {
-                        DownloadSignedAvenant(avenants[dataIndex].pathSignedAvenant);
-                      }}
-                  >
-                    <CTooltip content="Télécharger Avenant Signé">
-                      <CIcon name="cil-save"></CIcon>
-                    </CTooltip>
-                    &nbsp;
-                  </CButton>
+              {avenantsForRSS[dataIndex].pathSignedAvenant !== null ? (
+                <CButton
+                  variant="outline"
+                  color="success"
+                  size="sm"
+                  onClick={() => {
+                    DownloadSignedAvenant(avenantsForRSS[dataIndex].pathSignedAvenant);
+                  }}
+                >
+                  <CTooltip content="Télécharger Avenant Signé">
+                    <CIcon name="cil-save"></CIcon>
+                  </CTooltip>
+                  &nbsp;
+                </CButton>
               ) : (
-                  <>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  </>
+                <>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </>
               )}
-               
-          
+
+
             </>
           );
         },
       },
-    },
+    }
   ];
+
+  const theme = createMuiTheme({
+    overrides: {
+      MuiTableCell: {
+        root: {
+          padding: "0px 0px 0px 20px",
+        },
+      },
+    },
+  });
   const options = {
     rowsPerPage: 5,
     filter: true,
@@ -274,18 +260,102 @@ const AvenantsManage = () => {
     },
   };
 
-  const onClickAven = (i) => {
-    dispatch(getEtudiant(i.avenantPK.conventionPK.idEt));
+  const onClickAvenant = (i) => {
+
+    console.log('-------- onClickAven1: ' + i);
+    dispatch(getEtudiant(i.idEt));
     dispatch(selectAvenant(i));
-    document.body.style.overflowY = "auto";
+    document.body.style.overflowY = "auto"
+  }
+
+  const btnDownloadDisplay = (c) => {
+    if (c.traiter === "02" || c.traiter === "03") {
+      return (
+        <CButton variant="outline"
+                 color="danger"
+                 size="sm"
+                 onClick={() => {Download(c);}}>
+          <CTooltip content="Télécharger Avenant">
+            <CIcon name="cil-save"></CIcon>
+          </CTooltip>
+        </CButton>
+      );
+    } else {
+      return (
+        <CButton variant="outline" color="danger" size="sm" disabled>
+          <CTooltip content="Télécharger Avenant">
+            <CIcon name="cil-save"></CIcon>
+          </CTooltip>
+        </CButton>
+      );
+    }
   };
+
+  useEffect(() => {
+    const response1 = axios
+      .get(API_URL_RSS + `allOptionsForActivatedYears/` + currentResponsableServiceStage.id)
+      .then((res) => {
+        let result = res.data;
+        console.log('--------------> HI-HELLO: ', res.data);
+        setAllOpts(result);
+      })
+  }, [])
+
+  const formik = useFormik({
+    initialValues: {
+      yearLabel: "",
+      allYears: ["2022", "2021"]
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (values) => {
+
+      // console.log('------------------> yearLabel: ' + values.yearLabel);
+
+      setAvenantsForRSS([]);
+
+      setShowLoader(true);
+      // console.log('-----------------1-> 0908 id RSS: ' + currentResponsableServiceStage.id);
+
+      const [res, err] = await queryApi(
+        "respServStg/allAvenantsList?idRSS=" + currentResponsableServiceStage.id +
+        "&yearLabel=" + values.yearLabel,
+        {},
+        "PUT",
+        false
+      );
+      console.log("********* sars0508", res);
+      setAvenantsForRSS([]);
+      setAvenantsForRSS(res);
+
+      if (err) {
+        setShowLoader(false);
+        // console.log('-----------------1-> 0306')
+        setError({
+          visible: true,
+          message: JSON.stringify(err.errors, null, 2),
+        });
+      } else {
+        // console.log('-----------------2-> 0508')
+
+        /*dispatch(updateFichebydep(res));
+        dispatch(deleteElem(res));
+        dispatch(fetchUploadedReports());
+        dispatch(fetchValidatedReports());
+        dispatch(fetchRefusedReports());
+        dispatch(fetchStudentToSTNStat());*/
+        setDanger(false);
+        setShowLoader(false);
+      }
+    },
+  });
+
   const Download = (p) => {
     console.log('--------------------> 19.09.22' + p);
     axios
       .get(
         `${process.env.REACT_APP_API_URL}` +
-          "encadrement/download?fileName=" +
-          encodeURIComponent(encodeURIComponent(p)),
+        "encadrement/download?fileName=" +
+        encodeURIComponent(encodeURIComponent(p)),
 
         { responseType: "blob" }
       )
@@ -308,34 +378,28 @@ const AvenantsManage = () => {
     console.log('--------------------> 19.09.22' + p);
     let encodedURL = encodeURIComponent(encodeURIComponent(p));
     axios.get(`${process.env.REACT_APP_API_URL_STU}` + "downloadMyPDF/" + encodedURL, { responseType: "blob" })
-        .then((response) => {
-          //const filename =  response.headers.get('Content-Disposition').split('filename=')[1];
+      .then((response) => {
+        //const filename =  response.headers.get('Content-Disposition').split('filename=')[1];
 
-          const file = new Blob([response.data], { type: "application/pdf" });
-          let url = window.URL.createObjectURL(file);
+        const file = new Blob([response.data], { type: "application/pdf" });
+        let url = window.URL.createObjectURL(file);
 
-          let a = document.createElement("a");
-          a.href = url;
-          a.download = p.substring(p.lastIndexOf("/") + 1);
-          // console.log(url);
-          window.open(url);
-          a.click();
-        });
+        let a = document.createElement("a");
+        a.href = url;
+        a.download = p.substring(p.lastIndexOf("/") + 1);
+        // console.log(url);
+        window.open(url);
+        a.click();
+      });
   };
 
   return (
     <>
-      <Tour
-        steps={steps}
-        isOpen={isTourOpen}
-        onAfterOpen={(target) => (document.body.style.overflowY = "hidden")}
-        onBeforeClose={(target) => (document.body.style.overflowY = "auto")}
-        onRequestClose={() => setIsTourOpen(false)}
-      />
+
       {avenantsstatus === "loading" || avenantsstatus === "noData" ? (
-        <>
+        <div>
           <CRow>
-            <CCol xs="12">
+            <CCol md="12">
               <center>
                 <br/><br/>
                 <span className="waitIcon" />
@@ -343,44 +407,82 @@ const AvenantsManage = () => {
               </center>
             </CCol>
           </CRow>
-        </>
+        </div>
       ) : (
         <>
           <CRow>
             <CCol>
-              <CCard>
+              <CCard data-tut="reactour__1">
                 <CRow>
-                  <CCol xs="12">
-                    <br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <span style={{color: "#b30000", fontSize: "14px", fontWeight: "bold"}}>Liste des Avenants</span>
+                  <CCol md="3"/>
+                  <CCol md="6">
+                    <CForm onSubmit={formik.handleSubmit}>
+                      <CFormGroup>
+                        {error.visible && <p>{error.message}</p>}
+                      </CFormGroup>
+                      <center>
+                        Choisir une Promotion pour visualiser la liste correspondante :
+                      </center>
+                      <br/>
+                      <CFormGroup row>
+                        <CCol md="1"/>
+                        <CCol md="10">
+                          <CSelect  value={formik.values.yearLabel}
+                                    onChange={formik.handleChange}
+                            //onSelect={gotAllOptionsByPromotion(formik.values.yearLabel)}
+                                    onBlur={formik.handleBlur}
+                                    custom
+                                    size="sm"
+                                    name="yearLabel">
+                            <option style={{ display: "none" }}>
+                              ---- Choisir une Promotion ----
+                            </option>
+                            {formik.values.allYears?.map((e, i) => (
+                              <option value={e} key={i}>
+                                {e}
+                              </option>
+                            ))}
+                          </CSelect>
+                          {
+                            formik.errors.yearLabel && formik.touched.yearLabel &&
+                            <p style={{ color: "red" }}>{formik.errors.yearLabel}</p>
+                          }
+                          <br />
+                        </CCol>
+                        <CCol md="1"/>
+                      </CFormGroup>
+                      <center>
+                        <CButton  color="danger" type="submit">
+                          {showLoader && <CSpinner grow size="sm" />} &nbsp; Confirmer
+                        </CButton>
+                      </center>
+                    </CForm>
                   </CCol>
+                  <CCol md="3"/>
                 </CRow>
-                <br/>
-                <CCardBody data-tut="reactour__1">
-                  {avenants ? (
-                      <MuiThemeProvider theme={theme}>
+
+                <br/><br/>
+
+                <CCardBody>
+                  {avenantsForRSS ? (
                     <MUIDataTable
-                      title={""}
-                      data={avenants}
+                      data={avenantsForRSS}
                       columns={columnsAvenants}
-                      options={options}
-                    /></MuiThemeProvider>
+                      options={{
+                        selectableRows: 'none' // <===== will turn off checkboxes in rows
+                      }}
+                    />
                   ) : (
-                    <MuiThemeProvider theme={theme}>
-                    <MUIDataTable
-                      title={""}
-                      //data={avenants}
-                      columns={columnsAvenants}
-                      options={options}
-                    /></MuiThemeProvider>
+                    <>
+                      Sorry, no Data is available
+                    </>
                   )}
                 </CCardBody>
               </CCard>
             </CCol>
           </CRow>
-          {avenants ? (
-              ""
+          {avenantsForRSS ? (
+            ""
           ) : (
             <></>
           )}

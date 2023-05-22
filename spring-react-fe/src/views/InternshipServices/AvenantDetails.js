@@ -16,22 +16,23 @@ import {
   CSpinner,
 } from "@coreui/react";
 import moment from "moment";
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router";
+import React, {useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {useHistory} from "react-router";
 import {
   selectSelectedAvenant,
   updateAvenant,
 } from "../../redux/slices/AvenantSlice";
-import { selectetudiant } from "../../redux/slices/FichePFESlice";
-import { queryApi } from "../../utils/queryApi";
+import {selectetudiant} from "../../redux/slices/FichePFESlice";
+import {queryApi} from "../../utils/queryApi";
 import "moment/locale/fr";
 import Tour from "reactour";
-import LocalLibrary from "@material-ui/icons/LocalLibrary";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
 import Text from "antd/lib/typography/Text";
-import {getBadge, getEtat} from "./ConventionsManage";
+
+import AuthService from "../services/auth.service";
+
+const currentResponsableServiceStage = AuthService.getCurrentResponsableServiceStage();
+
 const steps = [
   {
     selector: '[data-tut="reactour__1"]',
@@ -72,7 +73,7 @@ const AvenantDetails = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const [showLoader, setShowLoader] = useState(false);
-  const [error, setError] = useState({ visible: false, message: "" });
+  const [error, setError] = useState({visible: false, message: ""});
   const Etu = useSelector(selectetudiant);
   const Avenant = useSelector(selectSelectedAvenant);
 
@@ -80,11 +81,11 @@ const AvenantDetails = () => {
     setShowLoader(true);
     const [res, err] = await queryApi(
       "serviceStage/updateAvenantState?idET=" +
-        Avenant.avenantPK.conventionPK.idEt +
-        "&dateConvention=" +
-        Avenant.avenantPK.conventionPK.dateConvention +
-        "&dateAvenant=" +
-        Avenant.avenantPK.dateAvenant,
+      Avenant.avenantPK.conventionPK.idEt +
+      "&dateConvention=" +
+      Avenant.avenantPK.conventionPK.dateConvention +
+      "&dateAvenant=" +
+      Avenant.avenantPK.dateAvenant,
       {},
       "PUT",
       false
@@ -121,7 +122,8 @@ const AvenantDetails = () => {
                 </CCol>
                 <CCol xs="12" sm="6" md="6">
                   <h5 className="float-right">
-                    <span style={{color: "#999999", fontSize: "14px", fontWeight: "bold"}}>{Etu.prenomet} {Etu.nomet}</span>
+                    <span
+                      style={{color: "#999999", fontSize: "14px", fontWeight: "bold"}}>{Etu.prenomet} {Etu.nomet}</span>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <span style={{color: "#999999", fontSize: "14px", fontWeight: "bold"}}>{Etu.classe}</span>
                   </h5>
@@ -138,13 +140,13 @@ const AvenantDetails = () => {
                     <h6>
                       <b style={{color: "red"}}>Cette avenant est </b>
                       {Avenant.traiter ? (
-                          <CBadge data-tut="reactour__3" color="success">
-                            TRAITE
-                          </CBadge>
+                        <CBadge data-tut="reactour__3" color="success">
+                          TRAITE
+                        </CBadge>
                       ) : (
-                          <CBadge data-tut="reactour__3" color="warning">
-                            EN ATTENTE
-                          </CBadge>
+                        <CBadge data-tut="reactour__3" color="warning">
+                          EN ATTENTE
+                        </CBadge>
                       )}
                     </h6>
                     <br></br>
@@ -152,12 +154,12 @@ const AvenantDetails = () => {
                     <span style={{fontWeight: "bold"}}>
                       Identifiant Étudiant:
                     </span>&nbsp;
-                    {Avenant.avenantPK.conventionPK.idEt}
+                    {Avenant.idEt}
                     <br/>
                     <span style={{fontWeight: "bold"}}>
                       Date Dépôt Avenant:
                     </span>&nbsp;
-                    {moment(Avenant.avenantPK.dateAvenant).format("LLLL")}
+                    {Avenant.dateDepotAvenant}
                     <br/><br/>
 
                     {Avenant.traiter ? (
@@ -165,7 +167,7 @@ const AvenantDetails = () => {
                         size="sm"
                         className="float-left;"
                         disabled
-                        style={{ backgroundColor: "#808580", color: "white" }}
+                        style={{backgroundColor: "#808580", color: "white"}}
                         data-tut="reactour__4"
                       >
                         Valider l'Avenant et l'envoyer à l'Étudiant par E-Mail
@@ -173,79 +175,76 @@ const AvenantDetails = () => {
                         <CIcon name="cil-check"></CIcon>
                       </CButton>
                     ) : (
-                      <CButton
-                        size="sm"
-                        className="float-left;"
-                        style={{ backgroundColor: "red", color: "white" }}
-                        color="warning"
-                        onClick={() => setWarning(!warning)}
-                        data-tut="reactour__4"
-                      >
-                        Valider l'Avenant et l'envoyer à l'Étudiant par E-Mail
-                        &nbsp; &nbsp;
-                        <CIcon name="cil-check"></CIcon>
-                      </CButton>
+                      <>
+                        {
+                          currentResponsableServiceStage.id.includes("IT") ? (
+                            <CButton
+                              size="sm"
+                              className="float-left;"
+                              style={{backgroundColor: "red", color: "white"}}
+                              color="warning"
+                              onClick={() => setWarning(!warning)}>
+                              Valider l'Avenant
+                              &nbsp; &nbsp;
+                              <CIcon name="cil-check"></CIcon>
+                            </CButton>
+                          ) : (
+                            <CButton
+                              size="sm"
+                              className="float-left;"
+                              style={{backgroundColor: "red", color: "white"}}
+                              color="warning"
+                              disabled>
+                              Valider l'Avenant
+                              &nbsp; &nbsp;
+                              <CIcon name="cil-check"></CIcon>
+                            </CButton>
+                          )
+                        }
+                      </>
                     )}
                   </CCardHeader>
                   <CCardBody>
-                    <b style={{ color: "red" }}>
+                    <b style={{color: "red"}}>
                       Date Dépôt Convention Associée: &nbsp;&nbsp;&nbsp;
                     </b>
-                    {moment(Avenant.avenantPK.conventionPK.dateConvention).format("LLLL")}
+                    {Avenant.dateDepotRelatedConvention}
                     <br></br><br></br>
 
                     <CRow>
-                      <CCol md="3" className="colPaddingRight">
+                      <CCol md="2" className="colPaddingRight">
                         <b>Nouvelle Date Début:</b>
                       </CCol>
-                      <CCol md="9" className="colPaddingLeft">
+                      <CCol md="10" className="colPaddingLeft">
                         {moment(Avenant.dateDebut).format("MMMM Do YYYY")}
                       </CCol>
                     </CRow>
 
                     <CRow>
-                      <CCol md="3" className="colPaddingRight">
+                      <CCol md="2" className="colPaddingRight">
                         <b>Nouvelle Date Fin:</b>
                       </CCol>
-                      <CCol md="9" className="colPaddingLeft">
+                      <CCol md="10" className="colPaddingLeft">
                         {moment(Avenant.dateFin).format("MMMM Do YYYY")}
-                      </CCol>
-                    </CRow>
-
-                    <CRow>
-                      <CCol md="3" className="colPaddingRight">
-                        <b>Date Signature Convention:</b>
-                      </CCol>
-                      <CCol md="9" className="colPaddingLeft">
-                        {moment(Avenant.dateSignatureConvention).format("MMMM Do YYYY")}
                       </CCol>
                     </CRow>
 
                     <br/>
                     <CRow>
-                      <CCol md="3" className="colPaddingRight">
+                      <CCol md="2" className="colPaddingRight">
                         <b>Responsable Entreprise:</b>
                       </CCol>
-                      <CCol md="9" className="colPaddingLeft">
+                      <CCol md="10" className="colPaddingLeft">
                         {Avenant.responsableEntreprise}
                       </CCol>
                     </CRow>
 
                     <CRow>
-                      <CCol md="3" className="colPaddingRight">
+                      <CCol md="2" className="colPaddingRight">
                         <b>Qualité Responsable:</b>
                       </CCol>
-                      <CCol md="9" className="colPaddingLeft">
+                      <CCol md="10" className="colPaddingLeft">
                         {Avenant.qualiteResponsable}
-                      </CCol>
-                    </CRow>
-
-                    <CRow>
-                      <CCol md="3" className="colPaddingRight">
-                        <b>Numéro SIREN:</b>
-                      </CCol>
-                      <CCol md="9" className="colPaddingLeft">
-                        {Avenant.numSiren}
                       </CCol>
                     </CRow>
 
@@ -284,9 +283,9 @@ const AvenantDetails = () => {
             <CCol md="1"/>
             <CCol md="10">
               <center>
-          <CButton color="warning" onClick={() => handleUpdateEvent()}>
-            {showLoader && <CSpinner grow size="sm" />} &nbsp;&nbsp;Oui
-          </CButton>
+                <CButton color="warning" onClick={() => handleUpdateEvent()}>
+                  {showLoader && <CSpinner grow size="sm"/>} &nbsp;&nbsp;Oui
+                </CButton>
                 &nbsp;&nbsp;
                 <CButton color="secondary" onClick={() => setWarning(!warning)}>
                   Non
@@ -294,13 +293,13 @@ const AvenantDetails = () => {
 
                 <br/><br/><br/>
 
-          {showLoader && (
-              <CAlert color="info">
-                Attendre un petit peu ... .
-                <br/>
-                Nous allons envoyer l'Avenant à cet Étudiant par email ... .
-              </CAlert>
-          )}
+                {showLoader && (
+                  <CAlert color="info">
+                    Attendre un petit peu ... .
+                    <br/>
+                    Nous allons envoyer l'Avenant à cet Étudiant par email ... .
+                  </CAlert>
+                )}
 
               </center>
             </CCol>

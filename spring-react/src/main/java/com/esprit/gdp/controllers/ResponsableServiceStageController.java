@@ -567,4 +567,21 @@ public class ResponsableServiceStageController {
 
 	}
 
+	@PutMapping("/allAvenantsList")
+	public ResponseEntity<List<AvenantForRSSDto>> getAllAvenantList(@RequestParam("idRSS") String idRSS, @RequestParam("yearLabel") String yearLabel)
+	{
+		System.out.println("-------------- Avenant : " + idRSS + " : " + yearLabel);
+		try {
+			List<AvenantForRSSDto> AvenantList = serviceStageService.findAllAvenantDTOByYear(idRSS, yearLabel);
+			if (AvenantList.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+
+			return new ResponseEntity<>(AvenantList, HttpStatus.OK);
+		} catch (Exception e) {
+
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 }
