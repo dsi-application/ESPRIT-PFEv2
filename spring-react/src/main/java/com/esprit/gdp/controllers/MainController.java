@@ -5675,13 +5675,11 @@ public class MainController {
 		// System.out.println("-------------PV--------------------9-> " + stnDate);
 		// System.out.println("-------------PV--------------------10-> " + PVFile);
 
-		// PVEtudiant_PDF pv = new PVEtudiant_PDF(idEt, nomet, classe,
-		// fichePFERepository.findTitleFichePFEByStudent(idEt).get(0),
-		// conventionRepository.findCompanyNameByIdEt(idEt).get(0), expert,
-		// juryPresident, membre, pedagogicalEncadrant, stnDate, PVFile);
+		String expert = utilServices.findFullNamePedagogicalExpert(idEt);
+
 		PVEtudiant_PDF pv = new PVEtudiant_PDF(idEt, nomet, classe,
 				fichePFERepository.findTitleFichePFEByStudent(idEt).get(0),
-				conventionRepository.findCompanyNameByIdEt(idEt).get(0), membre, juryPresident, membre,
+				conventionRepository.findCompanyNameByIdEt(idEt).get(0), expert, juryPresident, membre,
 				pedagogicalEncadrant, stnDate, PVFile);
 
 		File file = new File(PVFile);
@@ -5722,8 +5720,6 @@ public class MainController {
 		String PVName = "Procès Verbal " + nomet + ".pdf";
 		String PVFile = PVPath + PVName;
 
-		String expert = utilServices.findFullNamePedagogicalExpert(idEt);
-
 		// AffectationStudentSocieteSujetSocieteDto ass =
 		// affectationStudentSocieteRepository.findAffectationStudentSocieteSujetSociete(idStu);
 
@@ -5749,10 +5745,8 @@ public class MainController {
 		// System.out.println("-------------PV--------------------9-> " + stnDate);
 		// System.out.println("-------------PV--------------------10-> " + PVFile);
 
-		// PVEtudiant_PDF pv = new PVEtudiant_PDF(idEt, nomet, classe,
-		// fichePFERepository.findTitleFichePFEByStudent(idStu).get(0),
-		// conventionRepository.findCompanyNameByIdEt(idStu).get(0), juryPresident,
-		// expert, pedagogicalEncadrant, stnDate, PVFile);
+		String expert = utilServices.findFullNamePedagogicalExpert(idEt);
+
 		PVEtudiant_PDF pv = new PVEtudiant_PDF(idEt, nomet, classe,
 				fichePFERepository.findTitleFichePFEByStudent(idEt).get(0),
 				conventionRepository.findCompanyNameByIdEt(idEt).get(0), expert, juryPresident, membre,
