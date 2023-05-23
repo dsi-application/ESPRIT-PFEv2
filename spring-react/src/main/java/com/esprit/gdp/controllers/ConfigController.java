@@ -156,7 +156,7 @@ public class ConfigController
 		try 
 		{
 			List<StudentConfigDto> students = utilServices.findStudentsConfigDtoForConfig(year);
-			System.out.println("-----------------------------> LOL : " + students.size());
+			// System.out.println("-----------------------------> LOL : " + students.size());
 
 			if (students.isEmpty())
 			{
@@ -171,7 +171,7 @@ public class ConfigController
 					{
 						String opt = cls.substring(cls.lastIndexOf("-") + 1);
 						sd.setOptionStudent(opt);
-						System.out.println("---> " + opt);
+						// System.out.println("---> " + opt);
 					}
 					else if(cls.contains("4ALINFO"))
 					{
@@ -200,11 +200,11 @@ public class ConfigController
 		try 
 		{
 			List<StudentConfigDto> students = utilServices.findStudentsConfigDtoForConfig(selectedYear);
-			System.out.println("-------------------------YEEEEEEEEEEAR : " + students.size());
+			// System.out.println("-------------------------YEEEEEEEEEEAR : " + students.size());
 
 			if (students.isEmpty())
 			{
-				System.out.println("------EMPTY: " + students.size());
+				// System.out.println("------EMPTY: " + students.size());
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
 			else
@@ -216,47 +216,47 @@ public class ConfigController
 					{
 						String opt = cls.substring(cls.lastIndexOf("-") + 1);
 						sd.setOptionStudent(opt);
-						System.out.println("---> " + opt);
+						// System.out.println("---> " + opt);
 					}
 					else if(cls.contains("4ALINFO"))
 					{
 						sd.setOptionStudent(optionStudentALTRepository.findOptionByStudentALTAndYear(sd.getIdStudent(), selectedYear));
-						System.out.println("--> 2.1");
+						// System.out.println("--> 2.1");
 					}
 					else
 					{
-						System.out.println(":--> 2.2.1: " + sd.getIdStudent() + " - " + sd.getClasseStudent());
-						System.out.println(":--> 2.2.2: " + utilServices.findOptionByClass(sd.getClasseStudent(), optionRepository.listOptionsByYear(selectedYear)).replace("_01", ""));
+						// System.out.println(":--> 2.2.1: " + sd.getIdStudent() + " - " + sd.getClasseStudent());
+						// System.out.println(":--> 2.2.2: " + utilServices.findOptionByClass(sd.getClasseStudent(), optionRepository.listOptionsByYear(selectedYear)).replace("_01", ""));
 						sd.setOptionStudent(utilServices.findOptionByClass(sd.getClasseStudent(), optionRepository.listOptionsByYear(selectedYear)).replace("_01", ""));
 						
 					}
-					System.out.println("------lol: " + students.size());
+					// System.out.println("------lol: " + students.size());
 				}
-				System.out.println("------pika: " + students.size());
+				// System.out.println("------pika: " + students.size());
 				// students.sort(Comparator.comparing(StudentConfigDto::getOptionStudent).reversed().thenComparing(StudentConfigDto::getClasseStudent).reversed());
 				students.sort(Comparator.comparing(StudentConfigDto::getOptionStudent));
-				System.out.println("------FILLED: " + students.size());
+				// System.out.println("------FILLED: " + students.size());
 				return new ResponseEntity<>(students, HttpStatus.OK);
 			}
 		} catch (Exception e) {
-			System.out.println("------*****EXCEPTION");
+			// System.out.println("------*****EXCEPTION");
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	@PutMapping("/studentConfigs/updateStudentContact/{idEt}/{idRSS}/{selectedYear}")
 	public ResponseEntity<?> updateStudentConfig(@PathVariable("idEt") String idEt, @PathVariable("idRSS") String idRSS, @PathVariable("selectedYear") String selectedYear, @RequestBody StudentConfigRequest stuReq) {
-		
-	    System.out.println("###   Id: " + idEt);
+
+		// System.out.println("###   Id: " + idEt);
 		List<String> studentsCJALT = studentRepository.findStudentCJMailEspById(idEt);
 		List<String> studentsCS = studentRepository.findStudentCSMailEspById(idEt);
-		
-		System.out.println("#####   CJ/ALT: " + studentsCJALT.size());
-		System.out.println("#####   CS: " + studentsCS.size());
+
+		// System.out.println("#####   CJ/ALT: " + studentsCJALT.size());
+		// System.out.println("#####   CS: " + studentsCS.size());
 		
 		if(!studentsCJALT.isEmpty())
 		{
-			System.out.println("###########################   CJ");
+			// System.out.println("###########################   CJ");
 			Optional<StudentCJ> stuObj = studentRepository.findById(idEt);
 
 			StudentCJ stu = stuObj.get();

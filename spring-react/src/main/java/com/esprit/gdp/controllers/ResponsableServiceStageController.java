@@ -121,7 +121,7 @@ public class ResponsableServiceStageController {
 
 	@GetMapping("/listStudentsByDept/{codeDept}")
 	public List<EncadrementStatusExcelDto> listStudentsByDept(@PathVariable String codeDept) {
-		System.out.println("--PC----------------> pcMail: " + codeDept);
+		// System.out.println("--PC----------------> pcMail: " + codeDept);
 		List<String> lowerOpts = utilServices.findStudentsByDept(codeDept);
 
 		List<EncadrementStatusExcelDto> ess = new ArrayList<EncadrementStatusExcelDto>();
@@ -163,11 +163,11 @@ public class ResponsableServiceStageController {
 		List<EncadrementRSSStatusExcelDto> ess = new ArrayList<EncadrementRSSStatusExcelDto>();
 
 		ess.addAll(studentRepository.findEncadrementStatusCJ());
-		System.out.println("-------> Step 1: " + new Date());
+		// System.out.println("-------> Step 1: " + new Date());
 		ess.addAll(studentRepository.findEncadrementStatusCJALT());
-		System.out.println("-------> Step 2: " + new Date());
+		// System.out.println("-------> Step 2: " + new Date());
 		ess.addAll(studentRepository.findEncadrementStatusCS());
-		System.out.println("-------> Step 3: " + new Date());
+		// System.out.println("-------> Step 3: " + new Date());
 
 		for (EncadrementRSSStatusExcelDto es : ess) {
 
@@ -179,11 +179,11 @@ public class ResponsableServiceStageController {
 			es.setAcademicEncadMail(teacherRepository.findTeacherMailById(es.getAcademicEncadId()));
 			es.setAcademicEncadFullName(teacherRepository.findTeacherFullNameById(es.getAcademicEncadId()));
 		}
-		System.out.println("-------> Step 4: " + new Date());
+		// System.out.println("-------> Step 4: " + new Date());
 
 		ess.sort(Comparator.comparing(EncadrementRSSStatusExcelDto::getAcademicEncadFullName)
 				.thenComparing(EncadrementRSSStatusExcelDto::getStudentFullName));
-		System.out.println("-------> Step 5: " + new Date());
+		// System.out.println("-------> Step 5: " + new Date());
 
 		/************************************************************************************/
 

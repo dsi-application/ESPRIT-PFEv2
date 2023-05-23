@@ -124,10 +124,10 @@ public class ResponsableStageController {
 	@GetMapping("/FichePFEList")
 	public ResponseEntity<?> getFichePFEList(@RequestParam("codeOption") String codeOption) {
 		try {
-			System.out.println("slm" + decode(codeOption));
+			// System.out.println("slm" + decode(codeOption));
 			ObjectMapper mapper = new ObjectMapper();
 			List<String> strings = mapper.readValue(decode(codeOption), List.class);
-			System.out.println(strings);
+			// System.out.println(strings);
 			List<FichePFE> FichePFEList = responsableStageService.getFicheListbyOption(strings);
 
 			List<FicheETDetails> FicheETDetailsList = new ArrayList<FicheETDetails>();
@@ -282,7 +282,7 @@ public class ResponsableStageController {
 
 	) {
 
-		System.out.println("--------------------------------------- SATRt 0416");
+		// System.out.println("--------------------------------------- SATRt 0416");
 
 		responsableStageService.UpdateFicheToDEPOSEE(idET, dateDepotFiche.substring(0, 19).replace("T", " "));
 
@@ -381,7 +381,7 @@ public class ResponsableStageController {
 			List<StudentDetails> AllTerminalStudent = new ArrayList<>();
 			ObjectMapper mapper = new ObjectMapper();
 			List<String> strings = mapper.readValue(decode(codeOption), List.class);
-			System.out.println("----------------------------- EtudiantSansFicheList: " + strings);
+			// System.out.println("----------------------------- EtudiantSansFicheList: " + strings);
 
 			for (String C : strings) {
 
@@ -397,7 +397,7 @@ public class ResponsableStageController {
 
 			return new ResponseEntity<>(AllTerminalStudent, HttpStatus.OK);
 		} catch (Exception e) {
-			System.out.println("exception===" + e);
+			// System.out.println("exception===" + e);
 			return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -427,7 +427,7 @@ public class ResponsableStageController {
 	public ResponseEntity<?> getEtatValidationFiche(@RequestParam("codeOption") String codeOption,
 			@RequestParam("annee") String annee) {
 		List<Map<String, String>> AllTerminalStudent = new ArrayList<>();
-		System.out.println("-----> Start");
+		// System.out.println("-----> Start");
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			List<String> strings = mapper.readValue(decode(codeOption), List.class);

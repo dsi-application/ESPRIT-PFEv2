@@ -58,6 +58,7 @@ public class FicheDepotPFE_PDF
 	{
 		try
 		{
+            /*
 			System.out.println("----**********---------PV--------------------1-> " + idEt);
 			System.out.println("----**********---------PV--------------------2-> " + studentFullName);
 			System.out.println("----**********---------PV--------------------3-> " + classe);
@@ -66,7 +67,7 @@ public class FicheDepotPFE_PDF
 			System.out.println("----**********---------PV--------------------6-> " + studentTreatDepotDto.getSocieteLibelle());
 			System.out.println("----**********---------PV--------------------7-> " + urgRdvPFEDto.getDateDepot());
 			System.out.println("----**********---------PV--------------------8-> " + FILE);
-			
+			*/
 			
 			Document document = new Document();
             PdfWriter.getInstance(document, new FileOutputStream(FILE));

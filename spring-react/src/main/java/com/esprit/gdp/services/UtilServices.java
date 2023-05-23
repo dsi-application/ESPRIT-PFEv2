@@ -1753,8 +1753,8 @@ public class UtilServices {
 		List<TeacherEncadrantPedaDto> teachersCJ = inscriptionRepository.findEncadrantPedagogiqueByStudentCJ(idEt);
 		List<TeacherEncadrantPedaDto> teachersCS = inscriptionRepository.findEncadrantPedagogiqueByStudentCS(idEt);
 
-		System.out.println("----------------------------------> Teacher EncadrantPeda CJ: " + teachersCJ.size());
-		System.out.println("----------------------------------> Teacher EncadrantPeda CS: " + teachersCS.size());
+		// System.out.println("----------------------------------> Teacher EncadrantPeda CJ: " + teachersCJ.size());
+		// System.out.println("----------------------------------> Teacher EncadrantPeda CS: " + teachersCS.size());
 
 		if (!teachersCJ.isEmpty()) {
 			teacherEncadrantPedaDto = teachersCJ.get(0);
@@ -1768,7 +1768,7 @@ public class UtilServices {
 
 	public StudentJustificatifStageDto findStudentJustificatifStageByStudentId(String idEt) {
 
-		System.out.println("----------------------------------> Teacher EncadrantPeda ID: " + idEt);
+		// System.out.println("----------------------------------> Teacher EncadrantPeda ID: " + idEt);
 
 		StudentJustificatifStageDto studentDemandeStgDto = null;
 		List<StudentJustificatifStageDto> teachersCJ = inscriptionRepository.findStudentJustificatifStageDtoCJ(idEt,
@@ -1776,8 +1776,8 @@ public class UtilServices {
 		List<StudentJustificatifStageDto> teachersCS = inscriptionRepository.findStudentJustificatifStageDtoCS(idEt,
 				"2021");
 
-		System.out.println("----------------------------------> Teacher EncadrantPeda CJ: " + teachersCJ.size());
-		System.out.println("----------------------------------> Teacher EncadrantPeda CS: " + teachersCS.size());
+		// System.out.println("----------------------------------> Teacher EncadrantPeda CJ: " + teachersCJ.size());
+		// System.out.println("----------------------------------> Teacher EncadrantPeda CS: " + teachersCS.size());
 
 		if (!teachersCJ.isEmpty()) {
 			studentDemandeStgDto = teachersCJ.get(0);
@@ -1791,7 +1791,7 @@ public class UtilServices {
 
 	public StudentMandatoryInternshipDto findStudentMandatoryInternshipByStudentId(String idEt) {
 
-		System.out.println("----------------------------------> Teacher EncadrantPeda ID: " + idEt);
+		// System.out.println("----------------------------------> Teacher EncadrantPeda ID: " + idEt);
 
 		StudentMandatoryInternshipDto studentDemandeStgDto = null;
 		List<StudentMandatoryInternshipDto> teachersCJ = inscriptionRepository.findStudentMandatoryInternshipDtoCJ(idEt,
@@ -1799,8 +1799,8 @@ public class UtilServices {
 		List<StudentMandatoryInternshipDto> teachersCS = inscriptionRepository.findStudentMandatoryInternshipDtoCS(idEt,
 				"2021");
 
-		System.out.println("----------------------------------> Teacher EncadrantPeda CJ: " + teachersCJ.size());
-		System.out.println("----------------------------------> Teacher EncadrantPeda CS: " + teachersCS.size());
+		// System.out.println("----------------------------------> Teacher EncadrantPeda CJ: " + teachersCJ.size());
+		// System.out.println("----------------------------------> Teacher EncadrantPeda CS: " + teachersCS.size());
 
 		if (!teachersCJ.isEmpty()) {
 			studentDemandeStgDto = teachersCJ.get(0);
@@ -1856,14 +1856,14 @@ public class UtilServices {
 
 	public StudentDemandeStageDto findStudentDemandeStgByStudentId(String idEt) {
 
-		System.out.println("----------------------------------> Teacher EncadrantPeda ID: " + idEt);
+		// System.out.println("----------------------------------> Teacher EncadrantPeda ID: " + idEt);
 
 		StudentDemandeStageDto studentDemandeStgDto = null;
 		List<StudentDemandeStageDto> teachersCJ = inscriptionRepository.findStudentDemandeStageDtoCJ(idEt, "2021");
 		List<StudentDemandeStageDto> teachersCS = inscriptionRepository.findStudentDemandeStageDtoCS(idEt, "2021");
 
-		System.out.println("----------------------------------> Teacher EncadrantPeda CJ: " + teachersCJ.size());
-		System.out.println("----------------------------------> Teacher EncadrantPeda CS: " + teachersCS.size());
+		// System.out.println("----------------------------------> Teacher EncadrantPeda CJ: " + teachersCJ.size());
+		// System.out.println("----------------------------------> Teacher EncadrantPeda CS: " + teachersCS.size());
 
 		if (!teachersCJ.isEmpty()) {
 			studentDemandeStgDto = teachersCJ.get(0);

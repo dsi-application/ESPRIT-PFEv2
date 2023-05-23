@@ -112,8 +112,8 @@ public class ServiceStageController {
 	@GetMapping("/StudentPFEDepasseList")
 	public ResponseEntity<?> getStudentPFEDepasseList(@RequestParam("id") String id,
 			@RequestParam("nbrMois") int nbrMois) {
-		System.out.println("nbrMois" + nbrMois);
-		System.out.println("id" + id);
+		// System.out.println("nbrMois" + nbrMois);
+		// System.out.println("id" + id);
 		try {
 			List<StudentPFEDepasse> StudentPFEDepasseList = serviceStageService.getEtudiantPFEDepasse(id, nbrMois);
 			if (StudentPFEDepasseList.isEmpty()) {
@@ -122,7 +122,7 @@ public class ServiceStageController {
 
 			return new ResponseEntity<>(StudentPFEDepasseList, HttpStatus.OK);
 		} catch (Exception e) {
-			System.out.println(e);
+			// System.out.println(e);
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -221,10 +221,10 @@ public class ServiceStageController {
 	public ResponseEntity<ConventionForRSSDto> updateConventionState(@RequestParam("idET") String idEt,
 			@RequestParam("date") String dateOFF) throws Exception {
 
-		System.out.println("------THIS-1---------- idEt: " + idEt);
+		// System.out.println("------THIS-1---------- idEt: " + idEt);
 		String date = dateOFF.trim();
-		System.out.println("------THIS-2.1---------- date$" + dateOFF + "$");
-		System.out.println("------THIS-2.2---------- date$" + date + "$");
+		// System.out.println("------THIS-2.1---------- date$" + dateOFF + "$");
+		// System.out.println("------THIS-2.2---------- date$" + date + "$");
 
 		// System.out.println("------THIS-1---------- idEt: " + idEt);
 		// System.out.println("------THIS-2---------- date: " + date);
@@ -233,7 +233,7 @@ public class ServiceStageController {
 		// String convDt = date.substring(0, 19).replace("T", " ");
 
 		if (conventionRepository.getConventionByIdFormedDate(idEt, date).isPresent()) {
-			System.out.println("------THIS-3---------- date: " + date);
+			// System.out.println("------THIS-3---------- date: " + date);
 			Optional<Convention> conv = conventionRepository.getConventionByIdFormedDate(idEt, date);
 
 			Date dat = new Date();
@@ -257,12 +257,12 @@ public class ServiceStageController {
 			if (convCodePays.equalsIgnoreCase("TN")) {
 				ConventionTN_PDF convTN = new ConventionTN_PDF(conv, path, studentFullName, studentOption,
 						studentDepartment);
-				System.out.println("----------------- TN");
+				// System.out.println("----------------- TN");
 
 				/**********************************************
 				 * Notify Mail
 				 *******************************************************/
-				System.out.println("----------------- Current Convention: " + convCodePays);
+				// System.out.println("----------------- Current Convention: " + convCodePays);
 				conv.get().setPathConvention(path);
 				conventionRepository.save(conv.get());
 
@@ -282,7 +282,7 @@ public class ServiceStageController {
 				String studentMail = utilServices.findStudentMailById(idEt); // Server DEPLOY_SERVER
 				// String studentMail = "saria.essid@esprit.tn"; // Local
 
-				System.out.println("---------------------------> Start");
+				// System.out.println("---------------------------> Start");
 
 				utilServices.sendMail("Validation de Convention", studentMail, content);
 				// utilServices.sendMailWithAttachment(studentMail, "Validation de Convention",
@@ -292,12 +292,12 @@ public class ServiceStageController {
 			if (convCodePays.equalsIgnoreCase("EN") || convCodePays.equalsIgnoreCase("--")) {
 				ConventionEN_PDF convEN = new ConventionEN_PDF(conv, path, studentFullName, studentOption,
 						studentDepartment);
-				System.out.println("----------------- EN");
+				// System.out.println("----------------- EN");
 
 				/**********************************************
 				 * Notify Mail
 				 *******************************************************/
-				System.out.println("----------------- Current Convention: " + convCodePays);
+				// System.out.println("----------------- Current Convention: " + convCodePays);
 				conv.get().setPathConvention(path);
 				conventionRepository.save(conv.get());
 
@@ -318,7 +318,7 @@ public class ServiceStageController {
 				String studentMail = utilServices.findStudentMailById(idEt); // Server DEPLOY_SERVER
 				// String studentMail = "saria.essid@esprit.tn"; // Local
 
-				System.out.println("---------------------------> Start");
+				// System.out.println("---------------------------> Start");
 
 				utilServices.sendMail("Validation de Convention", studentMail, content);
 				// utilServices.sendMailWithAttachment(studentMail, "Validation de Convention",
@@ -328,12 +328,12 @@ public class ServiceStageController {
 				StudentConvFRDto scf = utilServices.findStudentConvFRDtoById(idEt);
 
 				ConventionFR_PDF convFR = new ConventionFR_PDF(conv, path, scf, studentOption, studentDepartment);
-				System.out.println("----------------- FR");
+				// System.out.println("----------------- FR");
 
 				/**********************************************
 				 * Notify Mail
 				 *******************************************************/
-				System.out.println("----------------- Current Convention: " + convCodePays);
+				// System.out.println("----------------- Current Convention: " + convCodePays);
 				conv.get().setPathConvention(path);
 				conventionRepository.save(conv.get());
 

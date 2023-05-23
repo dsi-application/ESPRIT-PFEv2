@@ -162,7 +162,7 @@ public class PedagogicalCoordinatorController {
 
 			for (String opt : options) {
 
-				System.out.println("-------------------------------> OPT: " + opt);
+				// System.out.println("-------------------------------> OPT: " + opt);
 
 				ess.addAll(studentRepository.findEncadrementStatusCJByOption(opt));
 				ess.addAll(studentRepository.findEncadrementStatusCSByOption(opt));
@@ -174,14 +174,13 @@ public class PedagogicalCoordinatorController {
 
 				if (opt.equalsIgnoreCase("arctic") || opt.equalsIgnoreCase("ds") || opt.equalsIgnoreCase("sae")
 						|| opt.equalsIgnoreCase("twin")) {
-					System.out.println("------------> OPT *: "
-							+ optionStudentALTRepository.findEncadrementStatusCJALTByOption(opt.toLowerCase()).size());
+					// System.out.println("------------> OPT *: " + optionStudentALTRepository.findEncadrementStatusCJALTByOption(opt.toLowerCase()).size());
 					// ess.addAll(studentRepository.findEncadrementStatusCJALTByOption());
 					ess.addAll(optionStudentALTRepository.findEncadrementStatusCJALTByOption(opt.toLowerCase()));
 				}
 			}
 
-			System.out.println("---> enc Download ExcelFile  " + optDept);
+			// System.out.println("---> enc Download ExcelFile  " + optDept);
 
 			for (EncadrementStatusExcelDto es : ess) {
 				es.setAcademicEncadMail(teacherRepository.findTeacherMailById(es.getAcademicEncadFullName()));

@@ -44,7 +44,7 @@ public class EtatEncadrementByOption_Excel
 		try
 		{
 			HSSFWorkbook workbook = new HSSFWorkbook();
-			System.out.println("LOL");
+			// System.out.println("LOL");
 			HSSFSheet sheet = workbook.createSheet("Année Universitaire " + year);
 			sheet.setHorizontallyCenter(true);
 			
