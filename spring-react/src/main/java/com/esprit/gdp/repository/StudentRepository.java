@@ -3,26 +3,12 @@ package com.esprit.gdp.repository;
 import java.util.List;
 import java.util.Optional;
 
+import com.esprit.gdp.dto.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.esprit.gdp.dto.EncadrementRSSStatusExcelDto;
-import com.esprit.gdp.dto.EncadrementStatusExcelDto;
-import com.esprit.gdp.dto.ExpertiseStatusExcelDto;
-import com.esprit.gdp.dto.StudentConfigDto;
-import com.esprit.gdp.dto.StudentConvFRDto;
-import com.esprit.gdp.dto.StudentDto;
-import com.esprit.gdp.dto.StudentExcelDto;
-import com.esprit.gdp.dto.StudentFullNameMailTelDto;
-import com.esprit.gdp.dto.StudentIdFullNameDto;
-import com.esprit.gdp.dto.StudentIdNomPrenomDto;
-import com.esprit.gdp.dto.StudentMailTelDto;
-import com.esprit.gdp.dto.StudentNoteEngTrainingshipDto;
-import com.esprit.gdp.dto.StudentSpeedDto;
-import com.esprit.gdp.dto.StudentToBeExpertisedForTimelineDto;
-import com.esprit.gdp.dto.StudentToBeSupervisedForTimelineDto;
 import com.esprit.gdp.models.StudentCJ;
 import com.esprit.gdp.models.StudentCS;
 
@@ -723,5 +709,15 @@ public interface StudentRepository extends JpaRepository<StudentCJ, String>
 			+ "and y.saisonClasse.id.anneeDeb =?1 "
 			+ "and lower(y.saisonClasse.id.codeCl) like CONCAT('4', ?2, '%')")
 	List<ExpertiseStatusExcelDto> findExpertiseStatusCSByYearAndOption(String selectedYear, String optionlabel);
+
+	@Query("Select new com.esprit.gdp.dto.StudentDetailsDto(u.idEt, trim(u.nomet), trim(u.prenomet), u.adressemailesp, u.telet) "
+			+ "from StudentCJ u, InscriptionCJ y "
+			+ "where u.idEt = y.id.idEt and (y.saisonClasse.id.codeCl like '5%' or y.saisonClasse.id.codeCl like '4ALINFO%') and u.idEt=?1")
+	StudentDetailsDto findStudentDetailsDtoDtoById_CJALT(String idEt);
+
+	@Query("Select new com.esprit.gdp.dto.StudentDetailsDto(u.idEt, trim(u.nomet), trim(u.prenomet), u.adressemailesp, u.telet) "
+			+ "from StudentCS u, InscriptionCS y "
+			+ "where u.idEt = y.id.idEt and y.saisonClasse.id.codeCl like '4%' and u.idEt=?1")
+	StudentDetailsDto findStudentDetailsDtoDtoById_CS(String idEt);
 
 }

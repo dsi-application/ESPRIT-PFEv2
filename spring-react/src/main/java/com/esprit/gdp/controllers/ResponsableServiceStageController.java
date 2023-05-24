@@ -11,7 +11,9 @@ import java.util.Date;
 import java.util.List;
 
 import com.esprit.gdp.dto.*;
+import com.esprit.gdp.files.*;
 import com.esprit.gdp.models.Avenant;
+import com.esprit.gdp.repository.*;
 import com.esprit.gdp.services.ServiceStageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -21,17 +23,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.esprit.gdp.files.EtatEncadrementsAndExpertisesByYear_Excel;
-import com.esprit.gdp.files.EtatEncadrementsDetailedByYear_Excel;
-import com.esprit.gdp.files.EtatEncadrementsGlobal_Excel;
-import com.esprit.gdp.files.EtatExpertisesDetailedByYear_Excel;
-import com.esprit.gdp.files.EtatPresidencesAndMembresBySession_Excel;
-import com.esprit.gdp.repository.FichePFERepository;
-import com.esprit.gdp.repository.OptionRepository;
-import com.esprit.gdp.repository.OptionStudentALTRepository;
-import com.esprit.gdp.repository.SessionRepository;
-import com.esprit.gdp.repository.StudentRepository;
-import com.esprit.gdp.repository.TeacherRepository;
 import com.esprit.gdp.services.UtilServices;
 
 //@RestController
@@ -70,6 +61,12 @@ public class ResponsableServiceStageController {
 
 	@Autowired
 	ServiceStageService serviceStageService;
+
+	@Autowired
+	GrilleAcademicEncadrantRepository grilleAcademicEncadrantRepository;
+
+	@Autowired
+	CodeNomenclatureRepository codeNomenclatureRepository;
 
 	/******************************************************
 	 * Methods
@@ -598,6 +595,170 @@ public class ResponsableServiceStageController {
 
 		serviceStageService.GenerateAvenant(idET,dateConvention, dateAvenant);
 		return new ResponseEntity<>(serviceStageService.UpdateAvenantState(idET, dateConvention, dateAvenant), HttpStatus.OK);
+	}
+
+	@GetMapping("/loadValidatedDepots")
+	public ResponseEntity<?> loadValidatedDepots(@RequestParam("idRSS") String idRSS, @RequestParam("yearLabel") String yearLabel, @RequestParam("optionLabel") String optionLabel) {
+		try {
+
+			System.out.println("--------------1805-----> HELLO : " + idRSS);
+
+			List<String> idStudents = new ArrayList<String>();
+			idStudents.addAll(utilServices.findStudentsByYearAndGroupedOption(yearLabel, optionLabel.toLowerCase()));
+
+			/****************************************************************************************************************************************/
+
+			String idServiceStage = null;
+			if(idRSS.equalsIgnoreCase("SR-STG-IT4") || idRSS.equalsIgnoreCase("SR-STG-IT2") || idRSS.equalsIgnoreCase("SR-STG-IT1"))
+			//if(idServiceStageFULL.startsWith("SR-STG-IT"))
+			{
+				idServiceStage = "SR-STG-IT";
+			}
+			else
+			{
+				idServiceStage = idRSS;
+			}
+
+			System.out.println("----------------------> PIKA 1: " + idServiceStage);
+
+			List<DepotFinalDto> plansTravailCJ = fichePFERepository.loadFichesForDepotValByStudents(idStudents);
+			// List<ConventionsValidatedForRSSDto> conventionList = serviceStageService.getAllConventionsValidatedDtoByStudentsForRSS(idRSS, idStudents);
+			//List<DepotFinalDto> depotsFinal = utilServices.loadPlanTravailByYear(yearLabel, idServiceStage);
+
+			System.out.println("----------------------> PIKA 2: " + plansTravailCJ.size());
+
+			for (DepotFinalDto df : plansTravailCJ) {
+
+				/*
+				DepotRapport D = new DepotRapport(F.getIdFichePFE().getConventionPK().getIdEt(),
+						S.getNomet(), S.getPrenomet(), F.getPathRapportVersion2(), F.getPathPlagiat(),
+						F.getPathAttestationStage(), F.getPathSupplement(),
+						codeNomenclatureRepository.findEtatFiche(F.getEtatFiche()),
+						codeNomenclatureRepository.findEtatDepot(F.getValidDepot()),
+						F.getIdFichePFE().getDateDepotFiche());
+				 */
+
+				df.setFullName(utilServices.findStudentFullNameById(df.getIdEt()));
+				df.setCurrentClasse(utilServices.findCurrentClassByIdEt(df.getIdEt()));
+				// df.setEtatFiche(codeNomenclatureRepository.findEtatFiche(df.getEtatFiche()));
+				// df.setEtatDepot(codeNomenclatureRepository.findEtatDepot(df.getEtatDepot()));
+				// df.setEtatDepot();
+
+				System.out.println("--------------> FichePFEPK : " + df.getFichePFEPK().getConventionPK().getIdEt());
+				//df.setEtatGrilleEncadrement("NOTYET");
+
+				if(!grilleAcademicEncadrantRepository.findEtatGrilleByFiche(df.getFichePFEPK()).isEmpty())
+				{
+					if(grilleAcademicEncadrantRepository.findEtatGrilleByFiche(df.getFichePFEPK()).get(0).equalsIgnoreCase("02"))
+					{
+						df.setEtatGrilleEncadrement("DONE");
+					}
+					else
+					{
+						df.setEtatGrilleEncadrement("NOTYET");
+					}
+				}
+				else
+				{
+					df.setEtatGrilleEncadrement("NOTYET");
+				}
+
+			}
+
+			if (plansTravailCJ.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+			return new ResponseEntity<>(plansTravailCJ, HttpStatus.OK);
+		} catch (Exception e) {
+
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@GetMapping("/loadNotYetTreatedDepots")
+	public ResponseEntity<?> loadNotYetTreatedDepots(@RequestParam("idRSS") String idRSS, @RequestParam("yearLabel") String yearLabel, @RequestParam("optionLabel") String optionLabel) {
+		try {
+
+			System.out.println("--------------1805-----> HELLO : " + idRSS);
+
+			List<String> idStudents = new ArrayList<String>();
+			idStudents.addAll(utilServices.findStudentsByYearAndGroupedOption(yearLabel, optionLabel.toLowerCase()));
+
+			/****************************************************************************************************************************************/
+
+			String idServiceStage = null;
+			if(idRSS.equalsIgnoreCase("SR-STG-IT4") || idRSS.equalsIgnoreCase("SR-STG-IT2") || idRSS.equalsIgnoreCase("SR-STG-IT1"))
+			//if(idServiceStageFULL.startsWith("SR-STG-IT"))
+			{
+				idServiceStage = "SR-STG-IT";
+			}
+			else
+			{
+				idServiceStage = idRSS;
+			}
+
+			System.out.println("----------------------> PIKA 1: " + idServiceStage);
+
+			//codeNomenclatureRepository.findEtatFiche(F.getEtatFiche())
+			List<DepotFinalDto> plansTravailCJ = fichePFERepository.loadFichesForDepotNotYetTreatedByStudents(idStudents);
+			// codeNomenclatureRepository.findEtatFiche(F.getEtatFiche())
+
+			// List<ConventionsValidatedForRSSDto> conventionList = serviceStageService.getAllConventionsValidatedDtoByStudentsForRSS(idRSS, idStudents);
+			//List<DepotFinalDto> depotsFinal = utilServices.loadPlanTravailByYear(yearLabel, idServiceStage);
+
+			System.out.println("----------------------> PIKA 2: " + plansTravailCJ.size());
+
+			for (DepotFinalDto df : plansTravailCJ) {
+
+				/*
+				DepotRapport D = new DepotRapport(F.getIdFichePFE().getConventionPK().getIdEt(),
+						S.getNomet(), S.getPrenomet(), F.getPathRapportVersion2(), F.getPathPlagiat(),
+						F.getPathAttestationStage(), F.getPathSupplement(),
+						codeNomenclatureRepository.findEtatFiche(F.getEtatFiche()),
+						codeNomenclatureRepository.findEtatDepot(F.getValidDepot()),
+						F.getIdFichePFE().getDateDepotFiche());
+				 */
+
+				System.out.println("----------------------> Etat Depot: " + df.getEtatDepot());
+
+				df.setEtatDepot(codeNomenclatureRepository.findEtatDepot(df.getEtatDepot()));
+				df.setFullName(utilServices.findStudentFullNameById(df.getIdEt()));
+				df.setCurrentClasse(utilServices.findCurrentClassByIdEt(df.getIdEt()));
+
+				// df.setEtatFiche(codeNomenclatureRepository.findEtatFiche(df.getEtatFiche()));
+				// df.setEtatDepot(codeNomenclatureRepository.findEtatDepot(df.getEtatDepot()));
+				// df.setEtatDepot();
+
+				System.out.println("--------------> FichePFEPK : " + df.getFichePFEPK().getConventionPK().getIdEt());
+				//df.setEtatGrilleEncadrement("NOTYET");
+
+				if(!grilleAcademicEncadrantRepository.findEtatGrilleByFiche(df.getFichePFEPK()).isEmpty())
+				{
+					if(grilleAcademicEncadrantRepository.findEtatGrilleByFiche(df.getFichePFEPK()).get(0).equalsIgnoreCase("02"))
+					{
+						df.setEtatGrilleEncadrement("DONE");
+					}
+					else
+					{
+						df.setEtatGrilleEncadrement("NOTYET");
+					}
+				}
+				else
+				{
+					df.setEtatGrilleEncadrement("NOTYET");
+				}
+
+			}
+
+			if (plansTravailCJ.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+			return new ResponseEntity<>(plansTravailCJ, HttpStatus.OK);
+		} catch (Exception e) {
+
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
 	}
 
 }

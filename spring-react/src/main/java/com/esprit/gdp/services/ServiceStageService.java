@@ -170,7 +170,7 @@ public class ServiceStageService {
 			String idEt = c.getIdEt();
 			String classe = utilServices.findCurrentClassByIdEt(idEt);
 
-			String convCodePays = c.getPaysConvention();
+			/*String convCodePays = c.getPaysConvention();
 			if(convCodePays.equalsIgnoreCase("--"))
 			{
 				c.setPaysConvention("EN");
@@ -178,7 +178,7 @@ public class ServiceStageService {
 			else
 			{
 				c.setPaysConvention(convCodePays);
-			}
+			}*/
 //
 //		    System.out.println("--------------------------> findStudentFullNameById: " + utilServices.findStudentFullNameById(idEt));
 //			System.out.println("--------------------------> findDepartmentAbbByClassWithStat: " + utilServices.findDepartmentAbbByClassWithStat(classe));
@@ -251,7 +251,7 @@ public class ServiceStageService {
 			String idEt = c.getIdEt();
 			String classe = utilServices.findCurrentClassByIdEt(idEt);
 
-			String convCodePays = c.getPaysConvention();
+			/*String convCodePays = c.getPaysConvention();
 			if(convCodePays.equalsIgnoreCase("--"))
 			{
 				c.setPaysConvention("EN");
@@ -259,7 +259,7 @@ public class ServiceStageService {
 			else
 			{
 				c.setPaysConvention(convCodePays);
-			}
+			}*/
 //
 //		    System.out.println("--------------------------> findStudentFullNameById: " + utilServices.findStudentFullNameById(idEt));
 //			System.out.println("--------------------------> findDepartmentAbbByClassWithStat: " + utilServices.findDepartmentAbbByClassWithStat(classe));
@@ -314,7 +314,9 @@ public class ServiceStageService {
 			String classe = utilServices.findCurrentClassByIdEt(idEt);
 
 			c.setNomEt(utilServices.findStudentFullNameById(idEt));
-			c.setDepartEt(utilServices.findDepartmentAbbByClassWithStat(classe));
+
+			List<String> los = optionRepository.listOptionsByYear("2021");
+			c.setDepartEt(utilServices.findOptionByStudent(idEt, los).replaceAll("_01", ""));
 			c.setCurrentClasse(classe);
 		}
 

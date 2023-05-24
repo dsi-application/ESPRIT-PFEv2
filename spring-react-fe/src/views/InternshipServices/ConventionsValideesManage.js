@@ -172,14 +172,6 @@ const ConventionsValideesManage = () => {
       },
     },
     {
-      name: "paysConvention",
-      label: "Type",
-      options: {
-        filter: true,
-        sort: true
-      },
-    },
-    {
       name: "dateConvention",
       label: "Date dépôt Convention",
       options: {
@@ -502,134 +494,106 @@ const ConventionsValideesManage = () => {
       <TheSidebar dataDAC={nbDemandesAnnulationConvention} dataDC={nbDepositedConventions}
                   dataVC={nbValidatedConventions}/>
 
-      <Tour
-        steps={steps}
-        isOpen={isTourOpen}
-        onAfterOpen={(target) => (document.body.style.overflowY = "hidden")}
-        onBeforeClose={(target) => (document.body.style.overflowY = "auto")}
-        onRequestClose={() => setIsTourOpen(false)}
-      />
-      {ConventionsstatusForRSS === "loading" || ConventionsstatusForRSS === "noData" ? (
-        <div>
-          <CRow>
-            <CCol md="12">
-              <center>
-                <br/><br/>
-                <span className="waitIcon"/> **
-                <br></br>
-              </center>
-            </CCol>
-          </CRow>
-        </div>
-      ) : (
-        <>
-
-          <CRow>
-            <CCol>
-              <CCard data-tut="reactour__1">
-                <CRow>
-                  <CCol md="3"/>
-                  <CCol md="6">
-                    <CForm onSubmit={formik.handleSubmit}>
-                      <CFormGroup>
-                        {error.visible && <p>{error.message}</p>}
-                      </CFormGroup>
-                      <center>
-                        Choisir une Promotion et une Option pour visualiser la liste correspondante :
-                      </center>
+      <CRow>
+        <CCol>
+          <CCard data-tut="reactour__1">
+            <CRow>
+              <CCol md="3"/>
+              <CCol md="6">
+                <CForm onSubmit={formik.handleSubmit}>
+                  <CFormGroup>
+                    {error.visible && <p>{error.message}</p>}
+                  </CFormGroup>
+                  <center>
+                    Choisir une Promotion et une Option pour visualiser la liste correspondante :
+                  </center>
+                  <br/>
+                  <CFormGroup row>
+                    <CCol md="1"/>
+                    <CCol md="10">
+                      <CSelect value={formik.values.yearLabel}
+                               onChange={formik.handleChange}
+                        // onSelect={gotAllOptionsByPromotion(formik.values.yearLabel)}
+                               onBlur={formik.handleBlur}
+                               custom
+                               size="sm"
+                               name="yearLabel">
+                        <option style={{display: "none"}}>
+                          ---- Choisir une Promotion ----
+                        </option>
+                        {formik.values.allYears?.map((e, i) => (
+                          <option value={e} key={i}>
+                            {e}
+                          </option>
+                        ))}
+                      </CSelect>
+                      {
+                        formik.errors.yearLabel && formik.touched.yearLabel &&
+                        <p style={{color: "red"}}>{formik.errors.yearLabel}</p>
+                      }
                       <br/>
-                      <CFormGroup row>
-                        <CCol md="1"/>
-                        <CCol md="10">
-                          <CSelect value={formik.values.yearLabel}
-                                   onChange={formik.handleChange}
-                            //onSelect={gotAllOptionsByPromotion(formik.values.yearLabel)}
-                                   onBlur={formik.handleBlur}
-                                   custom
-                                   size="sm"
-                                   name="yearLabel">
-                            <option style={{display: "none"}}>
-                              ---- Choisir une Promotion ----
-                            </option>
-                            {formik.values.allYears?.map((e, i) => (
-                              <option value={e} key={i}>
-                                {e}
-                              </option>
-                            ))}
-                          </CSelect>
-                          {
-                            formik.errors.yearLabel && formik.touched.yearLabel &&
-                            <p style={{color: "red"}}>{formik.errors.yearLabel}</p>
-                          }
-                          <br/>
-                        </CCol>
-                        <CCol md="1"/>
-                      </CFormGroup>
-                      <CFormGroup row>
-                        <CCol md="1"/>
-                        <CCol md="10">
-                          <CSelect value={formik.values.optionLabel}
-                                   onChange={formik.handleChange}
-                                   onBlur={formik.handleBlur}
-                                   custom
-                                   size="sm"
-                                   name="optionLabel">
-                            <option style={{display: "none"}}>
-                              ---- Choisir une Option ----
-                            </option>
-                            {allOpts?.map((e, i) => (
-                              <option value={e} key={i}>
-                                {e}
-                              </option>
-                            ))}
-                          </CSelect>
-                          {
-                            formik.errors.optionLabel && formik.touched.optionLabel &&
-                            <p style={{color: "red"}}>{formik.errors.optionLabel}</p>
-                          }
-                          <br/>
-                        </CCol>
-                        <CCol md="1"/>
-                        <br/><br/>
-                      </CFormGroup>
-                      <center>
-                        <CButton color="danger" type="submit">
-                          {showLoader && <CSpinner grow size="sm"/>} &nbsp; Confirmer
-                        </CButton>
-                      </center>
-                    </CForm>
-                  </CCol>
-                  <CCol md="3"/>
-                </CRow>
+                    </CCol>
+                    <CCol md="1"/>
+                  </CFormGroup>
+                  <CFormGroup row>
+                    <CCol md="1"/>
+                    <CCol md="10">
+                      <CSelect value={formik.values.optionLabel}
+                               onChange={formik.handleChange}
+                               onBlur={formik.handleBlur}
+                               custom
+                               size="sm"
+                               name="optionLabel">
+                        <option style={{display: "none"}}>
+                          ---- Choisir une Option ----
+                        </option>
+                        {allOpts?.map((e, i) => (
+                          <option value={e} key={i}>
+                            {e}
+                          </option>
+                        ))}
+                      </CSelect>
+                      {
+                        formik.errors.optionLabel && formik.touched.optionLabel &&
+                        <p style={{color: "red"}}>{formik.errors.optionLabel}</p>
+                      }
+                      <br/>
+                    </CCol>
+                    <CCol md="1"/>
+                    <br/><br/>
+                  </CFormGroup>
+                  <center>
+                    <CButton color="danger" type="submit">
+                      {showLoader && <CSpinner grow size="sm"/>} &nbsp; Confirmer
+                    </CButton>
+                  </center>
+                </CForm>
+              </CCol>
+              <CCol md="3"/>
+            </CRow>
 
 
-                <br/>
-                <CCardBody>
-                  {conventionsForRSS ? (
-                    <MUIDataTable
-                      data={conventionsForRSS}
-                      columns={columnsConventions}
-                      options={{
-                        selectableRows: 'none' // <===== will turn off checkboxes in rows
-                      }}
-                    />
-                  ) : (
-                    <>
-                      Sorry, no Data is available
-                    </>
-                  )}
-                </CCardBody>
+            <br/>
+            <CCardBody>
+              {conventionsForRSS ? (
+                <MUIDataTable
+                  data={conventionsForRSS}
+                  columns={columnsConventions}
+                  options={{
+                    selectableRows: 'none' // <===== will turn off checkboxes in rows
+                  }}
+                />
+              ) : (
+                <>
+                  Sorry, no Data is available
+                </>
+              )}
+            </CCardBody>
 
-              </CCard>
-            </CCol>
-          </CRow>
-          {conventionsForRSS ? (
-            ""
-          ) : (
-            <></>
-          )}
-        </>
-      )}
+          </CCard>
+        </CCol>
+      </CRow>
+
     </>
   );
 };

@@ -1213,7 +1213,7 @@ public class UtilServices {
 			String idEt = c.getIdEt();
 			String classe = findCurrentClassByIdEt(idEt);
 
-			String convCodePays = c.getPaysConvention();
+			/*String convCodePays = c.getPaysConvention();
 			if(convCodePays.equalsIgnoreCase("--"))
 			{
 				c.setPaysConvention("EN");
@@ -1221,10 +1221,12 @@ public class UtilServices {
 			else
 			{
 				c.setPaysConvention(convCodePays);
-			}
+			}*/
 
 			c.setNomEt(findStudentFullNameById(idEt));
-			c.setDepartEt(findDepartmentAbbByClassWithStat(classe));
+			//c.setDepartEt(findDepartmentAbbByClassWithStat(classe));
+			List<String> los = optionRepository.listOptionsByYear("2021");
+			c.setDepartEt(findOptionByStudent(idEt, los).replaceAll("_01", ""));
 			c.setCurrentClasse(classe);
 		}
 
@@ -2691,5 +2693,26 @@ public class UtilServices {
 		
 		return nbrEncByTeacher;
 	}
-	
+
+	public StudentDetailsDto findStudentDetailsDtoById(String idEt)
+	{
+		StudentDetailsDto student = null;
+		StudentDetailsDto studentCJALT = studentRepository.findStudentDetailsDtoDtoById_CJALT(idEt);
+		StudentDetailsDto studentCS = studentRepository.findStudentDetailsDtoDtoById_CS(idEt);
+
+		System.out.println("---------------------**-------------> JWT NOT SET CJ+ALT: " + studentCJALT);
+		System.out.println("---------------------**-------------> JWT NOT SET CS: " + studentCS);
+
+		if(studentCJALT != null)
+		{
+			student = studentCJALT;
+		}
+		if(studentCS != null)
+		{
+			student = studentCS;
+		}
+
+		return student;
+	}
+
 }

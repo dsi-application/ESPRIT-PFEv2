@@ -5,21 +5,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import com.esprit.gdp.dto.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.esprit.gdp.dto.FichePFEDateDepotReportsEtatReportsDto;
-import com.esprit.gdp.dto.FichePFEDepotDto;
-import com.esprit.gdp.dto.FichePFEForFicheDepotPFEDto;
-import com.esprit.gdp.dto.FichePFEHistoryDto;
-import com.esprit.gdp.dto.FichePFEMultiplePlanificationDto;
-import com.esprit.gdp.dto.FichePFEPlanificationSTNDto;
-import com.esprit.gdp.dto.FichePFETitreDateDepotStatusDto;
-import com.esprit.gdp.dto.FichePFEWithoutFicheDepotPFEDto;
-import com.esprit.gdp.dto.StudentSTNGradDto;
-import com.esprit.gdp.dto.StudentsByJuryActorForSTNDto;
 import com.esprit.gdp.models.FichePFE;
 import com.esprit.gdp.models.FichePFEPK;
 import com.esprit.gdp.models.Technologie;
@@ -304,7 +295,7 @@ public interface FichePFERepository extends JpaRepository<FichePFE, FichePFEPK>
 	List<Object[]> findFichePFEPlanifySoutenanceForMP(String idEt);
 	
 	// presidentJury   presidentJuryEns   expertEns
-	@Query("select fp.presidentJury, fp.presidentJuryEns.idEns, fp.expertEns.idEns, fp.salle.codeSalle, FUNCTION('to_char', fp.idFichePFE.dateDepotFiche,'yyyy-mm-dd HH24:MI:SS'), FUNCTION('to_char', fp.dateSoutenance,'yyyy-mm-dd'), fp.heureDebut, fp.heureFin, etatFiche "
+	@Query("select fp.presidentJury, fp.presidentJuryEns.idEns, fp.expertEns.idEns, fp.salle.codeSalle, FUNCTION('to_char', fp.idFichePFE.dateDepotFiche,'yyyy-mm-dd HH24:MI:SS'), FUNCTION('to_char', fp.dateSoutenance,'yyyy-mm-dd'), fp.heureDebut, fp.heureFin, fp.etatFiche "
 			+ " from FichePFE fp where fp.idFichePFE.conventionPK.idEt=?1 order by FUNCTION('to_char', fp.idFichePFE.dateDepotFiche,'yyyy-mm-dd HH24:MI:SS') asc")
 	List<Object[]> findFichePFEPlanifySoutenance(String idEt);
 	
@@ -774,6 +765,25 @@ public interface FichePFERepository extends JpaRepository<FichePFE, FichePFEPK>
 			+ "fp.expertEns.idEns =?1 and "
 			+ "fp.session.idSession =?2")
 	List<String> findStudentsIdByJuryMembre(String idMbr, Integer sessionId);
-	
-	
+
+	@Query("SELECT new com.esprit.gdp.dto.DepotFinalDto(f.idFichePFE, c.conventionPK.idEt, f.pathRapportVersion2, f.pathPlagiat, f.pathAttestationStage, f.pathSupplement, f.validDepot, FUNCTION('to_char', f.idFichePFE.dateDepotFiche,'dd-mm-yyyy HH24:MI:SS'), f.idFichePFE.dateDepotFiche) "
+			+ "from FichePFE f join Convention c on c.conventionPK.idEt = f.idFichePFE.conventionPK.idEt "
+			+ "where "
+			+ "f.validDepot='02' and " //+ "f.etatFiche ='03' and "
+			+ "c.traiter = '02' and "
+			+ "f.idFichePFE.conventionPK.idEt in (?1) "
+			// + "c.responsableServiceStage.idUserSce =?1 "
+			+ "order by f.dateDepotReports desc")
+	List<DepotFinalDto> loadFichesForDepotValByStudents(List<String> students); //;(String idServiceStage);
+
+	@Query("SELECT new com.esprit.gdp.dto.DepotFinalDto(f.idFichePFE, c.conventionPK.idEt, f.pathRapportVersion2, f.pathPlagiat, f.pathAttestationStage, f.pathSupplement, f.validDepot, FUNCTION('to_char', f.idFichePFE.dateDepotFiche,'dd-mm-yyyy HH24:MI:SS'), f.idFichePFE.dateDepotFiche) "
+			+ "from FichePFE f join Convention c on c.conventionPK.idEt = f.idFichePFE.conventionPK.idEt "
+			+ "where "
+			+ "f.validDepot='01' and f.etatFiche ='03' and " //+ "f.etatFiche ='03' and "
+			+ "c.traiter = '02' and "
+			+ "f.idFichePFE.conventionPK.idEt in (?1) "
+			// + "c.responsableServiceStage.idUserSce =?1 "
+			+ "order by f.dateDepotReports desc")
+	List<DepotFinalDto> loadFichesForDepotNotYetTreatedByStudents(List<String> students);
+
 }

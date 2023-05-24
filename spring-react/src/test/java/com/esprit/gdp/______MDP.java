@@ -15,7 +15,7 @@ public class ______MDP {
 		
 		StandardPBEStringEncryptor decryptor = new StandardPBEStringEncryptor();
 		decryptor.setPassword(mpCryptoPassword);
-		System.out.println(decryptor.decrypt("LwIAP21BCECINVkFekRAnmw53UdqwrRf"));
+		System.out.println(decryptor.decrypt("sEIGDvUxrWmLIgmJtEUNj2uL2Qc+LHyy"));
 	}
 
 }

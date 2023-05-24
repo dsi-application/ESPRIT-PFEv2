@@ -76,7 +76,7 @@ const AvenantsManage = () => {
     },
     {
       name: "departEt",
-      label: "Département",
+      label: "Option",
       options: {
         filter: true,
         sort: true
