@@ -206,7 +206,7 @@ export default class AffectAcademicEncadrantComponent extends Component {
       openPopupJustifyCancelAffectation: false,
       loadCancelAffectation: false,
       allSessionsLabel: [],
-      selectedYear: '2021',
+      selectedYear: '2022',
       loadStudentsCJByYear: true
     }
 
@@ -680,7 +680,7 @@ export default class AffectAcademicEncadrantComponent extends Component {
               <CCol md="3">
                 <br/>
                 <Select  placeholder="Please Select an Academic Year"
-                         defaultValue={{value: '2021', label: '2021', color: "#00B8D9"}}
+                         defaultValue={{value: '2022', label: '2022', color: "#00B8D9"}}
                          value={allSessionsLabel.value}
                          components={animatedComponents}
                          options={allSessionsLabel}

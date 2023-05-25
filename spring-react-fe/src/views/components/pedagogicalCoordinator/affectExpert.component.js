@@ -225,7 +225,7 @@ export default class AffectExpertComponent extends Component {
       allLabelCEP: [],
       openPopupVerifAffectEXP: false,
       allSessionsLabel: [],
-      selectedYear: "2021"
+      selectedYear: "2022"
     }
 
     let pcMail = currentPedagogicalCoordinator.id;
@@ -239,7 +239,7 @@ export default class AffectExpertComponent extends Component {
       this.state.privilegeKind = "Département";
     }
 
-    // Load Classes of 2021
+    // Load Classes of 2022
     let requestb = new XMLHttpRequest();
     requestb.open(
       "GET",
@@ -804,7 +804,7 @@ export default class AffectExpertComponent extends Component {
           <CCol md="4">
             <p className="greyMarkForSelectComp">Merci de choisir une Année pour consulter la résultante</p>
             <Select  placeholder="Please Select an Academic Year"
-                     defaultValue={{value: '2021', label: '2021', color: "#00B8D9"}}
+                     defaultValue={{value: '2022', label: '2022', color: "#00B8D9"}}
                      value={allSessionsLabel.value}
                      components={animatedComponents}
                      options={allSessionsLabel}
