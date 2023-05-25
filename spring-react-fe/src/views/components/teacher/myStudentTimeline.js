@@ -1075,7 +1075,7 @@ function MyStudentTimeline(props) {
                             <br/><br/>
                             <LightTooltip title="Télécharger Diagramme de Gantt" placement="right">
                               <span className="downloadPurpleIcon" onClick={() => {
-                                downloadPDFFile(fPFE.pathDiagrammeGantt);
+                                downloadGanttDiagramOFF(fPFE.pathDiagrammeGantt);
                               }}/>
                             </LightTooltip>
                           </CTabPane>
@@ -3059,7 +3059,7 @@ function MyStudentTimeline(props) {
                   tf.cancellingAgreementPath !== null &&
                   <LightTooltip title="Télécharger Accord Annulation" placement="right">
                     <span className="cancelAgreeIcon" onClick={() => {
-                      downloadGanttDiagramOFF(tf.cancellingAgreementPath);
+                      downloadGanttDiagram(tf.cancellingAgreementPath);
                     }}/>
                   </LightTooltip>
                 }
