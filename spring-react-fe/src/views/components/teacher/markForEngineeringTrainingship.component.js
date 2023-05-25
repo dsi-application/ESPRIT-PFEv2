@@ -185,7 +185,7 @@ export default class MarkForEngineeringTrainingship extends Component {
             noteNotCompleteSend: "",
             openPopupVerifyMarkIngTr: false,
             openPopupVerifyModifMarkIngTr: false,
-            selectedYear: '2021',
+            selectedYear: '2022',
             loadStudentsCJByYear: true,
             allSessionsLabel: []
         };
@@ -771,7 +771,7 @@ export default class MarkForEngineeringTrainingship extends Component {
                         <br/>
                         <p className="greyMarkForSelectComp">Merci de choisir une Année pour consulter la résultante</p>
                         <Select  placeholder="Please Select an Academic Year"
-                                 defaultValue={{value: '2021', label: '2021', color: "#00B8D9"}}
+                                 defaultValue={{value: '2022', label: '2022', color: "#00B8D9"}}
                                  value={allSessionsLabel.value}
                                  components={animatedComponents}
                                  options={allSessionsLabel}

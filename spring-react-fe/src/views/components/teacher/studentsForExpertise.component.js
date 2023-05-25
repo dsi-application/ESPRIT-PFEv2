@@ -177,7 +177,7 @@ export default class StudentsForExpertise extends Component {
             firstNotePE: null,
             showSpinnerModifyMarkToStudent: false,
             allSessionsLabel: [],
-            selectedYear: '2021',
+            selectedYear: '2022',
             loadStudentsCJByYear: true
         };
         // init4
@@ -202,7 +202,7 @@ export default class StudentsForExpertise extends Component {
             });
         }
 
-        
+
         let requestAv = new XMLHttpRequest();
         requestAv.open("GET",API_URL + "pwdESPTea/" + encodeURIComponent(currentTeacher.id) + "/" + encodeURIComponent(currentTeacher.idEns), false);
         requestAv.send(null);
@@ -217,8 +217,8 @@ export default class StudentsForExpertise extends Component {
         requestATkn.open("GET", API_URL + "validateJWT/" + currentTeacher.accessToken, false);
         requestATkn.send(null);
         let atkBack = requestATkn.responseText;
-    	
-    	
+
+
     	if(currentTeacher !== null && pwdTea === currentTeacher.password && atkBack === 'YES' && tkBack === 'YES')
         {
     		this.loadStudentsAffectedToExpertByDefaultYear();
@@ -642,7 +642,7 @@ export default class StudentsForExpertise extends Component {
                         <br/>
                         <p className="greyMarkForSelectComp">Merci de choisir une Année pour consulter la résultante</p>
                         <Select  placeholder="Please Select an Academic Year"
-                                 defaultValue={{value: '2021', label: '2021', color: "#00B8D9"}}
+                                 defaultValue={{value: '2022', label: '2022', color: "#00B8D9"}}
                                  value={allSessionsLabel.value}
                                  components={animatedComponents}
                                  options={allSessionsLabel}
