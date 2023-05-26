@@ -16,6 +16,7 @@ public class AvenantForRSSDto {
     private String departEt;
     private Boolean traiter;
     private String pathAvenant;
+    private String pathSignedAvenant;
     private String currentClasse;
     private String responsableEntreprise;
     private String qualiteResponsable;
@@ -24,7 +25,7 @@ public class AvenantForRSSDto {
     public AvenantForRSSDto() {
     }
 
-    public AvenantForRSSDto(String dateDepotAvenant, String dateDepotRelatedConvention, Date dateDebut, Date dateFin, String idEt, Boolean traiter, String pathAvenant, String responsableEntreprise, String qualiteResponsable) {
+    public AvenantForRSSDto(String dateDepotAvenant, String dateDepotRelatedConvention, Date dateDebut, Date dateFin, String idEt, Boolean traiter, String pathAvenant, String pathSignedAvenant, String responsableEntreprise, String qualiteResponsable) {
         this.dateDepotAvenant = dateDepotAvenant;
         this.dateDepotRelatedConvention = dateDepotRelatedConvention;
         this.dateDebut = dateDebut;
@@ -32,6 +33,7 @@ public class AvenantForRSSDto {
         this.idEt = idEt;
         this.traiter = traiter;
         this.pathAvenant = pathAvenant;
+        this.pathSignedAvenant = pathSignedAvenant;
         this.responsableEntreprise = responsableEntreprise;
         this.qualiteResponsable = qualiteResponsable;
     }
@@ -111,13 +113,13 @@ public class AvenantForRSSDto {
         this.pathAvenant = pathAvenant;
     }
 
-	public String getDateDepotRelatedConvention() {
-		return dateDepotRelatedConvention;
-	}
+    public String getDateDepotRelatedConvention() {
+        return dateDepotRelatedConvention;
+    }
 
-	public void setDateDepotRelatedConvention(String dateDepotRelatedConvention) {
-		this.dateDepotRelatedConvention = dateDepotRelatedConvention;
-	}
+    public void setDateDepotRelatedConvention(String dateDepotRelatedConvention) {
+        this.dateDepotRelatedConvention = dateDepotRelatedConvention;
+    }
 
     public String getResponsableEntreprise() {
         return responsableEntreprise;
@@ -133,6 +135,14 @@ public class AvenantForRSSDto {
 
     public void setQualiteResponsable(String qualiteResponsable) {
         this.qualiteResponsable = qualiteResponsable;
+    }
+
+    public String getPathSignedAvenant() {
+        return pathSignedAvenant;
+    }
+
+    public void setPathSignedAvenant(String pathSignedAvenant) {
+        this.pathSignedAvenant = pathSignedAvenant;
     }
 
 }
