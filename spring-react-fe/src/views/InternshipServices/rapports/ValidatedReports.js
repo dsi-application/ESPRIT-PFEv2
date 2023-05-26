@@ -54,6 +54,7 @@ const validationSchema = Yup.object().shape({
 const ValidatedReports = () => {
   const dispatch = useDispatch();
   const Etu = useSelector(selectetudiant);
+  const [selectedYear, setSelectedYear] = useState(false);
   const [validatedDepots, setValidatedDepots] = useState([]);
   const [responsive, setResponsive] = useState("vertical");
   const [tableBodyHeight, setTableBodyHeight] = useState("10");
@@ -356,7 +357,7 @@ const ValidatedReports = () => {
 
   const downloadGrilleAE = (p) => {
     console.log('------------AZERTY------> LOL 0: ' + p);
-    axios.get(`${process.env.REACT_APP_API_URL_AE}` + "downloadGrilleAE/" + p, {responseType: "blob"})
+    axios.get(`${process.env.REACT_APP_API_URL_AE}` + "downloadGrilleAE/" + p + "/" + selectedYear, {responseType: "blob"})
       .then((response) => {
         const file = new Blob([response.data], {type: 'application/pdf'});
         const fileURL = URL.createObjectURL(file);
@@ -404,6 +405,7 @@ const ValidatedReports = () => {
 
       // console.log('------------------> yearLabel: ' + values.yearLabel);
 
+      setSelectedYear(values.yearLabel)
       setValidatedDepots([]);
 
       setShowLoader(true);

@@ -1937,14 +1937,14 @@ public class UtilServices {
 
 	}
 
-	public StudentGrilleAcademicEncadrantDto findStudentTreatDepotByHisId(String idEt) {
+	public StudentGrilleAcademicEncadrantDto findStudentTreatDepotByHisId(String idEt, String selectedYear) {
 
 		String fullName = findStudentFullNameById(idEt);
 		String classe = findCurrentClassByIdEt(idEt);
 		String department = findDepartmentByClass(classe);
 		String option = findOptionByClass(classe, optionRepository.listOptionsByYear("2021"));
 
-		BigDecimal studentMarkRest = noteRestitutionRepository.findNoteRestitutionByStu(idEt, "2021");
+		BigDecimal studentMarkRest = noteRestitutionRepository.findNoteRestitutionByStu(idEt, selectedYear);
 
 		if (studentMarkRest == null) {
 			studentMarkRest = new BigDecimal("-1");

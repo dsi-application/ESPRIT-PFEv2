@@ -71,6 +71,7 @@ const RapportManage = () => {
   const [confirmNotif, setConfirmNotif] = useState(false);
   const [successNotif, setSuccessNotif] = useState(false);
   const [loadSpinnerNotif, setLoadSpinnerNotif] = useState(false);
+  const [selectedYear, setSelectedYear] = useState(false);
   /*
   const Fichebydepstatus = useSelector(
     (state) => state.persistedReducer.conventions.Fichebydepstatus
@@ -390,7 +391,7 @@ const RapportManage = () => {
 
   const downloadGrilleAE = (p) => {
     console.log('------------AZERTY------> LOL 0: ' + p);
-    axios.get(`${process.env.REACT_APP_API_URL_AE}` + "downloadGrilleAE/" + p, {responseType: "blob"})
+    axios.get(`${process.env.REACT_APP_API_URL_AE}` + "downloadGrilleAE/" + p + "/" + selectedYear, {responseType: "blob"})
       .then((response) => {
         const file = new Blob([response.data], {type: 'application/pdf'});
         const fileURL = URL.createObjectURL(file);
@@ -438,6 +439,7 @@ const RapportManage = () => {
 
       // console.log('------------------> yearLabel: ' + values.yearLabel);
 
+      setSelectedYear(values.yearLabel)
       setNotYetTreatedDepots([]);
 
       setShowLoader(true);

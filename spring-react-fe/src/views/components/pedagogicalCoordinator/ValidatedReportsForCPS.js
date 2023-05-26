@@ -461,7 +461,8 @@ const ValidatedReportsForCPS = () => {
 
   const downloadGrilleAE = (p) => {
     console.log('------------AZERTY------> LOL 0: ' + p);
-    axios.get(`${process.env.REACT_APP_API_URL_AE}` + "downloadGrilleAE/" + p, { responseType: "blob" })
+    let selectedYear = "2021";
+    axios.get(`${process.env.REACT_APP_API_URL_AE}` + "downloadGrilleAE/" + p + "/" + selectedYear, { responseType: "blob" })
       .then((response) => {
         const file = new Blob([response.data], {type: 'application/pdf'});
         const fileURL = URL.createObjectURL(file);

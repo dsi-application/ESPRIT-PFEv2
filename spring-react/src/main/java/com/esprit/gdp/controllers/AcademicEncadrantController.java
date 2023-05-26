@@ -2218,11 +2218,11 @@ public class AcademicEncadrantController
 		
 	}
 	
-	@GetMapping("/downloadGrilleAE/{idEt}")
-	public ResponseEntity downloadGrilleAE(@PathVariable String idEt) throws IOException
+	@GetMapping("/downloadGrilleAE/{idEt}/{selectedYear}")
+	public ResponseEntity downloadGrilleAE(@PathVariable String idEt, @PathVariable String selectedYear) throws IOException
 	{
     	
-		StudentGrilleAcademicEncadrantDto stuGrilleAcademicEncadrantDto = utilServices.findStudentTreatDepotByHisId(idEt);
+		StudentGrilleAcademicEncadrantDto stuGrilleAcademicEncadrantDto = utilServices.findStudentTreatDepotByHisId(idEt, selectedYear);
 		
 		FichePFEPK fichePFEPK = fichePFERepository.findFichePFEPKByStudent(idEt).get(0);
 		GrilleAcademicEncadrant grilleAcademicEncadrant = grilleAcademicEncadrantRepository.findGrilleByFiche(fichePFEPK);
@@ -2258,10 +2258,10 @@ public class AcademicEncadrantController
 	}
 	
 
-	@GetMapping("/studentGrilleEncadrement/{idEt}")
-	public StudentGrilleAcademicEncadrantDto findStudentGrilleEncadrementById(@PathVariable String idEt)
+	@GetMapping("/studentGrilleEncadrement/{idEt}/{selectedYear}")
+	public StudentGrilleAcademicEncadrantDto findStudentGrilleEncadrementById(@PathVariable String idEt, @PathVariable String selectedYear)
 	{
-		StudentGrilleAcademicEncadrantDto stuGrilleAcademicEncadrantDto = utilServices.findStudentTreatDepotByHisId(idEt);
+		StudentGrilleAcademicEncadrantDto stuGrilleAcademicEncadrantDto = utilServices.findStudentTreatDepotByHisId(idEt, selectedYear);
 		
 		return stuGrilleAcademicEncadrantDto;
 	}
