@@ -978,6 +978,11 @@ public class PedagogicalCoordinatorController {
 		List<String> studentsCJandALT = studentRepository.findStudentsFullNameCJandALT(idEt, activatedYears);
 		List<String> studentsCS = studentRepository.findStudentsFullNameCS(idEt, activatedYears);
 
+		// System.out.println("----------------------------------> StudentCJ FullName CJ: " + studentsCJ + " --- CS: " + studentsCS);
+		FichePFE fichePFE = fichePFERepository.findFichePFEByStudent(idEt).get(0);
+		fichePFE.setPedagogicalEncadrant(teacherRepository.findByIdEns(idEns));
+		fichePFERepository.save(fichePFE);
+
 		// System.out.println("----------------------------------> StudentCJ FullName
 		// CJ: " + studentsCJ + " --- CS: " + studentsCS);
 
