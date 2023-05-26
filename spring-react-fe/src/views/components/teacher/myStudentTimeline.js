@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import {useDispatch, useSelector} from "react-redux";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -6,7 +6,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Button from "@material-ui/core/Button";
 import PropTypes from "prop-types";
-import {styled} from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
@@ -29,37 +29,12 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Typography from '@mui/material/Typography';
 import CIcon from "@coreui/icons-react";
-import {freeSet} from '@coreui/icons';
-import {useFormik} from "formik";
+import { freeSet } from '@coreui/icons';
+import { useFormik } from "formik";
 
 import HomeWorkIcon from '@mui/icons-material/HomeWork';
-import {
-  CNav,
-  CForm,
-  CListGroupItem,
-  CListGroup,
-  CFormGroup,
-  CNavItem,
-  CNavLink,
-  CTabContent,
-  CTabPane,
-  CTabs,
-  CTextarea,
-  CWidgetDropdown,
-  CAlert,
-  CWidgetIcon,
-  CCard,
-  CCardImg,
-  CCardBody,
-  CCol,
-  CRow,
-  CButton,
-  CTooltip,
-  CBadge,
-  CJumbotron,
-  CCallout,
-  CWidgetBrand
-} from "@coreui/react";
+import { CNav, CForm, CListGroupItem, CListGroup, CFormGroup, CNavItem, CNavLink, CTabContent, CTabPane, CTabs, CTextarea, CWidgetDropdown,
+  CAlert, CWidgetIcon, CCard, CCardImg, CCardBody, CCol, CRow, CButton, CTooltip, CBadge, CJumbotron, CCallout, CWidgetBrand} from "@coreui/react";
 import * as Yup from "yup";
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -69,10 +44,10 @@ import CardActions from '@mui/material/CardActions';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import axios from "axios";
-import {purple} from '@mui/material/colors';
+import { purple } from '@mui/material/colors';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {withStyles} from "@material-ui/core/styles";
-import Tooltip, {tooltipClasses} from '@mui/material/Tooltip';
+import { withStyles } from "@material-ui/core/styles";
+import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import company from "../../images/company.jpg";
 
 import {
@@ -95,7 +70,7 @@ import {
 import TextScrollerStuTL from "../../css/TextScrollerStuTL";
 import Spinner from "react-bootstrap/Spinner";
 import Avatar from '@mui/material/Avatar';
-import {deepOrange, deepPurple} from '@mui/material/colors';
+import { deepOrange, deepPurple } from '@mui/material/colors';
 import {Wave} from "react-animated-text";
 import {queryApi} from "../../../utils/queryApi";
 import AuthService from "../../services/auth.service";
@@ -108,9 +83,9 @@ import makeAnimated from "react-select/animated";
 
 const currentTeacher = AuthService.getCurrentTeacher();
 
-const LightTooltip = styled(({className, ...props}) => (
-  <Tooltip {...props} classes={{popper: className}}/>
-))(({theme}) => ({
+const LightTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
   [`& .${tooltipClasses.tooltip}`]: {
     backgroundColor: theme.palette.common.white,
     color: 'rgba(0, 0, 0, 0.87)',
@@ -120,9 +95,9 @@ const LightTooltip = styled(({className, ...props}) => (
 }));
 
 const ExpandMore = styled((props) => {
-  const {expand, ...other} = props;
+  const { expand, ...other } = props;
   return <IconButton {...other} />;
-})(({theme, expand}) => ({
+})(({ theme, expand }) => ({
   transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
   marginLeft: 'auto',
   transition: theme.transitions.create('transform', {
@@ -130,7 +105,7 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-const QontoConnector = styled(StepConnector)(({theme}) => ({
+const QontoConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
     top: 10,
     left: "calc(-50% + 16px)",
@@ -154,7 +129,7 @@ const QontoConnector = styled(StepConnector)(({theme}) => ({
   }
 }));
 
-const QontoStepIconRoot = styled("div")(({theme, ownerState}) => ({
+const QontoStepIconRoot = styled("div")(({ theme, ownerState }) => ({
   color: theme.palette.mode === "dark" ? theme.palette.grey[700] : "#eaeaf0",
   display: "flex",
   height: 22,
@@ -176,14 +151,14 @@ const QontoStepIconRoot = styled("div")(({theme, ownerState}) => ({
 }));
 
 function QontoStepIcon(props) {
-  const {active, completed, className} = props;
+  const { active, completed, className } = props;
 
   return (
-    <QontoStepIconRoot ownerState={{active}} className={className}>
+    <QontoStepIconRoot ownerState={{ active }} className={className}>
       {completed ? (
-        <Check className="QontoStepIcon-completedIcon"/>
+        <Check className="QontoStepIcon-completedIcon" />
       ) : (
-        <div className="QontoStepIcon-circle"/>
+        <div className="QontoStepIcon-circle" />
       )}
     </QontoStepIconRoot>
   );
@@ -203,7 +178,7 @@ QontoStepIcon.propTypes = {
   completed: PropTypes.bool
 };
 
-const ColorlibConnector = styled(StepConnector)(({theme}) => ({
+const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
     top: 22
   },
@@ -228,7 +203,7 @@ const ColorlibConnector = styled(StepConnector)(({theme}) => ({
   }
 }));
 
-const ColorlibStepIconRoot = styled("div")(({theme, ownerState}) => ({
+const ColorlibStepIconRoot = styled("div")(({ theme, ownerState }) => ({
   backgroundColor:
     theme.palette.mode === "dark" ? theme.palette.grey[700] : "#ccc",
   zIndex: 1,
@@ -251,7 +226,7 @@ const ColorlibStepIconRoot = styled("div")(({theme, ownerState}) => ({
 }));
 
 function ColorlibStepIcon(props) {
-  const {active, completed, className} = props;
+  const { active, completed, className } = props;
 
   const icons = {
     1: <BusinessCenterIcon/>,
@@ -271,7 +246,7 @@ function ColorlibStepIcon(props) {
 
   return (
     <ColorlibStepIconRoot
-      ownerState={{completed, active}}
+      ownerState={{ completed, active }}
       className={className}
     >
       {icons[String(props.icon)]}
@@ -347,7 +322,7 @@ function MyStudentTimeline(props) {
   const [dateSaisieDemande, setDateSaisieDemande] = useState("");
   const [typeTrtConv, setTypeTrtConv] = useState("");
 
-  const [error, setError] = useState({visible: false, message: ""});
+  const [error, setError] = useState({ visible: false, message: "" });
   const [stepTitle, setStepTitle] = useState(null);
   const [stepId, setStepId] = useState(null);
   const [stepDate, setStepDate] = useState(null);
@@ -393,14 +368,16 @@ function MyStudentTimeline(props) {
   const nbaTechs = ['Spring Boot', 'Tensorflow', 'Saisir Manuellement Tag(s) Technologie(s)']
   const nbaDescs = ['Exemple Descipline 1', 'Exemple Descipline 2', 'Saisir Manuellement Tag(s) Descipline(s)']
 
-  const {classes} = props;
+  const { classes } = props;
 
-  const confirmAffectExpertRequestUP = () => {
+  const confirmAffectExpertRequestUP = () =>
+  {
     setShowModalSpecifyKeyWords(true);
     setVisible(false);
   };
 
-  const toggleItem = (stepItem = null) => {
+  const toggleItem = (stepItem = null) =>
+  {
     // console.log('---------------------1-------> 2911-stepPath: ', stepItem);
     setStepId(stepItem.stepId)
     setStepTitle(stepItem.stepTitle);
@@ -412,19 +389,22 @@ function MyStudentTimeline(props) {
   };
 
   // Manage ESP File
-  const verifyValidateESPFile = () => {
+  const verifyValidateESPFile = () =>
+  {
     // console.log('---------------------1-------> 0412-verifyValidateESPFile: ');
     setShowVerifValidateFichePFE(true);
     // console.log('---------------------2-------> 0412-verifyValidateESPFile: ');
   };
 
-  const verifyRefuseESPFile = () => {
+  const verifyRefuseESPFile = () =>
+  {
     // console.log('---------------------1-------> 0412-verifyValidateESPFile: ');
     setShowVerifRefuseFichePFE(true);
     // console.log('---------------------2-------> 0412-verifyValidateESPFile: ');
   };
 
-  const handleValidateESPFileYES = async () => {
+  const handleValidateESPFileYES = async () =>
+  {
     // console.log('------------studentId---------1-------> 0412-handleValidateESPFile: ', studentId);
     setShowLoadSpinnerForValidateFichePFE(true);
     const [res, err] = await queryApi(
@@ -440,7 +420,9 @@ function MyStudentTimeline(props) {
                 message: JSON.stringify(err.errors, null, 2),
             });*/
       // console.log('NOOOOOOOOOOOOOOOOOOOOOOO');
-    } else {
+    }
+    else
+    {
       dispatch(fetchFichePFEsHistoric(studentId)); // ...
       dispatch(fetchActiveStudentTimelineStep(studentId)); // Active Step
       dispatch(fetchFichePFEDetails(studentId)); // Badge
@@ -453,40 +435,47 @@ function MyStudentTimeline(props) {
     // console.log('------------studenvvtId---------2-------> 0412-handleValidateESPFile: ', res);
   };
 
-  const handlePresentMotifForRefuseESPFileYES = async () => {
+  const handlePresentMotifForRefuseESPFileYES = async () =>
+  {
     // console.log('------------studentId---------1-------> 0412-handlePresentMotifForRefuseESPFileYES:');
     setShowPresentMotifForRefuseFichePFE(true);
     setShowVerifRefuseFichePFE(false);
   };
 
-  const handleValidateESPFileNO = () => {
+  const handleValidateESPFileNO = () =>
+  {
     // console.log('---------------------1-------> 0412-handleValidateESPFile: ');
     setShowLoadSpinnerForValidateFichePFE(false);
     setShowVerifValidateFichePFE(false);
     // console.log('---------------------2-------> 0412-handleValidateESPFile: ');
   };
 
-  const handleRefuseESPFileNO = () => {
+  const handleRefuseESPFileNO = () =>
+  {
     // console.log('---------------------1-------> 0412-handleRefuseESPFileNO: ');
     setShowLoadSpinnerForRefuseFichePFE(false);
     setShowVerifRefuseFichePFE(false);
     // console.log('---------------------2-------> 0412-handleRefuseESPFileNO: ');
   };
 
-  const handleExitSuccessYESValidateESPFile = () => {
+  const handleExitSuccessYESValidateESPFile = () =>
+  {
     setShowSuccessYESValidateFichePFE(false);
   }
 
-  const handleExitSuccessYESRefuseESPFile = () => {
+  const handleExitSuccessYESRefuseESPFile = () =>
+  {
     setShowSuccessYESRefuseFichePFE(false);
   }
 
-  const handleExitPresentMotifForRefuseFichePFE = () => {
+  const handleExitPresentMotifForRefuseFichePFE = () =>
+  {
     setShowPresentMotifForRefuseFichePFE(false);
   }
 
   // Manage Demande Modification
-  const verifyValidateDemandeModification = (dateDepotFiche, dateSaisieDemande) => {
+  const verifyValidateDemandeModification = (dateDepotFiche, dateSaisieDemande) =>
+  {
     // console.log('---------------------1-------> 0412-verifyValidateDemandeModification: ');
     setShowVerifValidateDemandeModif(true);
     setDateDepotFiche(dateDepotFiche);
@@ -495,7 +484,8 @@ function MyStudentTimeline(props) {
     // console.log('---------------------0712-------> 0412-dateSaisieDemande: ', dateSaisieDemande);
   };
 
-  const verifyRefuseDemandeModification = (dateDepotFiche, dateSaisieDemande) => {
+  const verifyRefuseDemandeModification = (dateDepotFiche, dateSaisieDemande) =>
+  {
     // console.log('---------------------1-------> 0412-verifyRefuseDemandeModification: ');
     setShowVerifRefuseDemandeModif(true);
     setDateDepotFiche(dateDepotFiche);
@@ -504,7 +494,8 @@ function MyStudentTimeline(props) {
   };
 
   //
-  const handleValidateDemandeModifYES = async () => {
+  const handleValidateDemandeModifYES = async () =>
+  {
     // console.log('------------studentId---------0712-------> 0412-handleValidateESPFile: ', studentId);
 
     // console.log('------------studentId---------0712-------> 0412-dateDepotFiche: ', dateDepotFiche);
@@ -524,7 +515,9 @@ function MyStudentTimeline(props) {
                 message: JSON.stringify(err.errors, null, 2),
             });*/
       // console.log('NOOOOOOOOOOOOOOOOOOOOOOO****0712');
-    } else {
+    }
+    else
+    {
       dispatch(fetchFichePFEsHistoric(studentId)); // Update Fields of All Existing Fiches PFE History
       dispatch(fetchActiveStudentTimelineStep(studentId)); // Active Step
       dispatch(fetchFichePFEDetails(studentId)); // Badge
@@ -537,41 +530,48 @@ function MyStudentTimeline(props) {
     // console.log('------------studentId---------0712-------> 0412-validateDemandeModifESPFile: ', res);
   };
 
-  const handlePresentMotifForRefuseDemandeModifYES = async () => {
+  const handlePresentMotifForRefuseDemandeModifYES = async () =>
+  {
     // console.log('------------studentId---------1-------> 0412-handlePresentMotifForRefuseDemandeModifYES:');
     setShowPresentMotifForRefuseDemandeModif(true);
     setShowVerifRefuseDemandeModif(false);
   };
 
-  const handleValidateDemandeModifNO = () => {
+  const handleValidateDemandeModifNO = () =>
+  {
     // console.log('---------------------1-------> 0412-handleValidateDemandeModifNO: ');
     setShowLoadSpinnerForValidateDemandeModif(false);
     setShowVerifValidateDemandeModif(false);
     // console.log('---------------------2-------> 0412-handleValidateDemandeModifNO: ');
   };
 
-  const handleRefuseDemandeModifNO = () => {
+  const handleRefuseDemandeModifNO = () =>
+  {
     // console.log('---------------------1-------> 0412-handleRefuseDemandeModifNO: ');
     setShowLoadSpinnerForRefuseDemandeModif(false);
     setShowVerifRefuseDemandeModif(false);
     // console.log('---------------------2-------> 0412-handleRefuseDemandeModifNO: ');
   };
 
-  const handleExitSuccessYESValidateDemandeModif = () => {
+  const handleExitSuccessYESValidateDemandeModif = () =>
+  {
     setShowSuccessYESValidateDemandeModif(false);
   }
 
-  const handleExitSuccessYESRefuseDemandeModif = () => {
+  const handleExitSuccessYESRefuseDemandeModif = () =>
+  {
     setShowSuccessYESRefuseDemandeModif(false);
   }
 
-  const handleExitPresentMotifForRefuseDemandeModif = () => {
+  const handleExitPresentMotifForRefuseDemandeModif = () =>
+  {
     setShowPresentMotifForRefuseDemandeModif(false);
   }
 
 
   // Manage Demande Annulation
-  const verifyValidateDemandeAnnulation = (dateDepotFiche, dateSaisieDemande, typeTrtConv) => {
+  const verifyValidateDemandeAnnulation = (dateDepotFiche, dateSaisieDemande, typeTrtConv) =>
+  {
     // console.log('---------------------1-------> 0412-verifyValidateDemandeAnnulation: ');
     setShowVerifValidateDemandeAnnul(true);
     setDateDepotFiche(dateDepotFiche);
@@ -581,7 +581,8 @@ function MyStudentTimeline(props) {
     // console.log('---------------------0712-------> 0412-dateSaisieDemande: ', dateSaisieDemande);
   };
 
-  const verifyRefuseDemandeAnnulation = (dateDepotFiche, dateSaisieDemande, typeTrtConv) => {
+  const verifyRefuseDemandeAnnulation = (dateDepotFiche, dateSaisieDemande, typeTrtConv) =>
+  {
     // console.log('---------------------1-------> 0412-verifyRefuseDemandeAnnulation: ');
     setShowVerifRefuseDemandeAnnul(true);
     setDateDepotFiche(dateDepotFiche);
@@ -590,7 +591,8 @@ function MyStudentTimeline(props) {
     // console.log('---------------------2-------> 0412-verifyRefuseDemandeAnnulation: ');
   };
 
-  const handleValidateDemandeAnnulYES = async () => {
+  const handleValidateDemandeAnnulYES = async () =>
+  {
     // console.log('------------studentId---------0712-------> 0412-handleValidateESPFile: ', studentId);
 
     // console.log('------------studentId---------0712-------> 0412-dateDepotFiche: ', dateDepotFiche);
@@ -610,7 +612,9 @@ function MyStudentTimeline(props) {
                 message: JSON.stringify(err.errors, null, 2),
             });*/
       // console.log('NOOOOOOOOOOOOOOOOOOOOOOO****0712');
-    } else {
+    }
+    else
+    {
       dispatch(fetchFichePFEsHistoric(studentId));
       dispatch(fetchFichePFEDetails(studentId));
       dispatch(fetchTimelineSteps(studentId));  // Date Step
@@ -622,35 +626,41 @@ function MyStudentTimeline(props) {
     // console.log('------------studentId---------0712-------> 0412-validateDemandeAnnulESPFile: ', res);
   };
 
-  const handlePresentMotifForRefuseDemandeAnnulYES = async () => {
+  const handlePresentMotifForRefuseDemandeAnnulYES = async () =>
+  {
     // console.log('------------studentId---------1-------> 0412-handlePresentMotifForRefuseDemandeAnnulYES:');
     setShowPresentMotifForRefuseDemandeAnnul(true);
     setShowVerifRefuseDemandeAnnul(false);
   };
 
-  const handleValidateDemandeAnnulNO = () => {
+  const handleValidateDemandeAnnulNO = () =>
+  {
     // console.log('---------------------1-------> 0412-handleValidateDemandeAnnulNO: ');
     setShowLoadSpinnerForValidateDemandeAnnul(false);
     setShowVerifValidateDemandeAnnul(false);
     // console.log('---------------------2-------> 0412-handleValidateDemandeAnnulNO: ');
   };
 
-  const handleRefuseDemandeAnnulNO = () => {
+  const handleRefuseDemandeAnnulNO = () =>
+  {
     // console.log('---------------------1-------> 0412-handleRefuseDemandeAnnulNO: ');
     setShowLoadSpinnerForRefuseDemandeAnnul(false);
     setShowVerifRefuseDemandeAnnul(false);
     // console.log('---------------------2-------> 0412-handleRefuseDemandeAnnulNO: ');
   };
 
-  const handleExitSuccessYESValidateDemandeAnnul = () => {
+  const handleExitSuccessYESValidateDemandeAnnul = () =>
+  {
     setShowSuccessYESValidateDemandeAnnul(false);
   }
 
-  const handleExitSuccessYESRefuseDemandeAnnul = () => {
+  const handleExitSuccessYESRefuseDemandeAnnul = () =>
+  {
     setShowSuccessYESRefuseDemandeAnnul(false);
   }
 
-  const handleExitPresentMotifForRefuseDemandeAnnul = () => {
+  const handleExitPresentMotifForRefuseDemandeAnnul = () =>
+  {
     setShowPresentMotifForRefuseDemandeAnnul(false);
   }
 
@@ -782,7 +792,7 @@ function MyStudentTimeline(props) {
                                       <br/><br/>
                                       <CRow>
                                         <CCol md="2">
-                                          <HomeWorkIcon sx={{color: purple[400]}}/>
+                                          <HomeWorkIcon sx={{ color: purple[400] }}/>
                                         </CCol>
                                         <CCol md="10">
                                           Entreprise Accueil présentée par :<br/>
@@ -799,14 +809,14 @@ function MyStudentTimeline(props) {
                           }
                         </CCol>
                         <CCol md="7">
-                          <Card sx={{maxWidth: 530}}>
+                          <Card sx={{ maxWidth: 530 }}>
                             <CardHeader avatar={<Avatar src={company} aria-label={conv.companyDesignation}/>}
                                         title={conv.companyDesignation}
                                         subheader={'Entreprise Accueil présentée par Mme/Mr ' + conv.responsable}/>
-                            <CardMedia component="img"
-                                       height="120"
-                                       src={company}
-                                       alt="Entreprise Accueil"/>
+                            <CardMedia  component="img"
+                                        height="120"
+                                        src={company}
+                                        alt="Entreprise Accueil"/>
                             <CardContent>
                               <Typography variant="body2" color="text.secondary">
                                 <CRow>
@@ -840,7 +850,7 @@ function MyStudentTimeline(props) {
                                           onClick={handleExpandClick}
                                           aria-expanded={expanded}
                                           aria-label="show more">
-                                <ExpandMoreIcon/>
+                                <ExpandMoreIcon />
                               </ExpandMore>
                             </CardActions>
                             <Collapse in={expanded} timeout="auto" unmountOnExit>
@@ -923,6 +933,38 @@ function MyStudentTimeline(props) {
       return ganttDiagramFP;
     }
 
+    function downloadGanttDiagram(gdDecodedFullPath)
+    {
+      // console.log('--------------1003----> 0');
+      let lol = encodeURIComponent(gdDecodedFullPath);
+      // console.log('--------------1003----> 1: ', gdDecodedFullPath);
+      // console.log('--------------1003----> 2: ', lol);
+
+      /* axios
+                 .get(
+                     `${process.env.REACT_APP_API_URL}` +
+                     "encadrement/download?fileName=" +
+                     encodeURIComponent(p),
+
+                     { responseType: "blob" }
+                 )*/
+
+      axios.get(`${process.env.REACT_APP_API_URL_STU}` + "downloadGanttDiagramByUnit?gdDecodedFullPath=" + lol, { responseType: "blob" })
+        .then((response) => {
+
+          // console.log('2910Response Headers:', response.headers);
+          const file = new Blob([response.data], {type: 'application/pdf'});
+          const fileURL = URL.createObjectURL(file);
+
+          const contentDispo = response.headers['content-disposition'];
+          const fileName = contentDispo.substring(21);
+
+          let a = document.createElement('a');
+          a.href = fileURL;
+          a.download = fileName;
+          a.click();
+        });
+    }
 
     return (
       <>
@@ -965,9 +1007,7 @@ function MyStudentTimeline(props) {
                           <center>
                             <br/>
                             <LightTooltip title="Télécharger Plan de Travail" placement="top">
-                              <span className="downloadGrayIcon" onClick={() => {
-                                downloadPlanTravail(fPFE.dateDepotFiche);
-                              }}/>
+                              <span className="downloadGrayIcon" onClick={() => {downloadPlanTravail(fPFE.dateDepotFiche);}}/>
                             </LightTooltip>
                           </center>
                         </CCol>
@@ -984,21 +1024,21 @@ function MyStudentTimeline(props) {
                             <CNavLink data-tab="probs">
                               <span className="redMark">Problématiques</span> &nbsp;&nbsp;&nbsp;
                               <Badge badgeContent={fPFE.problematics.length}
-                                     classes={{badge: classes.probsBdg}}/>
+                                     classes={{ badge: classes.probsBdg}}/>
                             </CNavLink>
                           </CNavItem>
                           <CNavItem>
                             <CNavLink data-tab="funcs">
                               <span className="greenMark">Technologies</span> &nbsp;&nbsp;&nbsp;
                               <Badge badgeContent={fPFE.functionnalities.length}
-                                     classes={{badge: classes.funcsBdg}}/>
+                                     classes={{ badge: classes.funcsBdg}}/>
                             </CNavLink>
                           </CNavItem>
                           <CNavItem>
                             <CNavLink data-tab="techs">
                               <span className="blueMark">Technologies</span> &nbsp;&nbsp;&nbsp;
                               <Badge badgeContent={fPFE.technologies.length}
-                                     classes={{badge: classes.techsBdg}}/>
+                                     classes={{ badge: classes.techsBdg}}/>
                             </CNavLink>
                           </CNavItem>
                           <CNavItem>
@@ -1070,27 +1110,24 @@ function MyStudentTimeline(props) {
                             <br/>
                             Votre Diagramme de Gantt est:
                             <br/>
-                            <span
-                              className="greyMarkCourrierSmalLabel">{gotGanttDiagLabel(fPFE.pathDiagrammeGantt)}</span>
+                            <span className="greyMarkCourrierSmalLabel">{gotGanttDiagLabel(fPFE.pathDiagrammeGantt)}</span>
                             <br/><br/>
                             <LightTooltip title="Télécharger Diagramme de Gantt" placement="right">
-                              <span className="downloadPurpleIcon" onClick={() => {
-                                downloadGanttDiagramOFF(fPFE.pathDiagrammeGantt);
-                              }}/>
+                              <span className="downloadPurpleIcon" onClick={() => {downloadGanttDiagramOFF(fPFE.pathDiagrammeGantt);}}/>
                             </LightTooltip>
                           </CTabPane>
                           <CTabPane data-tab="compSups">
                             <br/>
                             <CRow>
                               <CCol md="7">
-                                <Card sx={{maxWidth: 530}}>
+                                <Card sx={{ maxWidth: 530 }}>
                                   <CardHeader avatar={<Avatar src={company} aria-label={fPFE.companyDto.designation}/>}
                                               title={fPFE.companyDto.designation}
                                               subheader="Entreprise Accueil"/>
-                                  <CardMedia component="img"
-                                             height="120"
-                                             src={company}
-                                             alt="Entreprise Accueil"/>
+                                  <CardMedia  component="img"
+                                              height="120"
+                                              src={company}
+                                              alt="Entreprise Accueil"/>
                                   <CardContent>
                                     <Typography variant="body2" color="text.secondary">
                                       <CRow>
@@ -1124,7 +1161,7 @@ function MyStudentTimeline(props) {
                                                 onClick={handleExpandClick}
                                                 aria-expanded={expanded}
                                                 aria-label="show more">
-                                      <ExpandMoreIcon/>
+                                      <ExpandMoreIcon />
                                     </ExpandMore>
                                   </CardActions>
                                   <Collapse in={expanded} timeout="auto" unmountOnExit>
@@ -1146,8 +1183,7 @@ function MyStudentTimeline(props) {
                                         </CCol>
 
                                         <CCol md="2" className="colPaddingRight">
-                                                                                    <span
-                                                                                      className="convHistoricGreyField">
+                                                                                    <span className="convHistoricGreyField">
                                                                                         E-Mail:
                                                                                     </span>
                                         </CCol>
@@ -1156,8 +1192,7 @@ function MyStudentTimeline(props) {
                                         </CCol>
 
                                         <CCol md="2" className="colPaddingRight">
-                                                                                    <span
-                                                                                      className="convHistoricGreyField">
+                                                                                    <span className="convHistoricGreyField">
                                                                                         Téléphone:
                                                                                     </span>
                                         </CCol>
@@ -1194,7 +1229,7 @@ function MyStudentTimeline(props) {
                                                         </span>
                                 <hr/>
                                 {fPFE.companySupervisors.map((cs) => (
-                                  <List sx={{width: '100%', maxWidth: 360, bgcolor: 'background.paper'}}>
+                                  <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
                                     {companySupervisorsForESPPFileHist(cs)}
                                   </List>
                                 ))}
@@ -1237,57 +1272,45 @@ function MyStudentTimeline(props) {
   };
 
   const downloadPDFFile = (filePath) => {
+    axios.get(
+      `${process.env.REACT_APP_API_URL}` + "student/downloadPDFFile?filePath=" + encodeURIComponent(filePath) ,
+      {responseType: 'blob'}
+    ).then((response) => {
 
-    let aze = encodeURIComponent(encodeURIComponent(filePath));
-    console.log('------------------------------- AZE-2: ', aze)
-    axios.get(`${process.env.REACT_APP_API_URL_STU}` + "downloadMyPDF/" + aze, {responseType: "blob"})
-      .then((response) => {
-        // console.log('2910Response Headers:', response.headers);
-        const file = new Blob([response.data], {type: 'application/pdf'});
-        const fileURL = URL.createObjectURL(file);
+      // console.log('2910Response Headers:', response.headers);
+      const file = new Blob([response.data], {type: 'application/pdf'});
+      const fileURL = URL.createObjectURL(file);
 
-        const contentDispo = response.headers['content-disposition'];
-        const fileName = contentDispo.substring(21);
+      const contentDispo = response.headers['content-disposition'];
+      const fileName = contentDispo.substring(21);
 
-        let a = document.createElement('a');
-        a.href = fileURL;
-        a.download = fileName;
-        a.click();
-        window.open(fileURL);
-      });
+      let a = document.createElement('a');
+      a.href = fileURL;
+      a.download = fileName;
+      a.click();
+      window.open(fileURL);
+    });
   };
 
-  const journalUnitHistoric = (fPFE) => {
+  const journalUnitHistoric = (fPFE) =>
+  {
 
     let filePath = fPFE.pathJournalStg;
     let fileName = "--";
-    if (filePath !== null) {
-      fileName = filePath.substring(filePath.indexOf("uploads") + 8, filePath.indexOf("espdsi2020"));
+    if(filePath !== null)
+    {
+      fileName = filePath.substring(filePath.indexOf("uploads")+8, filePath.indexOf("espdsi2020"));
     }
 
     let e = fPFE.etat;
     let color = "--";
-    if (e === "01") {
-      color = "secondary";
-    }
-    if (e === "02") {
-      color = "info";
-    }
-    if (e === "03") {
-      color = "success";
-    }
-    if (e === "04") {
-      color = "danger";
-    }
-    if (e === "05") {
-      color = "warning";
-    }
-    if (e === "06") {
-      color = "dark";
-    }
-    if (e === "07" || e === "08") {
-      color = "primary";
-    }
+    if (e === "01"){color = "secondary";}
+    if (e === "02"){color = "info";}
+    if (e === "03"){color = "success";}
+    if (e === "04"){color = "danger"; }
+    if (e === "05"){color = "warning";}
+    if (e === "06"){color = "dark";}
+    if (e === "07" || e === "08"){color = "primary";}
 
     return (
       <>
@@ -1338,9 +1361,7 @@ function MyStudentTimeline(props) {
                             </CCol>
                             <CCol md='3'>
                               <Tooltip title="Télécharger Journal de Bord" placement="top">
-                                <span className="downloadGreyIcon" onClick={() => {
-                                  downloadPDFFile(filePath);
-                                }}/>
+                                <span className="downloadGreyIcon" onClick={() => {downloadPDFFile(filePath);}}/>
                               </Tooltip>
                             </CCol>
                           </CRow>
@@ -1403,38 +1424,26 @@ function MyStudentTimeline(props) {
     );
   };
 
-  const bilan1UnitHistoric = (fPFE) => {
+  const bilan1UnitHistoric = (fPFE) =>
+  {
 
     let filePath = fPFE.pathBilan1;
     let fileName = "--";
-    if (filePath !== null) {
-      fileName = filePath.substring(filePath.indexOf("uploads") + 8, filePath.indexOf("espdsi2020"));
+    if(filePath !== null)
+    {
+      fileName = filePath.substring(filePath.indexOf("uploads")+8, filePath.indexOf("espdsi2020"));
     }
 
 
     let e = fPFE.etat;
     let color = "--";
-    if (e === "01") {
-      color = "secondary";
-    }
-    if (e === "02") {
-      color = "info";
-    }
-    if (e === "03") {
-      color = "success";
-    }
-    if (e === "04") {
-      color = "danger";
-    }
-    if (e === "05") {
-      color = "warning";
-    }
-    if (e === "06") {
-      color = "dark";
-    }
-    if (e === "07" || e === "08") {
-      color = "primary";
-    }
+    if (e === "01"){color = "secondary";}
+    if (e === "02"){color = "info";}
+    if (e === "03"){color = "success";}
+    if (e === "04"){color = "danger"; }
+    if (e === "05"){color = "warning";}
+    if (e === "06"){color = "dark";}
+    if (e === "07" || e === "08"){color = "primary";}
 
     return (
       <>
@@ -1485,9 +1494,7 @@ function MyStudentTimeline(props) {
                             </CCol>
                             <CCol md='3'>
                               <Tooltip title="Télécharger Bilan Version 1" placement="top">
-                                <span className="downloadGreyIcon" onClick={() => {
-                                  downloadPDFFile(filePath);
-                                }}/>
+                                <span className="downloadGreyIcon" onClick={() => {downloadPDFFile(filePath);}}/>
                               </Tooltip>
                             </CCol>
                           </CRow>
@@ -1550,38 +1557,26 @@ function MyStudentTimeline(props) {
     );
   };
 
-  const bilan2UnitHistoric = (fPFE) => {
+  const bilan2UnitHistoric = (fPFE) =>
+  {
 
     let filePath = fPFE.pathBilan2;
     let fileName = "--";
-    if (filePath !== null) {
-      fileName = filePath.substring(filePath.indexOf("uploads") + 8, filePath.indexOf("espdsi2020"));
+    if(filePath !== null)
+    {
+      fileName = filePath.substring(filePath.indexOf("uploads")+8, filePath.indexOf("espdsi2020"));
     }
 
 
     let e = fPFE.etat;
     let color = "--";
-    if (e === "01") {
-      color = "secondary";
-    }
-    if (e === "02") {
-      color = "info";
-    }
-    if (e === "03") {
-      color = "success";
-    }
-    if (e === "04") {
-      color = "danger";
-    }
-    if (e === "05") {
-      color = "warning";
-    }
-    if (e === "06") {
-      color = "dark";
-    }
-    if (e === "07" || e === "08") {
-      color = "primary";
-    }
+    if (e === "01"){color = "secondary";}
+    if (e === "02"){color = "info";}
+    if (e === "03"){color = "success";}
+    if (e === "04"){color = "danger"; }
+    if (e === "05"){color = "warning";}
+    if (e === "06"){color = "dark";}
+    if (e === "07" || e === "08"){color = "primary";}
 
     return (
       <>
@@ -1632,9 +1627,7 @@ function MyStudentTimeline(props) {
                             </CCol>
                             <CCol md='3'>
                               <Tooltip title="Télécharger Bilan Version 2" placement="top">
-                                <span className="downloadGreyIcon" onClick={() => {
-                                  downloadPDFFile(filePath);
-                                }}/>
+                                <span className="downloadGreyIcon" onClick={() => {downloadPDFFile(filePath);}}/>
                               </Tooltip>
                             </CCol>
                           </CRow>
@@ -1699,7 +1692,8 @@ function MyStudentTimeline(props) {
 
   const presentation1Details = () => {
 
-    function handleConfirmAffectExpertRequestNO() {
+    function handleConfirmAffectExpertRequestNO()
+    {
       setShowModalSpecifyKeyWords(false);
       // console.log('------- 3105 ----c---s--**-------> 1: ' + formikSARS.values.thematicsPIK.length)
 
@@ -1710,13 +1704,15 @@ function MyStudentTimeline(props) {
       // console.log('------- 3105 ----c--s---**-------> 2: ' + formikSARS.values.thematicsPIK.length)
     }
 
-    function handleSpecifyKeyWords() {
+    function handleSpecifyKeyWords()
+    {
       // console.log('------- 23.05 ----------------> studentId: ' + studentId)
       setShowModalRequestConfirm(true);
       setShowModalSpecifyKeyWords(false);
     }
 
-    function handleConfirmSpecifyKeyWordsRequestNO() {
+    function handleConfirmSpecifyKeyWordsRequestNO()
+    {
       setShowModalRequestConfirm(false);
       setShowModalSpecifyKeyWords(true);
     }
@@ -1737,8 +1733,10 @@ function MyStudentTimeline(props) {
         false
       );
       if (err) {
-        // console.log('lol2022********* ERROR');
-      } else {
+        console.log('lol2022********* ERROR');
+      }
+      else
+      {
         // console.log('3105******** OK');
         setShowLoadSpinnerSendMail(false);
         setShowModalSpecifyKeyWords(false);
@@ -1757,7 +1755,8 @@ function MyStudentTimeline(props) {
 
     }
 
-    function handleSuccessSendRequestExit() {
+    function handleSuccessSendRequestExit()
+    {
       setShowModalSuccessSendRequest(false);
     }
 
@@ -1782,7 +1781,7 @@ function MyStudentTimeline(props) {
             :
             <>
               {
-                (Object.keys(studentExpertObj).length === 0) ?
+                (Object.keys(studentExpertObj).length === 0)?
                   <>
                     <span className="greyMarkCourrierSmalLabel">Votre Étudiant </span>
                     &nbsp;
@@ -1795,9 +1794,7 @@ function MyStudentTimeline(props) {
                     <br/>
                     <span className="greyMarkCourrierSmalLabel">Si vous voulez demander un Expert, merci de cliquer sur ce bouton</span>
                     <br/><br/>
-                    <span className="expertRequestIcon" onClick={() => {
-                      confirmAffectExpertRequestUP();
-                    }}/>
+                    <span className="expertRequestIcon" onClick={() => {confirmAffectExpertRequestUP();}}/>
                     <br/>
 
                     <Dialog fullHight fullWidth
@@ -1869,17 +1866,17 @@ function MyStudentTimeline(props) {
 
                           <CFormGroup row>
                             <CCol xs="12" md="9">
-                              <Stack spacing={3} sx={{width: 500}}>
+                              <Stack spacing={3} sx={{ width: 500 }}>
                                 <Autocomplete
                                   id="nba thems"
                                   freeSolo
                                   multiple
                                   options={nbaThems}
                                   renderInput={params => (
-                                    <TextField {...params} label="Thématiques" variant="outlined"/>
+                                    <TextField {...params} label="Thématiques" variant="outlined" />
                                   )}
                                   getOptionLabel={option => option}
-                                  style={{width: 550}}
+                                  style={{ width: 550 }}
                                   value={selectedThem}
                                   onChange={(_event, newThem) => {
 
@@ -1899,17 +1896,17 @@ function MyStudentTimeline(props) {
                           <br/>
                           <CFormGroup row>
                             <CCol xs="12" md="9">
-                              <Stack spacing={3} sx={{width: 500}}>
+                              <Stack spacing={3} sx={{ width: 500 }}>
                                 <Autocomplete
                                   id="nba techs"
                                   freeSolo
                                   multiple
                                   options={nbaTechs}
                                   renderInput={params => (
-                                    <TextField {...params} label="Saisir des Tags Technologies" variant="outlined"/>
+                                    <TextField {...params} label="Saisir des Tags Technologies" variant="outlined" />
                                   )}
                                   getOptionLabel={option => option}
-                                  style={{width: 550}}
+                                  style={{ width: 550 }}
                                   value={selectedTech}
                                   onChange={(_event, newTech) => {
 
@@ -1930,21 +1927,21 @@ function MyStudentTimeline(props) {
                           <br/>
                           <CFormGroup row>
                             <CCol xs="12" md="9">
-                              <Stack spacing={3} sx={{width: 500}}>
+                              <Stack spacing={3} sx={{ width: 500 }}>
                                 <Autocomplete
                                   id="nba Desc"
                                   freeSolo
                                   multiple
                                   options={nbaDescs}
                                   renderInput={params => (
-                                    <TextField {...params} label="Disciplines" variant="outlined"/>
+                                    <TextField {...params} label="Disciplines" variant="outlined" />
                                   )}
                                   getOptionLabel={option => option}
-                                  style={{width: 550}}
+                                  style={{ width: 550 }}
                                   value={selectedDesc}
                                   onChange={(_event, newDesc) => {
 
-                                    // console.log('------------> poi: ' , newDesc)
+                                    console.log('------------> poi: ' , newDesc)
                                     setSelectedDesc(newDesc);
                                   }}
                                 />
@@ -2132,7 +2129,7 @@ function MyStudentTimeline(props) {
             <>
               <span className="greyMarkCourrierSmalLabel">Not Yet Deployed 2 !.</span>
               <br/>
-              <Wave text=". . ." effect="stretch" effectChange={2.8}/>
+              <Wave text=". . ." effect="stretch" effectChange={2.8} />
               {fichePFEsHistoric.map((fPFE) => (
                 <></>
               ))}
@@ -2165,7 +2162,7 @@ function MyStudentTimeline(props) {
             <>
               <span className="greyMarkCourrierSmalLabel">Not Yet Deployed 3 !.</span>
               <br/>
-              <Wave text=". . ." effect="stretch" effectChange={2.8}/>
+              <Wave text=". . ." effect="stretch" effectChange={2.8} />
               {fichePFEsHistoric.map((fPFE) => (
                 <></>
               ))}
@@ -2175,37 +2172,35 @@ function MyStudentTimeline(props) {
     );
   };
 
-  const bilan3UnitHistoric = (fPFE) => {
+  const surveyFirstJob = () => {
+    return (
+      <>
+        <span className="greyMarkCourrierSmalLabel">Not Yet Deployed !.</span>
+        <br/>
+        <Wave text=". . ." effect="stretch" effectChange={2.8} />
+      </>
+    );
+  };
+
+  const bilan3UnitHistoric = (fPFE) =>
+  {
 
     let filePath = fPFE.pathBilan3;
     let fileName = "--";
-    if (filePath !== null) {
-      fileName = filePath.substring(filePath.indexOf("uploads") + 8, filePath.indexOf("espdsi2020"));
+    if(filePath !== null)
+    {
+      fileName = filePath.substring(filePath.indexOf("uploads")+8, filePath.indexOf("espdsi2020"));
     }
 
     let e = fPFE.etat;
     let color = "--";
-    if (e === "01") {
-      color = "secondary";
-    }
-    if (e === "02") {
-      color = "info";
-    }
-    if (e === "03") {
-      color = "success";
-    }
-    if (e === "04") {
-      color = "danger";
-    }
-    if (e === "05") {
-      color = "warning";
-    }
-    if (e === "06") {
-      color = "dark";
-    }
-    if (e === "07" || e === "08") {
-      color = "primary";
-    }
+    if (e === "01"){color = "secondary";}
+    if (e === "02"){color = "info";}
+    if (e === "03"){color = "success";}
+    if (e === "04"){color = "danger"; }
+    if (e === "05"){color = "warning";}
+    if (e === "06"){color = "dark";}
+    if (e === "07" || e === "08"){color = "primary";}
 
     return (
       <>
@@ -2256,9 +2251,7 @@ function MyStudentTimeline(props) {
                             </CCol>
                             <CCol md='3'>
                               <Tooltip title="Télécharger Bilan Version 3" placement="top">
-                                <span className="downloadGreyIcon" onClick={() => {
-                                  downloadPDFFile(filePath);
-                                }}/>
+                                <span className="downloadGreyIcon" onClick={() => {downloadPDFFile(filePath);}}/>
                               </Tooltip>
                             </CCol>
                           </CRow>
@@ -2321,38 +2314,26 @@ function MyStudentTimeline(props) {
     );
   };
 
-  const rapport1UnitHistoric = (fPFE) => {
+  const rapport1UnitHistoric = (fPFE) =>
+  {
 
     let filePath = fPFE.pathRapportVersion1;
     let fileName = "--";
-    if (filePath !== null) {
-      fileName = filePath.substring(filePath.indexOf("uploads") + 8, filePath.indexOf("espdsi2020"));
+    if(filePath !== null)
+    {
+      fileName = filePath.substring(filePath.indexOf("uploads")+8, filePath.indexOf("espdsi2020"));
     }
 
 
     let e = fPFE.etat;
     let color = "--";
-    if (e === "01") {
-      color = "secondary";
-    }
-    if (e === "02") {
-      color = "info";
-    }
-    if (e === "03") {
-      color = "success";
-    }
-    if (e === "04") {
-      color = "danger";
-    }
-    if (e === "05") {
-      color = "warning";
-    }
-    if (e === "06") {
-      color = "dark";
-    }
-    if (e === "07" || e === "08") {
-      color = "primary";
-    }
+    if (e === "01"){color = "secondary";}
+    if (e === "02"){color = "info";}
+    if (e === "03"){color = "success";}
+    if (e === "04"){color = "danger"; }
+    if (e === "05"){color = "warning";}
+    if (e === "06"){color = "dark";}
+    if (e === "07" || e === "08"){color = "primary";}
 
     return (
       <>
@@ -2403,9 +2384,7 @@ function MyStudentTimeline(props) {
                             </CCol>
                             <CCol md='3'>
                               <Tooltip title="Télécharger Rapport Version 1" placement="top">
-                                <span className="downloadGreyIcon" onClick={() => {
-                                  downloadPDFFile(filePath);
-                                }}/>
+                                <span className="downloadGreyIcon" onClick={() => {downloadPDFFile(filePath);}}/>
                               </Tooltip>
                             </CCol>
                           </CRow>
@@ -2468,50 +2447,40 @@ function MyStudentTimeline(props) {
     );
   };
 
-  const rapport2UnitHistoric = (fPFE) => {
+  const rapport2UnitHistoric = (fPFE) =>
+  {
 
     let attestPath = fPFE.pathAttestationStage;
     let attestName = "--";
-    if (attestPath !== null) {
-      attestName = attestPath.substring(attestPath.indexOf("uploads") + 8, attestPath.indexOf("espdsi2020"));
+    if(attestPath !== null)
+    {
+      attestName = attestPath.substring(attestPath.indexOf("uploads")+8, attestPath.indexOf("espdsi2020"));
     }
 
     let urkundPath = fPFE.pathPlagiat;
     let urkundName = "--";
-    if (urkundPath !== null) {
-      urkundName = urkundPath.substring(urkundPath.indexOf("uploads") + 8, urkundPath.indexOf("espdsi2020"));
+    if(urkundPath !== null)
+    {
+      urkundName = urkundPath.substring(urkundPath.indexOf("uploads")+8, urkundPath.indexOf("espdsi2020"));
     }
 
     let rapportPath = fPFE.pathRapportVersion2;
     let rapportName = "--";
-    if (rapportPath !== null) {
-      rapportName = rapportPath.substring(rapportPath.indexOf("uploads") + 8, rapportPath.indexOf("espdsi2020"));
+    if(rapportPath !== null)
+    {
+      rapportName = rapportPath.substring(rapportPath.indexOf("uploads")+8, rapportPath.indexOf("espdsi2020"));
     }
 
 
     let e = fPFE.etat;
     let color = "--";
-    if (e === "01") {
-      color = "secondary";
-    }
-    if (e === "02") {
-      color = "info";
-    }
-    if (e === "03") {
-      color = "success";
-    }
-    if (e === "04") {
-      color = "danger";
-    }
-    if (e === "05") {
-      color = "warning";
-    }
-    if (e === "06") {
-      color = "dark";
-    }
-    if (e === "07" || e === "08") {
-      color = "primary";
-    }
+    if (e === "01"){color = "secondary";}
+    if (e === "02"){color = "info";}
+    if (e === "03"){color = "success";}
+    if (e === "04"){color = "danger"; }
+    if (e === "05"){color = "warning";}
+    if (e === "06"){color = "dark";}
+    if (e === "07" || e === "08"){color = "primary";}
 
     return (
       <>
@@ -2574,7 +2543,7 @@ function MyStudentTimeline(props) {
                     {
                       urkundPath !== null &&
                       <CCol md="4">
-                        <CCard style={{width: '14rem'}}>
+                        <CCard style={{ width: '14rem' }}>
                           <CCardImg variant="top" src={myDoc} height="125px"/>
                           <CCardBody>
                             <center>
@@ -2585,9 +2554,7 @@ function MyStudentTimeline(props) {
                               <span className="greyMarkItalic">{fPFE.dateDepotPlagiat}</span>
                               <br/><br/>
                               <Tooltip title="Télécharger Rapport Anti-Plagiat" placement="top">
-                                <span className="downloadGreyIcon" onClick={() => {
-                                  downloadPDFFile(urkundPath);
-                                }}/>
+                                <span className="downloadGreyIcon" onClick={() => {downloadPDFFile(urkundPath);}}/>
                               </Tooltip>
                             </center>
                           </CCardBody>
@@ -2615,7 +2582,7 @@ function MyStudentTimeline(props) {
                     {
                       rapportPath !== null &&
                       <CCol md="4">
-                        <CCard style={{width: '14rem'}}>
+                        <CCard style={{ width: '14rem' }}>
                           <CCardImg variant="top" src={myDoc} height="125px"/>
                           <CCardBody>
                             <center>
@@ -2626,9 +2593,7 @@ function MyStudentTimeline(props) {
                               <span className="greyMarkItalic">{fPFE.dateDepotRapportVersion2}</span>
                               <br/><br/>
                               <Tooltip title="Télécharger Rapport Version 2" placement="top">
-                                <span className="downloadGreyIcon" onClick={() => {
-                                  downloadPDFFile(rapportPath);
-                                }}/>
+                                <span className="downloadGreyIcon" onClick={() => {downloadPDFFile(rapportPath);}}/>
                               </Tooltip>
                             </center>
                           </CCardBody>
@@ -2694,16 +2659,6 @@ function MyStudentTimeline(props) {
     );
   };
 
-  const surveyFirstJob = () => {
-    return (
-      <>
-        <span className="greyMarkCourrierSmalLabel">Not Yet Deployed !.</span>
-        <br/>
-        <Wave text=". . ." effect="stretch" effectChange={2.8}/>
-      </>
-    );
-  };
-
   const startTrDateNote = () => {
     let studentFN = studentFullName.substring(32);
     return (
@@ -2732,11 +2687,11 @@ function MyStudentTimeline(props) {
                   <CWidgetBrand color="facebook"
                                 rightHeader={stepComment.substring(0, stepComment.lastIndexOf('-'))}
                                 rightFooter="Nombre Conventions Validées"
-                                leftHeader={stepComment.substring(stepComment.lastIndexOf('-') + 1)}
+                                leftHeader={stepComment.substring(stepComment.lastIndexOf('-')+1)}
                                 leftFooter="Nombre Avenants Validés">
-                    <CIcon content={freeSet.cilAvTimer}
-                           height="25"
-                           className="my-3"/>
+                    <CIcon  content={freeSet.cilAvTimer}
+                            height="25"
+                            className="my-3"/>
                   </CWidgetBrand>
                 </CCol>
                 <CCol md="3"/>
@@ -2746,8 +2701,7 @@ function MyStudentTimeline(props) {
                 <CCol md="2"/>
                 <CCol>
                   <CJumbotron>
-                    <span className="redMark">{studentFN}</span> a commencé son Projet Fin Études à <span
-                    className="redMark">{stepDate}</span> .
+                    <span className="redMark">{studentFN}</span> a commencé son Projet Fin Études à <span className="redMark">{stepDate}</span> .
                   </CJumbotron>
                 </CCol>
                 <CCol md="2"/>
@@ -2759,28 +2713,32 @@ function MyStudentTimeline(props) {
   };
 
   const convHistoricBadge = (e) => {
-    if (e === "01") {
+    if (e === "01")
+    {
       return (
         <CBadge color="info" className="float-right">
           DEPOSÉE
         </CBadge>
       );
     }
-    if (e === "02") {
+    if (e === "02")
+    {
       return (
         <CBadge color="success" className="float-right">
           TRAITÉE
         </CBadge>
       );
     }
-    if (e === "03") {
+    if (e === "03")
+    {
       return (
         <CBadge color="danger" className="float-right">
           ANNULÉE
         </CBadge>
       );
     }
-    if (e === "04") {
+    if (e === "04")
+    {
       return (
         <CBadge color="warning" className="float-right">
           ANNULATION DEMANDEE
@@ -2790,56 +2748,64 @@ function MyStudentTimeline(props) {
   };
 
   const fichePFEsHistoricBadge = (e) => {
-    if (e === "01") {
+    if (e === "01")
+    {
       return (
         <CBadge color="secondary" className="float-right">
           SAUVEGARDÉE
         </CBadge>
       );
     }
-    if (e === "02") {
+    if (e === "02")
+    {
       return (
         <CBadge color="info" className="float-right">
           DÉPOSÉE
         </CBadge>
       );
     }
-    if (e === "03") {
+    if (e === "03")
+    {
       return (
         <CBadge color="success" className="float-right">
           VALIDÉE
         </CBadge>
       );
     }
-    if (e === "04") {
+    if (e === "04")
+    {
       return (
         <CBadge color="danger" className="float-right">
           REFUSÉE
         </CBadge>
       );
     }
-    if (e === "05") {
+    if (e === "05")
+    {
       return (
         <CBadge color="warning" className="float-right">
           ANNULÉE
         </CBadge>
       );
     }
-    if (e === "06") {
+    if (e === "06")
+    {
       return (
         <CBadge color="dark" className="float-right">
           À SOUTENIR
         </CBadge>
       );
     }
-    if (e === "07") {
+    if (e === "07")
+    {
       return (
         <CBadge color="primary" className="float-right">
           SOUTENUE
         </CBadge>
       );
     }
-    if (e === "08") {
+    if (e === "08")
+    {
       return (
         <CBadge color="primary" className="float-right">
           PLANIFIÉE
@@ -2852,7 +2818,53 @@ function MyStudentTimeline(props) {
     setExpanded(!expanded);
   };
 
+  function downloadGanttDiagramOFF(gdDecodedFullPath) {
+
+    let encodedURL = encodeURIComponent(encodeURIComponent(gdDecodedFullPath));
+
+    axios.get(`${process.env.REACT_APP_API_URL_STU}` + "downloadAllFilesTypes/" + encodedURL, {responseType: "blob"})
+      .then((response) => {
+
+        // console.log('2910Response Headers:', response.headers);
+        const contentDispo = response.headers['content-disposition'];
+        const fileName = contentDispo.substring(21);
+
+        const file = new File([response.data], fileName);
+        const fileURL = URL.createObjectURL(file);
+
+        let a = document.createElement('a');
+        a.href = fileURL;
+        a.download = fileName;
+        a.click();
+      });
+
+  }
+
   const treatmentsForESPPFileHist = (tf) => {
+
+    function downloadGanttDiagram(gdDecodedFullPath)
+    {
+      // console.log('--------------1003----> 0');
+      let lol = encodeURIComponent(gdDecodedFullPath);
+      // console.log('--------------1003----> 1: ', gdDecodedFullPath);
+      // console.log('--------------1003----> 2: ', lol);
+
+      axios.get(`${process.env.REACT_APP_API_URL_STU}` + "downloadGanttDiagramByUnit?gdDecodedFullPath=" + lol, { responseType: "blob" })
+        .then((response) => {
+
+          // console.log('2910Response Headers:', response.headers);
+          const file = new Blob([response.data], {type: 'application/pdf'});
+          const fileURL = URL.createObjectURL(file);
+
+          const contentDispo = response.headers['content-disposition'];
+          const fileName = contentDispo.substring(21);
+
+          let a = document.createElement('a');
+          a.href = fileURL;
+          a.download = fileName;
+          a.click();
+        });
+    }
 
     return (
       <>
@@ -2887,13 +2899,11 @@ function MyStudentTimeline(props) {
                 {
                   tf.etatTrt === "01" &&
                   <div className="float-right">
-                    <CButton shape="pill" size="sm" color="success"
-                             onClick={() => verifyValidateDemandeModification(tf.dateDepotFiche, tf.dateSaisieDemande)}>
+                    <CButton shape="pill" size="sm" color="success" onClick={() => verifyValidateDemandeModification(tf.dateDepotFiche, tf.dateSaisieDemande)}>
                       Valider DM
                     </CButton>
                     &nbsp;&nbsp;&nbsp;
-                    <CButton shape="pill" size="sm" color="danger"
-                             onClick={() => verifyRefuseDemandeModification(tf.dateDepotFiche, tf.dateSaisieDemande)}>
+                    <CButton shape="pill" size="sm" color="danger" onClick={() => verifyRefuseDemandeModification(tf.dateDepotFiche, tf.dateSaisieDemande)}>
                       Refuser DM
                     </CButton>
                   </div>
@@ -2932,7 +2942,7 @@ function MyStudentTimeline(props) {
                                     Date Traitement Demande:
                                 </span>
               </CCol>
-              <CCol md="9" className="colPaddingLeft">
+              <CCol md="9"  className="colPaddingLeft">
                 {tf.dateTrtFiche}
               </CCol>
             </CRow>
@@ -2977,13 +2987,11 @@ function MyStudentTimeline(props) {
                 {
                   tf.etatTrt === "01" && tf.typeTrtConv !== "AUT" &&
                   <div className="float-right">
-                    <CButton shape="pill" size="sm" color="success"
-                             onClick={() => verifyValidateDemandeAnnulation(tf.dateDepotFiche, tf.dateSaisieDemande, tf.typeTrtConv)}>
+                    <CButton shape="pill" size="sm" color="success" onClick={() => verifyValidateDemandeAnnulation(tf.dateDepotFiche, tf.dateSaisieDemande, tf.typeTrtConv)}>
                       Valider DA
                     </CButton>
                     &nbsp;&nbsp;&nbsp;
-                    <CButton shape="pill" size="sm" color="danger"
-                             onClick={() => verifyRefuseDemandeAnnulation(tf.dateDepotFiche, tf.dateSaisieDemande, tf.typeTrtConv)}>
+                    <CButton shape="pill" size="sm" color="danger" onClick={() => verifyRefuseDemandeAnnulation(tf.dateDepotFiche, tf.dateSaisieDemande, tf.typeTrtConv)}>
                       Refuser DA
                     </CButton>
                   </div>
@@ -3023,7 +3031,7 @@ function MyStudentTimeline(props) {
                                 </span>
               </CCol>
               <CCol md="9">
-                {tf.dateTrtFiche}
+                {tf.dateTrtFiche}nnn
               </CCol>
             </CRow>
             <CRow>
@@ -3058,9 +3066,7 @@ function MyStudentTimeline(props) {
                 {
                   tf.cancellingAgreementPath !== null &&
                   <LightTooltip title="Télécharger Accord Annulation" placement="right">
-                    <span className="cancelAgreeIcon" onClick={() => {
-                      downloadGanttDiagram(tf.cancellingAgreementPath);
-                    }}/>
+                    <span className="cancelAgreeIcon" onClick={() => {downloadGanttDiagram(tf.cancellingAgreementPath);}}/>
                   </LightTooltip>
                 }
                 <br/>
@@ -3121,31 +3127,9 @@ function MyStudentTimeline(props) {
     );
   };
 
-
-  function downloadGanttDiagramOFF(gdDecodedFullPath) {
-
-    let encodedURL = encodeURIComponent(encodeURIComponent(gdDecodedFullPath));
-
-    axios.get(`${process.env.REACT_APP_API_URL_STU}` + "downloadAllFilesTypes/" + encodedURL, {responseType: "blob"})
-      .then((response) => {
-
-        // console.log('2910Response Headers:', response.headers);
-        const contentDispo = response.headers['content-disposition'];
-        const fileName = contentDispo.substring(21);
-
-        const file = new File([response.data], fileName);
-        const fileURL = URL.createObjectURL(file);
-
-        let a = document.createElement('a');
-        a.href = fileURL;
-        a.download = fileName;
-        a.click();
-      });
-
-  }
-
   const fichePFEsHistoricTreatment = (e) => {
-    if (e === "02") {
+    if (e === "02")
+    {
       return (
         <div className="float-right">
           <CButton shape="pill" size="sm" color="success" onClick={() => verifyValidateESPFile()}>
@@ -3183,7 +3167,9 @@ function MyStudentTimeline(props) {
                     message: JSON.stringify(err.errors, null, 2),
                 });*/
         // console.log('NOOOOOOOOOOOOOOOOOOOOOOO');
-      } else {
+      }
+      else
+      {
         dispatch(fetchFichePFEsHistoric(studentId));
         dispatch(fetchActiveStudentTimelineStep(studentId));
         dispatch(fetchFichePFEDetails(studentId));
@@ -3219,7 +3205,9 @@ function MyStudentTimeline(props) {
                     message: JSON.stringify(err.errors, null, 2),
                 });*/
         // console.log('NOOOOOOOOOOOOOOOOOOOOOOO*********0712');
-      } else {
+      }
+      else
+      {
         dispatch(fetchFichePFEsHistoric(studentId)); // Update Fields of All Existing Fiches PFE History
         dispatch(fetchActiveStudentTimelineStep(studentId)); // Active Step
         dispatch(fetchFichePFEDetails(studentId)); // Badge
@@ -3258,7 +3246,9 @@ function MyStudentTimeline(props) {
                     message: JSON.stringify(err.errors, null, 2),
                 });*/
         // console.log('NOOOOOOOOOOOOOOOOOOOOOOO*********0712');
-      } else {
+      }
+      else
+      {
         dispatch(fetchFichePFEsHistoric(studentId));
 
         setShowLoadSpinnerForRefuseDemandeAnnul(false);
@@ -3280,9 +3270,9 @@ function MyStudentTimeline(props) {
   const formikSARS = useFormik({
 
     initialValues: {
-      thematicsPIK: ["poiuytre", "plo"], //[],
-      technologiesPIK: ["poiugf"],
-      desciplinesPIK: [],
+      thematicsPIK : ["poiuytre", "plo"], //[],
+      technologiesPIK : ["poiugf"],
+      desciplinesPIK : [],
     },
     validationSchema: validationSchemaSARSS,
     onSubmit: async (values) => {// sars
@@ -3296,7 +3286,8 @@ function MyStudentTimeline(props) {
     let companySupervisorFN = cs.lastName + ' ' + cs.firstName;
 
     let splitStr = companySupervisorFN.toLowerCase().split(' ');
-    for (let i = 0; i < splitStr.length; i++) {
+    for (let i = 0; i < splitStr.length; i++)
+    {
       splitStr[i] = splitStr[i].charAt(0).toUpperCase();
     }
     let csAbbv = splitStr.join('');
@@ -3306,7 +3297,7 @@ function MyStudentTimeline(props) {
       <>
         <ListItem alignItems="flex-start">
           <ListItemAvatar>
-            <Avatar sx={{bgcolor: deepPurple[500]}}>{csAbbv}</Avatar>
+            <Avatar sx={{ bgcolor: deepPurple[500] }}>{csAbbv}</Avatar>
           </ListItemAvatar>
           <ListItemText primary={companySupervisorFN}
                         secondary={
@@ -3327,7 +3318,8 @@ function MyStudentTimeline(props) {
     );
   };
 
-  function downloadPlanTravail(dateDepotPT) {
+  function downloadPlanTravail(dateDepotPT)
+  {
     // console.log('--------------1003----> 0');
     //let lol = encodeURIComponent(dateDepotPT);
     // console.log('--------------1003----> 1: ', gdDecodedFullPath);
@@ -3342,7 +3334,7 @@ function MyStudentTimeline(props) {
                  { responseType: "blob" }
              )*/  // dateDepotFiche
 
-    axios.get(`${process.env.REACT_APP_API_URL_STU}` + "downloadPlanTravail?studentId=" + studentId + "&&dateDepotPT=" + dateDepotPT, {responseType: "blob"})
+    axios.get(`${process.env.REACT_APP_API_URL_STU}` + "downloadPlanTravail?studentId=" + studentId + "&&dateDepotPT=" + dateDepotPT, { responseType: "blob" })
       .then((response) => {
 
         // console.log('2910Response Headers:', response.headers);
@@ -3837,10 +3829,10 @@ function MyStudentTimeline(props) {
 
           <CCard accentColor="danger">
             <CCardBody>
-              <div style={{overflowX: "auto"}}>
+              <div style={{overflowX : "auto"}}>
                 <Stepper alternativeLabel
                          activeStep={activeStudentTimelineStep}
-                         connector={<ColorlibConnector/>}>
+                         connector={<ColorlibConnector />}>
                   {steps.map((step) => (
                     <Step key={step}>
                       <CRow>
@@ -3848,12 +3840,12 @@ function MyStudentTimeline(props) {
                           <StepLabel StepIconComponent={ColorlibStepIcon}>
                             <span className="redMark">{step.stepDate}</span>
                             <br/><br/>
-                            <CButton shape="pill"
-                                     color="light"
-                                     size="sm"
-                                     className="float-center"
-                                     aria-expanded="true"
-                                     onClick={() => toggleItem(step)}>
+                            <CButton  shape="pill"
+                                      color="light"
+                                      size="sm"
+                                      className="float-center"
+                                      aria-expanded="true"
+                                      onClick={() => toggleItem(step)}>
                               <p style={{whiteSpace: 'pre', textAlign: 'center'}}> {step.stepLabel} </p>
                             </CButton>
                           </StepLabel>
@@ -3931,6 +3923,7 @@ function MyStudentTimeline(props) {
                 stepId === 13 &&
                 surveyFirstJob()
               }
+
             </DialogContent>
             <DialogActions>
               <Button onClick={() => closeModal()} color="primary">
@@ -4061,17 +4054,17 @@ function MyStudentTimeline(props) {
                       <CCol md="8">
                         Merci de présenter le Motif de Refus du Plan de Travail :
                         <br/><br/>
-                        <CTextarea value={formikRefuseESPFile.values.observation}
-                                   onChange={formikRefuseESPFile.handleChange}
-                                   disabled={showLoadSpinnerForRefuseFichePFE}
-                                   name="observation"
-                                   rows="4"
-                                   cols="70"
-                                   placeholder="Présenter le Motif de Refus de la Fiche ..."/>
+                        <CTextarea  value={formikRefuseESPFile.values.observation}
+                                    onChange={formikRefuseESPFile.handleChange}
+                                    disabled={showLoadSpinnerForRefuseFichePFE}
+                                    name="observation"
+                                    rows="4"
+                                    cols="70"
+                                    placeholder="Présenter le Motif de Refus de la Fiche ..."/>
 
                         {
                           formikRefuseESPFile.errors.observation && formikRefuseESPFile.touched.observation && (
-                            <p style={{color: "red"}}>
+                            <p style={{ color: "red" }}>
                               {formikRefuseESPFile.errors.observation}
                             </p>
                           )}
@@ -4249,17 +4242,17 @@ function MyStudentTimeline(props) {
                       <CCol md="10">
                         Merci de présenter le Motif de Refus de la Demande de Modification de la Fiche :
                         <br/><br/>
-                        <CTextarea value={formikRefuseDemandeModif.values.observation}
-                                   onChange={formikRefuseDemandeModif.handleChange}
-                                   disabled={showLoadSpinnerForRefuseDemandeModif}
-                                   name="observation"
-                                   rows="4"
-                                   cols="70"
-                                   placeholder="Présenter le Motif de Refus de la Demande de Modification du Plan de Travail ..."/>
+                        <CTextarea  value={formikRefuseDemandeModif.values.observation}
+                                    onChange={formikRefuseDemandeModif.handleChange}
+                                    disabled={showLoadSpinnerForRefuseDemandeModif}
+                                    name="observation"
+                                    rows="4"
+                                    cols="70"
+                                    placeholder="Présenter le Motif de Refus de la Demande de Modification du Plan de Travail ..."/>
 
                         {
                           formikRefuseDemandeModif.errors.observation && formikRefuseDemandeModif.touched.observation && (
-                            <p style={{color: "red"}}>
+                            <p style={{ color: "red" }}>
                               {formikRefuseDemandeModif.errors.observation}
                             </p>
                           )}
@@ -4451,17 +4444,17 @@ function MyStudentTimeline(props) {
                       <CCol md="10">
                         Merci de présenter le Motif de Refus de la Demande d'Annulation de la Fiche:
                         <br/><br/>
-                        <CTextarea value={formikRefuseDemandeAnnul.values.observation}
-                                   onChange={formikRefuseDemandeAnnul.handleChange}
-                                   disabled={showLoadSpinnerForRefuseDemandeAnnul}
-                                   name="observation"
-                                   rows="4"
-                                   cols="70"
-                                   placeholder="Présenter le Motif de Refus de la Demande d'Annulation du Plan de Travail ..."/>
+                        <CTextarea  value={formikRefuseDemandeAnnul.values.observation}
+                                    onChange={formikRefuseDemandeAnnul.handleChange}
+                                    disabled={showLoadSpinnerForRefuseDemandeAnnul}
+                                    name="observation"
+                                    rows="4"
+                                    cols="70"
+                                    placeholder="Présenter le Motif de Refus de la Demande d'Annulation du Plan de Travail ..."/>
 
                         {
                           formikRefuseDemandeAnnul.errors.observation && formikRefuseDemandeAnnul.touched.observation && (
-                            <p style={{color: "red"}}>
+                            <p style={{ color: "red" }}>
                               {formikRefuseDemandeAnnul.errors.observation}
                             </p>
                           )}

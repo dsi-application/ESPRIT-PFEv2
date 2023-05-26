@@ -15,9 +15,9 @@ import {
   CSpinner,
   CTooltip,
   CForm,
-CFormGroup,
-CLabel,
-CTextarea
+  CFormGroup,
+  CLabel,
+  CTextarea
 } from "@coreui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -47,7 +47,7 @@ import { selectStudentsToStat, selectStudentsDoneStat} from "../../../redux/slic
 import { createMuiTheme } from "@material-ui/core";
 import { MuiThemeProvider } from "@material-ui/core";
 
-import { 
+import {
   selectNbrUploadedReports,
   selectNbrValidatedReports,
   selectNbrRefusedReports,
@@ -80,10 +80,7 @@ const ValidatedReportsForCPS = () => {
   const [confirmNotif, setConfirmNotif] = useState(false);
   const [successNotif, setSuccessNotif] = useState(false);
   const [loadSpinnerNotif, setLoadSpinnerNotif] = useState(false);
-  // console.log("Fiches", Fiches);
-  const FichestatusValALL = useSelector(
-    (state) => state.persistedReducer.conventions.FichestatusALL
-  );
+
   const [studentsToStat, errsts] = useSelector(selectStudentsToStat);
   const [studentsDoneStat, errsds] = useSelector(selectStudentsDoneStat);
 
@@ -93,7 +90,7 @@ const ValidatedReportsForCPS = () => {
 
   useEffect(() => { dispatch(fetchFicheValALL()) }, [Fiches]);
 
-const theme = createMuiTheme({
+  const theme = createMuiTheme({
     overrides: {
       MuiTableCell: {
         root: {
@@ -148,16 +145,16 @@ const theme = createMuiTheme({
                 onClick={() => handleValideModal(e.idEt, e.dateFiche)}
               >
 
-              <CTooltip content="Valider Dépôt" placement="top">
-                              <CIcon name="cil-check"/>
-                            </CTooltip>
+                <CTooltip content="Valider Dépôt" placement="top">
+                  <CIcon name="cil-check"/>
+                </CTooltip>
 
 
               </CButton>
             </div>
           </CCol>
           <CCol xs="12" sm="4" md="6">
-            
+
             <div
               style={{
                 display: "flex",
@@ -173,8 +170,8 @@ const theme = createMuiTheme({
                 onClick={() => handleRefuseModal(e.idEt, e.dateFiche)}
               >
                 <CTooltip content="Dépôt non complet" placement="top">
-                              <CIcon name="cil-x"/>
-                            </CTooltip>
+                  <CIcon name="cil-x"/>
+                </CTooltip>
               </CButton>
             </div>
           </CCol>
@@ -182,7 +179,7 @@ const theme = createMuiTheme({
       );
     } else {
       return (
-       <></>
+        <></>
       );
     }
   };
@@ -235,52 +232,52 @@ const theme = createMuiTheme({
             <>
               {Fiches[dataIndex].etatDepot ? (
                 <>
-                 <CRow>
-                   <CCol>
-                     <Tooltip title=" Télécharger Rapport">
-                       <IconButton
-                           onClick={() => {
-                             Download(Fiches[dataIndex].pathRapport);
-                           }}
-                       >
-                         <GetApp style={{ color: "#DB4437" }} />
-                       </IconButton>
-                     </Tooltip>
-                     &nbsp;
-                     <Tooltip title=" Télécharger Plagiat">
-                       <IconButton
-                           onClick={() => {
-                             Download(Fiches[dataIndex].pathPlagiat);
-                           }}
-                       >
-                         <GetApp style={{ color: "#DB4437" }} />
-                       </IconButton>
-                     </Tooltip>
-                     &nbsp;
-                     <Tooltip title=" Télécharger Attestation Stage">
-                       <IconButton
-                           onClick={() => {
-                             Download(Fiches[dataIndex].pathAttestationStage);
-                           }}
-                       >
-                         <GetApp style={{ color: "#DB4437" }} />
-                       </IconButton>
-                     </Tooltip>
-                     &nbsp;
-                     {(
-                         Fiches[dataIndex].pathDossierTechnique !== null &&
-                         <Tooltip title=" Télécharger Dossier Technique">
-                           <IconButton
-                               onClick={() => {
-                                 Download(Fiches[dataIndex].pathDossierTechnique);
-                               }}
-                           >
-                             <GetApp style={{ color: "#DB4437" }} />
-                           </IconButton>
-                         </Tooltip>
-                     )}
-                   </CCol>
-                 </CRow>
+                  <CRow>
+                    <CCol>
+                      <Tooltip title=" Télécharger Rapport">
+                        <IconButton
+                          onClick={() => {
+                            Download(Fiches[dataIndex].pathRapport);
+                          }}
+                        >
+                          <GetApp style={{ color: "#DB4437" }} />
+                        </IconButton>
+                      </Tooltip>
+                      &nbsp;
+                      <Tooltip title=" Télécharger Plagiat">
+                        <IconButton
+                          onClick={() => {
+                            Download(Fiches[dataIndex].pathPlagiat);
+                          }}
+                        >
+                          <GetApp style={{ color: "#DB4437" }} />
+                        </IconButton>
+                      </Tooltip>
+                      &nbsp;
+                      <Tooltip title=" Télécharger Attestation Stage">
+                        <IconButton
+                          onClick={() => {
+                            Download(Fiches[dataIndex].pathAttestationStage);
+                          }}
+                        >
+                          <GetApp style={{ color: "#DB4437" }} />
+                        </IconButton>
+                      </Tooltip>
+                      &nbsp;
+                      {(
+                        Fiches[dataIndex].pathDossierTechnique !== null &&
+                        <Tooltip title=" Télécharger Dossier Technique">
+                          <IconButton
+                            onClick={() => {
+                              Download(Fiches[dataIndex].pathDossierTechnique);
+                            }}
+                          >
+                            <GetApp style={{ color: "#DB4437" }} />
+                          </IconButton>
+                        </Tooltip>
+                      )}
+                    </CCol>
+                  </CRow>
                 </>
               ) : (
                 <> </>
@@ -299,22 +296,22 @@ const theme = createMuiTheme({
         sort: true,
         customBodyRenderLite: (dataIndex) => {
           return (
-              <center>
-                  <div className="float-center">
-                      {
-                          Fiches[dataIndex].etatGrilleEncadrement === "DONE" &&
-                          <Tooltip title="Télécharger Grille Evaluation">
-                            <span className="downloadGreenIconSmall" onClick={() => {downloadGrilleAE(Fiches[dataIndex].idEt)}}/>
-                          </Tooltip>
-                      }
-                      {
-                          Fiches[dataIndex].etatGrilleEncadrement === "NOTYET" &&
-                          <Tooltip title="Notifier Encadrant Académique">
-                            <span className="bellRedIconSmall" onClick={() => {askForNotif(Fiches[dataIndex].idEt)}}/>
-                          </Tooltip>
-                      }
-                  </div>
-              </center>
+            <center>
+              <div className="float-center">
+                {
+                  Fiches[dataIndex].etatGrilleEncadrement === "DONE" &&
+                  <Tooltip title="Télécharger Grille Evaluation">
+                    <span className="downloadGreenIconSmall" onClick={() => {downloadGrilleAE(Fiches[dataIndex].idEt)}}/>
+                  </Tooltip>
+                }
+                {
+                  Fiches[dataIndex].etatGrilleEncadrement === "NOTYET" &&
+                  <Tooltip title="Notifier Encadrant Académique">
+                    <span className="bellRedIconSmall" onClick={() => {askForNotif(Fiches[dataIndex].idEt)}}/>
+                  </Tooltip>
+                }
+              </div>
+            </center>
           );
         },
       },
@@ -403,7 +400,7 @@ const theme = createMuiTheme({
     setid(id);
     setDanger(true);
   };
- const formik = useFormik({
+  const formik = useFormik({
     initialValues: {
       observation: "",
     },
@@ -412,11 +409,11 @@ const theme = createMuiTheme({
       setShowLoader(true);
       const [res, err] = await queryApi(
         "serviceStage/updateDepotToREFUSE?idET=" +
-          id +
-          "&dateFiche=" +
-          date +
-          "&observation=" +
-          values.observation,
+        id +
+        "&dateFiche=" +
+        date +
+        "&observation=" +
+        values.observation,
         {},
         "PUT",
         false
@@ -430,7 +427,7 @@ const theme = createMuiTheme({
         });
       } else {
         dispatch(updateFichebydep(res));
-           window.location.reload();
+        window.location.reload();
         //setDanger(false);
       }
     },
@@ -444,40 +441,40 @@ const theme = createMuiTheme({
 
     // console.log('-----------AZERTY-------> LOL 1: ' + p);
 
-      let encodedURL = encodeURIComponent(encodeURIComponent(p));
-      axios.get(`${process.env.REACT_APP_API_URL_STU}` + "downloadMyPDF/" + encodedURL, { responseType: "blob" })
-          .then((response) => {
+    let encodedURL = encodeURIComponent(encodeURIComponent(p));
+    axios.get(`${process.env.REACT_APP_API_URL_STU}` + "downloadMyPDF/" + encodedURL, { responseType: "blob" })
+      .then((response) => {
 
-      const file = new Blob([response.data], { type: "application/pdf" });
-      let url = window.URL.createObjectURL(file);
+        const file = new Blob([response.data], { type: "application/pdf" });
+        let url = window.URL.createObjectURL(file);
 
-      // let a = document.createElement("a");
-      // a.href = url;
-      // a.download = p.substring(p.lastIndexOf("/") + 1);
-      if(p.includes('.pdf'))
-      {
-        window.open(url);
-      }
-      // a.click();
-    });
+        // let a = document.createElement("a");
+        // a.href = url;
+        // a.download = p.substring(p.lastIndexOf("/") + 1);
+        if(p.includes('.pdf'))
+        {
+          window.open(url);
+        }
+        // a.click();
+      });
   };
 
   const downloadGrilleAE = (p) => {
     console.log('------------AZERTY------> LOL 0: ' + p);
     axios.get(`${process.env.REACT_APP_API_URL_AE}` + "downloadGrilleAE/" + p, { responseType: "blob" })
-        .then((response) => {
-          const file = new Blob([response.data], {type: 'application/pdf'});
-          const fileURL = URL.createObjectURL(file);
+      .then((response) => {
+        const file = new Blob([response.data], {type: 'application/pdf'});
+        const fileURL = URL.createObjectURL(file);
 
-          const contentDispo = response.headers['content-disposition'];
-          const fileName = contentDispo.substring(21);
+        const contentDispo = response.headers['content-disposition'];
+        const fileName = contentDispo.substring(21);
 
-          let a = document.createElement('a');
-          a.href = fileURL;
-          a.download = fileName;
-          a.click();
-          window.open(fileURL);
-        });
+        let a = document.createElement('a');
+        a.href = fileURL;
+        a.download = fileName;
+        a.click();
+        window.open(fileURL);
+      });
   };
 
   const askForNotif = (p) => {
@@ -490,8 +487,8 @@ const theme = createMuiTheme({
     console.log('----------HIHIHI---------> 20.11 1: ', studentId);
     setLoadSpinnerNotif(!loadSpinnerNotif);
     const [err] = await queryApi(
-        "academicEncadrant/notifyAEToFillGrille/" + studentId,
-        "GET"
+      "academicEncadrant/notifyAEToFillGrille/" + studentId,
+      "GET"
     );
     if (err) {
       // console.log('-------------------> 20.11 2');
@@ -507,55 +504,40 @@ const theme = createMuiTheme({
   return (
     <>
 
-      <TheSidebar data1={studentsToStat} data2={studentsDoneStat} 
-      dataUR={nbUploadedReports} dataVR={nbValidatedReports} dataIR={nbIncompletedReports}/>
+      <TheSidebar data1={studentsToStat} data2={studentsDoneStat}
+                  dataUR={nbUploadedReports} dataVR={nbValidatedReports} dataIR={nbIncompletedReports}/>
 
-      {FichestatusValALL === "loading" || FichestatusValALL === "noData" ? (
-        <>
-          <div style={{ textAlign: "center" }}>
-            <br/><br/>
-            <CSpinner color="danger" grow size="lg" />
-
-            <br/><br/>
-            <b>Veuillez patienter le chargement des données ...</b>
-          </div>
-          <br></br>
-        </>
-      ) : (
-        <>
-          <CRow>
-            <CCol>
-              <CCard>
-                <CRow>
-                  <CCol xs="12">
-                    <br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <span style={{color: "#b30000", fontSize: "14px", fontWeight: "bold"}}>Liste des Rapports Validés</span>
-                  </CCol>
-                </CRow>
+      <CRow>
+        <CCol>
+          <CCard>
+            <CRow>
+              <CCol xs="12">
                 <br/>
-                <CCardBody>
-                  {Fiches ? (
-                      <MuiThemeProvider theme={theme}>
-                    <MUIDataTable
-                      title={""}
-                      data={Fiches}
-                      columns={columns}
-                      options={options}
-                    /></MuiThemeProvider>
-                  ) : (
-                      <center>
-                        <br/><br/><br/><br/><br/>
-                        <span className="waitIcon"/>
-                        <br/><br/><br/><br/><br/>
-                      </center>
-                  )}
-                </CCardBody>
-              </CCard>
-            </CCol>
-          </CRow>
-        </>
-      )}
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span style={{color: "#b30000", fontSize: "14px", fontWeight: "bold"}}>Liste des Rapports Validés</span>
+              </CCol>
+            </CRow>
+            <br/>
+            <CCardBody>
+              {Fiches ? (
+                <MuiThemeProvider theme={theme}>
+                  <MUIDataTable
+                    title={""}
+                    data={Fiches}
+                    columns={columns}
+                    options={options}
+                  /></MuiThemeProvider>
+              ) : (
+                <center>
+                  <br/><br/><br/><br/><br/>
+                  <span className="waitIcon"/>
+                  <br/><br/><br/><br/><br/>
+                </center>
+              )}
+            </CCardBody>
+          </CCard>
+        </CCol>
+      </CRow>
 
       <CModal size="lg" show={info} onClose={() => setInfo(!info)} color="dark">
         <CModalHeader closeButton>
@@ -620,9 +602,9 @@ const theme = createMuiTheme({
         </CModalFooter>
       </CModal>
       <CModal
-          show={danger}
-          onClose={() => setDanger(!danger)}
-          color="danger"
+        show={danger}
+        onClose={() => setDanger(!danger)}
+        color="danger"
       >
         <CModalHeader closeButton>
           <CModalTitle>
@@ -632,7 +614,7 @@ const theme = createMuiTheme({
         <CModalBody>
           <CForm onSubmit={formik.handleSubmit}>
             <CFormGroup>
-              
+
               {error.visible && <p>{error.message}</p>}
             </CFormGroup>
             <CFormGroup row>
@@ -643,40 +625,40 @@ const theme = createMuiTheme({
               </CCol>
               <CCol xs="12" md="9">
                 <CTextarea
-                    value={formik.values.observation}
-                    onChange={formik.handleChange}
-                    name="observation"
-                    rows="3"
-                    cols="70"
-                    placeholder="Saisir votre motif ..."
+                  value={formik.values.observation}
+                  onChange={formik.handleChange}
+                  name="observation"
+                  rows="3"
+                  cols="70"
+                  placeholder="Saisir votre motif ..."
                 />
                 {formik.errors.observation &&
-                formik.touched.observation && (
+                  formik.touched.observation && (
                     <p style={{ color: "red" }}>
                       {formik.errors.observation}
                     </p>
-                )}
+                  )}
 
                 <br />
               </CCol>
             </CFormGroup>
             {showLoader && (
-                <CAlert color="danger">
-                  Attendre un petit peu ... Nous allons notifer cet
-                  étudiant par email ....
-                </CAlert>
+              <CAlert color="danger">
+                Attendre un petit peu ... Nous allons notifer cet
+                étudiant par email ....
+              </CAlert>
             )}
             <CButton
-                className="float-right"
-                color="secondary"
-                onClick={() => setDanger(!danger)}
+              className="float-right"
+              color="secondary"
+              onClick={() => setDanger(!danger)}
             >
               Annuler
             </CButton>
             <CButton
-                className="float-right"
-                color="danger"
-                type="submit"
+              className="float-right"
+              color="danger"
+              type="submit"
             >
               {showLoader && <CSpinner grow size="sm" />} OUI
             </CButton>
@@ -686,9 +668,9 @@ const theme = createMuiTheme({
 
       </CModal>
       <CModal
-          show={success}
-          onClose={() => setSuccess(!success)}
-          color="success"
+        show={success}
+        onClose={() => setSuccess(!success)}
+        color="success"
       >
         <CModalHeader closeButton>
           <CModalTitle>
@@ -699,14 +681,14 @@ const theme = createMuiTheme({
         <CModalFooter>
 
           {showLoader && (
-              <CAlert color="danger">
-                Attendre un petit peu ... Nous allons notifer cet
-                étudiant par email ....
-              </CAlert>
+            <CAlert color="danger">
+              Attendre un petit peu ... Nous allons notifer cet
+              étudiant par email ....
+            </CAlert>
           )}
           <CButton
-              color="secondary"
-              onClick={() => setSuccess(!success)}
+            color="secondary"
+            onClick={() => setSuccess(!success)}
           >
             Annuler
           </CButton>
@@ -714,9 +696,9 @@ const theme = createMuiTheme({
       </CModal>
 
       <CModal
-          show={confirmNotif}
-          onClose={() => setConfirmNotif(!confirmNotif)}
-          color="danger"
+        show={confirmNotif}
+        onClose={() => setConfirmNotif(!confirmNotif)}
+        color="danger"
       >
         <CModalHeader closeButton>
           <CModalTitle>
@@ -739,16 +721,16 @@ const theme = createMuiTheme({
             <CCol md="12">
               <div className="float-right">
                 {loadSpinnerNotif === true ? (
-                    <>
-                      <Spinner animation="grow" variant="danger"/>
-                    </>
+                  <>
+                    <Spinner animation="grow" variant="danger"/>
+                  </>
                 ) : (
-                    <>
-                      <CButton color="danger"
-                               onClick={() => notifyAEToFillGrille()}>
-                        YES, I Confirm
-                      </CButton>
-                    </>
+                  <>
+                    <CButton color="danger"
+                             onClick={() => notifyAEToFillGrille()}>
+                      YES, I Confirm
+                    </CButton>
+                  </>
                 )}
 
                 &nbsp;&nbsp;
@@ -763,9 +745,9 @@ const theme = createMuiTheme({
       </CModal>
 
       <CModal
-          show={successNotif}
-          onClose={() => setSuccessNotif(!successNotif)}
-          color="success"
+        show={successNotif}
+        onClose={() => setSuccessNotif(!successNotif)}
+        color="success"
       >
         <CModalHeader closeButton>
           <CModalTitle>
