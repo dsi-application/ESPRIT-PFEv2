@@ -52,7 +52,7 @@ const AvenantsManage = () => {
   const columnsAvenants = [
     {
       name: "idEt",
-      label: "Identifiant Étudiant",
+      label: "Identifiant",
       options: {
         filter: true,
         sort: true,
@@ -60,7 +60,7 @@ const AvenantsManage = () => {
     },
     {
       name: "nomEt",
-      label: "Nom & Prénom Étudiant",
+      label: "Nom & Prénom",
       options: {
         filter: true,
         sort: true,
@@ -420,7 +420,7 @@ const AvenantsManage = () => {
                         {error.visible && <p>{error.message}</p>}
                       </CFormGroup>
                       <center>
-                        Choisir une Promotion pour visualiser la liste correspondante :
+                        <span className="greyLabel_Dark_Cr_12">Merci de choisir une Promotion</span>
                       </center>
                       <br/>
                       <CFormGroup row>
@@ -463,7 +463,14 @@ const AvenantsManage = () => {
                 <br/>
 
                 <CCardBody>
-                  {avenantsForRSS ? (
+                  {avenantsForRSS.length === 0 ? (
+                    <center>
+                      <hr/>
+                      <br/><br/>
+                      <span className="greyLabel_Dark_Cr_13">Sorry, no Data is available.</span>
+                      <br/><br/><br/><br/>
+                    </center>
+                  ) : (
                     <MUIDataTable
                       data={avenantsForRSS}
                       columns={columnsAvenants}
@@ -471,12 +478,9 @@ const AvenantsManage = () => {
                         selectableRows: 'none' // <===== will turn off checkboxes in rows
                       }}
                     />
-                  ) : (
-                    <>
-                      Sorry, no Data is available
-                    </>
                   )}
                 </CCardBody>
+
               </CCard>
             </CCol>
           </CRow>
