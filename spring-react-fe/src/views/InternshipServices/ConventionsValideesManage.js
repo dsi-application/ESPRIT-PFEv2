@@ -149,7 +149,7 @@ const ConventionsValideesManage = () => {
     },
     {
       name: "nomEt",
-      label: "Nom & Prénom Étudiant",
+      label: "Nom & Prénom",
       options: {
         filter: true,
         sort: true,
@@ -161,14 +161,6 @@ const ConventionsValideesManage = () => {
       options: {
         filter: true,
         sort: true,
-      },
-    },
-    {
-      name: "departEt",
-      label: "Dépt",
-      options: {
-        filter: true,
-        sort: true
       },
     },
     {
@@ -494,6 +486,14 @@ const ConventionsValideesManage = () => {
       <TheSidebar dataDAC={nbDemandesAnnulationConvention} dataDC={nbDepositedConventions}
                   dataVC={nbValidatedConventions}/>
 
+      <Tour
+        steps={steps}
+        isOpen={isTourOpen}
+        onAfterOpen={(target) => (document.body.style.overflowY = "hidden")}
+        onBeforeClose={(target) => (document.body.style.overflowY = "auto")}
+        onRequestClose={() => setIsTourOpen(false)}
+      />
+
       <CRow>
         <CCol>
           <CCard data-tut="reactour__1">
@@ -505,7 +505,7 @@ const ConventionsValideesManage = () => {
                     {error.visible && <p>{error.message}</p>}
                   </CFormGroup>
                   <center>
-                    Choisir une Promotion et une Option pour visualiser la liste correspondante :
+                    <span className="greyLabel_Dark_Cr_12">Merci de choisir une Promotion et une Option</span>
                   </center>
                   <br/>
                   <CFormGroup row>
@@ -572,10 +572,16 @@ const ConventionsValideesManage = () => {
               <CCol md="3"/>
             </CRow>
 
-
             <br/>
             <CCardBody>
-              {conventionsForRSS ? (
+              {conventionsForRSS.length === 0 ? (
+                <center>
+                  <hr/>
+                  <br/><br/>
+                  <span className="greyLabel_Dark_Cr_13">Sorry, no Data is available.</span>
+                  <br/><br/><br/><br/>
+                </center>
+              ) : (
                 <MUIDataTable
                   data={conventionsForRSS}
                   columns={columnsConventions}
@@ -583,10 +589,6 @@ const ConventionsValideesManage = () => {
                     selectableRows: 'none' // <===== will turn off checkboxes in rows
                   }}
                 />
-              ) : (
-                <>
-                  Sorry, no Data is available
-                </>
               )}
             </CCardBody>
 

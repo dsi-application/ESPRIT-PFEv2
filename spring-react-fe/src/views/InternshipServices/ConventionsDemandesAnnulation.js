@@ -107,11 +107,11 @@ const ConventionsDemandesAnnulation = () => {
   const ConventionsstatusForRSS = useSelector((state) => state.persistedReducer.conventions.ConventionsstatusForRSS);
   const dispatch = useDispatch();
   const columnsConventions = [{
-    name: "idEt", label: "Identifiant Étudiant", options: {
+    name: "idEt", label: "Identifiant", options: {
       filter: true, sort: true,
     },
   }, {
-    name: "nomEt", label: "Nom & Prénom Étudiant", options: {
+    name: "nomEt", label: "Nom & Prénom", options: {
       filter: true, sort: true,
     },
   }, {
@@ -119,7 +119,7 @@ const ConventionsDemandesAnnulation = () => {
       filter: true, sort: true,
     },
   }, {
-    name: "departEt", label: "Option", options: {
+    name: "optionEt", label: "Option", options: {
       filter: true, sort: true
     },
   },
@@ -338,7 +338,7 @@ const ConventionsDemandesAnnulation = () => {
                   {error.visible && <p>{error.message}</p>}
                 </CFormGroup>
                 <center>
-                  Choisir une Promotion pour visualiser la liste correspondante :
+                  <span className="greyLabel_Dark_Cr_12">Merci de choisir une Promotion</span>
                 </center>
                 <br/>
                 <CFormGroup row>
@@ -375,18 +375,25 @@ const ConventionsDemandesAnnulation = () => {
           </CRow>
 
           <br/>
-
           <CCardBody>
-            {conventionsForRSS ? (<MUIDataTable
-              data={conventionsForRSS}
-              columns={columnsConventions}
-              options={{
-                selectableRows: 'none' // <===== will turn off checkboxes in rows
-              }}
-            />) : (<>
-              Sorry, no Data is available
-            </>)}
+            {conventionsForRSS.length === 0 ? (
+              <center>
+                <hr/>
+                <br/><br/>
+                <span className="greyLabel_Dark_Cr_13">Sorry, no Data is available.</span>
+                <br/><br/><br/><br/>
+              </center>
+            ) : (
+              <MUIDataTable
+                data={conventionsForRSS}
+                columns={columnsConventions}
+                options={{
+                  selectableRows: 'none' // <===== will turn off checkboxes in rows
+                }}
+              />
+            )}
           </CCardBody>
+
         </CCard>
       </CCol>
     </CRow>

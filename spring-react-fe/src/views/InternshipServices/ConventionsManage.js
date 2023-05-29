@@ -49,7 +49,6 @@ import * as Yup from "yup";
 
 const validationSchema = Yup.object().shape({
   yearLabel: Yup.string().required("* Année est un Champ obligatoire !."),
-  optionLabel: Yup.string().required("* Option est un Champ obligatoire !."),
 });
 
 const steps = [
@@ -126,7 +125,7 @@ const ConventionsManage = () => {
   const columnsConventions = [
     {
       name: "idEt",
-      label: "Identifiant Étudiant",
+      label: "Identifiant",
       options: {
         filter: true,
         sort: true,
@@ -134,7 +133,15 @@ const ConventionsManage = () => {
     },
     {
       name: "nomEt",
-      label: "Nom & Prénom Étudiant",
+      label: "Nom & Prénom",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "optionEt",
+      label: "Option",
       options: {
         filter: true,
         sort: true,
@@ -146,14 +153,6 @@ const ConventionsManage = () => {
       options: {
         filter: true,
         sort: true,
-      },
-    },
-    {
-      name: "departEt",
-      label: "Département",
-      options: {
-        filter: true,
-        sort: true
       },
     },
     {
@@ -398,8 +397,7 @@ const ConventionsManage = () => {
 
       const [res, err] = await queryApi(
         "respServStg/allConventionsListByOptionForRSS?idRSS=" + currentResponsableServiceStage.id +
-        "&yearLabel=" + values.yearLabel +
-        "&optionLabel=" + values.optionLabel,
+        "&yearLabel=" + values.yearLabel,
         {},
         "PUT",
         false
@@ -436,18 +434,26 @@ const ConventionsManage = () => {
       <TheSidebar dataDAC={nbDemandesAnnulationConvention} dataDC={nbDepositedConventions}
                   dataVC={nbValidatedConventions}/>
 
+      <Tour
+        steps={steps}
+        isOpen={isTourOpen}
+        onAfterOpen={(target) => (document.body.style.overflowY = "hidden")}
+        onBeforeClose={(target) => (document.body.style.overflowY = "auto")}
+        onRequestClose={() => setIsTourOpen(false)}
+      />
+
       <CRow>
         <CCol>
           <CCard data-tut="reactour__1">
             <CRow>
-              <CCol md="3"/>
-              <CCol md="6">
+              <CCol md="4"/>
+              <CCol md="4">
                 <CForm onSubmit={formik.handleSubmit}>
                   <CFormGroup>
                     {error.visible && <p>{error.message}</p>}
                   </CFormGroup>
                   <center>
-                    Choisir une Promotion et une Option pour visualiser la liste correspondante :
+                    <span className="greyLabel_Dark_Cr_12">Merci de choisir une Promotion</span>
                   </center>
                   <br/>
                   <CFormGroup row>
@@ -477,33 +483,6 @@ const ConventionsManage = () => {
                     </CCol>
                     <CCol md="1"/>
                   </CFormGroup>
-                  <CFormGroup row>
-                    <CCol md="1"/>
-                    <CCol md="10">
-                      <CSelect value={formik.values.optionLabel}
-                               onChange={formik.handleChange}
-                               onBlur={formik.handleBlur}
-                               custom
-                               size="sm"
-                               name="optionLabel">
-                        <option style={{display: "none"}}>
-                          ---- Choisir une Option ----
-                        </option>
-                        {allOpts?.map((e, i) => (
-                          <option value={e} key={i}>
-                            {e}
-                          </option>
-                        ))}
-                      </CSelect>
-                      {
-                        formik.errors.optionLabel && formik.touched.optionLabel &&
-                        <p style={{color: "red"}}>{formik.errors.optionLabel}</p>
-                      }
-                      <br/>
-                    </CCol>
-                    <CCol md="1"/>
-                    <br/><br/>
-                  </CFormGroup>
                   <center>
                     <CButton color="danger" type="submit">
                       {showLoader && <CSpinner grow size="sm"/>} &nbsp; Confirmer
@@ -511,13 +490,20 @@ const ConventionsManage = () => {
                   </center>
                 </CForm>
               </CCol>
-              <CCol md="3"/>
+              <CCol md="4"/>
             </CRow>
 
             <br/>
 
             <CCardBody>
-              {conventionsForRSS ? (
+              {conventionsForRSS.length === 0 ? (
+                <center>
+                  <hr/>
+                  <br/><br/>
+                  <span className="greyLabel_Dark_Cr_13">Sorry, no Data is available.</span>
+                  <br/><br/><br/><br/>
+                </center>
+              ) : (
                 <MUIDataTable
                   data={conventionsForRSS}
                   columns={columnsConventions}
@@ -525,10 +511,6 @@ const ConventionsManage = () => {
                     selectableRows: 'none' // <===== will turn off checkboxes in rows
                   }}
                 />
-              ) : (
-                <>
-                  Sorry, no Data is available
-                </>
               )}
             </CCardBody>
           </CCard>

@@ -12,16 +12,16 @@ public class ConventionForRSSDto
 	private Date dateFin;
 	private String idEt;
 	private String nomEt;
-	private String departEt;
+	private String optionEt;
 	private String paysConvention;
 	private String traiter;
 	private String pathConvention;
 	private String currentClasse;
 	private EntrepriseAccueil entrepriseAccueilConvention;
-	
-	
+
+
 	public ConventionForRSSDto() {}
-	
+
 	public ConventionForRSSDto(String dateConvention, Date dateDebut, Date dateFin, String idEt, String paysConvention, String traiter, String pathConvention, EntrepriseAccueil entrepriseAccueilConvention) {
 		this.dateConvention = dateConvention;
 		this.dateDebut = dateDebut;
@@ -32,7 +32,7 @@ public class ConventionForRSSDto
 		this.pathConvention = pathConvention;
 		this.entrepriseAccueilConvention = entrepriseAccueilConvention;
 	}
-	
+
 //	public ConventionForRSSDto(String dateConvention, Date dateDebut, Date dateFin, String idEt, String nomEt, String departEt, String paysConvention, String traiter) {
 //		this.dateConvention = dateConvention;
 //		this.dateDebut = dateDebut;
@@ -87,16 +87,12 @@ public class ConventionForRSSDto
 		this.nomEt = nomEt;
 	}
 
-	public String getDepartEt() {
-		return departEt;
+	public String getOptionEt() {
+		return optionEt;
 	}
 
-	public void setDepartEt(String departEt) {
-		this.departEt = departEt;
-	}
-
-	public String getPaysConvention() {
-		return paysConvention;
+	public void setOptionEt(String optionEt) {
+		this.optionEt = optionEt;
 	}
 
 	public void setPaysConvention(String paysConvention) {
@@ -133,6 +129,10 @@ public class ConventionForRSSDto
 
 	public void setCurrentClasse(String currentClasse) {
 		this.currentClasse = currentClasse;
+	}
+
+	public String getPaysConvention() {
+		return paysConvention;
 	}
 
 }

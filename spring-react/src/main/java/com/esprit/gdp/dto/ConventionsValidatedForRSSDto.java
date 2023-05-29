@@ -12,7 +12,7 @@ public class ConventionsValidatedForRSSDto
 	private Date dateFin;
 	private String idEt;
 	private String nomEt;
-	private String departEt;
+	// private String departEt;
 	private String paysConvention;
 	private String pathConvention;
 	private String pathSignedConvention;
@@ -100,6 +100,7 @@ public class ConventionsValidatedForRSSDto
 		this.nomEt = nomEt;
 	}
 
+	/*
 	public String getDepartEt() {
 		return departEt;
 	}
@@ -107,6 +108,7 @@ public class ConventionsValidatedForRSSDto
 	public void setDepartEt(String departEt) {
 		this.departEt = departEt;
 	}
+	*/
 
 	public String getPaysConvention() {
 		return paysConvention;

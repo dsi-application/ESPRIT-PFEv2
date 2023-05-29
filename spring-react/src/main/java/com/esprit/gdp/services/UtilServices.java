@@ -1226,11 +1226,73 @@ public class UtilServices {
 			c.setNomEt(findStudentFullNameById(idEt));
 			//c.setDepartEt(findDepartmentAbbByClassWithStat(classe));
 			List<String> los = optionRepository.listOptionsByYear("2021");
-			c.setDepartEt(findOptionByStudent(idEt, los).replaceAll("_01", ""));
+			// c.setDepartEt(findOptionByStudent(idEt, los).replaceAll("_01", ""));
 			c.setCurrentClasse(classe);
 		}
 
 		return demandesAnnulationConventions;
+	}
+
+	public List<ConventionForRSSDto> findNotTreatedConventionsByYear(String year)
+	{
+
+		List<ConventionForRSSDto> notTreatedConventions = new ArrayList<ConventionForRSSDto>();
+		System.out.println("---------------------------------------------------> year: " + year);
+
+		List<ConventionForRSSDto> notTreatedConventionsCJ = conventionRepository.findStudentsCJWithNotTreatedConventionsByYear(year);
+		List<ConventionForRSSDto> notTreatedConventionsALT = conventionRepository.findStudentsALTWithNotTreatedConventionsByYear(year);
+		List<ConventionForRSSDto> notTreatedConventionsCS = conventionRepository.findStudentsCSWithNotTreatedConventionsByYear(year);
+
+		System.out.println("----------------------------------> Student CJ: " + notTreatedConventionsCJ.size());
+		System.out.println("----------------------------------> Student ALT: " + notTreatedConventionsALT.size());
+		System.out.println("----------------------------------> Student CS: " + notTreatedConventionsCS.size());
+
+		if(!notTreatedConventionsCJ.isEmpty())
+		{
+			notTreatedConventions.addAll(notTreatedConventionsCJ);
+		}
+		if(!notTreatedConventionsALT.isEmpty())
+		{
+			notTreatedConventions.addAll(notTreatedConventionsALT);
+		}
+		if(!notTreatedConventionsCS.isEmpty())
+		{
+			notTreatedConventions.addAll(notTreatedConventionsCS);
+		}
+
+		for(ConventionForRSSDto c : notTreatedConventions)
+		{
+			// System.out.println("--------------------------> DATE: " + c.getDateConvention());
+			String idEt = c.getIdEt();
+			String classe = findCurrentClassByIdEt(idEt);
+
+			/*String convCodePays = c.getPaysConvention();
+			if(convCodePays.equalsIgnoreCase("--"))
+			{
+				c.setPaysConvention("EN");
+			}
+			else
+			{
+				c.setPaysConvention(convCodePays);
+			}*/
+
+			c.setNomEt(findStudentFullNameById(idEt));
+			//c.setDepartEt(findDepartmentAbbByClassWithStat(classe));
+			List<String> los = optionRepository.listOptionsByYear("2021");
+			// c.setDepartEt(findOptionByStudent(idEt, los).replaceAll("_01", ""));
+			c.setCurrentClasse(classe);
+
+			if(!classe.contains("4ALINFO"))
+			{
+				c.setOptionEt(findOptionByClass(classe, optionRepository.listOptionsByYear(year)).replace("_01", ""));
+			}
+			if(classe.contains("4ALINFO"))
+			{
+				c.setOptionEt(optionStudentALTRepository.findOptionByStudentALTAndYear(idEt, year));
+			}
+		}
+
+		return notTreatedConventions;
 	}
 
 	public List<String> findStudentsByYearAndOption(String year, String option)

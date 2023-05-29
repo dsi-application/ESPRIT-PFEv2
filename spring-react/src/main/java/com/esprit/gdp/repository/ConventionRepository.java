@@ -335,4 +335,30 @@ public interface ConventionRepository extends JpaRepository<Convention, Conventi
 	//@Query(value="SELECT new com.esprit.gdp.dto.ConventionsValidatedForRSSDto(FUNCTION('to_char', c.conventionPK.dateConvention,'dd-mm-yyyy HH24:MI:SS'), c.dateDebut, c.dateFin, c.conventionPK.idEt, c.entrepriseAccueilConvention) from Convention c where c.traiter = '02' and c.responsableServiceStage.idUserSce like CONCAT('SR-STG-', ?1) order by c.conventionPK.dateConvention desc")
 	List<ConventionsValidatedForRSSDto> getAllConventionsValidatedDtoByStudentsForSpeceficRSS(String kindRSS, List<String> students);
 
+	@Query(value="SELECT new com.esprit.gdp.dto.ConventionForRSSDto(FUNCTION('to_char', c.conventionPK.dateConvention,'dd-mm-yyyy HH24:MI:SS'), c.dateDebut, c.dateFin, c.conventionPK.idEt, c.entrepriseAccueilConvention.pays.langueCode, c.traiter, c.pathConvention, c.entrepriseAccueilConvention) " +
+			"from Convention c, InscriptionCJ y " +
+			"where c.conventionPK.idEt = y.id.idEt " +
+			"and y.saisonClasse.id.codeCl like '5%'" +
+			"and c.traiter = '01' " +
+			"and y.id.anneeDeb =?1 " +
+			"order by c.conventionPK.dateConvention desc")
+	List<ConventionForRSSDto> findStudentsCJWithNotTreatedConventionsByYear(String year);
+
+	@Query(value="SELECT new com.esprit.gdp.dto.ConventionForRSSDto(FUNCTION('to_char', c.conventionPK.dateConvention,'dd-mm-yyyy HH24:MI:SS'), c.dateDebut, c.dateFin, c.conventionPK.idEt, c.entrepriseAccueilConvention.pays.langueCode, c.traiter, c.pathConvention, c.entrepriseAccueilConvention) " +
+			"from Convention c, OptionStudentALT o " +
+			"where c.conventionPK.idEt = o.idOptStuALT.idEt " +
+			"and c.traiter = '01' " +
+			"and o.idOptStuALT.anneeDeb =?1 " +
+			"order by c.conventionPK.dateConvention desc")
+	List<ConventionForRSSDto> findStudentsALTWithNotTreatedConventionsByYear(String year);
+
+	@Query(value="SELECT new com.esprit.gdp.dto.ConventionForRSSDto(FUNCTION('to_char', c.conventionPK.dateConvention,'dd-mm-yyyy HH24:MI:SS'), c.dateDebut, c.dateFin, c.conventionPK.idEt, c.entrepriseAccueilConvention.pays.langueCode, c.traiter, c.pathConvention, c.entrepriseAccueilConvention) " +
+			"from Convention c, InscriptionCS y " +
+			"where c.conventionPK.idEt = y.id.idEt " +
+			"and y.saisonClasse.id.codeCl like '4%'" +
+			"and c.traiter = '01' " +
+			"and y.id.anneeDeb =?1 " +
+			"order by c.conventionPK.dateConvention desc")
+	List<ConventionForRSSDto> findStudentsCSWithNotTreatedConventionsByYear(String year);
+
 }

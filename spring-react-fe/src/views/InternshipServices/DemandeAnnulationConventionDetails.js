@@ -85,6 +85,9 @@ const DemandeAnnulationConventionDetails = () => {
   const handleUpdateEvent = async () => {
     setShowLoader(true);
 
+    console.log('------------> A : ' + Convention.idEt);
+    console.log('------------> Z : ' + Convention.dateConvention);
+
     const [res, err] = await queryApi(
       "serviceStage/updateDemandeAnnulationConventionState?idEt=" +
       Convention.idEt +

@@ -515,19 +515,14 @@ public class ResponsableServiceStageController {
 
 	@PutMapping(value = "/allConventionsListByOptionForRSS")
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<List<ConventionForRSSDto>> getconventionsListDto(@RequestParam("idRSS") String idRSS, @RequestParam("yearLabel") String yearLabel, @RequestParam("optionLabel") String optionLabel)
+	public ResponseEntity<List<ConventionForRSSDto>> getconventionsListDto(@RequestParam("idRSS") String idRSS, @RequestParam("yearLabel") String yearLabel)
 	{
-		System.out.println("--------------PRIM : " + idRSS + " : " + yearLabel + " - " + optionLabel);
-
-		List<String> idStudents = new ArrayList<String>();
-		idStudents.addAll(utilServices.findStudentsByYearAndGroupedOption(yearLabel, optionLabel.toLowerCase()));
+		System.out.println("--------------PRIM : " + idRSS + " : " + yearLabel);
 
 		try
 		{
-			// List<ConventionsValidatedForRSSDto> ConventionList = serviceStageService.getAllConventionsValidatedDtoByRSS(idRSS, idMonth);
-			List<ConventionForRSSDto> conventionList = serviceStageService.getAllConventionsDtoByStudentsForRSS(idRSS, idStudents);
+			List<ConventionForRSSDto> conventionList = utilServices.findNotTreatedConventionsByYear(yearLabel);
 
-			//System.out.println("--------------ddddd 3-----> SARS VAL: " + conventionList.size());
 			if (conventionList.isEmpty())
 			{
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -538,7 +533,6 @@ public class ResponsableServiceStageController {
 		{
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
 	}
 
 	@PutMapping(value = "/allDemandesAnnulationsConventionsListByOptionForRSS")

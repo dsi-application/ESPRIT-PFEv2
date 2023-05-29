@@ -15,6 +15,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 
 import com.esprit.gdp.dto.*;
+import com.esprit.gdp.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,16 +25,6 @@ import com.esprit.gdp.models.EntrepriseAccueil;
 import com.esprit.gdp.models.FichePFE;
 import com.esprit.gdp.models.StudentCJ;
 import com.esprit.gdp.models.Teacher;
-import com.esprit.gdp.repository.AvenantRepository;
-import com.esprit.gdp.repository.CodeNomenclatureRepository;
-import com.esprit.gdp.repository.ConventionRepository;
-import com.esprit.gdp.repository.EntrepriseAccueilRepository;
-import com.esprit.gdp.repository.FichePFERepository;
-import com.esprit.gdp.repository.OptionRepository;
-import com.esprit.gdp.repository.SettingsRepository;
-import com.esprit.gdp.repository.StudentCSRepository;
-import com.esprit.gdp.repository.StudentRepository;
-import com.esprit.gdp.repository.TeacherRepository;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfReader;
@@ -75,6 +66,9 @@ public class ServiceStageService {
 	@Autowired
 	OptionRepository optionRepository;
 
+	@Autowired
+	OptionStudentALTRepository optionStudentALTRepository;
+
 	public List<Convention> getConventions(String id) {
 		List<Convention> listConvention = conventionRepository.getConventionsByServiceStage(id);
 		return listConvention;
@@ -103,7 +97,7 @@ public class ServiceStageService {
 			}
 
 			c.setNomEt(utilServices.findStudentFullNameById(idEt));
-			c.setDepartEt(utilServices.findDepartmentAbbByClassWithStat(classe));
+			// c.setDepartEt(utilServices.findDepartmentAbbByClassWithStat(classe));
 		}
 
 		return listConventions;
@@ -139,7 +133,7 @@ public class ServiceStageService {
 			}
 
 			c.setNomEt(utilServices.findStudentFullNameById(idEt));
-			c.setDepartEt(utilServices.findDepartmentAbbByClassWithStat(classe));
+			// c.setDepartEt(utilServices.findDepartmentAbbByClassWithStat(classe));
 		}
 
 		return listConventions;
@@ -184,7 +178,7 @@ public class ServiceStageService {
 //			System.out.println("--------------------------> findDepartmentAbbByClassWithStat: " + utilServices.findDepartmentAbbByClassWithStat(classe));
 
 			c.setNomEt(utilServices.findStudentFullNameById(idEt));
-			c.setDepartEt(utilServices.findDepartmentAbbByClassWithStat(classe));
+			// c.setDepartEt(utilServices.findDepartmentAbbByClassWithStat(classe));
 			c.setCurrentClasse(classe);
 		}
 
@@ -228,7 +222,7 @@ public class ServiceStageService {
 			// utilServices.findDepartmentAbbByClassWithStat(classe));
 
 			c.setNomEt(utilServices.findStudentFullNameById(idEt));
-			c.setDepartEt(utilServices.findDepartmentAbbByClassWithStat(classe));
+			// c.setDepartEt(utilServices.findDepartmentAbbByClassWithStat(classe));
 
 		}
 
@@ -236,7 +230,7 @@ public class ServiceStageService {
 	}
 
 	// Got All Conv Validated By RSS DTO - By Option
-	public List<ConventionForRSSDto> getAllConventionsDtoByStudentsForRSS(String idRSS, List<String> students)
+	public List<ConventionForRSSDto> getAllConventionsDtoByStudentsForRSS(String yearLabel, String idRSS, List<String> students)
 	{
 
 		String kindRSS = idRSS.replace("SR-STG-", "");
@@ -264,8 +258,17 @@ public class ServiceStageService {
 //		    System.out.println("--------------------------> findStudentFullNameById: " + utilServices.findStudentFullNameById(idEt));
 //			System.out.println("--------------------------> findDepartmentAbbByClassWithStat: " + utilServices.findDepartmentAbbByClassWithStat(classe));
 
+			if(!classe.contains("4ALINFO"))
+			{
+				c.setOptionEt(utilServices.findOptionByClass(classe, optionRepository.listOptionsByYear(yearLabel)).replace("_01", ""));
+			}
+			if(classe.contains("4ALINFO"))
+			{
+				c.setOptionEt(optionStudentALTRepository.findOptionByStudentALTAndYear(idEt, yearLabel));
+			}
+
 			c.setNomEt(utilServices.findStudentFullNameById(idEt));
-			c.setDepartEt(utilServices.findDepartmentAbbByClassWithStat(classe));
+			// c.setDepartEt(utilServices.findDepartmentAbbByClassWithStat(classe));
 			c.setCurrentClasse(classe);
 		}
 
@@ -401,7 +404,7 @@ public class ServiceStageService {
 			}
 			String classe = utilServices.findCurrentClassByIdEt(idET);
 			c.setNomEt(utilServices.findStudentFullNameById(idET));
-			c.setDepartEt(utilServices.findDepartmentAbbByClassWithStat(classe));
+			// c.setDepartEt(utilServices.findDepartmentAbbByClassWithStat(classe));
 
 			return c;
 		} else
@@ -437,7 +440,7 @@ public class ServiceStageService {
 			}
 			String classe = utilServices.findCurrentClassByIdEt(idET);
 			c.setNomEt(utilServices.findStudentFullNameById(idET));
-			c.setDepartEt(utilServices.findDepartmentAbbByClassWithStat(classe));
+			// c.setDepartEt(utilServices.findDepartmentAbbByClassWithStat(classe));
 
 			return c;
 		} else
