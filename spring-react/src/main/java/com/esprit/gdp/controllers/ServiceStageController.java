@@ -682,7 +682,7 @@ public class ServiceStageController {
 
 	@PutMapping(value = "/updateDemandeAnnulationConventionState", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Convention> updateDemandeAnnulationConventionState(@RequestParam("idET") String idEt, @RequestParam("date") String date) throws Exception
+	public ResponseEntity<Convention> updateDemandeAnnulationConventionState(@RequestParam("idEt") String idEt, @RequestParam("date") String date) throws Exception
 	{
 
 		System.out.println("------THIS-1---------- idEt: " + idEt);
@@ -692,13 +692,17 @@ public class ServiceStageController {
 		System.out.println("------THIS-2.2---------- convDt: " + convDt);
 
 		// if (conventionRepository.getConventionById(idEt, convDt).isPresent())
-		if (conventionRepository.getConventionByIdFormedDateNew(idEt, convDt).isPresent())
+		if (conventionRepository.getConventionByIdFormedDate(idEt, convDt).isPresent())
 		{
-			System.out.println("------THIS-3---------- date: " + convDt);
+			System.out.println("------THIS-3----hhhhhhhh------ date: " + convDt);
 
 			/*********************************** STAR : ANNULL ESP File after ANNULL Convention /***********************************/
-			Optional<Convention> conv = conventionRepository.getConventionByIdFormedDateNew(idEt, convDt);
+			Optional<Convention> conv = conventionRepository.getConventionByIdFormedDate(idEt, convDt);
 			//Optional<Convention> conv = conventionRepository.getConventionById(idEt, convDt);
+
+			Convention convention = conv.get();
+			convention.setTraiter("03");
+			conventionRepository.save(convention);
 
 			DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 

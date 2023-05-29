@@ -86,7 +86,7 @@ const DemandeAnnulationConventionDetails = () => {
     setShowLoader(true);
 
     const [res, err] = await queryApi(
-      "serviceStage/updateDemandeAnnulationConventionState?idET=" +
+      "serviceStage/updateDemandeAnnulationConventionState?idEt=" +
       Convention.idEt +
       "&date=" +
       Convention.dateConvention,
