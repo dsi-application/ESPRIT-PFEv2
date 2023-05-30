@@ -2,7 +2,6 @@ package com.esprit.gdp.dto;
 
 import com.esprit.gdp.models.FichePFEPK;
 
-import java.sql.Timestamp;
 import java.util.Date;
 
 public class DepotFinalDto {
@@ -14,8 +13,8 @@ public class DepotFinalDto {
     private String pathPlagiat;
     private String pathAttestationStage;
     private String pathDossierTechnique;
-    private String currentClasse;
-    private Timestamp DateDepotFiche;
+    private String classeEt;
+    private String optionEt;
     private Integer trainingDuration;
     private Date dateDepotReports;
     private String etatGrilleEncadrement;
@@ -58,20 +57,20 @@ public class DepotFinalDto {
         this.idEt = idEt;
     }
 
-    public String getCurrentClasse() {
-        return currentClasse;
+    public String getClasseEt() {
+        return classeEt;
     }
 
-    public void setCurrentClasse(String currentClasse) {
-        this.currentClasse = currentClasse;
+    public void setClasseEt(String classeEt) {
+        this.classeEt = classeEt;
     }
 
-    public Timestamp getDateDepotFiche() {
-        return DateDepotFiche;
+    public String getOptionEt() {
+        return optionEt;
     }
 
-    public void setDateDepotFiche(Timestamp dateDepotFiche) {
-        DateDepotFiche = dateDepotFiche;
+    public void setOptionEt(String optionEt) {
+        this.optionEt = optionEt;
     }
 
     public String getPathRapport() {
@@ -148,6 +147,10 @@ public class DepotFinalDto {
 
     public void setDateDepotFiche(String dateDepotFiche) {
         this.dateDepotFiche = dateDepotFiche;
+    }
+
+    public String getDateDepotFiche() {
+        return dateDepotFiche;
     }
 
 }

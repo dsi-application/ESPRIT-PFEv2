@@ -1,4 +1,5 @@
 import {
+  CAlert,
   CBadge,
   CButton,
   CCard,
@@ -10,7 +11,7 @@ import {
   CModalHeader,
   CModalTitle,
   CRow, CSelect,
-  CSpinner, CTooltip
+  CSpinner, CTextarea, CTooltip
 } from "@coreui/react";
 import axios from "axios";
 import React, {useEffect, useState} from "react";
@@ -30,7 +31,12 @@ import {useFormik} from "formik";
 import Spinner from "react-bootstrap/Spinner";
 
 import TheSidebar from "../../../containers/TheSidebar";
-import {selectStudentsToStat, selectStudentsDoneStat} from "../../../redux/slices/DepotSlice";
+import {
+  selectStudentsToStat,
+  selectStudentsDoneStat,
+  fetchValidatedReports,
+  fetchUploadedReports, fetchStudentToSTNStat, fetchRefusedReports
+} from "../../../redux/slices/DepotSlice";
 
 import {createMuiTheme, MuiThemeProvider} from "@material-ui/core";
 
@@ -51,6 +57,10 @@ const API_URL_RSS = process.env.REACT_APP_API_URL_RSS;
 
 const validationSchema = Yup.object().shape({
   yearLabel: Yup.string().required("* Année est un Champ obligatoire !."),
+});
+
+const validationSchemaRef = Yup.object().shape({
+  cancelMotif: Yup.string().max(300, "Please don't depass 300 caractères  !").required("* Motif Refus is obligatory !"),
 });
 
 const RapportManage = () => {
@@ -132,6 +142,7 @@ const RapportManage = () => {
   };
 
   const renderbtn = (e) => {
+    console.log("===================> PIKA 0: " , e)
     if (e.etatDepot === "DEPOSE") {
       return (
         <CRow>
@@ -141,7 +152,7 @@ const RapportManage = () => {
                         color="success"
                         size="sm"
                         className="float-left;"
-                        onClick={() => handleValideModal(e.idEt, e.dateFiche)}>
+                        onClick={() => handleValideModal(e.idEt, e.dateDepotFiche)}>
 
                 <CTooltip content="Valider Dépôt" placement="top">
                   <CIcon name="cil-check"/>
@@ -152,7 +163,7 @@ const RapportManage = () => {
                         color="danger"
                         size="sm"
                         className="float-left;"
-                        onClick={() => handleRefuseModal(e.idEt, e.dateFiche)}>
+                        onClick={() => handleRefuseModal(e.idEt, e.dateDepotFiche)}>
                 <CTooltip content="Dépôt non complet" placement="top">
                   <CIcon name="cil-x"/>
                 </CTooltip>
@@ -180,6 +191,22 @@ const RapportManage = () => {
     {
       name: "fullName",
       label: "Nom & Prénom",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "classeEt",
+      label: "Classe",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "optionEt",
+      label: "Option",
       options: {
         filter: true,
         sort: true,
@@ -354,6 +381,7 @@ const RapportManage = () => {
   };
 
   const handleValideModal = (id, date) => {
+    console.log("===================> PIKA 1: " + date)
     setdate(date);
     setid(id);
     setSuccess(true);
@@ -362,6 +390,120 @@ const RapportManage = () => {
     setdate(date);
     setid(id);
     setDanger(true);
+  };
+
+  const formikRef = useFormik({
+    initialValues: {
+      cancelMotif: ""
+    },
+    validationSchema: validationSchemaRef,
+    onSubmit: async (values) => {
+      setShowLoader(true);
+
+      const [res, err] = await queryApi(
+        "serviceStage/updateDepotToREFUSE?idET=" +
+        id +
+        "&dateDepotFiche=" +
+        date +
+        "&cancelMotif=" +
+        encodeURIComponent(values.cancelMotif),
+        {},
+        "PUT",
+        false
+      );
+      // console.log("resupdate", res);
+      if (err) {
+        setShowLoader(false);
+        console.log('-----------------1-> 0306')
+        setError({
+          visible: true,
+          message: JSON.stringify(err.errors, null, 2),
+        });
+      } else {
+        console.log("****dddd***** sars3005 1", selectedYear);
+
+        const [res, err] = await queryApi("respServStg/loadNotYetTreatedDepots?idRSS=" + currentResponsableServiceStage.id +
+          "&yearLabel=" + selectedYear,
+          {},
+          "GET",
+          false
+        );
+
+        setNotYetTreatedDepots([]);
+        setNotYetTreatedDepots(res);
+
+        if (err) {
+          setShowLoader(false);
+          // console.log('-----------------1-> 0306')
+          setError({
+            visible: true, message: JSON.stringify(err.errors, null, 2),
+          });
+        } else {
+          // console.log('-----------------2-> 0508')
+          console.log("****dddd***** sars0508 2", res);
+          dispatch(fetchUploadedReports());
+          dispatch(fetchValidatedReports());
+          dispatch(fetchRefusedReports());
+          dispatch(fetchStudentToSTNStat());
+          setDanger(false);
+          setShowLoader(false);
+        }
+        console.log("-----------------> AZERTYYY 1: " , res)
+      }
+    },
+  });
+
+  const handleValidate = async (id, date) => {
+
+    console.log("===================> AZERTYYY 0: " + date)
+    setShowLoader(true);
+    const [res, err] = await queryApi(
+      "serviceStage/updateDepotToVALIDE?idET=" + id + "&dateDepotFiche=" + date,
+      {},
+      "PUT",
+      false
+    );
+    // console.log("resupdate", res);
+    if (err) {
+      setShowLoader(false);
+      setError({
+        visible: true,
+        message: JSON.stringify(err.errors, null, 2),
+      });
+    } else {
+
+      console.log("****dddd***** sars3005 1", selectedYear);
+
+      const [res, err] = await queryApi("respServStg/loadNotYetTreatedDepots?idRSS=" + currentResponsableServiceStage.id +
+        "&yearLabel=" + selectedYear,
+        {},
+        "GET",
+        false
+      );
+
+      setNotYetTreatedDepots([]);
+      setNotYetTreatedDepots(res);
+
+      if (err) {
+        setShowLoader(false);
+        // console.log('-----------------1-> 0306')
+        setError({
+          visible: true, message: JSON.stringify(err.errors, null, 2),
+        });
+      } else {
+        // console.log('-----------------2-> 0508')
+        console.log("****dddd***** sars0508 2", res);
+        dispatch(fetchUploadedReports());
+        dispatch(fetchValidatedReports());
+        dispatch(fetchRefusedReports());
+        dispatch(fetchStudentToSTNStat());
+        setDanger(false);
+        setSuccess(false);
+        setShowLoader(false);
+      }
+      console.log("-----------------> AZERTYYY 1: " , res)
+
+    }
   };
 
   const Download = (p) => {
@@ -373,7 +515,7 @@ const RapportManage = () => {
     // console.log('-----------AZERTY-------> LOL 1: ' + p);
 
     let encodedURL = encodeURIComponent(encodeURIComponent(p));
-    axios.get(`${process.env.REACT_APP_API_URL_STU}` + "downloadMyPDF/" + encodedURL, {responseType: "blob"})
+    axios.get(`${process.env.REACT_APP_API_URL_STU}` + "downloadMyPDF/" + encodedURL, { responseType: "blob" })
       .then((response) => {
 
         const file = new Blob([response.data], {type: "application/pdf"});
@@ -446,8 +588,7 @@ const RapportManage = () => {
       // console.log('-----------------1-> 0908 id RSS: ' + currentResponsableServiceStage.id);idRSS,yearLabel
 
       const [res, err] = await queryApi("respServStg/loadNotYetTreatedDepots?idRSS=" + currentResponsableServiceStage.id +
-        "&yearLabel=" + values.yearLabel +
-        "&optionLabel=" + values.optionLabel,
+        "&yearLabel=" + values.yearLabel,
         {},
         "GET",
         false
@@ -466,12 +607,10 @@ const RapportManage = () => {
       } else {
         // console.log('-----------------2-> 0508')
         console.log("****dddd***** sars0508 2", res);
-        /*dispatch(updateFichebydep(res));
-        dispatch(deleteElem(res));
         dispatch(fetchUploadedReports());
         dispatch(fetchValidatedReports());
         dispatch(fetchRefusedReports());
-        dispatch(fetchStudentToSTNStat());*/
+        dispatch(fetchStudentToSTNStat());
         setDanger(false);
         setShowLoader(false);
       }
@@ -495,7 +634,7 @@ const RapportManage = () => {
                     {error.visible && <p>{error.message}</p>}
                   </CFormGroup>
                   <center>
-                    Choisir une Promotion et une Option pour visualiser la liste correspondante :
+                    <span className="greyLabel_Dark_Cr_12">Merci de choisir une Promotion</span>
                   </center>
                   <br/>
                   <CFormGroup row>
@@ -521,33 +660,6 @@ const RapportManage = () => {
                     </CCol>
                     <CCol md="1"/>
                   </CFormGroup>
-                  <CFormGroup row>
-                    <CCol md="1"/>
-                    <CCol md="10">
-                      <CSelect value={formik.values.optionLabel}
-                               onChange={formik.handleChange}
-                               onBlur={formik.handleBlur}
-                               custom
-                               size="sm"
-                               name="optionLabel">
-                        <option style={{display: "none"}}>
-                          ---- Choisir une Option ----
-                        </option>
-                        {allOpts?.map((e, i) => (
-                          <option value={e} key={i}>
-                            {e}
-                          </option>
-                        ))}
-                      </CSelect>
-                      {
-                        formik.errors.optionLabel && formik.touched.optionLabel &&
-                        <p style={{color: "red"}}>{formik.errors.optionLabel}</p>
-                      }
-                      <br/>
-                    </CCol>
-                    <CCol md="1"/>
-                    <br/><br/>
-                  </CFormGroup>
                   <center>
                     <CButton color="danger" type="submit">
                       {showLoader && <CSpinner grow size="sm"/>} &nbsp; Confirmer
@@ -559,24 +671,26 @@ const RapportManage = () => {
             </CRow>
 
             <br/>
+
             <CCardBody>
-              {notYetTreatedDepots ? (
-                <MuiThemeProvider theme={theme}>
-                  <MUIDataTable
-                    title={""}
-                    data={notYetTreatedDepots}
-                    columns={columns}
-                    options={options}
-                  /></MuiThemeProvider>
-              ) : (
+              {notYetTreatedDepots.length === 0 ? (
                 <center>
                   <hr/>
                   <br/><br/>
-                  Sorry, no Data is available.
+                  <span className="greyLabel_Dark_Cr_13">Sorry, no Data is available.</span>
                   <br/><br/><br/><br/>
                 </center>
+              ) : (
+                <MUIDataTable
+                  data={notYetTreatedDepots}
+                  columns={columns}
+                  options={{
+                    selectableRows: 'none' // <===== will turn off checkboxes in rows
+                  }}
+                />
               )}
             </CCardBody>
+
           </CCard>
         </CCol>
       </CRow>
@@ -718,6 +832,105 @@ const RapportManage = () => {
             </CCol>
           </CRow>
         </CModalFooter>
+      </CModal>
+
+      <CModal
+        show={success}
+        onClose={() => setSuccess(!success)}
+        color="success"
+      >
+        <CModalHeader closeButton>
+          <CModalTitle>
+            Confirmation Validation Dépôt
+          </CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <br/>
+          Êtes-vous sûres de vouloir valider le Dépôt ?
+        </CModalBody>
+
+        <br/><br/>
+        <CRow>
+          <CCol>
+            <div className="float-right">
+              <CButton  color="success" onClick={() => handleValidate(id, date)}>
+                {showLoader && <CSpinner grow size="sm" />}
+                Confirmer
+              </CButton>
+              &nbsp;&nbsp;&nbsp;
+
+              <CButton  color="secondary"
+                        onClick={() => setSuccess(!success)}>
+                EXIT
+              </CButton>
+              &nbsp;&nbsp;
+            </div>
+          </CCol>
+        </CRow>
+        <br/><br/>
+      </CModal>
+
+      <CModal
+        show={danger}
+        onClose={() => setDanger(!danger)}
+        color="danger"
+      >
+        <CModalHeader closeButton>
+          <CModalTitle>
+            Dépôt Incomplet
+          </CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CForm onSubmit={formikRef.handleSubmit}>
+            <CFormGroup>
+
+              {error.visible && <p>{error.message}</p>}
+            </CFormGroup>
+            <center>
+              Merci d'insérer le Motif du Dépôt Incomplet :
+            </center>
+
+            <br/>
+            <CFormGroup row>
+              <CCol md="10">
+                <CTextarea
+                  value={formikRef.values.cancelMotif}
+                  onChange={formikRef.handleChange}
+                  name="cancelMotif"
+                  rows="4"
+                  cols="70"
+                  placeholder="Saisir Motif Refus Dépôt .."
+                />
+                {formikRef.errors.cancelMotif &&
+                  formikRef.touched.cancelMotif && (
+                    <p style={{ color: "red" }}>
+                      {formikRef.errors.cancelMotif}
+                    </p>
+                  )}
+                <br />
+
+              </CCol>
+              <CCol md="1"/>
+              <br/><br/>
+            </CFormGroup>
+            {showLoader && (
+              <CAlert color="danger">
+                Attendre un petit peu ... Nous allons notifer cet
+                étudiant par email ... .
+              </CAlert>
+            )}
+            <div className="float-right">
+              <CButton  color="danger" type="submit">
+                {showLoader && <CSpinner grow size="sm" />} Confirmer
+              </CButton>
+              &nbsp;&nbsp;&nbsp;
+              <CButton color="secondary" onClick={() => setDanger(!danger)}>
+                EXIT
+              </CButton>
+            </div>
+          </CForm>
+        </CModalBody>
+
       </CModal>
 
     </>

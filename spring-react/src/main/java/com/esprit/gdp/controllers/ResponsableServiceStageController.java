@@ -633,7 +633,7 @@ public class ResponsableServiceStageController {
 				 */
 
 				df.setFullName(utilServices.findStudentFullNameById(df.getIdEt()));
-				df.setCurrentClasse(utilServices.findCurrentClassByIdEt(df.getIdEt()));
+				df.setClasseEt(utilServices.findCurrentClassByIdEt(df.getIdEt()));
 				// df.setEtatFiche(codeNomenclatureRepository.findEtatFiche(df.getEtatFiche()));
 				// df.setEtatDepot(codeNomenclatureRepository.findEtatDepot(df.getEtatDepot()));
 				// df.setEtatDepot();
@@ -670,19 +670,17 @@ public class ResponsableServiceStageController {
 	}
 
 	@GetMapping("/loadNotYetTreatedDepots")
-	public ResponseEntity<?> loadNotYetTreatedDepots(@RequestParam("idRSS") String idRSS, @RequestParam("yearLabel") String yearLabel, @RequestParam("optionLabel") String optionLabel) {
+	public ResponseEntity<?> loadNotYetTreatedDepots(@RequestParam("idRSS") String idRSS, @RequestParam("yearLabel") String yearLabel)
+	{
 		try {
 
 			System.out.println("--------------1805-----> HELLO : " + idRSS);
 
-			List<String> idStudents = new ArrayList<String>();
-			idStudents.addAll(utilServices.findStudentsByYearAndGroupedOption(yearLabel, optionLabel.toLowerCase()));
 
 			/****************************************************************************************************************************************/
 
 			String idServiceStage = null;
 			if(idRSS.equalsIgnoreCase("SR-STG-IT4") || idRSS.equalsIgnoreCase("SR-STG-IT2") || idRSS.equalsIgnoreCase("SR-STG-IT1"))
-			//if(idServiceStageFULL.startsWith("SR-STG-IT"))
 			{
 				idServiceStage = "SR-STG-IT";
 			}
@@ -693,38 +691,31 @@ public class ResponsableServiceStageController {
 
 			System.out.println("----------------------> PIKA 1: " + idServiceStage);
 
-			//codeNomenclatureRepository.findEtatFiche(F.getEtatFiche())
-			List<DepotFinalDto> plansTravailCJ = fichePFERepository.loadFichesForDepotNotYetTreatedByStudents(idStudents);
-			// codeNomenclatureRepository.findEtatFiche(F.getEtatFiche())
+			List<DepotFinalDto> depotFinalDtos = utilServices.loadFichesForDepotNotYetTreatedByYear(yearLabel, idServiceStage);
 
-			// List<ConventionsValidatedForRSSDto> conventionList = serviceStageService.getAllConventionsValidatedDtoByStudentsForRSS(idRSS, idStudents);
-			//List<DepotFinalDto> depotsFinal = utilServices.loadPlanTravailByYear(yearLabel, idServiceStage);
+			System.out.println("----------------------> PIKA 2: " + depotFinalDtos.size());
 
-			System.out.println("----------------------> PIKA 2: " + plansTravailCJ.size());
+			for (DepotFinalDto df : depotFinalDtos)
+			{
 
-			for (DepotFinalDto df : plansTravailCJ) {
+				System.out.println("############################################> Date Depot Fiche: " + df.getDateDepotFiche());
 
-				/*
-				DepotRapport D = new DepotRapport(F.getIdFichePFE().getConventionPK().getIdEt(),
-						S.getNomet(), S.getPrenomet(), F.getPathRapportVersion2(), F.getPathPlagiat(),
-						F.getPathAttestationStage(), F.getPathSupplement(),
-						codeNomenclatureRepository.findEtatFiche(F.getEtatFiche()),
-						codeNomenclatureRepository.findEtatDepot(F.getValidDepot()),
-						F.getIdFichePFE().getDateDepotFiche());
-				 */
-
-				System.out.println("----------------------> Etat Depot: " + df.getEtatDepot());
+				String classeEt = utilServices.findCurrentClassByIdEt(df.getIdEt());
 
 				df.setEtatDepot(codeNomenclatureRepository.findEtatDepot(df.getEtatDepot()));
 				df.setFullName(utilServices.findStudentFullNameById(df.getIdEt()));
-				df.setCurrentClasse(utilServices.findCurrentClassByIdEt(df.getIdEt()));
+				df.setClasseEt(classeEt);
 
-				// df.setEtatFiche(codeNomenclatureRepository.findEtatFiche(df.getEtatFiche()));
-				// df.setEtatDepot(codeNomenclatureRepository.findEtatDepot(df.getEtatDepot()));
-				// df.setEtatDepot();
+				if(!classeEt.contains("4ALINFO"))
+				{
+					df.setOptionEt(utilServices.findOptionByClass(classeEt, optionRepository.listOptionsByYear(yearLabel)).replace("_01", ""));
+				}
+				if(classeEt.contains("4ALINFO"))
+				{
+					df.setOptionEt(optionStudentALTRepository.findOptionByStudentALTAndYear(df.getIdEt(), yearLabel));
+				}
 
 				System.out.println("--------------> FichePFEPK : " + df.getFichePFEPK().getConventionPK().getIdEt());
-				//df.setEtatGrilleEncadrement("NOTYET");
 
 				if(!grilleAcademicEncadrantRepository.findEtatGrilleByFiche(df.getFichePFEPK()).isEmpty())
 				{
@@ -744,10 +735,10 @@ public class ResponsableServiceStageController {
 
 			}
 
-			if (plansTravailCJ.isEmpty()) {
+			if (depotFinalDtos.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
-			return new ResponseEntity<>(plansTravailCJ, HttpStatus.OK);
+			return new ResponseEntity<>(depotFinalDtos, HttpStatus.OK);
 		} catch (Exception e) {
 
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

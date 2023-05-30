@@ -1047,113 +1047,128 @@ public class ServiceStageController {
 	@PutMapping(value = "/updateDepotToVALIDE", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<?> updateDepotToVALIDE(@RequestParam("idET") String idET,
-			@RequestParam("dateFiche") String dateFiche) {
+												 @RequestParam("dateDepotFiche") String dateDepotFiche)
+	{
 
+		System.out.println("===============================================================================> idET: " + idET);
+		System.out.println("===============================================================================> dateFiche: " + dateDepotFiche);
+
+		// Local
+		// String receiver = "saria.essid@esprit.tn";
+
+		// Server
 		String receiver = findStudentMailById(idET);
+		System.out.println("------------------------------------------> Student A: " + receiver);
 
-		String idPair = fichePFERepository.findBinomeIdByStudentId(idET).get(0); // Binome
+		String idPair = fichePFERepository.findBinomeIdByStudentId(idET).get(0);
 		String mailPair = findStudentMailById(idPair);
 
 		System.out.println("------------------------------------------> Pair A: " + mailPair);
-		if (mailPair != null) {
+		if(mailPair != null)
+		{
 			List<String> pairs = new ArrayList<String>();
-			pairs.add(receiver);
-			pairs.add(mailPair);
+			// pairs.add("no_reply@esprit.tn"); pairs.add("rosa.natali123@gmail.com");  // UPDATE
+			pairs.add(receiver); pairs.add(mailPair);
 			receiver = pairs.stream().collect(Collectors.joining(", "));
 			System.out.println("------------------------------------------> Pair B: " + mailPair);
 		}
-		String mailRSS = responsableServiceStageRepository
-				.findRespServStgMailById(conventionRepository.findResponsableServiceStageByIdEt(idET).get(0));
+
+		String mailRSS = responsableServiceStageRepository.findRespServStgMailById(conventionRepository.findResponsableServiceStageByIdEt(idET).get(0));
 
 		String studentClasse = utilServices.findCurrentClassByIdEt(idET);
 
-    	String studentOption = null;
+		String studentOption = null;
 		if(studentClasse.contains("4ALINFO"))
 		{
+			// MOCHKLA
 			studentOption = optionStudentALTRepository.findOptionByStudentALT(idET) + "_01";
 		}
 		else
 		{
 			studentOption = utilServices.findOptionByClass(studentClasse, optionRepository.listOptionsByYear("2021"));
-			// sd.setOption(utilServices.findOptionByClass(sd.getClasse(), optionRepository.listOptionsByYear("2021")).replace("_01", ""));	
+			// sd.setOption(utilServices.findOptionByClass(sd.getClasse(), optionRepository.listOptionsByYear("2021")).replace("_01", ""));
 		}
 
 		System.out.println("-----------> Student : " + studentClasse + " - " + studentOption.toLowerCase());
 
-		List<String> idCPSs = pedagogicalCoordinatorRepository
-				.gotIdPedagogicalCoordinatorByOptionNew(studentOption.toLowerCase());
+		List<String> idCPSs = pedagogicalCoordinatorRepository.gotIdPedagogicalCoordinatorByOptionNew(studentOption.toLowerCase());
 
 		String idCPS = null;
 		String mailCPS = "saria.essid@esprit.tn";
 		// List<String> idExistCPSs = new ArrayList<String>();
-		for (String s : idCPSs) {
-			// ********************** Exceptional Case where same CPS has 2 Units : just for
-			// Current University year
-			if (studentOption.toUpperCase().contains("SIM") || studentOption.toUpperCase().contains("GAMIX")
-					|| studentOption.toUpperCase().contains("WIN") || studentOption.toUpperCase().contains("IOSYS")) {
-				if (studentOption.toUpperCase().contains("SIM")) {
+		for(String s : idCPSs)
+		{
+			System.out.println("-----ccc------> idCPS : " + s);
+//    		if(pedagogicalCoordinatorRepository.gotIdPedagogicalCoordinatorByIdEns(s) != null)
+//    		{
+//    			idCPS = pedagogicalCoordinatorRepository.gotIdPedagogicalCoordinatorByIdEns(s);
+//    			// idExistCPSs
+//    		}
+
+			// ********************** Exceptional Case where same CPS has 2 Units : just for Current University year
+			if(
+					studentOption.toUpperCase().contains("SIM") || studentOption.toUpperCase().contains("GAMIX") ||
+							studentOption.toUpperCase().contains("WIN") || studentOption.toUpperCase().contains("IOSYS")
+			)
+			{
+				if(studentOption.toUpperCase().contains("SIM"))
+				{
 					mailCPS = "CPS_SIM@esprit.tn";
 				}
-				if (studentOption.toUpperCase().contains("GAMIX")) {
+				if(studentOption.toUpperCase().contains("GAMIX"))
+				{
 					mailCPS = "CPS_GAMIX@esprit.tn";
 				}
-				if (studentOption.toUpperCase().contains("WIN")) {
+				if(studentOption.toUpperCase().contains("WIN"))
+				{
 					mailCPS = "CPS_WIN@esprit.tn";
 				}
-				if (studentOption.toUpperCase().contains("IOSYS")) {
+				if(studentOption.toUpperCase().contains("IOSYS"))
+				{
 					mailCPS = "CPS_IOSYS@esprit.tn";
 				}
-			} else {
-				if (pedagogicalCoordinatorRepository.gotAllMAilsPedagogicalCoordinatorByIdNew(s) != null) {
+			}
+			else
+			{
+				if(pedagogicalCoordinatorRepository.gotAllMAilsPedagogicalCoordinatorByIdNew(s) != null)
+				{
 					mailCPS = pedagogicalCoordinatorRepository.gotAllMAilsPedagogicalCoordinatorByIdNew(s);
 				}
 			}
 			/***********************************************************************************************************/
-			// if(pedagogicalCoordinatorRepository.gotIdPedagogicalCoordinatorByIdEns(s) !=
-			// null)
-			// {
-			// idCPS =
-			// pedagogicalCoordinatorRepository.gotIdPedagogicalCoordinatorByIdEns(s);
-			// // idExistCPSs
-			// }
 		}
 
-		System.out.println("-----------> idCPS : " + idCPS);
+//    	System.out.println("-----------> idCPS : " + idCPS);
+//    	String mailCPS = pedagogicalCoordinatorRepository.gotAllMAilsPedagogicalCoordinatorById(idCPS).get(0);
 
-		System.out.println("-----------> mailCPS : " + mailCPS);
+		System.out.println("-----ddd------> mailCPS : " + mailCPS);
+
 		List<String> mailsCPSRSS = new ArrayList<String>();
-		mailsCPSRSS.add(utilServices.findMailPedagogicalEncadrant(idET));
-		mailsCPSRSS.add(mailCPS);
-		mailsCPSRSS.add(mailRSS);
-		String mailsCPSRSS_STR = mailsCPSRSS.stream().map(plain -> '"' + StringEscapeUtils.escapeJava(plain) + '"')
-				.collect(Collectors.joining(", "));
+		mailsCPSRSS.add(utilServices.findMailPedagogicalEncadrant(idET));mailsCPSRSS.add(mailCPS);mailsCPSRSS.add(mailRSS);
+		String mailsCPSRSS_STR = mailsCPSRSS.stream().map(plain -> '"' + StringEscapeUtils.escapeJava(plain) + '"').collect(Collectors.joining(", "));
 
 		/*
-		 * String mailPE = findMailAcademicEncadrantByStudent(idET);
-		 * 
-		 * String codeOption =
-		 * utilServices.findOptionByClass(findCurrentClassByIdEt(idET),
-		 * optionRepository.listOptionsByYear("2021"));
-		 * 
-		 * System.out.println("-------------> OPTION " + codeOption);
-		 * System.out.println("-------------> lol " + responsableStageRepository.lol());
-		 * 
-		 * String mailAcademicCoordinator =
-		 * teacherRepository.findMailTeacherById(responsableStageRepository.
-		 * findPedagogicalCoordinatorByCodeOption(codeOption));
-		 * 
-		 * List<String> receiversCC = new ArrayList<String>(); receiversCC.add(mailPE);
-		 * receiversCC.add(mailAcademicCoordinator); receiversCC.add(mailRSS); String
-		 * responsibles = receiversCC.stream().collect(Collectors.joining(", "));
-		 * 
-		 * System.out.
-		 * println("------------------------------------------> VALIDATE 1: HOSTS VDR - VALIDATE: "
-		 * + responsibles + "--->" + mailRSS + " - " + mailAcademicCoordinator + " - " +
-		 * mailPE + " *** " + receiver);
-		 */
+			String mailPE = findMailAcademicEncadrantByStudent(idET);
 
-		// ****************************************************************************
-		// Notification by mail
+			String codeOption = utilServices.findOptionByClass(findCurrentClassByIdEt(idET), optionRepository.listOptionsByYear("1988"));
+
+			System.out.println("-------------> OPTION " + codeOption);
+			System.out.println("-------------> lol " + responsableStageRepository.lol());
+
+			String mailAcademicCoordinator = teacherRepository.findMailTeacherById(responsableStageRepository.findPedagogicalCoordinatorByCodeOption(codeOption));
+
+			List<String> receiversCC = new ArrayList<String>();
+			// receiversCC.add("no_reply@esprit.tn"); receiversCC.add("saria.essid@esprit.tn"); // UPDATE
+		    receiversCC.add(mailPE); receiversCC.add(mailAcademicCoordinator); receiversCC.add(mailRSS);
+			String responsibles = receiversCC.stream().collect(Collectors.joining(", "));
+
+			// List<String> receiversCC = new ArrayList<String>();
+			// receiversCC.add(mailPE); receiversCC.add(mailAcademicCoordinator); receiversCC.add(mailRSS);
+			// String responsibles = receiversCC.stream().map(plain -> '"' + StringEscapeUtils.escapeJava(plain) + '"').collect(Collectors.joining(", "));
+	    	// System.out.println("------------------------------------------> VALIDATE 1: HOSTS VDR - VALIDATE: " + responsibles + "--->" + mailRSS + " - " + mailAcademicCoordinator + " - " + mailPE + " *** " + receiver);
+		*/
+
+		// **************************************************************************** Notification by mail
 		DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		String dateValidateDepot = dateFormata.format(new Date());
 
@@ -1167,37 +1182,40 @@ public class ServiceStageController {
 
 		utilServices.sendMailWithManyCC(subject, receiver, mailsCPSRSS_STR, content);
 
-		return new ResponseEntity<>(
-				serviceStageService.UpdateRepotToVALIDE(idET, dateFiche.substring(0, 19).replace("T", " ")),
-				HttpStatus.OK);
-
+		return new ResponseEntity<>(serviceStageService.UpdateRepotToVALIDE(idET, dateDepotFiche), HttpStatus.OK);
 	}
 
 	@PutMapping(value = "/updateDepotToREFUSE", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<?> updateDepotToREFUSE(@RequestParam("idET") String idET,
-			@RequestParam("dateFiche") String dateFiche, @RequestParam("cancelMotif") String encodedCancelMotif) {
+												 @RequestParam("dateDepotFiche") String dateDepotFiche,@RequestParam("cancelMotif") String encodedCancelMotif) {
 
 		String cancelMotif = utilServices.decodeEncodedValue(encodedCancelMotif);
+//		String receiver = "saria.essid@esprit.tn"; // UPDATE
+//		 String receiver = S.getAdressemailesp();
+
 		String receiver = findStudentMailById(idET);
 
+		//String mailPair = fichePFERepository.findBinomeMailByStudentId(idET).get(0);
 		String mailPair = utilServices.findStudentMailById(idET); // Binome
 
-		if (mailPair != null) {
+		System.out.println("------------------------------------------> Pair A: " + cancelMotif);
+		if(mailPair != null)
+		{
 			List<String> pairs = new ArrayList<String>();
-			pairs.add(receiver);
-			pairs.add(mailPair);
+//			pairs.add("no_reply@esprit.tn"); pairs.add("rosa.natali123@gmail.com");  // UPDATE
+			pairs.add(receiver); pairs.add(mailPair);
 			receiver = pairs.stream().collect(Collectors.joining(", "));
 		}
 
+
 		System.out.println("------------------------------------------> receiver: " + receiver);
 
-		String mailRSS = responsableServiceStageRepository
-				.findRespServStgMailById(conventionRepository.findResponsableServiceStageByIdEt(idET).get(0));
+		String mailRSS = responsableServiceStageRepository.findRespServStgMailById(conventionRepository.findResponsableServiceStageByIdEt(idET).get(0));
 
 		String studentClasse = utilServices.findCurrentClassByIdEt(idET);
 
-    	String studentOption = null;
+		String studentOption = null;
 		if(studentClasse.contains("4ALINFO"))
 		{
 			studentOption = optionStudentALTRepository.findOptionByStudentALT(idET) + "_01";
@@ -1205,103 +1223,87 @@ public class ServiceStageController {
 		else
 		{
 			studentOption = utilServices.findOptionByClass(studentClasse, optionRepository.listOptionsByYear("2021"));
-			// sd.setOption(utilServices.findOptionByClass(sd.getClasse(), optionRepository.listOptionsByYear("2021")).replace("_01", ""));	
+			// sd.setOption(utilServices.findOptionByClass(sd.getClasse(), optionRepository.listOptionsByYear("2021")).replace("_01", ""));
 		}
 
 		System.out.println("-----------> Student : " + studentClasse + " - " + studentOption.toLowerCase());
 
-		String idCPS = pedagogicalCoordinatorRepository.gotIdEnsPedagogicalCoordinatorByOption(studentOption.toLowerCase());
-    	System.out.println("--------------> idCPS: " + idCPS);
-    	// ********************** Exceptional Case where same CPS has 2 Units : just for Current University year
-    	String mailCPS = "saria.essid@esprit.tn";
-    	if(
-    			studentOption.toUpperCase().contains("SIM") || studentOption.toUpperCase().contains("GAMIX") ||
-    			studentOption.toUpperCase().contains("WIN") || studentOption.toUpperCase().contains("IOSYS")
-    	  )
-    	{
-    		if(studentOption.toUpperCase().contains("SIM"))
-        	{
-        		mailCPS = "CPS_SIM@esprit.tn";
-        	}
-        	if(studentOption.toUpperCase().contains("GAMIX"))
-        	{
-        		mailCPS = "CPS_GAMIX@esprit.tn";
-        	}
-        	if(studentOption.toUpperCase().contains("WIN"))
-        	{
-        		mailCPS = "CPS_WIN@esprit.tn";
-        	}
-        	if(studentOption.toUpperCase().contains("IOSYS"))
-        	{
-        		mailCPS = "CPS_IOSYS@esprit.tn";
-        	}
-    	}
-    	else
-    	{
-    		mailCPS = pedagogicalCoordinatorRepository.gotAllMAilsPedagogicalCoordinatorByIdNew(idCPS);
-    	}
-    	/***********************************************************************************************************/
-    	
-//		List<PedagogicalCoordinator> CPSs = pedagogicalCoordinatorRepository
-//				.gotAllIdsPedagogicalCoordinatorByOption(studentOption.toLowerCase());
-//		System.out.println("-----------> Size CPSs : " + CPSs.size());
-//		String mailCPS = null;
-//		for (PedagogicalCoordinator pc : CPSs) {
-//			if (pedagogicalCoordinatorRepository
-//					.gotMailPedagogicalCoordinatorByIdEns(pc.getTeacher().getIdEns()) != null) {
-//				mailCPS = pedagogicalCoordinatorRepository
-//						.gotMailPedagogicalCoordinatorByIdEns(pc.getTeacher().getIdEns());
-//			}
-//		}
-//		System.out.println("-----****************------> MAils : " + mailCPS + " - " + mailRSS);
+//    	List<PedagogicalCoordinator> CPSs = pedagogicalCoordinatorRepository.gotAllIdsPedagogicalCoordinatorByOption(studentOption.toLowerCase());
+//    	System.out.println("-----------> Size CPSs : " + CPSs.size());
 
-		// String mailRSS =
-		// responsableServiceStageRepository.findRespServStgMailById(conventionRepository.findResponsableServiceStageByIdEt(idET).get(0));
-		//
-		// String studentClasse = utilServices.findCurrentClassByIdEt(idET);
-		// String studentOption = utilServices.findOptionByClass(studentClasse,
-		// optionRepository.listOptionsByYear("2021"));
-		//
-		// System.out.println("-----------> Student : " + studentClasse + " - " +
-		// studentOption.toLowerCase());
-		//
-		// String idCPS =
-		// pedagogicalCoordinatorRepository.gotIdPedagogicalCoordinatorByOption(studentOption.toLowerCase());
-		// String mailCPS =
-		// pedagogicalCoordinatorRepository.gotAllMAilsPedagogicalCoordinatorById(idCPS).get(0);
+		String idCPS = pedagogicalCoordinatorRepository.gotIdEnsPedagogicalCoordinatorByOption(studentOption.toLowerCase());
+		System.out.println("--------------> idCPS: " + idCPS);
+		// ********************** Exceptional Case where same CPS has 2 Units : just for Current University year
+		String mailCPS = "saria.essid@esprit.tn";
+		if(
+				studentOption.toUpperCase().contains("SIM") || studentOption.toUpperCase().contains("GAMIX") ||
+						studentOption.toUpperCase().contains("WIN") || studentOption.toUpperCase().contains("IOSYS")
+		)
+		{
+			if(studentOption.toUpperCase().contains("SIM"))
+			{
+				mailCPS = "CPS_SIM@esprit.tn";
+			}
+			if(studentOption.toUpperCase().contains("GAMIX"))
+			{
+				mailCPS = "CPS_GAMIX@esprit.tn";
+			}
+			if(studentOption.toUpperCase().contains("WIN"))
+			{
+				mailCPS = "CPS_WIN@esprit.tn";
+			}
+			if(studentOption.toUpperCase().contains("IOSYS"))
+			{
+				mailCPS = "CPS_IOSYS@esprit.tn";
+			}
+		}
+		else
+		{
+			mailCPS = pedagogicalCoordinatorRepository.gotAllMAilsPedagogicalCoordinatorByIdNew(idCPS);
+		}
+		/***********************************************************************************************************/
+
+//    	for(PedagogicalCoordinator pc : CPSs)
+//    	{
+//    		if(pedagogicalCoordinatorRepository.gotMailPedagogicalCoordinatorByIdEns(pc.getTeacher().getIdEns()) != null)
+//    		{
+//    			mailCPS = pedagogicalCoordinatorRepository.gotMailPedagogicalCoordinatorByIdEns(pc.getTeacher().getIdEns());
+//    		}
+//    	}
+		System.out.println("-----**********c******------> MAils : " + mailCPS + " - " + mailRSS);
 
 		List<String> mailsCPSRSS = new ArrayList<String>();
-		mailsCPSRSS.add(utilServices.findMailPedagogicalEncadrant(idET));
-		mailsCPSRSS.add(mailCPS);
-		mailsCPSRSS.add(mailRSS);
-		String mailsCPSRSS_STR = mailsCPSRSS.stream().map(plain -> '"' + StringEscapeUtils.escapeJava(plain) + '"')
-				.collect(Collectors.joining(", "));
-		/*
-		 * String mailPE = findMailAcademicEncadrantByStudent(idET);
-		 * 
-		 * String codeOption =
-		 * utilServices.findOptionByClass(findCurrentClassByIdEt(idET),
-		 * optionRepository.listOptionsByYear("2021"));
-		 * 
-		 * String mailAcademicCoordinator =
-		 * teacherRepository.findMailTeacherById(responsableStageRepository.
-		 * findPedagogicalCoordinatorByCodeOption(codeOption));
-		 * 
-		 * List<String> receiversCC = new ArrayList<String>(); receiversCC.add(mailPE);
-		 * receiversCC.add(mailAcademicCoordinator); receiversCC.add(mailRSS); String
-		 * responsibles = receiversCC.stream().collect(Collectors.joining(", "));
-		 * 
-		 * System.out.println("------------------------------------------> REFUSE 2: " +
-		 * responsibles + "--->" + mailRSS + " - " + mailAcademicCoordinator + " - " +
-		 * mailPE + " *** " + receiver);
-		 */
+		mailsCPSRSS.add(utilServices.findMailPedagogicalEncadrant(idET));mailsCPSRSS.add(mailCPS);mailsCPSRSS.add(mailRSS);
+		String mailsCPSRSS_STR = mailsCPSRSS.stream().map(plain -> '"' + StringEscapeUtils.escapeJava(plain) + '"').collect(Collectors.joining(", "));
 
-		// ****************************************************************************
-		// Notification by mail
+		//		String mailPE = findMailAcademicEncadrantByStudent(idET);
+
+//		String codeOption = utilServices.findOptionByClass(findCurrentClassByIdEt(idET), optionRepository.listOptionsByYear("1988"));
+
+//		String mailAcademicCoordinator = teacherRepository.findMailTeacherById(responsableStageRepository.findPedagogicalCoordinatorByCodeOption(codeOption));
+
+//		List<String> receiversCC = new ArrayList<String>();
+////		receiversCC.add("no_reply@esprit.tn"); receiversCC.add("saria.essid@esprit.tn"); // UPDATE
+//		 receiversCC.add(mailPE); receiversCC.add(mailAcademicCoordinator); receiversCC.add(mailRSS);
+//		String responsibles = receiversCC.stream().collect(Collectors.joining(", "));
+//		System.out.println("------------------------------------------> REFUSE 2: " + responsibles + "--->" + mailRSS + " - " + mailAcademicCoordinator + " - " + mailPE + " *** " + receiver);
+
+
+//		utilServices.sendMailWithManyTOandManyCC("Traitement Dépot rappot", receiver, responsibles,
+//				"Votre Dépôt a été marqué comme Incomplet par le service des stages avec le motif : " + observation +".");
+
+
+		// **************************************************************************** Notification by mail
 		DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		String dateValidateDepot = dateFormata.format(new Date());
 
 		String subject = "Traitement Dépôt Rapport";
+
+		// Local
+		//String studentMail = "saria.essid@esprit.tn";
+
+		// Server
+		//String studentMail = utilServices.findStudentMailById(idET);
 
 		String content = "Nous voulons vous informer par le présent mail que votre "
 				+ "<strong><font color=grey>Dépôt</font></strong> a été marqué comme "
@@ -1311,9 +1313,7 @@ public class ServiceStageController {
 				+ "Veuillez consulter votre espace pour mettre à jour votre Dépôt.";
 
 		utilServices.sendMailWithManyCC(subject, receiver, mailsCPSRSS_STR, content);
-
-		return new ResponseEntity<>(serviceStageService.UpdateRepotToREFUSE(idET,
-				dateFiche.substring(0, 19).replace("T", " "), cancelMotif), HttpStatus.OK);
+		return new ResponseEntity<>(serviceStageService.UpdateRepotToREFUSE(idET, dateDepotFiche.substring(0, 19).replace("T", " "), cancelMotif), HttpStatus.OK);
 
 	}
 

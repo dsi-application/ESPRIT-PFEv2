@@ -2652,7 +2652,37 @@ public class UtilServices {
 		
 		return students;
 	}
-	
+
+
+	public List<DepotFinalDto> loadFichesForDepotNotYetTreatedByYear(String year, String idServiceStage)
+	{
+
+		List<DepotFinalDto> students = new ArrayList<DepotFinalDto>();
+
+		System.out.println("---------------------------------------------------> year: " + year);
+		List<DepotFinalDto> depotNYT_CJ = fichePFERepository.loadFichesForDepotNotYetTreatedForStudents_CJ(year, idServiceStage);
+		List<DepotFinalDto> depotNYT_ALT = fichePFERepository.loadFichesForDepotNotYetTreatedForStudents_ALT(year, idServiceStage);
+		List<DepotFinalDto> depotNYT_CS = fichePFERepository.loadFichesForDepotNotYetTreatedForStudents_CS(year, idServiceStage);
+
+		System.out.println("----------------------------------> depotNYT_CJ: " + depotNYT_CJ.size());
+		System.out.println("----------------------------------> depotNYT_ALT: " + depotNYT_ALT.size());
+		System.out.println("----------------------------------> depotNYT_CS: " + depotNYT_CS.size());
+
+		if(!depotNYT_CJ.isEmpty())
+		{
+			students.addAll(depotNYT_CJ);
+		}
+		if(!depotNYT_ALT.isEmpty())
+		{
+			students.addAll(depotNYT_ALT);
+		}
+		if(!depotNYT_CS.isEmpty())
+		{
+			students.addAll(depotNYT_CS);
+		}
+
+		return students;
+	}
 
 	public String findIdEncadrantPedagogiqueByStudentByYear(String idStu, String year)
 	{

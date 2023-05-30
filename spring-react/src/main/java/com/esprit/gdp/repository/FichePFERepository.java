@@ -19,7 +19,11 @@ import com.esprit.gdp.models.Technologie;
 public interface FichePFERepository extends JpaRepository<FichePFE, FichePFEPK> 
 {
 
-	 @Query("Select new com.esprit.gdp.dto.FichePFEHistoryDto(fp.titreProjet, fp.descriptionProjet, FUNCTION('to_char', fp.idFichePFE.dateDepotFiche,'dd-mm-yyyy HH24:MI:SS'), fp.anneeDeb, fp.etatFiche, fp.pathDiagrammeGantt, "
+	@Query(value="SELECT f from FichePFE f " +
+			"where (FUNCTION('to_char', f.idFichePFE.dateDepotFiche,'dd-mm-yyyy HH24:MI:SS')=:dateFiche and f.idFichePFE.conventionPK.idEt =:idET)")
+	FichePFE findPlanTravailByDateDepot(@Param("idET") String idET, @Param("dateFiche") String dateFiche);
+
+	@Query("Select new com.esprit.gdp.dto.FichePFEHistoryDto(fp.titreProjet, fp.descriptionProjet, FUNCTION('to_char', fp.idFichePFE.dateDepotFiche,'dd-mm-yyyy HH24:MI:SS'), fp.anneeDeb, fp.etatFiche, fp.pathDiagrammeGantt, "
 	 		+ "fp.pathBilan1, "
 	 		+ "FUNCTION('to_char', fp.dateDepotBilan1,'dd-mm-yyyy HH24:MI:SS'), fp.pathBilan2, "
 	 		+ "FUNCTION('to_char', fp.dateDepotBilan2,'dd-mm-yyyy HH24:MI:SS'), "
@@ -785,5 +789,38 @@ public interface FichePFERepository extends JpaRepository<FichePFE, FichePFEPK>
 			// + "c.responsableServiceStage.idUserSce =?1 "
 			+ "order by f.dateDepotReports desc")
 	List<DepotFinalDto> loadFichesForDepotNotYetTreatedByStudents(List<String> students);
+
+	@Query("SELECT new com.esprit.gdp.dto.DepotFinalDto(f.idFichePFE, c.conventionPK.idEt, f.pathRapportVersion2, f.pathPlagiat, f.pathAttestationStage, f.pathSupplement, f.validDepot, FUNCTION('to_char', f.idFichePFE.dateDepotFiche,'dd-mm-yyyy HH24:MI:SS'), f.dateDepotReports) "
+			+ "from InscriptionCJ y, FichePFE f join Convention c on c.conventionPK.idEt = f.idFichePFE.conventionPK.idEt "
+			+ "where "
+			+ "y.id.idEt = f.idFichePFE.conventionPK.idEt and "
+			+ "f.validDepot ='01' and f.etatFiche ='03' and " //+ "f.etatFiche ='03' and "
+			+ "c.traiter = '02' and "
+			+ "y.id.anneeDeb =?1 and y.saisonClasse.id.codeCl like '5%' and "
+			+ "c.responsableServiceStage.idUserSce =?2 "
+			+ "order by f.dateDepotReports desc")
+	List<DepotFinalDto> loadFichesForDepotNotYetTreatedForStudents_CJ(String year, String idServiceStage);
+
+	@Query("SELECT new com.esprit.gdp.dto.DepotFinalDto(f.idFichePFE, c.conventionPK.idEt, f.pathRapportVersion2, f.pathPlagiat, f.pathAttestationStage, f.pathSupplement, f.validDepot, FUNCTION('to_char', f.idFichePFE.dateDepotFiche,'dd-mm-yyyy HH24:MI:SS'), f.dateDepotReports) "
+			+ "from OptionStudentALT o, FichePFE f join Convention c on c.conventionPK.idEt = f.idFichePFE.conventionPK.idEt "
+			+ "where "
+			+ "o.idOptStuALT.idEt = f.idFichePFE.conventionPK.idEt and "
+			+ "f.validDepot='01' and f.etatFiche ='03' and " //+ "f.etatFiche ='03' and "
+			+ "c.traiter = '02' and "
+			+ "o.idOptStuALT.anneeDeb =?1 and "
+			+ "c.responsableServiceStage.idUserSce =?2 "
+			+ "order by f.dateDepotReports desc")
+	List<DepotFinalDto> loadFichesForDepotNotYetTreatedForStudents_ALT(String year, String idServiceStage);
+
+	@Query("SELECT new com.esprit.gdp.dto.DepotFinalDto(f.idFichePFE, c.conventionPK.idEt, f.pathRapportVersion2, f.pathPlagiat, f.pathAttestationStage, f.pathSupplement, f.validDepot, FUNCTION('to_char', f.idFichePFE.dateDepotFiche,'dd-mm-yyyy HH24:MI:SS'), f.dateDepotReports) "
+			+ "from InscriptionCS y, FichePFE f join Convention c on c.conventionPK.idEt = f.idFichePFE.conventionPK.idEt "
+			+ "where "
+			+ "y.id.idEt = f.idFichePFE.conventionPK.idEt and "
+			+ "f.validDepot='01' and f.etatFiche ='03' and " //+ "f.etatFiche ='03' and "
+			+ "c.traiter = '02' and "
+			+ "y.id.anneeDeb =?1 and y.saisonClasse.id.codeCl like '4%' and "
+			+ "c.responsableServiceStage.idUserSce =?2 "
+			+ "order by f.dateDepotReports desc")
+	List<DepotFinalDto> loadFichesForDepotNotYetTreatedForStudents_CS(String year, String idServiceStage);
 
 }

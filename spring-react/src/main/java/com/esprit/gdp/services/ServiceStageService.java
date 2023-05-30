@@ -881,25 +881,28 @@ public class ServiceStageService {
 
 	public DepotRapport UpdateRepotToVALIDE(String idET, String dateFiche) {
 
-		if (fichePFERepository.getFichebyId(idET, dateFiche) != null) {
-			FichePFE existingFichePFE = fichePFERepository.getFichebyId(idET, dateFiche);
+		if (fichePFERepository.findPlanTravailByDateDepot(idET, dateFiche) != null) {
+			FichePFE existingFichePFE = fichePFERepository.findPlanTravailByDateDepot(idET, dateFiche);
 			existingFichePFE.setValidDepot("02");
 			existingFichePFE.setDateTreatReports(new Date());
 			// existingFichePFE.setEtatFiche("06");
 			fichePFERepository.saveAndFlush(existingFichePFE);
 
-			// Student S =
+			// StudentCJ S =
 			// etudiantRepository.getOne(existingFichePFE.getIdFichePFE().getIdEt());
-			StudentIdNomPrenomDto S = findStudentIdFullName(
-					existingFichePFE.getIdFichePFE().getConventionPK().getIdEt());
+			StudentIdNomPrenomDto S = findStudentIdFullName(existingFichePFE.getIdFichePFE().getConventionPK().getIdEt());
 
-			DepotRapport D = new DepotRapport(existingFichePFE.getIdFichePFE().getConventionPK().getIdEt(),
-					S.getNomet(), S.getPrenomet(), existingFichePFE.getPathRapportVersion2(),
-					existingFichePFE.getPathPlagiat(), existingFichePFE.getPathAttestationStage(),
-					existingFichePFE.getPathSupplement(),
+			DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+			String timestampToString = dateFormata.format(existingFichePFE.getIdFichePFE().getDateDepotFiche());
+
+			DepotRapport D = new DepotRapport(existingFichePFE.getIdFichePFE().getConventionPK().getIdEt(), S.getNomet(), S.getPrenomet(),
+					existingFichePFE.getPathRapportVersion2(), existingFichePFE.getPathPlagiat(),
+					existingFichePFE.getPathAttestationStage(), existingFichePFE.getPathSupplement(),
 					codeNomenclatureRepository.findEtatFiche(existingFichePFE.getEtatFiche()),
 					codeNomenclatureRepository.findEtatDepot(existingFichePFE.getValidDepot()),
-					existingFichePFE.getIdFichePFE().getDateDepotFiche());
+					timestampToString);
+
+			System.out.println("=============> LOL: " + D.getDateDepotFiche());
 
 			return D;
 		} else
@@ -908,25 +911,26 @@ public class ServiceStageService {
 
 	public DepotRapport UpdateRepotToREFUSE(String idET, String dateFiche, String observation) {
 
-		if (fichePFERepository.getFichebyId(idET, dateFiche) != null) {
-			FichePFE existingFichePFE = fichePFERepository.getFichebyId(idET, dateFiche);
+		if (fichePFERepository.findPlanTravailByDateDepot(idET, dateFiche) != null) {
+			FichePFE existingFichePFE = fichePFERepository.findPlanTravailByDateDepot(idET, dateFiche);
 			existingFichePFE.setValidDepot("03");
 			existingFichePFE.setDateTreatReports(new Date());
 			existingFichePFE.setObservationDepot(observation);
 			fichePFERepository.save(existingFichePFE);
 
-			// Student S =
+			// StudentCJ S =
 			// etudiantRepository.getOne(existingFichePFE.getIdFichePFE().getIdEt());
-			StudentIdNomPrenomDto S = findStudentIdFullName(
-					existingFichePFE.getIdFichePFE().getConventionPK().getIdEt());
+			StudentIdNomPrenomDto S = findStudentIdFullName(existingFichePFE.getIdFichePFE().getConventionPK().getIdEt());
 
-			DepotRapport D = new DepotRapport(existingFichePFE.getIdFichePFE().getConventionPK().getIdEt(),
-					S.getNomet(), S.getPrenomet(), existingFichePFE.getPathRapportVersion2(),
-					existingFichePFE.getPathPlagiat(), existingFichePFE.getPathAttestationStage(),
-					existingFichePFE.getPathSupplement(),
+			DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+			String timestampToString = dateFormata.format(existingFichePFE.getIdFichePFE().getDateDepotFiche());
+
+			DepotRapport D = new DepotRapport(existingFichePFE.getIdFichePFE().getConventionPK().getIdEt(), S.getNomet(), S.getPrenomet(),
+					existingFichePFE.getPathRapportVersion2(), existingFichePFE.getPathPlagiat(),
+					existingFichePFE.getPathAttestationStage(), existingFichePFE.getPathSupplement(),
 					codeNomenclatureRepository.findEtatFiche(existingFichePFE.getEtatFiche()),
 					codeNomenclatureRepository.findEtatDepot(existingFichePFE.getValidDepot()),
-					existingFichePFE.getIdFichePFE().getDateDepotFiche());
+					timestampToString);
 
 			return D;
 		} else
