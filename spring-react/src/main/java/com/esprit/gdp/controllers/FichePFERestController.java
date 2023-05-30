@@ -105,7 +105,7 @@ public class FichePFERestController {
 		Optional<Convention> conv = conventionRepository.getConventionById(idEt,
 				dateConvention.substring(0, 19).replace("T", " "));
 
-		System.out.println("-----> Convention: " + conv.get().getAddress());
+		// System.out.println("-----> Convention: " + conv.get().getAddress());
 
 		Date dat = new Date();
 		String studentFullName = utilServices.findStudentFullNameById(idEt);
@@ -127,20 +127,20 @@ public class FichePFERestController {
 			if (convCodePays.equalsIgnoreCase("TN")) {
 				ConventionTN_PDF convTN = new ConventionTN_PDF(conv, path, studentFullName, studentOption,
 						studentDepartment);
-				System.out.println("----------------- TN");
+				// System.out.println("----------------- TN");
 			}
 
 			if (convCodePays.equalsIgnoreCase("EN") || convCodePays.equalsIgnoreCase("--")) {
 				ConventionEN_PDF convEN = new ConventionEN_PDF(conv, path, studentFullName, studentOption,
 						studentDepartment);
-				System.out.println("----------------- EN");
+				// System.out.println("----------------- EN");
 			}
 			if (convCodePays.equalsIgnoreCase("FR")) {
 
 				StudentConvFRDto scf = utilServices.findStudentConvFRDtoById(idEt);
 
 				ConventionFR_PDF convFR = new ConventionFR_PDF(conv, path, scf, studentOption, studentDepartment);
-				System.out.println("----------------- FR");
+				// System.out.println("----------------- FR");
 			}
 
 			conv.get().setPathConvention(path);
@@ -149,7 +149,7 @@ public class FichePFERestController {
 		}
 
 		String fp = conv.get().getPathConvention();
-		System.out.println("----------------- ############################################# SARS: " + fp);
+		// System.out.println("----------------- ############################################# SARS: " + fp);
 		File file = new File(fp);
 		String fileName = fp.substring(fp.lastIndexOf("/") + 1, fp.length());
 

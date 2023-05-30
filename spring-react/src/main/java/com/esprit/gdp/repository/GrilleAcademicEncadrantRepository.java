@@ -25,6 +25,8 @@ public interface GrilleAcademicEncadrantRepository extends JpaRepository<GrilleA
 			+ "from GrilleAcademicEncadrant g where g.grilleAcademicEncadrantPK.fichePFEPK.conventionPK.idEt =?1 "
 			+ "order by g.grilleAcademicEncadrantPK.dateSaisieGAE desc")
 	GrilleAcademicEncadrantDto findGrilleEncadrementDtoByFiche(String IdEt);
-	
-	
+
+	@Query("select g.etatGrille from GrilleAcademicEncadrant g where g.grilleAcademicEncadrantPK.fichePFEPK =?1 order by g.grilleAcademicEncadrantPK.dateSaisieGAE desc")
+	List<String> findEtatGrilleByFiche(FichePFEPK fichePFEPK);
+
 }

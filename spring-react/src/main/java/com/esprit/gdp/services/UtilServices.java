@@ -35,6 +35,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import com.esprit.gdp.dto.*;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,20 +43,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.esprit.gdp.dto.BinomeIdFullNameDto;
-import com.esprit.gdp.dto.FichePFETitreProjetLabelCompanyDto;
-import com.esprit.gdp.dto.StudentAffectationDetailsDto;
-import com.esprit.gdp.dto.StudentConfigDto;
-import com.esprit.gdp.dto.StudentConvFRDto;
-import com.esprit.gdp.dto.StudentDemandeStageDto;
-import com.esprit.gdp.dto.StudentDto;
-import com.esprit.gdp.dto.StudentExcelDto;
-import com.esprit.gdp.dto.StudentFullNameMailTelDto;
-import com.esprit.gdp.dto.StudentGrilleAcademicEncadrantDto;
-import com.esprit.gdp.dto.StudentJustificatifStageDto;
-import com.esprit.gdp.dto.StudentMailTelDto;
-import com.esprit.gdp.dto.StudentMandatoryInternshipDto;
-import com.esprit.gdp.dto.TeacherEncadrantPedaDto;
 import com.esprit.gdp.models.PedagogicalCoordinator;
 import com.esprit.gdp.models.ResponsableServiceStage;
 import com.esprit.gdp.models.StudentCJ;
@@ -1064,6 +1051,249 @@ public class UtilServices {
 		return students;
 	}
 
+	public List<String> findStudentsByYearAndGroupedOption(String year, String option)
+	{
+
+		System.out.println("---------------------------------------------------> option: " + option);
+		List<String> students = new ArrayList<String>();
+		if(option.equalsIgnoreCase("em"))
+		{
+			List<String> studentsEMCJ = optionRepository.findStudentsByYearAndOptionForEMCJ(year);
+			List<String> studentsEMCS = optionRepository.findStudentsByYearAndOptionForEMCS(year);
+
+			System.out.println("----------------------------------> Student EM CJ: " + studentsEMCJ.size());
+			System.out.println("----------------------------------> Student EM CS: " + studentsEMCS.size());
+
+			if(!studentsEMCJ.isEmpty())
+			{
+				students.addAll(studentsEMCJ);
+			}
+			if(!studentsEMCS.isEmpty())
+			{
+				students.addAll(studentsEMCS);
+			}
+		}
+		if(option.equalsIgnoreCase("gc"))
+		{
+			List<String> studentsGCCJ = optionRepository.findStudentsByYearAndOptionForGCCJ(year);
+
+			System.out.println("----------------------------------> Student GC CJ: " + studentsGCCJ.size());
+
+			if(!studentsGCCJ.isEmpty())
+			{
+				students.addAll(studentsGCCJ);
+			}
+		}
+		if(option.equalsIgnoreCase("arctic"))
+		{
+			List<String> studentsCJ = optionRepository.findStudentsByYearAndOption(year, option);
+			List<String> studentsCJALT = optionStudentALTRepository.findIdStudentsALTByYearAndOption(year, option);
+			List<String> studentsARCCS = optionRepository.findStudentsARCCSByYearAndOption(year);
+
+			System.out.println("----------------------------------> Student ARC CJ: " + studentsCJ.size());
+			System.out.println("----------------------------------> Student ARC ALT: " + studentsCJALT.size());
+			System.out.println("----------------------------------> Student ARC CS: " + studentsARCCS.size());
+
+			if(!studentsCJ.isEmpty())
+			{
+				students.addAll(studentsCJ);
+			}
+			if(!studentsCJALT.isEmpty())
+			{
+				students.addAll(studentsCJALT);
+			}
+			if(!studentsARCCS.isEmpty())
+			{
+				students.addAll(studentsARCCS);
+			}
+		}
+		if(option.equalsIgnoreCase("erp-bi"))
+		{
+			List<String> studentsCJ = optionRepository.findStudentsByYearAndOption(year, option);
+			List<String> studentsCJALT = optionStudentALTRepository.findIdStudentsALTByYearAndOption(year, option);
+			List<String> studentsBICS = optionRepository.findStudentsBICSByYearAndOption(year);
+
+			System.out.println("----------------------------------> Student BI CJ: " + studentsCJ.size());
+			System.out.println("----------------------------------> Student BI ALT: " + studentsCJALT.size());
+			System.out.println("----------------------------------> Student BI CS: " + studentsBICS.size());
+
+			if(!studentsCJ.isEmpty())
+			{
+				students.addAll(studentsCJ);
+			}
+			if(!studentsCJALT.isEmpty())
+			{
+				students.addAll(studentsCJALT);
+			}
+			if(!studentsBICS.isEmpty())
+			{
+				students.addAll(studentsBICS);
+			}
+		}
+		if(option.equalsIgnoreCase("sae"))
+		{
+			List<String> studentsCJ = optionRepository.findStudentsByYearAndOption(year, option);
+			List<String> studentsCJALT = optionStudentALTRepository.findIdStudentsSAEALTByYearAndOption(year);
+			List<String> studentSAECS = optionRepository.findStudentsSAECSByYearAndOption(year);
+
+			System.out.println("--------jj--------------------------> Student SAE CJ: " + studentsCJ.size());
+			System.out.println("----------------------------------> Student SAE ALT: " + studentsCJALT.size());
+			System.out.println("----------------------------------> Student SAE CS: " + studentSAECS.size());
+
+			if(!studentsCJ.isEmpty())
+			{
+				students.addAll(studentsCJ);
+			}
+			if(!studentsCJALT.isEmpty())
+			{
+				students.addAll(studentsCJALT);
+			}
+			if(!studentSAECS.isEmpty())
+			{
+				students.addAll(studentSAECS);
+			}
+		}
+		else
+		{
+			List<String> studentsCJ = optionRepository.findStudentsCJByYearAndOption(year, option);
+			List<String> studentsCJALT = optionStudentALTRepository.findIdStudentsALTByYearAndOption(year, option);
+			List<String> studentsCS = optionRepository.findStudentsCSByYearAndOption(year, option);
+
+			System.out.println("----------------------------------> Student CJ: " + studentsCJ.size());
+			System.out.println("----------------------------------> Student ALT: " + studentsCJALT.size());
+			System.out.println("----------------------------------> Student CS: " + studentsCS.size());
+
+			if(!studentsCJ.isEmpty())
+			{
+				students.addAll(studentsCJ);
+			}
+			if(!studentsCJALT.isEmpty())
+			{
+				students.addAll(studentsCJALT);
+			}
+			if(!studentsCS.isEmpty())
+			{
+				students.addAll(studentsCS);
+			}
+		}
+
+		return students;
+	}
+
+	public List<ConventionForRSSDto> findDemandesAnnulationConventionsByYear(String year)
+	{
+
+		List<ConventionForRSSDto> demandesAnnulationConventions = new ArrayList<ConventionForRSSDto>();
+		System.out.println("---------------------------------------------------> year: " + year);
+
+		List<ConventionForRSSDto> demandesAnnulationConventionsCJ = optionRepository.findStudentsCJWithDemandesAnnulationsConventionsByYear(year);
+		List<ConventionForRSSDto> demandesAnnulationConventionsALT = optionRepository.findStudentsALTWithDemandesAnnulationsConventionsByYear(year);
+		List<ConventionForRSSDto> demandesAnnulationConventionsCS = optionRepository.findStudentsCSWithDemandesAnnulationsConventionsByYear(year);
+
+		System.out.println("----------------------------------> Student CJ: " + demandesAnnulationConventionsCJ.size());
+		System.out.println("----------------------------------> Student ALT: " + demandesAnnulationConventionsALT.size());
+		System.out.println("----------------------------------> Student CS: " + demandesAnnulationConventionsCS.size());
+
+		if(!demandesAnnulationConventionsCJ.isEmpty())
+		{
+			demandesAnnulationConventions.addAll(demandesAnnulationConventionsCJ);
+		}
+		if(!demandesAnnulationConventionsALT.isEmpty())
+		{
+			demandesAnnulationConventions.addAll(demandesAnnulationConventionsALT);
+		}
+		if(!demandesAnnulationConventionsCS.isEmpty())
+		{
+			demandesAnnulationConventions.addAll(demandesAnnulationConventionsCS);
+		}
+
+		for(ConventionForRSSDto c : demandesAnnulationConventions)
+		{
+			// System.out.println("--------------------------> DATE: " + c.getDateConvention());
+			String idEt = c.getIdEt();
+			String classe = findCurrentClassByIdEt(idEt);
+
+			/*String convCodePays = c.getPaysConvention();
+			if(convCodePays.equalsIgnoreCase("--"))
+			{
+				c.setPaysConvention("EN");
+			}
+			else
+			{
+				c.setPaysConvention(convCodePays);
+			}*/
+
+			c.setNomEt(findStudentFullNameById(idEt));
+			//c.setDepartEt(findDepartmentAbbByClassWithStat(classe));
+			List<String> los = optionRepository.listOptionsByYear("2021");
+			// c.setDepartEt(findOptionByStudent(idEt, los).replaceAll("_01", ""));
+			c.setCurrentClasse(classe);
+		}
+
+		return demandesAnnulationConventions;
+	}
+
+	public List<ConventionForRSSDto> findNotTreatedConventionsByYear(String year)
+	{
+
+		List<ConventionForRSSDto> notTreatedConventions = new ArrayList<ConventionForRSSDto>();
+		System.out.println("---------------------------------------------------> year: " + year);
+
+		List<ConventionForRSSDto> notTreatedConventionsCJ = conventionRepository.findStudentsCJWithNotTreatedConventionsByYear(year);
+		List<ConventionForRSSDto> notTreatedConventionsALT = conventionRepository.findStudentsALTWithNotTreatedConventionsByYear(year);
+		List<ConventionForRSSDto> notTreatedConventionsCS = conventionRepository.findStudentsCSWithNotTreatedConventionsByYear(year);
+
+		System.out.println("----------------------------------> Student CJ: " + notTreatedConventionsCJ.size());
+		System.out.println("----------------------------------> Student ALT: " + notTreatedConventionsALT.size());
+		System.out.println("----------------------------------> Student CS: " + notTreatedConventionsCS.size());
+
+		if(!notTreatedConventionsCJ.isEmpty())
+		{
+			notTreatedConventions.addAll(notTreatedConventionsCJ);
+		}
+		if(!notTreatedConventionsALT.isEmpty())
+		{
+			notTreatedConventions.addAll(notTreatedConventionsALT);
+		}
+		if(!notTreatedConventionsCS.isEmpty())
+		{
+			notTreatedConventions.addAll(notTreatedConventionsCS);
+		}
+
+		for(ConventionForRSSDto c : notTreatedConventions)
+		{
+			// System.out.println("--------------------------> DATE: " + c.getDateConvention());
+			String idEt = c.getIdEt();
+			String classe = findCurrentClassByIdEt(idEt);
+
+			/*String convCodePays = c.getPaysConvention();
+			if(convCodePays.equalsIgnoreCase("--"))
+			{
+				c.setPaysConvention("EN");
+			}
+			else
+			{
+				c.setPaysConvention(convCodePays);
+			}*/
+
+			c.setNomEt(findStudentFullNameById(idEt));
+			//c.setDepartEt(findDepartmentAbbByClassWithStat(classe));
+			List<String> los = optionRepository.listOptionsByYear("2021");
+			// c.setDepartEt(findOptionByStudent(idEt, los).replaceAll("_01", ""));
+			c.setCurrentClasse(classe);
+
+			if(!classe.contains("4ALINFO"))
+			{
+				c.setOptionEt(findOptionByClass(classe, optionRepository.listOptionsByYear(year)).replace("_01", ""));
+			}
+			if(classe.contains("4ALINFO"))
+			{
+				c.setOptionEt(optionStudentALTRepository.findOptionByStudentALTAndYear(idEt, year));
+			}
+		}
+
+		return notTreatedConventions;
+	}
 
 	public List<String> findStudentsByYearAndOption(String year, String option)
 	{
@@ -1587,8 +1817,8 @@ public class UtilServices {
 		List<TeacherEncadrantPedaDto> teachersCJ = inscriptionRepository.findEncadrantPedagogiqueByStudentCJ(idEt);
 		List<TeacherEncadrantPedaDto> teachersCS = inscriptionRepository.findEncadrantPedagogiqueByStudentCS(idEt);
 
-		System.out.println("----------------------------------> Teacher EncadrantPeda CJ: " + teachersCJ.size());
-		System.out.println("----------------------------------> Teacher EncadrantPeda CS: " + teachersCS.size());
+		// System.out.println("----------------------------------> Teacher EncadrantPeda CJ: " + teachersCJ.size());
+		// System.out.println("----------------------------------> Teacher EncadrantPeda CS: " + teachersCS.size());
 
 		if (!teachersCJ.isEmpty()) {
 			teacherEncadrantPedaDto = teachersCJ.get(0);
@@ -1602,7 +1832,7 @@ public class UtilServices {
 
 	public StudentJustificatifStageDto findStudentJustificatifStageByStudentId(String idEt) {
 
-		System.out.println("----------------------------------> Teacher EncadrantPeda ID: " + idEt);
+		// System.out.println("----------------------------------> Teacher EncadrantPeda ID: " + idEt);
 
 		StudentJustificatifStageDto studentDemandeStgDto = null;
 		List<StudentJustificatifStageDto> teachersCJ = inscriptionRepository.findStudentJustificatifStageDtoCJ(idEt,
@@ -1610,8 +1840,8 @@ public class UtilServices {
 		List<StudentJustificatifStageDto> teachersCS = inscriptionRepository.findStudentJustificatifStageDtoCS(idEt,
 				"2021");
 
-		System.out.println("----------------------------------> Teacher EncadrantPeda CJ: " + teachersCJ.size());
-		System.out.println("----------------------------------> Teacher EncadrantPeda CS: " + teachersCS.size());
+		// System.out.println("----------------------------------> Teacher EncadrantPeda CJ: " + teachersCJ.size());
+		// System.out.println("----------------------------------> Teacher EncadrantPeda CS: " + teachersCS.size());
 
 		if (!teachersCJ.isEmpty()) {
 			studentDemandeStgDto = teachersCJ.get(0);
@@ -1625,7 +1855,7 @@ public class UtilServices {
 
 	public StudentMandatoryInternshipDto findStudentMandatoryInternshipByStudentId(String idEt) {
 
-		System.out.println("----------------------------------> Teacher EncadrantPeda ID: " + idEt);
+		// System.out.println("----------------------------------> Teacher EncadrantPeda ID: " + idEt);
 
 		StudentMandatoryInternshipDto studentDemandeStgDto = null;
 		List<StudentMandatoryInternshipDto> teachersCJ = inscriptionRepository.findStudentMandatoryInternshipDtoCJ(idEt,
@@ -1633,8 +1863,8 @@ public class UtilServices {
 		List<StudentMandatoryInternshipDto> teachersCS = inscriptionRepository.findStudentMandatoryInternshipDtoCS(idEt,
 				"2021");
 
-		System.out.println("----------------------------------> Teacher EncadrantPeda CJ: " + teachersCJ.size());
-		System.out.println("----------------------------------> Teacher EncadrantPeda CS: " + teachersCS.size());
+		// System.out.println("----------------------------------> Teacher EncadrantPeda CJ: " + teachersCJ.size());
+		// System.out.println("----------------------------------> Teacher EncadrantPeda CS: " + teachersCS.size());
 
 		if (!teachersCJ.isEmpty()) {
 			studentDemandeStgDto = teachersCJ.get(0);
@@ -1690,14 +1920,14 @@ public class UtilServices {
 
 	public StudentDemandeStageDto findStudentDemandeStgByStudentId(String idEt) {
 
-		System.out.println("----------------------------------> Teacher EncadrantPeda ID: " + idEt);
+		// System.out.println("----------------------------------> Teacher EncadrantPeda ID: " + idEt);
 
 		StudentDemandeStageDto studentDemandeStgDto = null;
 		List<StudentDemandeStageDto> teachersCJ = inscriptionRepository.findStudentDemandeStageDtoCJ(idEt, "2021");
 		List<StudentDemandeStageDto> teachersCS = inscriptionRepository.findStudentDemandeStageDtoCS(idEt, "2021");
 
-		System.out.println("----------------------------------> Teacher EncadrantPeda CJ: " + teachersCJ.size());
-		System.out.println("----------------------------------> Teacher EncadrantPeda CS: " + teachersCS.size());
+		// System.out.println("----------------------------------> Teacher EncadrantPeda CJ: " + teachersCJ.size());
+		// System.out.println("----------------------------------> Teacher EncadrantPeda CS: " + teachersCS.size());
 
 		if (!teachersCJ.isEmpty()) {
 			studentDemandeStgDto = teachersCJ.get(0);
@@ -1769,14 +1999,14 @@ public class UtilServices {
 
 	}
 
-	public StudentGrilleAcademicEncadrantDto findStudentTreatDepotByHisId(String idEt) {
+	public StudentGrilleAcademicEncadrantDto findStudentTreatDepotByHisId(String idEt, String selectedYear) {
 
 		String fullName = findStudentFullNameById(idEt);
 		String classe = findCurrentClassByIdEt(idEt);
 		String department = findDepartmentByClass(classe);
 		String option = findOptionByClass(classe, optionRepository.listOptionsByYear("2021"));
 
-		BigDecimal studentMarkRest = noteRestitutionRepository.findNoteRestitutionByStu(idEt, "2021");
+		BigDecimal studentMarkRest = noteRestitutionRepository.findNoteRestitutionByStu(idEt, selectedYear);
 
 		if (studentMarkRest == null) {
 			studentMarkRest = new BigDecimal("-1");
@@ -2422,7 +2652,37 @@ public class UtilServices {
 		
 		return students;
 	}
-	
+
+
+	public List<DepotFinalDto> loadFichesForDepotNotYetTreatedByYear(String year, String idServiceStage)
+	{
+
+		List<DepotFinalDto> students = new ArrayList<DepotFinalDto>();
+
+		System.out.println("---------------------------------------------------> year: " + year);
+		List<DepotFinalDto> depotNYT_CJ = fichePFERepository.loadFichesForDepotNotYetTreatedForStudents_CJ(year, idServiceStage);
+		List<DepotFinalDto> depotNYT_ALT = fichePFERepository.loadFichesForDepotNotYetTreatedForStudents_ALT(year, idServiceStage);
+		List<DepotFinalDto> depotNYT_CS = fichePFERepository.loadFichesForDepotNotYetTreatedForStudents_CS(year, idServiceStage);
+
+		System.out.println("----------------------------------> depotNYT_CJ: " + depotNYT_CJ.size());
+		System.out.println("----------------------------------> depotNYT_ALT: " + depotNYT_ALT.size());
+		System.out.println("----------------------------------> depotNYT_CS: " + depotNYT_CS.size());
+
+		if(!depotNYT_CJ.isEmpty())
+		{
+			students.addAll(depotNYT_CJ);
+		}
+		if(!depotNYT_ALT.isEmpty())
+		{
+			students.addAll(depotNYT_ALT);
+		}
+		if(!depotNYT_CS.isEmpty())
+		{
+			students.addAll(depotNYT_CS);
+		}
+
+		return students;
+	}
 
 	public String findIdEncadrantPedagogiqueByStudentByYear(String idStu, String year)
 	{
@@ -2525,5 +2785,26 @@ public class UtilServices {
 		
 		return nbrEncByTeacher;
 	}
-	
+
+	public StudentDetailsDto findStudentDetailsDtoById(String idEt)
+	{
+		StudentDetailsDto student = null;
+		StudentDetailsDto studentCJALT = studentRepository.findStudentDetailsDtoDtoById_CJALT(idEt);
+		StudentDetailsDto studentCS = studentRepository.findStudentDetailsDtoDtoById_CS(idEt);
+
+		System.out.println("---------------------**-------------> JWT NOT SET CJ+ALT: " + studentCJALT);
+		System.out.println("---------------------**-------------> JWT NOT SET CS: " + studentCS);
+
+		if(studentCJALT != null)
+		{
+			student = studentCJALT;
+		}
+		if(studentCS != null)
+		{
+			student = studentCS;
+		}
+
+		return student;
+	}
+
 }

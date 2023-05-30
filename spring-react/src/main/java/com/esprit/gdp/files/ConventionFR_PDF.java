@@ -323,7 +323,7 @@ public class ConventionFR_PDF
         PdfPCell cell_622 = new PdfPCell(new Phrase("3 ans d’études en cycle d'ingénieur", attributeStyle));
         
         PdfPCell cell_631 = new PdfPCell(new Phrase("Niveau de la préparation atteint :", attributeStyle));
-        PdfPCell cell_632 = new PdfPCell(new Phrase("5ème année " + studentDepartment, attributeStyle));
+        PdfPCell cell_632 = new PdfPCell(new Phrase("3ème année " + studentDepartment, attributeStyle));
         
         PdfPCell cell_641 = new PdfPCell(new Phrase("Diplôme préparé ou qualification visée :", attributeStyle));
         PdfPCell cell_642 = new PdfPCell(new Phrase("Diplôme National d’Ingénieur en " + studentDepartment, attributeStyle));

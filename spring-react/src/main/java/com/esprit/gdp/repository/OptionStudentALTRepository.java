@@ -20,7 +20,11 @@ public interface OptionStudentALTRepository extends JpaRepository<OptionStudentA
 	
 	@Query("Select o.idOptStuALT.idEt from OptionStudentALT o where o.idOptStuALT.anneeDeb =?1 and lower(o.codeOption) =?2")
 	List<String> findIdStudentsALTByYearAndOption(String year, String codeOption);
-	
+
+	@Query("Select o.idOptStuALT.idEt from OptionStudentALT o where "
+			+ "o.idOptStuALT.anneeDeb =?1 and lower(o.codeOption) like '%sae%'")
+	List<String> findIdStudentsSAEALTByYearAndOption(String year);
+
 	@Query("Select o.codeOption from OptionStudentALT o where o.idOptStuALT.anneeDeb =?1 and o.idOptStuALT.idEt =?2")//
 	String findOptionByYearAndStudentALT(String year, String idEt);
 	

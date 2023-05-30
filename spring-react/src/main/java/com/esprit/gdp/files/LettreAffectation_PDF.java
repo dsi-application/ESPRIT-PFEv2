@@ -98,7 +98,7 @@ public class LettreAffectation_PDF
         
         Paragraph cptt11 = new Paragraph("");
         cptt11.add(new Phrase("Inscrit(e) en : ", attributeStyle));
-        cptt11.add(new Phrase("5ème Année ", subTitleStyleGray));
+        cptt11.add(new Phrase("3ème Année ", subTitleStyleGray));
         cptt11.add(new Phrase(departementLabel, subTitleStyleGray));
         cptt11.setAlignment(Element.ALIGN_CENTER);
         addEmptyLine(cptt11, 1);

@@ -1,27 +1,20 @@
-import CIcon from "@coreui/icons-react";
 import {
-  CAlert,
   CBadge,
   CButton,
   CCard,
   CCardBody,
-  CCol,
+  CCol, CForm, CFormGroup,
   CModal,
   CModalBody,
   CModalFooter,
   CModalHeader,
   CModalTitle,
-  CRow,
-  CSpinner,
-  CTooltip,
-  CForm,
-CFormGroup,
-CLabel,
-CTextarea
+  CRow, CSelect,
+  CSpinner
 } from "@coreui/react";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
 import GetApp from "@material-ui/icons/GetApp";
 import Search from "@material-ui/icons/Search";
 import IconButton from "@material-ui/core/IconButton";
@@ -29,44 +22,40 @@ import Tooltip from "@material-ui/core/Tooltip";
 import MUIDataTable from "mui-datatables";
 import "moment/locale/fr";
 import {
-  selectFichebydepVal,fetchFichebydepVal,
-  updateFichebydep,
-} from "../../../redux/slices/ConventionSlice";
-import {
   getEtudiant,
   selectetudiant,
 } from "../../../redux/slices/FichePFESlice";
-import { etat } from "../../Monotoring/StudentSupervision";
-import { queryApi } from "../../../utils/queryApi";
-import { useFormik } from "formik";
+import {queryApi} from "../../../utils/queryApi";
+import {useFormik} from "formik";
 import Spinner from "react-bootstrap/Spinner";
 
 import TheSidebar from "../../../containers/TheSidebar";
-import { selectStudentsToStat, selectStudentsDoneStat} from "../../../redux/slices/DepotSlice";
+import {selectStudentsToStat, selectStudentsDoneStat} from "../../../redux/slices/DepotSlice";
 
-import { createMuiTheme } from "@material-ui/core";
-import { MuiThemeProvider } from "@material-ui/core";
+import {createMuiTheme, MuiThemeProvider} from "@material-ui/core";
 
-import { 
+import {
   selectNbrUploadedReports,
   selectNbrValidatedReports,
-  selectNbrRefusedReports,
-  fetchUploadedReports,
-  fetchValidatedReports,
-  fetchRefusedReports
+  selectNbrRefusedReports
 } from "../../../redux/slices/DepotSlice";
 
 import * as Yup from "yup";
 import {setErrors} from "../../../redux/slices/ChefCoordConfigSlice";
+import AuthService from "../../services/auth.service";
+
+const currentResponsableServiceStage = AuthService.getCurrentResponsableServiceStage();
+const API_URL_RSS = process.env.REACT_APP_API_URL_RSS;
+
 const validationSchema = Yup.object().shape({
-  observation: Yup.string()
-    .max(100, "Ne pas dépasser 100 caractères  !")
-    .required("* Champs obligatoire !"),
+  yearLabel: Yup.string().required("* Année est un Champ obligatoire !."),
 });
+
 const ValidatedReports = () => {
   const dispatch = useDispatch();
   const Etu = useSelector(selectetudiant);
-  const [Fiches, err] = useSelector(selectFichebydepVal);
+  const [selectedYear, setSelectedYear] = useState(false);
+  const [validatedDepots, setValidatedDepots] = useState([]);
   const [responsive, setResponsive] = useState("vertical");
   const [tableBodyHeight, setTableBodyHeight] = useState("10");
   const [tableBodyMaxHeight, setTableBodyMaxHeight] = useState("");
@@ -74,26 +63,25 @@ const ValidatedReports = () => {
   const [danger, setDanger] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState({ visible: false, message: "" });
+  const [error, setError] = useState({visible: false, message: ""});
   const [date, setdate] = useState("");
   const [id, setid] = useState("");
   const [confirmNotif, setConfirmNotif] = useState(false);
   const [successNotif, setSuccessNotif] = useState(false);
   const [loadSpinnerNotif, setLoadSpinnerNotif] = useState(false);
-  // console.log("Fiches", Fiches);
-  const Fichebydepstatus = useSelector(
+  // console.log("validatedDepots", validatedDepots);
+  /*const Fichebydepstatus = useSelector(
     (state) => state.persistedReducer.conventions.Fichebydepstatus
-  );
+  );*/
   const [studentsToStat, errsts] = useSelector(selectStudentsToStat);
   const [studentsDoneStat, errsds] = useSelector(selectStudentsDoneStat);
 
   const [nbUploadedReports, errnur] = useSelector(selectNbrUploadedReports);
   const [nbValidatedReports, errnvr] = useSelector(selectNbrValidatedReports);
   const [nbIncompletedReports, errnir] = useSelector(selectNbrRefusedReports);
+  const [allOpts, setAllOpts] = useState([]);
 
-  useEffect(() => { dispatch(fetchFichebydepVal()) }, [Fiches]);
-
-const theme = createMuiTheme({
+  const theme = createMuiTheme({
     overrides: {
       MuiTableCell: {
         root: {
@@ -102,6 +90,17 @@ const theme = createMuiTheme({
       },
     },
   });
+
+  useEffect(() => {
+    const response1 = axios
+      .get(API_URL_RSS + `allOptionsForActivatedYears/` + currentResponsableServiceStage.id)
+      .then((res) => {
+        let result = res.data;
+        console.log('--------------> HI-HELLO: ', res.data);
+        setAllOpts(result);
+      })
+  }, [])
+
   const etatDepot = (e) => {
     if (e === "DEPOSE") {
       return (
@@ -127,65 +126,7 @@ const theme = createMuiTheme({
       return <p>Cet étudiant n'a pas encore déposé son rapport</p>;
     }
   };
-  const renderbtn = (e) => {
-    if (e.etatDepot === "DEPOSE") {
-      return (
-        <CRow>
-          <CCol xs="12" sm="4" md="6">
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
 
-              <CButton
-                variant="outline"
-                color="success"
-                size="sm"
-                className="float-left;"
-                onClick={() => handleValideModal(e.idEt, e.dateFiche)}
-              >
-
-              <CTooltip content="Valider Dépôt" placement="top">
-                              <CIcon name="cil-check"/>
-                            </CTooltip>
-
-
-              </CButton>
-            </div>
-          </CCol>
-          <CCol xs="12" sm="4" md="6">
-            
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <CButton
-                variant="outline"
-                color="danger"
-                size="sm"
-                className="float-left;"
-                onClick={() => handleRefuseModal(e.idEt, e.dateFiche)}
-              >
-                <CTooltip content="Dépôt non complet" placement="top">
-                              <CIcon name="cil-x"/>
-                            </CTooltip>
-              </CButton>
-            </div>
-          </CCol>
-        </CRow>
-      );
-    } else {
-      return (
-       <></>
-      );
-    }
-  };
   const columns = [
     {
       name: "idEt",
@@ -196,96 +137,79 @@ const theme = createMuiTheme({
       },
     },
     {
-      name: "nomet",
-      label: "Nom",
+      name: "fullName",
+      label: "Nom & Prénom",
       options: {
         filter: true,
         sort: true,
       },
     },
     {
-      name: "prenomet",
-      label: "Prénom",
+      name: "classeEt",
+      label: "Classe",
       options: {
         filter: true,
         sort: true,
       },
     },
-    {
-      name: "etatDepot",
-      label: "État du dépôt",
-      options: {
-        filter: true,
-        sort: true,
-        customBodyRender: (e) => {
-          return etatDepot(e);
-        },
-      },
-    },
-
     {
       name: "",
-      label: "",
+      label: "Rapport | Plagiat | Attestation Stage",
       options: {
         filter: true,
         sort: true,
+        // align: "left",
+        // setCellProps: () => ({ style: { justifyContent: 'left' }}),
+        // setCellProps: () => ({ style: { minWidth: "200px", maxWidth: "200px" }}),
         customBodyRenderLite: (dataIndex) => {
-          // console.log(Fiches[dataIndex].pathRapport);
+          // console.log(validatedDepots[dataIndex].pathRapport);
           return (
-            <>
-              {Fiches[dataIndex].etatDepot ? (
-                <>
-                 <CRow>
-                   <CCol>
-                     <Tooltip title=" Télécharger Rapport">
-                       <IconButton
-                           onClick={() => {
-                             Download(Fiches[dataIndex].pathRapport);
-                           }}
-                       >
-                         <GetApp style={{ color: "#DB4437" }} />
-                       </IconButton>
-                     </Tooltip>
-                     &nbsp;
-                     <Tooltip title=" Télécharger Plagiat">
-                       <IconButton
-                           onClick={() => {
-                             Download(Fiches[dataIndex].pathPlagiat);
-                           }}
-                       >
-                         <GetApp style={{ color: "#DB4437" }} />
-                       </IconButton>
-                     </Tooltip>
-                     &nbsp;
-                     <Tooltip title=" Télécharger Attestation Stage">
-                       <IconButton
-                           onClick={() => {
-                             Download(Fiches[dataIndex].pathAttestationStage);
-                           }}
-                       >
-                         <GetApp style={{ color: "#DB4437" }} />
-                       </IconButton>
-                     </Tooltip>
-                     &nbsp;
-                     {(
-                         Fiches[dataIndex].pathDossierTechnique !== null &&
-                         <Tooltip title=" Télécharger Dossier Technique">
-                           <IconButton
-                               onClick={() => {
-                                 Download(Fiches[dataIndex].pathDossierTechnique);
-                               }}
-                           >
-                             <GetApp style={{ color: "#DB4437" }} />
-                           </IconButton>
-                         </Tooltip>
-                     )}
-                   </CCol>
-                 </CRow>
-                </>
-              ) : (
-                <> </>
-              )}
-            </>
+            <CRow>
+              <CCol>
+                <Tooltip title=" Télécharger Rapport">
+                  <IconButton
+                    onClick={() => {
+                      Download(validatedDepots[dataIndex].pathRapport);
+                    }}
+                  >
+                    <GetApp style={{color: "#DB4437"}}/>
+                  </IconButton>
+                </Tooltip>
+                &nbsp;
+                <Tooltip title=" Télécharger Plagiat">
+                  <IconButton
+                    onClick={() => {
+                      Download(validatedDepots[dataIndex].pathPlagiat);
+                    }}
+                  >
+                    <GetApp style={{color: "#DB4437"}}/>
+                  </IconButton>
+                </Tooltip>
+                &nbsp;
+                <Tooltip title=" Télécharger Attestation Stage">
+                  <IconButton
+                    onClick={() => {
+                      Download(validatedDepots[dataIndex].pathAttestationStage);
+                    }}
+                  >
+                    <GetApp style={{color: "#DB4437"}}/>
+                  </IconButton>
+                </Tooltip>
+                &nbsp;
+                {(
+                  validatedDepots[dataIndex].pathDossierTechnique !== null &&
+                  <Tooltip title=" Télécharger Dossier Technique">
+                    <IconButton
+                      onClick={() => {
+                        Download(validatedDepots[dataIndex].pathDossierTechnique);
+                      }}
+                    >
+                      <GetApp style={{color: "#DB4437"}}/>
+                    </IconButton>
+                  </Tooltip>
+                )}
+              </CCol>
+            </CRow>
           );
         },
       },
@@ -299,22 +223,24 @@ const theme = createMuiTheme({
         sort: true,
         customBodyRenderLite: (dataIndex) => {
           return (
-              <center>
-                  <div className="float-center">
-                      {
-                          Fiches[dataIndex].etatGrilleEncadrement === "DONE" &&
-                          <Tooltip title="Télécharger Grille Evaluation">
-                            <span className="downloadGreenIconSmall" onClick={() => {downloadGrilleAE(Fiches[dataIndex].idEt)}}/>
-                          </Tooltip>
-                      }
-                      {
-                          Fiches[dataIndex].etatGrilleEncadrement === "NOTYET" &&
-                          <Tooltip title="Notifier Encadrant Académique">
-                            <span className="bellRedIconSmall" onClick={() => {askForNotif(Fiches[dataIndex].idEt)}}/>
-                          </Tooltip>
-                      }
-                  </div>
-              </center>
+            <>
+              {
+                validatedDepots[dataIndex].etatGrilleEncadrement === "DONE" &&
+                <Tooltip title="Télécharger Grille Evaluation">
+                  <span className="downloadGreenIconSmall" onClick={() => {
+                    downloadGrilleAE(validatedDepots[dataIndex].idEt)
+                  }}/>
+                </Tooltip>
+              }
+              {
+                validatedDepots[dataIndex].etatGrilleEncadrement === "NOTYET" &&
+                <Tooltip title="Notifier Encadrant Académique">
+                  <span className="bellRedIconSmall" onClick={() => {
+                    askForNotif(validatedDepots[dataIndex].idEt)
+                  }}/>
+                </Tooltip>
+              }
+            </>
           );
         },
       },
@@ -330,9 +256,9 @@ const theme = createMuiTheme({
             <div className="float-center">
               <Tooltip title="Voir Détails Étudiant">
                 <IconButton
-                  onClick={() => onClickEtudiant(Fiches[dataIndex].idEt)}
+                  onClick={() => onClickEtudiant(validatedDepots[dataIndex].idEt)}
                 >
-                  <Search style={{ color: "#000000" }} />
+                  <Search style={{color: "#000000"}}/>
                 </IconButton>
               </Tooltip>
             </div>
@@ -403,38 +329,6 @@ const theme = createMuiTheme({
     setid(id);
     setDanger(true);
   };
- const formik = useFormik({
-    initialValues: {
-      observation: "",
-    },
-    validationSchema: validationSchema,
-    onSubmit: async (values) => {
-      setShowLoader(true);
-      const [res, err] = await queryApi(
-        "serviceStage/updateDepotToREFUSE?idET=" +
-          id +
-          "&dateFiche=" +
-          date +
-          "&observation=" +
-          values.observation,
-        {},
-        "PUT",
-        false
-      );
-      // console.log("resupdate", res);
-      if (err) {
-        setShowLoader(false);
-        setError({
-          visible: true,
-          message: JSON.stringify(err.errors, null, 2),
-        });
-      } else {
-        dispatch(updateFichebydep(res));
-           window.location.reload();
-        //setDanger(false);
-      }
-    },
-  });
 
   const Download = (p) => {
 
@@ -444,40 +338,39 @@ const theme = createMuiTheme({
 
     // console.log('-----------AZERTY-------> LOL 1: ' + p);
 
-      let encodedURL = encodeURIComponent(encodeURIComponent(p));
-      axios.get(`${process.env.REACT_APP_API_URL_STU}` + "downloadMyPDF/" + encodedURL, { responseType: "blob" })
-          .then((response) => {
+    let encodedURL = encodeURIComponent(encodeURIComponent(p));
+    axios.get(`${process.env.REACT_APP_API_URL_STU}` + "downloadMyPDF/" + encodedURL, {responseType: "blob"})
+      .then((response) => {
 
-      const file = new Blob([response.data], { type: "application/pdf" });
-      let url = window.URL.createObjectURL(file);
+        const file = new Blob([response.data], {type: "application/pdf"});
+        let url = window.URL.createObjectURL(file);
 
-      // let a = document.createElement("a");
-      // a.href = url;
-      // a.download = p.substring(p.lastIndexOf("/") + 1);
-      if(p.includes('.pdf'))
-      {
-        window.open(url);
-      }
-      // a.click();
-    });
+        // let a = document.createElement("a");
+        // a.href = url;
+        // a.download = p.substring(p.lastIndexOf("/") + 1);
+        if (p.includes('.pdf')) {
+          window.open(url);
+        }
+        // a.click();
+      });
   };
 
   const downloadGrilleAE = (p) => {
     console.log('------------AZERTY------> LOL 0: ' + p);
-    axios.get(`${process.env.REACT_APP_API_URL_AE}` + "downloadGrilleAE/" + p, { responseType: "blob" })
-        .then((response) => {
-          const file = new Blob([response.data], {type: 'application/pdf'});
-          const fileURL = URL.createObjectURL(file);
+    axios.get(`${process.env.REACT_APP_API_URL_AE}` + "downloadGrilleAE/" + p + "/" + selectedYear, {responseType: "blob"})
+      .then((response) => {
+        const file = new Blob([response.data], {type: 'application/pdf'});
+        const fileURL = URL.createObjectURL(file);
 
-          const contentDispo = response.headers['content-disposition'];
-          const fileName = contentDispo.substring(21);
+        const contentDispo = response.headers['content-disposition'];
+        const fileName = contentDispo.substring(21);
 
-          let a = document.createElement('a');
-          a.href = fileURL;
-          a.download = fileName;
-          a.click();
-          window.open(fileURL);
-        });
+        let a = document.createElement('a');
+        a.href = fileURL;
+        a.download = fileName;
+        a.click();
+        window.open(fileURL);
+      });
   };
 
   const askForNotif = (p) => {
@@ -490,8 +383,8 @@ const theme = createMuiTheme({
     console.log('----------HIHIHI---------> 20.11 1: ', studentId);
     setLoadSpinnerNotif(!loadSpinnerNotif);
     const [err] = await queryApi(
-        "academicEncadrant/notifyAEToFillGrille/" + studentId,
-        "GET"
+      "academicEncadrant/notifyAEToFillGrille/" + studentId,
+      "GET"
     );
     if (err) {
       // console.log('-------------------> 20.11 2');
@@ -504,219 +397,216 @@ const theme = createMuiTheme({
     }
   };
 
+  const formik = useFormik({
+    initialValues: {
+      yearLabel: "",
+      allYears: ["2022", "2021"]
+    }, validationSchema: validationSchema, onSubmit: async (values) => {
+
+      // console.log('------------------> yearLabel: ' + values.yearLabel);
+
+      setSelectedYear(values.yearLabel)
+      setValidatedDepots([]);
+
+      setShowLoader(true);
+      // console.log('-----------------1-> 0908 id RSS: ' + currentResponsableServiceStage.id);idRSS,yearLabel
+
+      const [res, err] = await queryApi("respServStg/loadValidatedDepots?idRSS=" + currentResponsableServiceStage.id +
+        "&yearLabel=" + values.yearLabel +
+        "&optionLabel=" + values.optionLabel,
+        {},
+        "GET",
+        false
+      );
+
+      console.log("****dddd***** sars0508 1", res);
+      setValidatedDepots([]);
+      setValidatedDepots(res);
+
+      if (err) {
+        setShowLoader(false);
+        // console.log('-----------------1-> 0306')
+        setError({
+          visible: true, message: JSON.stringify(err.errors, null, 2),
+        });
+      } else {
+        // console.log('-----------------2-> 0508')
+        console.log("****dddd***** sars0508 2", res);
+        /*dispatch(updateFichebydep(res));
+        dispatch(deleteElem(res));
+        dispatch(fetchUploadedReports());
+        dispatch(fetchValidatedReports());
+        dispatch(fetchRefusedReports());
+        dispatch(fetchStudentToSTNStat());*/
+        setDanger(false);
+        setShowLoader(false);
+      }
+    },
+  });
+
   return (
     <>
 
-      <TheSidebar data1={studentsToStat} data2={studentsDoneStat} 
-      dataUR={nbUploadedReports} dataVR={nbValidatedReports} dataIR={nbIncompletedReports}/>
+      <TheSidebar data1={studentsToStat} data2={studentsDoneStat}
+                  dataUR={nbUploadedReports} dataVR={nbValidatedReports} dataIR={nbIncompletedReports}/>
 
-      {Fichebydepstatus === "loading" || Fichebydepstatus === "noData" ? (
-        <>
-          <div style={{ textAlign: "center" }}>
-            <br/><br/>
-            <CSpinner color="danger" grow size="lg" />
+      <CRow>
+        <CCol>
+          <CCard>
+            <CRow>
+              <CCol md="3"/>
+              <CCol md="6">
+                <CForm onSubmit={formik.handleSubmit}>
+                  <CFormGroup>
+                    {error.visible && <p>{error.message}</p>}
+                  </CFormGroup>
+                  <center>
+                    <span className="greyLabel_Dark_Cr_12">Merci de choisir une Promotion et une Option</span>
+                  </center>
+                  <br/>
+                  <CFormGroup row>
+                    <CCol md="1"/>
+                    <CCol md="10">
+                      <CSelect value={formik.values.yearLabel}
+                               onChange={formik.handleChange}
+                        //onSelect={gotAllOptionsByPromotion(formik.values.yearLabel)}
+                               onBlur={formik.handleBlur}
+                               custom
+                               size="sm"
+                               name="yearLabel">
+                        <option style={{display: "none"}}>
+                          ---- Choisir une Promotion ----
+                        </option>
+                        {formik.values.allYears?.map((e, i) => (<option value={e} key={i}>
+                          {e}
+                        </option>))}
+                      </CSelect>
+                      {formik.errors.yearLabel && formik.touched.yearLabel &&
+                        <p style={{color: "red"}}>{formik.errors.yearLabel}</p>}
+                      <br/>
+                    </CCol>
+                    <CCol md="1"/>
+                  </CFormGroup>
+                  <CFormGroup row>
+                    <CCol md="1"/>
+                    <CCol md="10">
+                      <CSelect value={formik.values.optionLabel}
+                               onChange={formik.handleChange}
+                               onBlur={formik.handleBlur}
+                               custom
+                               size="sm"
+                               name="optionLabel">
+                        <option style={{display: "none"}}>
+                          ---- Choisir une Option ----
+                        </option>
+                        {allOpts?.map((e, i) => (
+                          <option value={e} key={i}>
+                            {e}
+                          </option>
+                        ))}
+                      </CSelect>
+                      {
+                        formik.errors.optionLabel && formik.touched.optionLabel &&
+                        <p style={{color: "red"}}>{formik.errors.optionLabel}</p>
+                      }
+                      <br/>
+                    </CCol>
+                    <CCol md="1"/>
+                    <br/><br/>
+                  </CFormGroup>
+                  <center>
+                    <CButton color="danger" type="submit">
+                      {showLoader && <CSpinner grow size="sm"/>} &nbsp; Confirmer
+                    </CButton>
+                  </center>
+                </CForm>
+              </CCol>
+              <CCol md="3"/>
+            </CRow>
 
-            <br/><br/>
-            <b>Veuillez patienter le chargement des données ...</b>
-          </div>
-          <br></br>
-        </>
-      ) : (
-        <>
-          <CRow>
-            <CCol>
-              <CCard>
-                <CRow>
-                  <CCol xs="12">
-                    <br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <span style={{color: "#b30000", fontSize: "14px", fontWeight: "bold"}}>Liste des Rapports Validés</span>
-                  </CCol>
-                </CRow>
-                <br/>
-                <CCardBody>
-                  {Fiches ? (
-                      <MuiThemeProvider theme={theme}>
-                    <MUIDataTable
-                      title={""}
-                      data={Fiches}
-                      columns={columns}
-                      options={options}
-                    /></MuiThemeProvider>
-                  ) : (
-                      <center>
-                        <br/><br/><br/><br/><br/>
-                        <span className="waitIcon"/>
-                        <br/><br/><br/><br/><br/>
-                      </center>
-                  )}
-                </CCardBody>
-              </CCard>
-            </CCol>
-          </CRow>
-        </>
-      )}
+            <CCardBody>
+              {validatedDepots.length === 0 ? (
+                <center>
+                  <hr/>
+                  <br/><br/>
+                  <span className="greyLabel_Dark_Cr_13">Sorry, no Data is available.</span>
+                  <br/><br/><br/><br/>
+                </center>
+              ) : (
+                <MUIDataTable
+                  data={validatedDepots}
+                  columns={columns}
+                  options={{
+                    selectableRows: 'none' // <===== will turn off checkboxes in rows
+                  }}
+                />
+              )}
+            </CCardBody>
+          </CCard>
+        </CCol>
+      </CRow>
 
-      <CModal size="lg" show={info} onClose={() => setInfo(!info)} color="dark">
+      <CModal size="md" show={info} onClose={() => setInfo(!info)} color="dark">
         <CModalHeader closeButton>
           <CModalTitle>
-            <span style={{fontSize:"14px"}}>
-            Détails Étudiant
+            <span style={{fontSize: "14px"}}>
+            Détails Étudiant(e)
             </span>
           </CModalTitle>
         </CModalHeader>
         <CModalBody>
           <CCol xs="12" sm="12" md="12">
             <CRow>
-              <CCol md="3">
+              <CCol md="5">
                 <b> Identifiant : </b>
               </CCol>
-              <CCol md="9">
+              <CCol md="7">
                 {Etu.idEt}
               </CCol>
             </CRow>
 
             <CRow>
-              <CCol md="3">
+              <CCol md="5">
                 <b> Nom & Prénom : </b>
               </CCol>
-              <CCol md="9">
+              <CCol md="7">
                 {Etu.nomet} &nbsp; {Etu.prenomet}
               </CCol>
             </CRow>
 
             <CRow>
-              <CCol md="3">
+              <CCol md="5">
                 <b> Numéro Téléphone : </b>
               </CCol>
-              <CCol md="9">
+              <CCol md="7">
                 {Etu.telet}
               </CCol>
             </CRow>
 
             <CRow>
-              <CCol md="3">
+              <CCol md="5">
                 <b> E-Mail : </b>
               </CCol>
-              <CCol md="9">
+              <CCol md="7">
                 {Etu.adressemailesp}
-              </CCol>
-            </CRow>
-
-            <CRow>
-              <CCol md="3">
-                <b> Classe Courante : </b>
-              </CCol>
-              <CCol md="9">
-                {Etu.classe}
               </CCol>
             </CRow>
           </CCol>
         </CModalBody>
         <CModalFooter>
-          <CButton color="secondary" onClick={() => {setInfo(!info); setLoadSpinnerNotif(loadSpinnerNotif)}}>
+          <CButton color="secondary" onClick={() => {
+            setInfo(!info);
+            setLoadSpinnerNotif(loadSpinnerNotif)
+          }}>
             EXIT
           </CButton>
         </CModalFooter>
       </CModal>
-      <CModal
-          show={danger}
-          onClose={() => setDanger(!danger)}
-          color="danger"
-      >
-        <CModalHeader closeButton>
-          <CModalTitle>
-            Dépôt Incomplet
-          </CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <CForm onSubmit={formik.handleSubmit}>
-            <CFormGroup>
-              
-              {error.visible && <p>{error.message}</p>}
-            </CFormGroup>
-            <CFormGroup row>
-              <CCol md="3">
-                <CLabel htmlFor="selectSm">
-                  <b>Motif de dépot Incomplet : </b>
-                </CLabel>
-              </CCol>
-              <CCol xs="12" md="9">
-                <CTextarea
-                    value={formik.values.observation}
-                    onChange={formik.handleChange}
-                    name="observation"
-                    rows="3"
-                    cols="70"
-                    placeholder="Saisir votre motif ..."
-                />
-                {formik.errors.observation &&
-                formik.touched.observation && (
-                    <p style={{ color: "red" }}>
-                      {formik.errors.observation}
-                    </p>
-                )}
-
-                <br />
-              </CCol>
-            </CFormGroup>
-            {showLoader && (
-                <CAlert color="danger">
-                  Attendre un petit peu ... Nous allons notifer cet
-                  étudiant par email ....
-                </CAlert>
-            )}
-            <CButton
-                className="float-right"
-                color="secondary"
-                onClick={() => setDanger(!danger)}
-            >
-              Annuler
-            </CButton>
-            <CButton
-                className="float-right"
-                color="danger"
-                type="submit"
-            >
-              {showLoader && <CSpinner grow size="sm" />} OUI
-            </CButton>
-          </CForm>
-        </CModalBody>
-
-
-      </CModal>
-      <CModal
-          show={success}
-          onClose={() => setSuccess(!success)}
-          color="success"
-      >
-        <CModalHeader closeButton>
-          <CModalTitle>
-            Confirmation de validation de l'étudiant
-          </CModalTitle>
-        </CModalHeader>
-        <CModalBody>Voulez vous valider le dépot ?</CModalBody>
-        <CModalFooter>
-
-          {showLoader && (
-              <CAlert color="danger">
-                Attendre un petit peu ... Nous allons notifer cet
-                étudiant par email ....
-              </CAlert>
-          )}
-          <CButton
-              color="secondary"
-              onClick={() => setSuccess(!success)}
-          >
-            Annuler
-          </CButton>
-        </CModalFooter>
-      </CModal>
 
       <CModal
-          show={confirmNotif}
-          onClose={() => setConfirmNotif(!confirmNotif)}
-          color="danger"
+        show={confirmNotif}
+        onClose={() => setConfirmNotif(!confirmNotif)}
+        color="danger"
       >
         <CModalHeader closeButton>
           <CModalTitle>
@@ -739,16 +629,16 @@ const theme = createMuiTheme({
             <CCol md="12">
               <div className="float-right">
                 {loadSpinnerNotif === true ? (
-                    <>
-                      <Spinner animation="grow" variant="danger"/>
-                    </>
+                  <>
+                    <Spinner animation="grow" variant="danger"/>
+                  </>
                 ) : (
-                    <>
-                      <CButton color="danger"
-                               onClick={() => notifyAEToFillGrille()}>
-                        YES, I Confirm
-                      </CButton>
-                    </>
+                  <>
+                    <CButton color="danger"
+                             onClick={() => notifyAEToFillGrille()}>
+                      YES, I Confirm
+                    </CButton>
+                  </>
                 )}
 
                 &nbsp;&nbsp;
@@ -763,9 +653,9 @@ const theme = createMuiTheme({
       </CModal>
 
       <CModal
-          show={successNotif}
-          onClose={() => setSuccessNotif(!successNotif)}
-          color="success"
+        show={successNotif}
+        onClose={() => setSuccessNotif(!successNotif)}
+        color="success"
       >
         <CModalHeader closeButton>
           <CModalTitle>

@@ -14,31 +14,17 @@ import java.util.Optional;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 
+import com.esprit.gdp.dto.*;
+import com.esprit.gdp.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.esprit.gdp.dto.ConventionForRSSDto;
-import com.esprit.gdp.dto.ConventionsValidatedForRSSDto;
-import com.esprit.gdp.dto.DepotRapport;
-import com.esprit.gdp.dto.StudentForSoutenance;
-import com.esprit.gdp.dto.StudentIdNomPrenomDto;
-import com.esprit.gdp.dto.StudentPFEDepasse;
 import com.esprit.gdp.models.Avenant;
 import com.esprit.gdp.models.Convention;
 import com.esprit.gdp.models.EntrepriseAccueil;
 import com.esprit.gdp.models.FichePFE;
 import com.esprit.gdp.models.StudentCJ;
 import com.esprit.gdp.models.Teacher;
-import com.esprit.gdp.repository.AvenantRepository;
-import com.esprit.gdp.repository.CodeNomenclatureRepository;
-import com.esprit.gdp.repository.ConventionRepository;
-import com.esprit.gdp.repository.EntrepriseAccueilRepository;
-import com.esprit.gdp.repository.FichePFERepository;
-import com.esprit.gdp.repository.OptionRepository;
-import com.esprit.gdp.repository.SettingsRepository;
-import com.esprit.gdp.repository.StudentCSRepository;
-import com.esprit.gdp.repository.StudentRepository;
-import com.esprit.gdp.repository.TeacherRepository;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfReader;
@@ -80,6 +66,9 @@ public class ServiceStageService {
 	@Autowired
 	OptionRepository optionRepository;
 
+	@Autowired
+	OptionStudentALTRepository optionStudentALTRepository;
+
 	public List<Convention> getConventions(String id) {
 		List<Convention> listConvention = conventionRepository.getConventionsByServiceStage(id);
 		return listConvention;
@@ -108,7 +97,7 @@ public class ServiceStageService {
 			}
 
 			c.setNomEt(utilServices.findStudentFullNameById(idEt));
-			c.setDepartEt(utilServices.findDepartmentAbbByClassWithStat(classe));
+			// c.setDepartEt(utilServices.findDepartmentAbbByClassWithStat(classe));
 		}
 
 		return listConventions;
@@ -144,9 +133,56 @@ public class ServiceStageService {
 			}
 
 			c.setNomEt(utilServices.findStudentFullNameById(idEt));
-			c.setDepartEt(utilServices.findDepartmentAbbByClassWithStat(classe));
+			// c.setDepartEt(utilServices.findDepartmentAbbByClassWithStat(classe));
 		}
 
+		return listConventions;
+	}
+
+	// Got All Conv Validated By RSS DTO - By Option
+	public List<ConventionsValidatedForRSSDto> getAllConventionsValidatedDtoByStudentsForRSS(String idRSS, List<String> students)
+	{
+
+		String kindRSS = idRSS.replace("SR-STG-", "");
+		// System.out.println("----- 34 -------####################-------- VALIDATED ------> idRSS: " + idRSS + " - " + kindRSS);
+
+		List<ConventionsValidatedForRSSDto> listConventions = null;
+		//if(idRSS.contains("IT"))
+		//{
+		listConventions = conventionRepository.getAllConventionsValidatedDtoByStudentsForRSS(students);
+		// System.out.println("-----####################-----> IT: " + listConventions.size());
+		//}
+		/*if (idRSS.contains("EM") || idRSS.contains("GC"))
+		{
+			listConventions = conventionRepository.getAllConventionsValidatedDtoByStudentsForSpeceficRSS(kindRSS, students);
+			// System.out.println("-----####################-----> EM-GC: " + listConventions.size());
+		}*/
+
+		for(ConventionsValidatedForRSSDto c : listConventions)
+		{
+			// System.out.println("--------------------------> DATE: " + c.getDateConvention());
+			String idEt = c.getIdEt();
+			String classe = utilServices.findCurrentClassByIdEt(idEt);
+
+			/*String convCodePays = c.getPaysConvention();
+			if(convCodePays.equalsIgnoreCase("--"))
+			{
+				c.setPaysConvention("EN");
+			}
+			else
+			{
+				c.setPaysConvention(convCodePays);
+			}*/
+//
+//		    System.out.println("--------------------------> findStudentFullNameById: " + utilServices.findStudentFullNameById(idEt));
+//			System.out.println("--------------------------> findDepartmentAbbByClassWithStat: " + utilServices.findDepartmentAbbByClassWithStat(classe));
+
+			c.setNomEt(utilServices.findStudentFullNameById(idEt));
+			// c.setDepartEt(utilServices.findDepartmentAbbByClassWithStat(classe));
+			c.setCurrentClasse(classe);
+		}
+
+		// ess.sort(Comparator.comparing(EncadrementStatusExcelDto::getStudentClasse).thenComparing(EncadrementStatusExcelDto::getStudentFullName));
 		return listConventions;
 	}
 
@@ -186,10 +222,57 @@ public class ServiceStageService {
 			// utilServices.findDepartmentAbbByClassWithStat(classe));
 
 			c.setNomEt(utilServices.findStudentFullNameById(idEt));
-			c.setDepartEt(utilServices.findDepartmentAbbByClassWithStat(classe));
+			// c.setDepartEt(utilServices.findDepartmentAbbByClassWithStat(classe));
 
 		}
 
+		return listConventions;
+	}
+
+	// Got All Conv Validated By RSS DTO - By Option
+	public List<ConventionForRSSDto> getAllConventionsDtoByStudentsForRSS(String yearLabel, String idRSS, List<String> students)
+	{
+
+		String kindRSS = idRSS.replace("SR-STG-", "");
+		// System.out.println("----- 34 -------####################-------- VALIDATED ------> idRSS: " + idRSS + " - " + kindRSS);
+
+		List<ConventionForRSSDto> listConventions = conventionRepository.getAllConventionsDtoByStudentsForRSS(students);
+		// System.out.println("-----####################-----> IT: " + listConventions.size());
+
+		for(ConventionForRSSDto c : listConventions)
+		{
+			// System.out.println("--------------------------> DATE: " + c.getDateConvention());
+			String idEt = c.getIdEt();
+			String classe = utilServices.findCurrentClassByIdEt(idEt);
+
+			/*String convCodePays = c.getPaysConvention();
+			if(convCodePays.equalsIgnoreCase("--"))
+			{
+				c.setPaysConvention("EN");
+			}
+			else
+			{
+				c.setPaysConvention(convCodePays);
+			}*/
+//
+//		    System.out.println("--------------------------> findStudentFullNameById: " + utilServices.findStudentFullNameById(idEt));
+//			System.out.println("--------------------------> findDepartmentAbbByClassWithStat: " + utilServices.findDepartmentAbbByClassWithStat(classe));
+
+			if(!classe.contains("4ALINFO"))
+			{
+				c.setOptionEt(utilServices.findOptionByClass(classe, optionRepository.listOptionsByYear(yearLabel)).replace("_01", ""));
+			}
+			if(classe.contains("4ALINFO"))
+			{
+				c.setOptionEt(optionStudentALTRepository.findOptionByStudentALTAndYear(idEt, yearLabel));
+			}
+
+			c.setNomEt(utilServices.findStudentFullNameById(idEt));
+			// c.setDepartEt(utilServices.findDepartmentAbbByClassWithStat(classe));
+			c.setCurrentClasse(classe);
+		}
+
+		// ess.sort(Comparator.comparing(EncadrementStatusExcelDto::getStudentClasse).thenComparing(EncadrementStatusExcelDto::getStudentFullName));
 		return listConventions;
 	}
 
@@ -197,6 +280,50 @@ public class ServiceStageService {
 	public List<Convention> getAllDemandesAnnulationConvention() {
 		List<Convention> listConvention = conventionRepository.getAllDemandesAnnulationConvention();
 		return listConvention;
+	}
+
+	// Got All Avenants DTO
+	public List<AvenantForRSSDto> findAllAvenantDTOByYear(String idRSS, String year)
+	{
+
+		List<AvenantForRSSDto> allAvenants = new ArrayList<AvenantForRSSDto>();
+		System.out.println("---------------------------------------------------> Data: " + idRSS + " - " + year);
+
+		List<AvenantForRSSDto> allAvenantsCJ = avenantRepository.findAllAvenantsCJByYear(idRSS, year);
+		List<AvenantForRSSDto> allAvenantsALT = avenantRepository.findAllAvenantsALTByYear(idRSS, year);
+		List<AvenantForRSSDto> allAvenantsCS = avenantRepository.findAllAvenantsCSByYear(idRSS, year);
+
+		System.out.println("----------------------------------> Student CJ: " + allAvenantsCJ.size());
+		System.out.println("----------------------------------> Student ALT: " + allAvenantsALT.size());
+		System.out.println("----------------------------------> Student CS: " + allAvenantsCS.size());
+
+		if(!allAvenantsCJ.isEmpty())
+		{
+			allAvenants.addAll(allAvenantsCJ);
+		}
+		if(!allAvenantsALT.isEmpty())
+		{
+			allAvenants.addAll(allAvenantsALT);
+		}
+		if(!allAvenantsCS.isEmpty())
+		{
+			allAvenants.addAll(allAvenantsCS);
+		}
+
+		for(AvenantForRSSDto c : allAvenants)
+		{
+			// System.out.println("--------------------------> DATE: " + c.getDateConvention());
+			String idEt = c.getIdEt();
+			String classe = utilServices.findCurrentClassByIdEt(idEt);
+
+			c.setNomEt(utilServices.findStudentFullNameById(idEt));
+
+			List<String> los = optionRepository.listOptionsByYear("2021");
+			c.setDepartEt(utilServices.findOptionByStudent(idEt, los).replaceAll("_01", ""));
+			c.setCurrentClasse(classe);
+		}
+
+		return allAvenants;
 	}
 
 	public List<Avenant> getAvenants(String id) {
@@ -233,9 +360,8 @@ public class ServiceStageService {
 	}
 
 	public Avenant UpdateAvenantState(String idET, String dateConvention, String DateAvenant) {
-
-		if (avenantRepository.getAvenant(idET, dateConvention, DateAvenant) != null) {
-			Avenant existingAvenant = avenantRepository.getAvenant(idET, dateConvention, DateAvenant);
+		if (avenantRepository.getAvenantOFF(idET, dateConvention, DateAvenant) != null) {
+			Avenant existingAvenant = avenantRepository.getAvenantOFF(idET, dateConvention, DateAvenant);
 			existingAvenant.setTraiter(true);
 			return avenantRepository.save(existingAvenant);
 		} else
@@ -278,7 +404,7 @@ public class ServiceStageService {
 			}
 			String classe = utilServices.findCurrentClassByIdEt(idET);
 			c.setNomEt(utilServices.findStudentFullNameById(idET));
-			c.setDepartEt(utilServices.findDepartmentAbbByClassWithStat(classe));
+			// c.setDepartEt(utilServices.findDepartmentAbbByClassWithStat(classe));
 
 			return c;
 		} else
@@ -314,7 +440,7 @@ public class ServiceStageService {
 			}
 			String classe = utilServices.findCurrentClassByIdEt(idET);
 			c.setNomEt(utilServices.findStudentFullNameById(idET));
-			c.setDepartEt(utilServices.findDepartmentAbbByClassWithStat(classe));
+			// c.setDepartEt(utilServices.findDepartmentAbbByClassWithStat(classe));
 
 			return c;
 		} else
@@ -606,13 +732,12 @@ public class ServiceStageService {
 	}
 
 	public String GenerateAvenant(String idET, String dateconvention, String dateAvenant) throws Exception {
-
 		String pattern = "dd-MM-yyyy";
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 		String datenow = simpleDateFormat.format(new Date());
-		if (avenantRepository.getAvenant(idET, dateconvention, dateAvenant) != null) {
-			Optional<Convention> C = conventionRepository.getConventionById(idET, dateconvention);
-			Avenant A = avenantRepository.getAvenant(idET, dateconvention, dateAvenant);
+		if (avenantRepository.getAvenantOFF(idET, dateconvention, dateAvenant) != null) {
+			Optional<Convention> C = conventionRepository.getConventionByIdOFF(idET, dateconvention);
+			Avenant A = avenantRepository.getAvenantOFF(idET, dateconvention, dateAvenant);
 
 			List<String> los = optionRepository.listOptionsByYear("2021");
 			String Option = utilServices.findOptionByStudent(idET, los);
@@ -631,7 +756,7 @@ public class ServiceStageService {
 			String Mail = C.get().getMail();
 			String numSiren = A.getNumSiren();
 			try {
-				// Create PdfReader instance. C:\\ESP-DOCS\\Avenants
+				// Create PdfReader instance.   C:\\ESP-DOCS\\Avenants
 				PdfReader pdfReader = new PdfReader("C:\\ESP-DOCS\\Avenants\\Avenant.pdf");
 				// Create PdfStamper instance.
 				PdfStamper pdfStamper = new PdfStamper(pdfReader,
@@ -723,6 +848,8 @@ public class ServiceStageService {
 				e.printStackTrace();
 			}
 
+
+
 			DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 			String aveValidationDate = dateFormata.format(new Date());
 
@@ -732,21 +859,20 @@ public class ServiceStageService {
 			String avenantPath = "C:\\ESP-DOCS\\Avenants\\" + idET + "_Avenant_" + datenow + ".pdf";
 			String avenantLabel = idET + "_Avenant_" + datenow + ".pdf";
 
-			String studentMail = utilServices.findStudentMailById(idET); // Server DEPLOY_SERVER
-			// String studentMail = "saria.essid@esprit.tn"; // Local
+			String studentMail = utilServices.findStudentMailById(idET);  // Server  DEPLOY_SERVER
+			//String studentMail = "saria.essid@esprit.tn";   // Local
 
 			System.out.println("---------------------------> Start");
-			utilServices.sendMailWithAttachment(studentMail, "Validation d'Avenant", content, avenantPath,
-					avenantLabel);
+			utilServices.sendMailWithAttachment(studentMail, "Validation d'Avenant", content, avenantPath, avenantLabel);
 
-			System.out.println("---------------------------> End  Send Mail of Avenant: "
-					+ utilServices.findStudentMailById(idET));
+			System.out.println("---------------------------> End  Send Mail of Avenant: " + utilServices.findStudentMailById(idET));
+
+
 
 			return "PDF modified successfully.";
 
 		} else
 			return null;
-
 	}
 
 	/*******************
@@ -755,25 +881,28 @@ public class ServiceStageService {
 
 	public DepotRapport UpdateRepotToVALIDE(String idET, String dateFiche) {
 
-		if (fichePFERepository.getFichebyId(idET, dateFiche) != null) {
-			FichePFE existingFichePFE = fichePFERepository.getFichebyId(idET, dateFiche);
+		if (fichePFERepository.findPlanTravailByDateDepot(idET, dateFiche) != null) {
+			FichePFE existingFichePFE = fichePFERepository.findPlanTravailByDateDepot(idET, dateFiche);
 			existingFichePFE.setValidDepot("02");
 			existingFichePFE.setDateTreatReports(new Date());
 			// existingFichePFE.setEtatFiche("06");
 			fichePFERepository.saveAndFlush(existingFichePFE);
 
-			// Student S =
+			// StudentCJ S =
 			// etudiantRepository.getOne(existingFichePFE.getIdFichePFE().getIdEt());
-			StudentIdNomPrenomDto S = findStudentIdFullName(
-					existingFichePFE.getIdFichePFE().getConventionPK().getIdEt());
+			StudentIdNomPrenomDto S = findStudentIdFullName(existingFichePFE.getIdFichePFE().getConventionPK().getIdEt());
 
-			DepotRapport D = new DepotRapport(existingFichePFE.getIdFichePFE().getConventionPK().getIdEt(),
-					S.getNomet(), S.getPrenomet(), existingFichePFE.getPathRapportVersion2(),
-					existingFichePFE.getPathPlagiat(), existingFichePFE.getPathAttestationStage(),
-					existingFichePFE.getPathSupplement(),
+			DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+			String timestampToString = dateFormata.format(existingFichePFE.getIdFichePFE().getDateDepotFiche());
+
+			DepotRapport D = new DepotRapport(existingFichePFE.getIdFichePFE().getConventionPK().getIdEt(), S.getNomet(), S.getPrenomet(),
+					existingFichePFE.getPathRapportVersion2(), existingFichePFE.getPathPlagiat(),
+					existingFichePFE.getPathAttestationStage(), existingFichePFE.getPathSupplement(),
 					codeNomenclatureRepository.findEtatFiche(existingFichePFE.getEtatFiche()),
 					codeNomenclatureRepository.findEtatDepot(existingFichePFE.getValidDepot()),
-					existingFichePFE.getIdFichePFE().getDateDepotFiche());
+					timestampToString);
+
+			System.out.println("=============> LOL: " + D.getDateDepotFiche());
 
 			return D;
 		} else
@@ -782,25 +911,26 @@ public class ServiceStageService {
 
 	public DepotRapport UpdateRepotToREFUSE(String idET, String dateFiche, String observation) {
 
-		if (fichePFERepository.getFichebyId(idET, dateFiche) != null) {
-			FichePFE existingFichePFE = fichePFERepository.getFichebyId(idET, dateFiche);
+		if (fichePFERepository.findPlanTravailByDateDepot(idET, dateFiche) != null) {
+			FichePFE existingFichePFE = fichePFERepository.findPlanTravailByDateDepot(idET, dateFiche);
 			existingFichePFE.setValidDepot("03");
 			existingFichePFE.setDateTreatReports(new Date());
 			existingFichePFE.setObservationDepot(observation);
 			fichePFERepository.save(existingFichePFE);
 
-			// Student S =
+			// StudentCJ S =
 			// etudiantRepository.getOne(existingFichePFE.getIdFichePFE().getIdEt());
-			StudentIdNomPrenomDto S = findStudentIdFullName(
-					existingFichePFE.getIdFichePFE().getConventionPK().getIdEt());
+			StudentIdNomPrenomDto S = findStudentIdFullName(existingFichePFE.getIdFichePFE().getConventionPK().getIdEt());
 
-			DepotRapport D = new DepotRapport(existingFichePFE.getIdFichePFE().getConventionPK().getIdEt(),
-					S.getNomet(), S.getPrenomet(), existingFichePFE.getPathRapportVersion2(),
-					existingFichePFE.getPathPlagiat(), existingFichePFE.getPathAttestationStage(),
-					existingFichePFE.getPathSupplement(),
+			DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+			String timestampToString = dateFormata.format(existingFichePFE.getIdFichePFE().getDateDepotFiche());
+
+			DepotRapport D = new DepotRapport(existingFichePFE.getIdFichePFE().getConventionPK().getIdEt(), S.getNomet(), S.getPrenomet(),
+					existingFichePFE.getPathRapportVersion2(), existingFichePFE.getPathPlagiat(),
+					existingFichePFE.getPathAttestationStage(), existingFichePFE.getPathSupplement(),
 					codeNomenclatureRepository.findEtatFiche(existingFichePFE.getEtatFiche()),
 					codeNomenclatureRepository.findEtatDepot(existingFichePFE.getValidDepot()),
-					existingFichePFE.getIdFichePFE().getDateDepotFiche());
+					timestampToString);
 
 			return D;
 		} else

@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.esprit.gdp.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,12 +23,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.esprit.gdp.dto.FicheETDetails;
-import com.esprit.gdp.dto.StudentDetails;
-import com.esprit.gdp.dto.StudentDto;
-import com.esprit.gdp.dto.StudentExcelDto;
-import com.esprit.gdp.dto.TeacherDetailsDto;
-import com.esprit.gdp.dto.TeacherValidation;
 import com.esprit.gdp.models.FichePFE;
 import com.esprit.gdp.models.StudentCJ;
 import com.esprit.gdp.models.Teacher;
@@ -124,10 +119,10 @@ public class ResponsableStageController {
 	@GetMapping("/FichePFEList")
 	public ResponseEntity<?> getFichePFEList(@RequestParam("codeOption") String codeOption) {
 		try {
-			System.out.println("slm" + decode(codeOption));
+			// System.out.println("slm" + decode(codeOption));
 			ObjectMapper mapper = new ObjectMapper();
 			List<String> strings = mapper.readValue(decode(codeOption), List.class);
-			System.out.println(strings);
+			// System.out.println(strings);
 			List<FichePFE> FichePFEList = responsableStageService.getFicheListbyOption(strings);
 
 			List<FicheETDetails> FicheETDetailsList = new ArrayList<FicheETDetails>();
@@ -152,8 +147,18 @@ public class ResponsableStageController {
 
 	@GetMapping(value = "/getEtudiant")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<?> getEtudiant(@RequestParam("idET") String idET) {
+	public ResponseEntity<?> getEtudiant(@RequestParam("idET") String idET)
+	{
 
+		StudentDetailsDto studentDto = utilServices.findStudentDetailsDtoById(idET);
+
+		if (studentDto == null)
+		{
+			return new ResponseEntity("{}", HttpStatus.OK);
+		}
+		return new ResponseEntity<>(studentDto, HttpStatus.OK);
+
+		/*
 		StudentDto studentDto = utilServices.findStudentDtoById(idET);
 
 		if (studentDto == null) {
@@ -167,6 +172,7 @@ public class ResponsableStageController {
 				findCurrentAnnneInscriptiobByIdEt(idET).get(0) + " - " + String.valueOf(valeur));
 
 		return new ResponseEntity<>(SNF, HttpStatus.OK);
+		*/
 
 		// oif if (etudiantRepository.findById(idET) == null) {
 		// return new ResponseEntity("{}", HttpStatus.OK);
@@ -282,7 +288,7 @@ public class ResponsableStageController {
 
 	) {
 
-		System.out.println("--------------------------------------- SATRt 0416");
+		// System.out.println("--------------------------------------- SATRt 0416");
 
 		responsableStageService.UpdateFicheToDEPOSEE(idET, dateDepotFiche.substring(0, 19).replace("T", " "));
 
@@ -381,7 +387,7 @@ public class ResponsableStageController {
 			List<StudentDetails> AllTerminalStudent = new ArrayList<>();
 			ObjectMapper mapper = new ObjectMapper();
 			List<String> strings = mapper.readValue(decode(codeOption), List.class);
-			System.out.println("----------------------------- EtudiantSansFicheList: " + strings);
+			// System.out.println("----------------------------- EtudiantSansFicheList: " + strings);
 
 			for (String C : strings) {
 
@@ -397,7 +403,7 @@ public class ResponsableStageController {
 
 			return new ResponseEntity<>(AllTerminalStudent, HttpStatus.OK);
 		} catch (Exception e) {
-			System.out.println("exception===" + e);
+			// System.out.println("exception===" + e);
 			return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -427,7 +433,7 @@ public class ResponsableStageController {
 	public ResponseEntity<?> getEtatValidationFiche(@RequestParam("codeOption") String codeOption,
 			@RequestParam("annee") String annee) {
 		List<Map<String, String>> AllTerminalStudent = new ArrayList<>();
-		System.out.println("-----> Start");
+		// System.out.println("-----> Start");
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			List<String> strings = mapper.readValue(decode(codeOption), List.class);

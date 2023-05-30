@@ -167,7 +167,7 @@ export default class EtatExpertiseGlobal extends Component {
       selectedAcademicExpertFullName: "",
       openPopupShowAffectesStudentsListToAE: false,
       allSessionsLabel: [],
-      selectedYear: '2021',
+      selectedYear: '2022',
       loadStudentsCJByYear: true
     }
 
@@ -263,7 +263,7 @@ export default class EtatExpertiseGlobal extends Component {
             aeList.push(ae);
           }
 
-          // console.log('--------------> HI2021', aeList);
+          // console.log('--------------> HI2022', aeList);
 
           this.setState({
             loadAffectedStudentsToAE: false,
@@ -373,7 +373,7 @@ export default class EtatExpertiseGlobal extends Component {
                   <br/>
                   <p className="greyMarkForSelectComp">Merci de choisir une Année pour consulter la résultante</p>
                   <Select  placeholder="Please Select an Academic Year"
-                           defaultValue={{value: '2021', label: '2021', color: "#00B8D9"}}
+                           defaultValue={{value: '2022', label: '2022', color: "#00B8D9"}}
                            value={allSessionsLabel.value}
                            components={animatedComponents}
                            options={allSessionsLabel}

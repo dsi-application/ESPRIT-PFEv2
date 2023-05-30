@@ -10,32 +10,19 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import com.esprit.gdp.dto.*;
+import com.esprit.gdp.files.*;
+import com.esprit.gdp.models.Avenant;
+import com.esprit.gdp.repository.*;
+import com.esprit.gdp.services.ServiceStageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.esprit.gdp.dto.EncadrementRSSStatusExcelDto;
-import com.esprit.gdp.dto.EncadrementStatusExcelDto;
-import com.esprit.gdp.dto.TeacherQuotaEncadrementExpertiseDto;
-import com.esprit.gdp.dto.TeacherQuotaPresidenceMembreDto;
-import com.esprit.gdp.files.EtatEncadrementsAndExpertisesByYear_Excel;
-import com.esprit.gdp.files.EtatEncadrementsDetailedByYear_Excel;
-import com.esprit.gdp.files.EtatEncadrementsGlobal_Excel;
-import com.esprit.gdp.files.EtatExpertisesDetailedByYear_Excel;
-import com.esprit.gdp.files.EtatPresidencesAndMembresBySession_Excel;
-import com.esprit.gdp.repository.FichePFERepository;
-import com.esprit.gdp.repository.OptionRepository;
-import com.esprit.gdp.repository.OptionStudentALTRepository;
-import com.esprit.gdp.repository.SessionRepository;
-import com.esprit.gdp.repository.StudentRepository;
-import com.esprit.gdp.repository.TeacherRepository;
 import com.esprit.gdp.services.UtilServices;
 
 //@RestController
@@ -71,6 +58,15 @@ public class ResponsableServiceStageController {
 	
 	@Autowired
 	OptionStudentALTRepository optionStudentALTRepository;
+
+	@Autowired
+	ServiceStageService serviceStageService;
+
+	@Autowired
+	GrilleAcademicEncadrantRepository grilleAcademicEncadrantRepository;
+
+	@Autowired
+	CodeNomenclatureRepository codeNomenclatureRepository;
 
 	/******************************************************
 	 * Methods
@@ -122,7 +118,7 @@ public class ResponsableServiceStageController {
 
 	@GetMapping("/listStudentsByDept/{codeDept}")
 	public List<EncadrementStatusExcelDto> listStudentsByDept(@PathVariable String codeDept) {
-		System.out.println("--PC----------------> pcMail: " + codeDept);
+		// System.out.println("--PC----------------> pcMail: " + codeDept);
 		List<String> lowerOpts = utilServices.findStudentsByDept(codeDept);
 
 		List<EncadrementStatusExcelDto> ess = new ArrayList<EncadrementStatusExcelDto>();
@@ -164,11 +160,11 @@ public class ResponsableServiceStageController {
 		List<EncadrementRSSStatusExcelDto> ess = new ArrayList<EncadrementRSSStatusExcelDto>();
 
 		ess.addAll(studentRepository.findEncadrementStatusCJ());
-		System.out.println("-------> Step 1: " + new Date());
+		// System.out.println("-------> Step 1: " + new Date());
 		ess.addAll(studentRepository.findEncadrementStatusCJALT());
-		System.out.println("-------> Step 2: " + new Date());
+		// System.out.println("-------> Step 2: " + new Date());
 		ess.addAll(studentRepository.findEncadrementStatusCS());
-		System.out.println("-------> Step 3: " + new Date());
+		// System.out.println("-------> Step 3: " + new Date());
 
 		for (EncadrementRSSStatusExcelDto es : ess) {
 
@@ -180,11 +176,11 @@ public class ResponsableServiceStageController {
 			es.setAcademicEncadMail(teacherRepository.findTeacherMailById(es.getAcademicEncadId()));
 			es.setAcademicEncadFullName(teacherRepository.findTeacherFullNameById(es.getAcademicEncadId()));
 		}
-		System.out.println("-------> Step 4: " + new Date());
+		// System.out.println("-------> Step 4: " + new Date());
 
 		ess.sort(Comparator.comparing(EncadrementRSSStatusExcelDto::getAcademicEncadFullName)
 				.thenComparing(EncadrementRSSStatusExcelDto::getStudentFullName));
-		System.out.println("-------> Step 5: " + new Date());
+		// System.out.println("-------> Step 5: " + new Date());
 
 		/************************************************************************************/
 
@@ -464,5 +460,290 @@ public class ResponsableServiceStageController {
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
                 .body(resource);
 	}
-	
+
+	@GetMapping("/allOptionsForActivatedYears/{idRSS}")
+	public List<String> allOptionsForActivatedYearsByRSS(@PathVariable String idRSS)
+	{
+		List<String> options = new ArrayList<String>();
+
+		if(idRSS.contains("IT"))
+		{
+			options = optionRepository.allOptionsForActivatedYears();
+			options.replaceAll(s-> s.replace("_01", ""));
+			options.remove("CINFO-ARC");options.remove("CINFO-BI");options.remove("CINFO-GL");options.remove("ME21-GC");
+			options.remove("ALINFO");options.remove("EE");options.remove("PC");options.remove("SO");options.remove("OG");
+			options.remove("CEM");options.remove("MÉCAT");options.remove("OGI");options.remove("GL");
+		}
+		else if (idRSS.contains("EM"))
+		{
+			options.add("EM");
+		}
+		else
+		{
+			options.add("GC");
+		}
+		return options;
+	}
+
+	@PutMapping(value = "/allValidatedConventionsListByOptionForRSS")
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<List<ConventionsValidatedForRSSDto>> getconventionValidatedListDto(@RequestParam("idRSS") String idRSS, @RequestParam("yearLabel") String yearLabel, @RequestParam("optionLabel") String optionLabel)
+	{
+		System.out.println("--------------1805-----> HELLO : " + idRSS);
+
+		List<String> idStudents = new ArrayList<String>();
+		idStudents.addAll(utilServices.findStudentsByYearAndGroupedOption(yearLabel, optionLabel.toLowerCase()));
+
+		try
+		{
+			// List<ConventionsValidatedForRSSDto> ConventionList = serviceStageService.getAllConventionsValidatedDtoByRSS(idRSS, idMonth);
+			List<ConventionsValidatedForRSSDto> conventionList = serviceStageService.getAllConventionsValidatedDtoByStudentsForRSS(idRSS, idStudents);
+
+			System.out.println("--------------ddddd 3-----> SARS VAL: " + conventionList.size());
+			if (conventionList.isEmpty())
+			{
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+			return new ResponseEntity<>(conventionList, HttpStatus.OK);
+		}
+		catch (Exception e)
+		{
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+
+	@PutMapping(value = "/allConventionsListByOptionForRSS")
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<List<ConventionForRSSDto>> getconventionsListDto(@RequestParam("idRSS") String idRSS, @RequestParam("yearLabel") String yearLabel)
+	{
+		System.out.println("--------------PRIM : " + idRSS + " : " + yearLabel);
+
+		try
+		{
+			List<ConventionForRSSDto> conventionList = utilServices.findNotTreatedConventionsByYear(yearLabel);
+
+			if (conventionList.isEmpty())
+			{
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+			return new ResponseEntity<>(conventionList, HttpStatus.OK);
+		}
+		catch (Exception e)
+		{
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@PutMapping(value = "/allDemandesAnnulationsConventionsListByOptionForRSS")
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<List<ConventionForRSSDto>> getDemandesAnnulationsConventionsListDto(@RequestParam("idRSS") String idRSS, @RequestParam("yearLabel") String yearLabel)
+	{
+		System.out.println("--------------PRIM : " + idRSS + " : " + yearLabel);
+
+		try
+		{
+			List<ConventionForRSSDto> conventionList = utilServices.findDemandesAnnulationConventionsByYear(yearLabel);
+			// List<ConventionsValidatedForRSSDto> ConventionList = serviceStageService.getAllConventionsValidatedDtoByRSS(idRSS, idMonth);
+
+			if (conventionList.isEmpty())
+			{
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+			return new ResponseEntity<>(conventionList, HttpStatus.OK);
+		}
+		catch (Exception e)
+		{
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+
+	@PutMapping("/allAvenantsList")
+	public ResponseEntity<List<AvenantForRSSDto>> getAllAvenantList(@RequestParam("idRSS") String idRSS, @RequestParam("yearLabel") String yearLabel)
+	{
+		System.out.println("-------------- Avenant : " + idRSS + " : " + yearLabel);
+		try {
+			List<AvenantForRSSDto> AvenantList = serviceStageService.findAllAvenantDTOByYear(idRSS, yearLabel);
+			if (AvenantList.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+
+			return new ResponseEntity<>(AvenantList, HttpStatus.OK);
+		} catch (Exception e) {
+
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@PutMapping(value = "/updateAvenantStatus", produces = MediaType.APPLICATION_JSON_VALUE) // 22052023
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Avenant> updateAvenantState(@RequestParam("idET") String idET,
+													  @RequestParam("dateConvention") String dateConvention,
+													  @RequestParam("dateAvenant") String dateAvenant)
+			throws Exception {
+
+		System.out.println("----------------------------> idET: " + idET);
+		System.out.println("----------------------------> dateConvention: " + dateConvention);
+		System.out.println("----------------------------> dateAvenant: " + dateAvenant);
+
+		serviceStageService.GenerateAvenant(idET,dateConvention, dateAvenant);
+		return new ResponseEntity<>(serviceStageService.UpdateAvenantState(idET, dateConvention, dateAvenant), HttpStatus.OK);
+	}
+
+	@GetMapping("/loadValidatedDepots")
+	public ResponseEntity<?> loadValidatedDepots(@RequestParam("idRSS") String idRSS, @RequestParam("yearLabel") String yearLabel, @RequestParam("optionLabel") String optionLabel) {
+		try {
+
+			System.out.println("--------------1805-----> HELLO : " + idRSS);
+
+			List<String> idStudents = new ArrayList<String>();
+			idStudents.addAll(utilServices.findStudentsByYearAndGroupedOption(yearLabel, optionLabel.toLowerCase()));
+
+			/****************************************************************************************************************************************/
+
+			String idServiceStage = null;
+			if(idRSS.equalsIgnoreCase("SR-STG-IT4") || idRSS.equalsIgnoreCase("SR-STG-IT2") || idRSS.equalsIgnoreCase("SR-STG-IT1"))
+			//if(idServiceStageFULL.startsWith("SR-STG-IT"))
+			{
+				idServiceStage = "SR-STG-IT";
+			}
+			else
+			{
+				idServiceStage = idRSS;
+			}
+
+			System.out.println("----------------------> PIKA 1: " + idServiceStage);
+
+			List<DepotFinalDto> plansTravailCJ = fichePFERepository.loadFichesForDepotValByStudents(idStudents);
+			// List<ConventionsValidatedForRSSDto> conventionList = serviceStageService.getAllConventionsValidatedDtoByStudentsForRSS(idRSS, idStudents);
+			//List<DepotFinalDto> depotsFinal = utilServices.loadPlanTravailByYear(yearLabel, idServiceStage);
+
+			System.out.println("----------------------> PIKA 2: " + plansTravailCJ.size());
+
+			for (DepotFinalDto df : plansTravailCJ) {
+
+				/*
+				DepotRapport D = new DepotRapport(F.getIdFichePFE().getConventionPK().getIdEt(),
+						S.getNomet(), S.getPrenomet(), F.getPathRapportVersion2(), F.getPathPlagiat(),
+						F.getPathAttestationStage(), F.getPathSupplement(),
+						codeNomenclatureRepository.findEtatFiche(F.getEtatFiche()),
+						codeNomenclatureRepository.findEtatDepot(F.getValidDepot()),
+						F.getIdFichePFE().getDateDepotFiche());
+				 */
+
+				df.setFullName(utilServices.findStudentFullNameById(df.getIdEt()));
+				df.setClasseEt(utilServices.findCurrentClassByIdEt(df.getIdEt()));
+				// df.setEtatFiche(codeNomenclatureRepository.findEtatFiche(df.getEtatFiche()));
+				// df.setEtatDepot(codeNomenclatureRepository.findEtatDepot(df.getEtatDepot()));
+				// df.setEtatDepot();
+
+				System.out.println("--------------> FichePFEPK : " + df.getFichePFEPK().getConventionPK().getIdEt());
+				//df.setEtatGrilleEncadrement("NOTYET");
+
+				if(!grilleAcademicEncadrantRepository.findEtatGrilleByFiche(df.getFichePFEPK()).isEmpty())
+				{
+					if(grilleAcademicEncadrantRepository.findEtatGrilleByFiche(df.getFichePFEPK()).get(0).equalsIgnoreCase("02"))
+					{
+						df.setEtatGrilleEncadrement("DONE");
+					}
+					else
+					{
+						df.setEtatGrilleEncadrement("NOTYET");
+					}
+				}
+				else
+				{
+					df.setEtatGrilleEncadrement("NOTYET");
+				}
+
+			}
+
+			if (plansTravailCJ.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+			return new ResponseEntity<>(plansTravailCJ, HttpStatus.OK);
+		} catch (Exception e) {
+
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@GetMapping("/loadNotYetTreatedDepots")
+	public ResponseEntity<?> loadNotYetTreatedDepots(@RequestParam("idRSS") String idRSS, @RequestParam("yearLabel") String yearLabel)
+	{
+		try {
+
+			System.out.println("--------------1805-----> HELLO : " + idRSS);
+
+
+			/****************************************************************************************************************************************/
+
+			String idServiceStage = null;
+			if(idRSS.equalsIgnoreCase("SR-STG-IT4") || idRSS.equalsIgnoreCase("SR-STG-IT2") || idRSS.equalsIgnoreCase("SR-STG-IT1"))
+			{
+				idServiceStage = "SR-STG-IT";
+			}
+			else
+			{
+				idServiceStage = idRSS;
+			}
+
+			System.out.println("----------------------> PIKA 1: " + idServiceStage);
+
+			List<DepotFinalDto> depotFinalDtos = utilServices.loadFichesForDepotNotYetTreatedByYear(yearLabel, idServiceStage);
+
+			System.out.println("----------------------> PIKA 2: " + depotFinalDtos.size());
+
+			for (DepotFinalDto df : depotFinalDtos)
+			{
+
+				System.out.println("############################################> Date Depot Fiche: " + df.getDateDepotFiche());
+
+				String classeEt = utilServices.findCurrentClassByIdEt(df.getIdEt());
+
+				df.setEtatDepot(codeNomenclatureRepository.findEtatDepot(df.getEtatDepot()));
+				df.setFullName(utilServices.findStudentFullNameById(df.getIdEt()));
+				df.setClasseEt(classeEt);
+
+				if(!classeEt.contains("4ALINFO"))
+				{
+					df.setOptionEt(utilServices.findOptionByClass(classeEt, optionRepository.listOptionsByYear(yearLabel)).replace("_01", ""));
+				}
+				if(classeEt.contains("4ALINFO"))
+				{
+					df.setOptionEt(optionStudentALTRepository.findOptionByStudentALTAndYear(df.getIdEt(), yearLabel));
+				}
+
+				System.out.println("--------------> FichePFEPK : " + df.getFichePFEPK().getConventionPK().getIdEt());
+
+				if(!grilleAcademicEncadrantRepository.findEtatGrilleByFiche(df.getFichePFEPK()).isEmpty())
+				{
+					if(grilleAcademicEncadrantRepository.findEtatGrilleByFiche(df.getFichePFEPK()).get(0).equalsIgnoreCase("02"))
+					{
+						df.setEtatGrilleEncadrement("DONE");
+					}
+					else
+					{
+						df.setEtatGrilleEncadrement("NOTYET");
+					}
+				}
+				else
+				{
+					df.setEtatGrilleEncadrement("NOTYET");
+				}
+
+			}
+
+			if (depotFinalDtos.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+			return new ResponseEntity<>(depotFinalDtos, HttpStatus.OK);
+		} catch (Exception e) {
+
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+
 }

@@ -52,11 +52,9 @@ const avenantSlice = createSlice({
 
       const index = state.avenants.findIndex(
         (item) =>
-          item.avenantPK.conventionPK.idEt ===
-            payload.avenantPK.conventionPK.idEt &&
-          item.avenantPK.conventionPK.dateConvention ===
-            payload.avenantPK.conventionPK.dateConvention &&
-          item.avenantPK.dateAvenant === payload.avenantPK.dateAvenant
+          item.avenantPK.conventionPK.idEt === payload.idEt &&
+          item.avenantPK.conventionPK.dateConvention === payload.dateDepotRelatedConvention &&
+          item.avenantPK.dateAvenant === payload.dateDepotAvenant
       );
 
       if (index !== -1) {

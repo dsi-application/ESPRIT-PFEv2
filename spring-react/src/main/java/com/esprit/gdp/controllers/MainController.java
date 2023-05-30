@@ -312,6 +312,7 @@ public class MainController {
 	public void addConvention(@Valid @RequestBody AddConventionRequest addConventionRequest, @PathVariable String idEt)
 			throws UnsupportedEncodingException {
 
+		/*
 		System.out.println("-----> NomSociete: " + addConventionRequest.getNomSociete() + " - "
 				+ utilServices.decodeEncodedValue(addConventionRequest.getNomSociete()));
 		System.out.println("-----> getMail: " + addConventionRequest.getMail() + " - "
@@ -322,13 +323,13 @@ public class MainController {
 				+ utilServices.decodeEncodedValue(addConventionRequest.getTelephone()));
 		System.out.println("-----> getResponsable: " + addConventionRequest.getResponsable() + " - "
 				+ utilServices.decodeEncodedValue(addConventionRequest.getResponsable()));
-
+		*/
 		ConventionPK conventionPK = new ConventionPK(idEt, new Timestamp(System.currentTimeMillis()));
 
 		/********************************************************************************************************************/
 
-		System.out.println("---------------------------> Date Début : " + addConventionRequest.getDateDebut());
-		System.out.println("---------------------------> Date Fin : " + addConventionRequest.getDateFin());
+		// System.out.println("---------------------------> Date Début : " + addConventionRequest.getDateDebut());
+		// System.out.println("---------------------------> Date Fin : " + addConventionRequest.getDateFin());
 
 		Integer trainingDuration = null;
 
@@ -343,7 +344,7 @@ public class MainController {
 		float daysBetween = (difference / (1000 * 60 * 60 * 24));
 
 		trainingDuration = Math.round(daysBetween / 7);
-		System.out.println("---------------------------> AZERTY 4: " + trainingDuration);
+		// System.out.println("---------------------------> AZERTY 4: " + trainingDuration);
 
 		/********************************************************************************************************************/
 
@@ -400,6 +401,7 @@ public class MainController {
 	public void modifyConvention(@Valid @RequestBody AddConventionRequest addConventionRequest,
 								 @PathVariable String idEt) throws UnsupportedEncodingException {
 
+		/*
 		System.out.println("-----> NomSociete: " + addConventionRequest.getNomSociete() + " - "
 				+ utilServices.decodeEncodedValue(addConventionRequest.getNomSociete()));
 		System.out.println("-----> getMail: " + addConventionRequest.getMail() + " - "
@@ -410,6 +412,7 @@ public class MainController {
 				+ utilServices.decodeEncodedValue(addConventionRequest.getTelephone()));
 		System.out.println("-----> getResponsable: " + addConventionRequest.getResponsable() + " - "
 				+ utilServices.decodeEncodedValue(addConventionRequest.getResponsable()));
+		*/
 
 		Convention convention = conventionRepository.findConventionByIdEt(idEt).get(0);
 		EntrepriseAccueil ea = new EntrepriseAccueil();
@@ -477,12 +480,13 @@ public class MainController {
 	public void modifyConventionByStudent(@Valid @RequestBody AddConventionRequest addConventionRequest, @PathVariable String idEt) throws UnsupportedEncodingException
 	{
 
+		/*
 		System.out.println("--MODIF STU---> NomSociete: " + addConventionRequest.getNomSociete() + " - " + utilServices.decodeEncodedValue(addConventionRequest.getNomSociete()));
 		System.out.println("--MODIF STU---> getMail: " + addConventionRequest.getMail() + " - " + utilServices.decodeEncodedValue(addConventionRequest.getMail()));
 		System.out.println("--MODIF STU---> getAddress: " + addConventionRequest.getAddress() + " - " + utilServices.decodeEncodedValue(addConventionRequest.getAddress()));
 		System.out.println("--MODIF STU---> getTelephone: " + addConventionRequest.getTelephone() + " - " + utilServices.decodeEncodedValue(addConventionRequest.getTelephone()));
 		System.out.println("--MODIF STU---> getResponsable: " + addConventionRequest.getResponsable() + " - " + utilServices.decodeEncodedValue(addConventionRequest.getResponsable()));
-
+		*/
 
 		Convention convention = conventionRepository.findConventionByIdEt(idEt).get(0);
 		EntrepriseAccueil ea = new EntrepriseAccueil();
@@ -5675,13 +5679,11 @@ public class MainController {
 		// System.out.println("-------------PV--------------------9-> " + stnDate);
 		// System.out.println("-------------PV--------------------10-> " + PVFile);
 
-		// PVEtudiant_PDF pv = new PVEtudiant_PDF(idEt, nomet, classe,
-		// fichePFERepository.findTitleFichePFEByStudent(idEt).get(0),
-		// conventionRepository.findCompanyNameByIdEt(idEt).get(0), expert,
-		// juryPresident, membre, pedagogicalEncadrant, stnDate, PVFile);
+		String expert = utilServices.findFullNamePedagogicalExpert(idEt);
+
 		PVEtudiant_PDF pv = new PVEtudiant_PDF(idEt, nomet, classe,
 				fichePFERepository.findTitleFichePFEByStudent(idEt).get(0),
-				conventionRepository.findCompanyNameByIdEt(idEt).get(0), membre, juryPresident, membre,
+				conventionRepository.findCompanyNameByIdEt(idEt).get(0), expert, juryPresident, membre,
 				pedagogicalEncadrant, stnDate, PVFile);
 
 		File file = new File(PVFile);
@@ -5722,8 +5724,6 @@ public class MainController {
 		String PVName = "Procès Verbal " + nomet + ".pdf";
 		String PVFile = PVPath + PVName;
 
-		String expert = utilServices.findFullNamePedagogicalExpert(idEt);
-
 		// AffectationStudentSocieteSujetSocieteDto ass =
 		// affectationStudentSocieteRepository.findAffectationStudentSocieteSujetSociete(idStu);
 
@@ -5749,10 +5749,8 @@ public class MainController {
 		// System.out.println("-------------PV--------------------9-> " + stnDate);
 		// System.out.println("-------------PV--------------------10-> " + PVFile);
 
-		// PVEtudiant_PDF pv = new PVEtudiant_PDF(idEt, nomet, classe,
-		// fichePFERepository.findTitleFichePFEByStudent(idStu).get(0),
-		// conventionRepository.findCompanyNameByIdEt(idStu).get(0), juryPresident,
-		// expert, pedagogicalEncadrant, stnDate, PVFile);
+		String expert = utilServices.findFullNamePedagogicalExpert(idEt);
+
 		PVEtudiant_PDF pv = new PVEtudiant_PDF(idEt, nomet, classe,
 				fichePFERepository.findTitleFichePFEByStudent(idEt).get(0),
 				conventionRepository.findCompanyNameByIdEt(idEt).get(0), expert, juryPresident, membre,
@@ -8622,6 +8620,7 @@ public class MainController {
 			juryHosts.add(mailPE);
 			juryHosts.add(mailEXP);
 
+			calendarHosts.add(mailJP);
 			calendarHosts.add(mailPE);
 			calendarHosts.add(mailEXP);
 			calendarHosts.add(utilServices.findStudentMailById(idEtToSTN));

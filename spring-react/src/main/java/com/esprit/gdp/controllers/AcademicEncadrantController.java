@@ -144,15 +144,15 @@ public class AcademicEncadrantController
 	{
 
 		String idEns = teacherRepository.findIdTeacherByMailEns(mailEns);
-		System.out.println("------------xwxwx--------> Id: " + idEns);
+		// System.out.println("------------xwxwx--------> Id: " + idEns);
 		
 		List<StudentNoteEngTrainingshipDto> studentsDtoCJs = studentRepository.findStudentNoteEngTrainingshipCJByAEAndYear(idEns, year);
 
-		System.out.println("--------------------> 1: " + studentsDtoCJs.size());
+		// System.out.println("--------------------> 1: " + studentsDtoCJs.size());
 		
 		for(StudentNoteEngTrainingshipDto sn : studentsDtoCJs)
 		{
-			System.out.println("--------**************************------------> Student Full Name: " + sn.getStudentFullName());
+			// System.out.println("--------**************************------------> Student Full Name: " + sn.getStudentFullName());
 			
 			BigDecimal noteEvalStgIng = null;
 			
@@ -169,12 +169,12 @@ public class AcademicEncadrantController
 			if(sn.getStudentClasse().contains("4ALINFO"))
 			{
 				sn.setStudentOption(optionStudentALTRepository.findOptionByStudentALTAndYear(sn.getStudentId(), year));
-				System.out.println("--> 2.1 : " + optionStudentALTRepository.findOptionByStudentALTAndYear(sn.getStudentId(), year));
+				// System.out.println("--> 2.1 : " + optionStudentALTRepository.findOptionByStudentALTAndYear(sn.getStudentId(), year));
 			}
 			else
 			{
 				sn.setStudentOption(utilServices.findOptionByClass(sn.getStudentClasse(), optionRepository.listOptionsByYear(year)).replace("_01", ""));
-				System.out.println("--> 2.2");
+				// System.out.println("--> 2.2");
 			}
 			
 		}
@@ -2218,11 +2218,11 @@ public class AcademicEncadrantController
 		
 	}
 	
-	@GetMapping("/downloadGrilleAE/{idEt}")
-	public ResponseEntity downloadGrilleAE(@PathVariable String idEt) throws IOException
+	@GetMapping("/downloadGrilleAE/{idEt}/{selectedYear}")
+	public ResponseEntity downloadGrilleAE(@PathVariable String idEt, @PathVariable String selectedYear) throws IOException
 	{
     	
-		StudentGrilleAcademicEncadrantDto stuGrilleAcademicEncadrantDto = utilServices.findStudentTreatDepotByHisId(idEt);
+		StudentGrilleAcademicEncadrantDto stuGrilleAcademicEncadrantDto = utilServices.findStudentTreatDepotByHisId(idEt, selectedYear);
 		
 		FichePFEPK fichePFEPK = fichePFERepository.findFichePFEPKByStudent(idEt).get(0);
 		GrilleAcademicEncadrant grilleAcademicEncadrant = grilleAcademicEncadrantRepository.findGrilleByFiche(fichePFEPK);
@@ -2258,10 +2258,10 @@ public class AcademicEncadrantController
 	}
 	
 
-	@GetMapping("/studentGrilleEncadrement/{idEt}")
-	public StudentGrilleAcademicEncadrantDto findStudentGrilleEncadrementById(@PathVariable String idEt)
+	@GetMapping("/studentGrilleEncadrement/{idEt}/{selectedYear}")
+	public StudentGrilleAcademicEncadrantDto findStudentGrilleEncadrementById(@PathVariable String idEt, @PathVariable String selectedYear)
 	{
-		StudentGrilleAcademicEncadrantDto stuGrilleAcademicEncadrantDto = utilServices.findStudentTreatDepotByHisId(idEt);
+		StudentGrilleAcademicEncadrantDto stuGrilleAcademicEncadrantDto = utilServices.findStudentTreatDepotByHisId(idEt, selectedYear);
 		
 		return stuGrilleAcademicEncadrantDto;
 	}

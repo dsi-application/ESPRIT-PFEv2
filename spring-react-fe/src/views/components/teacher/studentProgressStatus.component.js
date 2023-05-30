@@ -171,7 +171,7 @@ export default class StudentProgressStatus extends Component {
             noteNotCompleteSend: "",
             openPopupVerifyMarkIngTr: false,
             allSessionsLabel: [],
-            selectedYear: '2021',
+            selectedYear: '2022',
             loadStudentsCJByYear: true
         };
         // init4
@@ -197,23 +197,23 @@ export default class StudentProgressStatus extends Component {
             });
         }
 
-        
+
 	    let requestAv = new XMLHttpRequest();
 	    requestAv.open("GET",API_URL + "pwdESPTea/" + encodeURIComponent(currentTeacher.id) + "/" + encodeURIComponent(currentTeacher.idEns), false);
 	    requestAv.send(null);
 	    let pwdTea = requestAv.responseText;
-	
+
 	    let requestTkn = new XMLHttpRequest();
 	    requestTkn.open("GET", API_URL + "validateJWT/" + currentTeacher.token, false);
 	    requestTkn.send(null);
 	    let tkBack = requestTkn.responseText;
-	
+
 	    let requestATkn = new XMLHttpRequest();
 	    requestATkn.open("GET", API_URL + "validateJWT/" + currentTeacher.accessToken, false);
 	    requestATkn.send(null);
 	    let atkBack = requestATkn.responseText;
-		
-		
+
+
 		if(currentTeacher !== null && pwdTea === currentTeacher.password && atkBack === 'YES' && tkBack === 'YES')
 	    {
 			this.loadStudentsAffectedToAEByDefaultYear();
@@ -224,7 +224,7 @@ export default class StudentProgressStatus extends Component {
 	      sessionStorage.clear();
 	      window.location.href = "/";
 	    }
-	
+
     }
 
     loadStudentsAffectedToAEByDefaultYear () {
@@ -518,7 +518,7 @@ export default class StudentProgressStatus extends Component {
                         <br/>
                         <p className="greyMarkForSelectComp">Merci de choisir une Année pour consulter la résultante</p>
                         <Select  placeholder="Please Select an Academic Year"
-                                 defaultValue={{value: '2021', label: '2021', color: "#00B8D9"}}
+                                 defaultValue={{value: '2022', label: '2022', color: "#00B8D9"}}
                                  value={allSessionsLabel.value}
                                  components={animatedComponents}
                                  options={allSessionsLabel}

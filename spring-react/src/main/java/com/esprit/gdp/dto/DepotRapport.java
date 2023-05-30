@@ -14,24 +14,37 @@ public class DepotRapport {
 	private String pathDossierTechnique;
 	private String EtatFiche ;
 	private String EtatDepot ;
-	private Timestamp DateFiche ;
-	
+
+	private String dateDepotFiche;
+
 	private Integer trainingDuration;
 	private Date dateDepotReports;
-	
+
 	private String etatGrilleEncadrement;
-	
-	
+
+
 	public DepotRapport() {
 		super();
 	}
-	
-	public DepotRapport(String idEt)
-	{
-		this.idEt = idEt;
-	}
-	
+
+
 	public DepotRapport(String idEt, String nomet, String prenomet, String pathRapport, String pathPlagiat,
+						String pathAttestationStage, String dossierTechnique, String etatFiche, String etatDepot, String dateDepotFiche) {
+		super();
+		this.idEt = idEt;
+		this.nomet = nomet;
+		this.prenomet = prenomet;
+		this.pathRapport = pathRapport;
+		this.pathPlagiat = pathPlagiat;
+		this.pathAttestationStage = pathAttestationStage;
+		this.pathDossierTechnique = dossierTechnique;
+		this.EtatFiche = etatFiche;
+		this.EtatDepot = etatDepot;
+		this.dateDepotFiche = dateDepotFiche;
+	}
+
+	/*
+		public DepotRapport(String idEt, String nomet, String prenomet, String pathRapport, String pathPlagiat,
 			String pathAttestationStage, String pathDossierTechnique, String etatFiche, String etatDepot) {
 		super();
 		this.idEt = idEt;
@@ -44,7 +57,7 @@ public class DepotRapport {
 		EtatFiche = etatFiche;
 		EtatDepot = etatDepot;
 	}
-	
+
 	public DepotRapport(String idEt, String nomet, String prenomet, String pathRapport, String pathPlagiat,
 			String pathAttestationStage, String etatFiche, String etatDepot) {
 		super();
@@ -57,7 +70,7 @@ public class DepotRapport {
 		EtatFiche = etatFiche;
 		EtatDepot = etatDepot;
 	}
-	
+
 	public DepotRapport(String idEt, String nomet, String prenomet, String pathRapport, String pathPlagiat,
 			String pathAttestationStage, String dossierTechnique, String etatFiche, String etatDepot, Timestamp dateFiche) {
 		super();
@@ -70,11 +83,10 @@ public class DepotRapport {
 		this.pathDossierTechnique = dossierTechnique;
 		EtatFiche = etatFiche;
 		EtatDepot = etatDepot;
-		DateFiche = dateFiche;
 	}
-	
+
 	public DepotRapport(String idEt, String nomet, String prenomet, String pathRapport, String pathPlagiat,
-						String pathAttestationStage, String pathDossierTechnique, String etatFiche, String etatDepot, 
+						String pathAttestationStage, String pathDossierTechnique, String etatFiche, String etatDepot,
 						Timestamp dateFiche, Integer trainingDuration, Date dateDepotReports) {
 		super();
 		this.idEt = idEt;
@@ -86,11 +98,10 @@ public class DepotRapport {
 		this.pathDossierTechnique = pathDossierTechnique;
 		EtatFiche = etatFiche;
 		EtatDepot = etatDepot;
-		DateFiche = dateFiche;
 		this.trainingDuration = trainingDuration;
 		this.dateDepotReports = dateDepotReports;
 	}
-	
+
 	public DepotRapport(String idEt, String fullName, String pathRapport, String pathPlagiat,
 			String pathAttestationStage, String pathDossierTechnique, String etatFiche, String etatDepot,
 			Timestamp dateFiche, Integer trainingDuration, Date dateDepotReports) {
@@ -107,8 +118,8 @@ public class DepotRapport {
 		this.trainingDuration = trainingDuration;
 		this.dateDepotReports = dateDepotReports;
 	}
-	
-	public DepotRapport(String idEt, String nomet, String prenomet, String pathRapport, String pathPlagiat,
+
+		public DepotRapport(String idEt, String nomet, String prenomet, String pathRapport, String pathPlagiat,
 			String pathAttestationStage, String pathDossierTechnique, String etatFiche, String etatDepot, Date dateDepotReports) {
 		super();
 		this.idEt = idEt;
@@ -122,7 +133,7 @@ public class DepotRapport {
 		EtatDepot = etatDepot;
 		this.dateDepotReports = dateDepotReports;
 	}
-	
+
 	public DepotRapport(String idEt, String nomet, String prenomet, String pathRapport, String pathPlagiat,
 			String pathAttestationStage, String pathDossierTechnique, String etatFiche, String etatDepot,
 			Timestamp dateFiche, Date dateDepotReports) {
@@ -139,83 +150,28 @@ public class DepotRapport {
 		DateFiche = dateFiche;
 		this.dateDepotReports = dateDepotReports;
 	}
-	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((DateFiche == null) ? 0 : DateFiche.hashCode());
-		result = prime * result + ((EtatDepot == null) ? 0 : EtatDepot.hashCode());
-		result = prime * result + ((EtatFiche == null) ? 0 : EtatFiche.hashCode());
-		result = prime * result + ((idEt == null) ? 0 : idEt.hashCode());
-		result = prime * result + ((nomet == null) ? 0 : nomet.hashCode());
-		result = prime * result + ((pathAttestationStage == null) ? 0 : pathAttestationStage.hashCode());
-		result = prime * result + ((pathPlagiat == null) ? 0 : pathPlagiat.hashCode());
-		result = prime * result + ((pathRapport == null) ? 0 : pathRapport.hashCode());
-		result = prime * result + ((prenomet == null) ? 0 : prenomet.hashCode());
-		return result;
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		DepotRapport other = (DepotRapport) obj;
-		if (DateFiche == null) {
-			if (other.DateFiche != null)
-				return false;
-		} else if (!DateFiche.equals(other.DateFiche))
-			return false;
-		if (EtatDepot == null) {
-			if (other.EtatDepot != null)
-				return false;
-		} else if (!EtatDepot.equals(other.EtatDepot))
-			return false;
-		if (EtatFiche == null) {
-			if (other.EtatFiche != null)
-				return false;
-		} else if (!EtatFiche.equals(other.EtatFiche))
-			return false;
-		if (idEt == null) {
-			if (other.idEt != null)
-				return false;
-		} else if (!idEt.equals(other.idEt))
-			return false;
-		if (nomet == null) {
-			if (other.nomet != null)
-				return false;
-		} else if (!nomet.equals(other.nomet))
-			return false;
-		if (pathAttestationStage == null) {
-			if (other.pathAttestationStage != null)
-				return false;
-		} else if (!pathAttestationStage.equals(other.pathAttestationStage))
-			return false;
-		if (pathPlagiat == null) {
-			if (other.pathPlagiat != null)
-				return false;
-		} else if (!pathPlagiat.equals(other.pathPlagiat))
-			return false;
-		if (pathRapport == null) {
-			if (other.pathRapport != null)
-				return false;
-		} else if (!pathRapport.equals(other.pathRapport))
-			return false;
-		if (prenomet == null) {
-			if (other.prenomet != null)
-				return false;
-		} else if (!prenomet.equals(other.prenomet))
-			return false;
-		return true;
+	*/
+
+	public DepotRapport(String idEt, String fullName, String pathRapport, String pathPlagiat,
+						String pathAttestationStage, String pathDossierTechnique, String etatFiche, String etatDepot,
+						String dateDepotFiche, Integer trainingDuration, Date dateDepotReports) {
+		super();
+		this.idEt = idEt;
+		this.fullName = fullName;
+		this.pathRapport = pathRapport;
+		this.pathPlagiat = pathPlagiat;
+		this.pathAttestationStage = pathAttestationStage;
+		this.pathDossierTechnique = pathDossierTechnique;
+		this.EtatFiche = etatFiche;
+		this.EtatDepot = etatDepot;
+		this.dateDepotFiche = dateDepotFiche;
+		this.trainingDuration = trainingDuration;
+		this.dateDepotReports = dateDepotReports;
 	}
 
-	
+
 	/************************************************** Getters & Setters *********************************************/
-	
+
 	public String getIdEt() {
 		return idEt;
 	}
@@ -288,14 +244,6 @@ public class DepotRapport {
 		EtatDepot = etatDepot;
 	}
 
-	public Timestamp getDateFiche() {
-		return DateFiche;
-	}
-
-	public void setDateFiche(Timestamp dateFiche) {
-		DateFiche = dateFiche;
-	}
-
 	public Integer getTrainingDuration() {
 		return trainingDuration;
 	}
@@ -324,8 +272,10 @@ public class DepotRapport {
 		return etatGrilleEncadrement;
 	}
 
-	public void setEtatGrilleEncadrement(String etatGrilleEncadrement) {
-		this.etatGrilleEncadrement = etatGrilleEncadrement;
-	}
-	
+	public void setEtatGrilleEncadrement(String etatGrilleEncadrement) { this.etatGrilleEncadrement = etatGrilleEncadrement; }
+
+	public String getDateDepotFiche() { return dateDepotFiche; }
+
+	public void setDateDepotFiche(String dateDepotFiche) { this.dateDepotFiche = dateDepotFiche; }
+
 }

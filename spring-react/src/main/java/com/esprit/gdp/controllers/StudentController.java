@@ -132,7 +132,7 @@ public class StudentController {
 	@GetMapping("/downloadDemandeStage/{idEt}")
 	public ResponseEntity downloadDemandeStage(@PathVariable String idEt) throws IOException {
 
-		System.out.println("------------------> idEt: " + idEt);
+		// System.out.println("------------------> idEt: " + idEt);
 
 		StudentDemandeStageDto studentDemStg = utilServices.findStudentDemandeStgByStudentId(idEt);
 
@@ -249,10 +249,10 @@ public class StudentController {
 	public ResponseEntity downloadAllFilesTypes(@PathVariable String pathFile) throws IOException
 	{
 
-		System.out.println("---------------------> encoded path: " + pathFile);
+		// System.out.println("---------------------> encoded path: " + pathFile);
 		String gdFullPath = utilServices.decodeEncodedValue(pathFile);
 
-		System.out.println("---------------------> decoded path: " + gdFullPath);
+		// System.out.println("---------------------> decoded path: " + gdFullPath);
 
 		String PTPath = gdFullPath.replace("/", "\\");
 
@@ -358,17 +358,17 @@ public class StudentController {
 
 			if (convCodePays.equalsIgnoreCase("TN")) {
 				new ConventionTN_PDF(conv, CSFile, studentFullName, optionLabel, deptLabel);
-				System.out.println("----------------- TN");
+				// System.out.println("----------------- TN");
 			}
 
 			if (convCodePays.equalsIgnoreCase("EN") || convCodePays.equalsIgnoreCase("--")) {
 				new ConventionEN_PDF(conv, CSFile, studentFullName, optionLabel, deptLabel);
-				System.out.println("----------------- EN");
+				// System.out.println("----------------- EN");
 			}
 			if (convCodePays.equalsIgnoreCase("FR")) {
 				StudentConvFRDto scf = utilServices.findStudentConvFRDtoById(idEt);
 				new ConventionFR_PDF(conv, CSFile, scf, optionLabel, deptLabel);
-				System.out.println("----------------- FR");
+				// System.out.println("----------------- FR");
 			}
 
 		}

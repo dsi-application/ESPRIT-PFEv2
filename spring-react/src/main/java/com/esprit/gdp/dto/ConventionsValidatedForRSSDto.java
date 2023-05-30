@@ -12,22 +12,24 @@ public class ConventionsValidatedForRSSDto
 	private Date dateFin;
 	private String idEt;
 	private String nomEt;
-	private String departEt;
+	// private String departEt;
 	private String paysConvention;
 	private String pathConvention;
 	private String pathSignedConvention;
 	private String traiter;
 	private EntrepriseAccueil entrepriseAccueilConvention;
-	
-	
+
+	private String currentClasse;
+
+
 	public ConventionsValidatedForRSSDto() {}
-	
+
 	public ConventionsValidatedForRSSDto(
 			String dateConvention, Date dateDebut, Date dateFin,
 			String idEt, String traiter
 			, String paysConvention, String pathConvention
 			, EntrepriseAccueil entrepriseAccueilConvention
-			) {
+	) {
 		this.dateConvention = dateConvention;
 		this.dateDebut = dateDebut;
 		this.dateFin = dateFin;
@@ -44,7 +46,7 @@ public class ConventionsValidatedForRSSDto
 			String idEt, String traiter
 			, String paysConvention, String pathConvention, String pathSignedConvention
 			, EntrepriseAccueil entrepriseAccueilConvention
-			) {
+	) {
 		this.dateConvention = dateConvention;
 		this.dateDebut = dateDebut;
 		this.dateFin = dateFin;
@@ -98,6 +100,7 @@ public class ConventionsValidatedForRSSDto
 		this.nomEt = nomEt;
 	}
 
+	/*
 	public String getDepartEt() {
 		return departEt;
 	}
@@ -105,6 +108,7 @@ public class ConventionsValidatedForRSSDto
 	public void setDepartEt(String departEt) {
 		this.departEt = departEt;
 	}
+	*/
 
 	public String getPaysConvention() {
 		return paysConvention;
@@ -145,5 +149,13 @@ public class ConventionsValidatedForRSSDto
 	public void setPathSignedConvention(String pathSignedConvention) {
 		this.pathSignedConvention = pathSignedConvention;
 	}
-	
+
+	public String getCurrentClasse() {
+		return currentClasse;
+	}
+
+	public void setCurrentClasse(String currentClasse) {
+		this.currentClasse = currentClasse;
+	}
+
 }

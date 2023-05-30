@@ -14,18 +14,20 @@ let initialState = {
   Fichebydep: [],
   FichebydepVal: [],
   FichebydepInc: [],
+  FicheValALL: [],
   errors: "",
-  FichestatusALL: "noData",
   Conventionsstatus: "noData",
   ConventionsstatusForRSS: "noData",
   DemandesAnnulationConventionsstatus: "noData",
   Fichebydepstatus: "noData",
+  FichestatusALL: "noData",
   FichebydepstatusVal: "noData",
   FichebydepstatusInc: "noData",
   nbrDemandesAnnulationConvention: 0,
   nbrDemandesAnnulationConventionNotTreated: 0,
   nbrDepositedConvention: 0,
-  nbrValidatedConvention: 0
+  nbrValidatedConvention: 0,
+  FichestatusValALL: "noData",
 };
 
 function timeout(ms) {
@@ -34,7 +36,7 @@ function timeout(ms) {
 
 export const fetchConventions = () => async (dispatch) => {
   const [res, error] = await queryApi(
-      "serviceStage/allConventionList"
+    "serviceStage/allConventionList"
   );
 
   if (error) {
@@ -65,7 +67,7 @@ export const fetchConventions = () => async (dispatch) => {
 
 export const fetchConventionsForRSS = () => async (dispatch) => {
   const [res, error] = await queryApi(
-      "serviceStage/allConventionListByRSS?idRSS=" + currentResponsableServiceStage.id
+    "serviceStage/allConventionListByRSS?idRSS=" + currentResponsableServiceStage.id
   );
 
   if (error) {
@@ -80,7 +82,7 @@ export const fetchConventionsForRSS = () => async (dispatch) => {
 
 export const fetchConventionsValidatedForRSS = () => async (dispatch) => {
   const [res, error] = await queryApi(
-      "serviceStage/allConventionValidatedListByRSS?idRSS=" + currentResponsableServiceStage.id
+    "serviceStage/allConventionValidatedListByRSS?idRSS=" + currentResponsableServiceStage.id
   );
 
   console.log('--------------1-------> 05.08: ', res);
@@ -97,10 +99,10 @@ export const fetchConventionsValidatedForRSS = () => async (dispatch) => {
 
 export const fetchDemandesAnnulationConventions = () => async (dispatch) => {
   const [res, error] = await queryApi(
-      "serviceStage/allDemandesAnnulationConventionList"
+    "serviceStage/allDemandesAnnulationConventionList"
   );
 
-  //console.log('------------------ DAC: ', res);
+  console.log('------------------ PIKATCHA: ', res);
 
   if (error) {
     dispatch(setErrors(error));
@@ -114,7 +116,7 @@ export const fetchDemandesAnnulationConventions = () => async (dispatch) => {
 
 export const fetchFichebydep = () => async (dispatch) => {
   const [res, error] = await queryApi(
-      "serviceStage/FichesForDepot?id=" + currentResponsableServiceStage.id
+    "serviceStage/FichesForDepot?id=" + currentResponsableServiceStage.id
   );
   if (error) {
     dispatch(setErrors(error));
@@ -128,7 +130,7 @@ export const fetchFichebydep = () => async (dispatch) => {
 
 export const fetchFichebydepVal = () => async (dispatch) => {
   const [res, error] = await queryApi(
-      "serviceStage/FichesForDepotVal?id=" + currentResponsableServiceStage.id
+    "serviceStage/FichesForDepotVal?id=" + currentResponsableServiceStage.id
   );
   if (error) {
     dispatch(setErrors(error));
@@ -142,7 +144,7 @@ export const fetchFichebydepVal = () => async (dispatch) => {
 
 export const fetchFicheValALL = () => async (dispatch) => {
   const [res, error] = await queryApi(
-      "serviceStage/FichesDepotValALL"
+    "serviceStage/FichesDepotValALL"
   );
   if (error) {
     dispatch(setErrors(error));
@@ -160,7 +162,7 @@ export const fetchFicheValALL = () => async (dispatch) => {
 
 export const fetchFichebydepInc = () => async (dispatch) => {
   const [res, error] = await queryApi(
-      "serviceStage/FichesForDepotInc?id=" + currentResponsableServiceStage.id
+    "serviceStage/FichesForDepotInc?id=" + currentResponsableServiceStage.id
   );
   if (error) {
     dispatch(setErrors(error));
@@ -176,7 +178,7 @@ export const fetchNbrDemandesAnnulationConvention = () => async (dispatch) =>
 {
   //console.log('----------------> OUTPUT-0.1:' + res);
   const [res, error] =
-      await queryApi("student/nbrDemandesAnnulationConvention");
+    await queryApi("student/nbrDemandesAnnulationConvention");
 
   if (error)
   {
@@ -193,7 +195,7 @@ export const fetchNbrDemandesAnnulationConventionNotTreated = () => async (dispa
 {
   //console.log('----------------> OUTPUT-0.1:' + res);
   const [res, error] =
-      await queryApi("student/nbrDemandesAnnulationConventionNotTreated");
+    await queryApi("student/nbrDemandesAnnulationConventionNotTreated");
 
   if (error)
   {
@@ -210,7 +212,7 @@ export const fetchNbrDepositedConventions = () => async (dispatch) =>
 {
   // console.log('----------------> OUTPUT-0.1:' + res);
   const [res, error] =
-      await queryApi("student/nbrDepositedConvention");
+    await queryApi("student/nbrDepositedConvention");
 
   if (error)
   {
@@ -227,7 +229,7 @@ export const fetchNbrValidatedConventions = () => async (dispatch) =>
 {
   // console.log('----------------> OUTPUT-0.1:' + res);
   const [res, error] =
-      await queryApi("student/nbrValidatedConvention");
+    await queryApi("student/nbrValidatedConvention");
 
   if (error)
   {
@@ -374,11 +376,20 @@ const conventionSlice = createSlice({
     populateFichebydepsVal(state, action) {
       state.FichebydepVal = action.payload;
     },
+    populateFicheValALL(state, action) {
+      state.FicheValALL = action.payload;
+    },
     populateLoadFichebydepVal(state, action) {
       state.FichebydepstatusVal = "loading";
     },
+    populateLoadFicheValALL(state, action) {
+      state.FichestatusValALL = "loading";
+    },
     populateDoneFichebydepVal(state, action) {
       state.FichebydepstatusVal = "data";
+    },
+    populateDoneFicheValALL(state, action) {
+      state.FichestatusValALL = "data";
     },
     populateFichebydepsInc(state, action) {
       state.FichebydepInc = action.payload;
@@ -389,21 +400,12 @@ const conventionSlice = createSlice({
     populateDoneFichebydepInc(state, action) {
       state.FichebydepstatusInc = "data";
     },
-    populateFicheValALL(state, action) {
-      state.FicheValALL = action.payload;
-    },
-    populateLoadFicheValALL(state, action) {
-      state.FichestatusValALL = "loading";
-    },
-    populateDoneFicheValALL(state, action) {
-      state.FichestatusValALL = "data";
-    },
     updateFichebydep: (state, action) => {
       const payload = action.payload;
 
       const index = state.Fichebydep.findIndex(
-          (item) =>
-              item.idEt === payload.idEt && item.dateFiche === payload.dateFiche
+        (item) =>
+          item.idEt === payload.idEt && item.dateFiche === payload.dateFiche
       );
 
       if (index !== -1) {
@@ -414,8 +416,8 @@ const conventionSlice = createSlice({
       const payload = action.payload;
 
       const index = state.Fichebydep.findIndex(
-          (item) =>
-              item.idEt === payload.idEt && item.dateFiche === payload.dateFiche
+        (item) =>
+          item.idEt === payload.idEt && item.dateFiche === payload.dateFiche
       );
 
       if (index !== -1) {
@@ -432,10 +434,9 @@ const conventionSlice = createSlice({
       const payload = action.payload;
       // console.log("payload", payload);
       const index = state.conventions.findIndex(
-          (item) =>
-              item.conventionPK.idEt === payload.conventionPK.idEt &&
-              item.conventionPK.dateConvention ===
-              payload.conventionPK.dateConvention
+        (item) =>
+          item.conventionPK.idEt === payload.idEt &&
+          item.conventionPK.dateConvention === payload.dateConvention
       );
 
       if (index !== -1) {
@@ -453,6 +454,7 @@ const conventionSlice = createSlice({
 
       console.log("----------zzd------- 2005 3.0 ----->", payload);
 
+      /*
       const index = state.conventionsForRSS.findIndex(
           (item) =>
               item.conventionPK.idEt === payload.conventionPK.idEt &&
@@ -468,14 +470,15 @@ const conventionSlice = createSlice({
         console.log("----------------- 0905 3.1 ----->", index);
         console.log("----------------- 0905 3.2 ----->", payload);
       }
+      */
     },
     updateConventionDtoForRSS: (state, action) => {
       const payload = action.payload;
 
       const index = state.conventionsForRSS.findIndex(
-          (item) =>
-              item.idEt === payload.idEt &&
-              item.dateConvention === payload.dateConvention
+        (item) =>
+          item.idEt === payload.idEt &&
+          item.dateConvention === payload.dateConvention
       );
 
       // console.log("-----------------1702-2----->" + index + " - " + payload.conventionPK.dateConvention);
@@ -489,9 +492,9 @@ const conventionSlice = createSlice({
       const payload = action.payload;
       // console.log("payload", payload);
       const index = state.demandesAnnulationConventions.findIndex(
-          (item) =>
-              item.conventionPK.idEt === payload.conventionPK.idEt &&
-              item.conventionPK.dateConvention === payload.conventionPK.dateConvention
+        (item) =>
+          item.conventionPK.idEt === payload.idEt &&
+          item.conventionPK.dateConvention === payload.dateConvention
       );
 
       if (index !== -1) {

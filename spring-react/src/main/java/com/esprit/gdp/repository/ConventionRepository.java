@@ -193,7 +193,12 @@ public interface ConventionRepository extends JpaRepository<Convention, Conventi
 			+ " where (c.conventionPK.idEt=:idET and "
 			+ "FUNCTION('to_char', c.conventionPK.dateConvention,'yyyy-mm-dd HH24:MI:SS')=:date )")
 	Optional<Convention> getConventionById(@Param("idET") String idET , @Param("date") String date);
-	
+
+	@Query(value="SELECT c from Convention c "
+			+ " where (c.conventionPK.idEt=:idET and "
+			+ "FUNCTION('to_char', c.conventionPK.dateConvention,'dd-mm-yyyy HH24:MI:SS')=:date )")
+	Optional<Convention> getConventionByIdOFF(@Param("idET") String idET , @Param("date") String date);
+
 	@Query(value="SELECT c from Convention c "
 			+ " where (c.conventionPK.idEt=:idET and "
 			+ "FUNCTION('to_char', c.conventionPK.dateConvention,'dd-mm-yyyy HH24:MI:SS')=:date )")
@@ -301,5 +306,59 @@ public interface ConventionRepository extends JpaRepository<Convention, Conventi
 			+ " where (c.conventionPK.idEt=:idET and "
 			+ "FUNCTION('to_char', c.conventionPK.dateConvention,'yyyy-mm-dd HH24:MI:SS')=:date )")
 	Optional<Convention> getConventionByIdFormedDateNew(@Param("idET") String idET , @Param("date") String date);
+
+	@Query(value="SELECT new com.esprit.gdp.dto.ConventionsValidatedForRSSDto(FUNCTION('to_char', c.conventionPK.dateConvention,'dd-mm-yyyy HH24:MI:SS'), c.dateDebut, c.dateFin, c.conventionPK.idEt, c.traiter, c.entrepriseAccueilConvention.pays.langueCode, c.pathConvention, c.pathSignedConvention, c.entrepriseAccueilConvention) "
+			+ "from Convention c where c.traiter = '02' "
+			+ "and c.conventionPK.idEt IN ?1 "
+			+ "and c.conventionPK.idEt not in ('171JMT1867', '181SMT2040') "
+			// + "and FUNCTION('to_char', c.conventionPK.dateConvention,'dd-mm-yyyy HH24:MI:SS') in ('25-02-2022 00:39:16', '25-02-2022 01:57:37', '25-02-2022 02:03:12', '25-02-2022 15:29:19', '25-02-2022 21:47:21', '25-02-2022 22:06:42', '25-02-2022 23:06:58') "
+			// + "and FUNCTION('to_char', c.conventionPK.dateConvention,'dd-mm-yyyy HH24:MI:SS') in ('25-02-2022 15:39:29', '25-02-2022 15:48:49', '25-02-2022 16:03:43', '25-02-2022 16:06:28', '25-02-2022 17:28:12', '25-02-2022 18:02:35', '25-02-2022 18:03:51', '25-02-2022 18:06:26', '25-02-2022 18:25:52', '25-02-2022 18:36:23', '25-02-2022 18:59:31', '25-02-2022 20:32:28', '25-02-2022 21:12:03', '25-02-2022 21:22:23', '25-02-2022 21:47:21', '25-02-2022 22:06:42', '25-02-2022 23:06:58') "
+			// + "and FUNCTION('to_char', c.conventionPK.dateConvention,'dd-mm-yyyy HH24:MI:SS') in ('25-02-2022 00:39:16', '25-02-2022 01:57:37', '25-02-2022 02:03:12', '25-02-2022 15:29:19', '25-02-2022 15:39:29', '25-02-2022 15:48:49', '25-02-2022 16:03:43', '25-02-2022 16:06:28', '25-02-2022 17:28:12', '25-02-2022 18:02:35', '25-02-2022 18:03:51', '25-02-2022 18:06:26', '25-02-2022 18:25:52', '25-02-2022 18:36:23', '25-02-2022 18:59:31', '25-02-2022 20:32:28', '25-02-2022 21:12:03', '25-02-2022 21:22:23', '25-02-2022 21:47:21', '25-02-2022 22:06:42', '25-02-2022 23:06:58') "
+			+ "order by c.conventionPK.dateConvention desc")
+		//@Query(value="SELECT new com.esprit.gdp.dto.ConventionsValidatedForRSSDto(FUNCTION('to_char', c.conventionPK.dateConvention,'dd-mm-yyyy HH24:MI:SS'), c.dateDebut, c.dateFin, c.conventionPK.idEt, c.entrepriseAccueilConvention) from Convention c where c.traiter = '02' order by c.conventionPK.dateConvention desc")
+	List<ConventionsValidatedForRSSDto> getAllConventionsValidatedDtoByStudentsForRSS(List<String> students);
+
+	@Query(value="SELECT new com.esprit.gdp.dto.ConventionForRSSDto(FUNCTION('to_char', c.conventionPK.dateConvention,'dd-mm-yyyy HH24:MI:SS'), c.dateDebut, c.dateFin, c.conventionPK.idEt, c.entrepriseAccueilConvention.pays.langueCode, c.traiter, c.pathConvention, c.entrepriseAccueilConvention) " +
+			"from Convention c " +
+			"where c.traiter = '01' " +
+			"and c.conventionPK.idEt IN ?1 " +
+			"order by c.conventionPK.dateConvention desc")
+	List<ConventionForRSSDto> getAllConventionsDtoByStudentsForRSS(List<String> students);
+
+	// Got All Conv Validated DTO By RSS
+	@Query(value="SELECT new com.esprit.gdp.dto.ConventionsValidatedForRSSDto(FUNCTION('to_char', c.conventionPK.dateConvention,'dd-mm-yyyy HH24:MI:SS'), c.dateDebut, c.dateFin, c.conventionPK.idEt, c.traiter, c.entrepriseAccueilConvention.pays.langueCode, c.pathConvention, c.pathSignedConvention, c.entrepriseAccueilConvention) "
+			+ "from Convention c where c.traiter = '02' "
+			+ "and c.responsableServiceStage.idUserSce like CONCAT('SR-STG-', ?1) "
+			+ "and c.conventionPK.idEt IN ?2 "
+			+ "and c.conventionPK.idEt not in ('171JMT1867', '181SMT2040') "
+			+ "order by c.conventionPK.dateConvention desc")
+	//@Query(value="SELECT new com.esprit.gdp.dto.ConventionsValidatedForRSSDto(FUNCTION('to_char', c.conventionPK.dateConvention,'dd-mm-yyyy HH24:MI:SS'), c.dateDebut, c.dateFin, c.conventionPK.idEt, c.entrepriseAccueilConvention) from Convention c where c.traiter = '02' and c.responsableServiceStage.idUserSce like CONCAT('SR-STG-', ?1) order by c.conventionPK.dateConvention desc")
+	List<ConventionsValidatedForRSSDto> getAllConventionsValidatedDtoByStudentsForSpeceficRSS(String kindRSS, List<String> students);
+
+	@Query(value="SELECT new com.esprit.gdp.dto.ConventionForRSSDto(FUNCTION('to_char', c.conventionPK.dateConvention,'dd-mm-yyyy HH24:MI:SS'), c.dateDebut, c.dateFin, c.conventionPK.idEt, c.entrepriseAccueilConvention.pays.langueCode, c.traiter, c.pathConvention, c.entrepriseAccueilConvention) " +
+			"from Convention c, InscriptionCJ y " +
+			"where c.conventionPK.idEt = y.id.idEt " +
+			"and y.saisonClasse.id.codeCl like '5%'" +
+			"and c.traiter = '01' " +
+			"and y.id.anneeDeb =?1 " +
+			"order by c.conventionPK.dateConvention desc")
+	List<ConventionForRSSDto> findStudentsCJWithNotTreatedConventionsByYear(String year);
+
+	@Query(value="SELECT new com.esprit.gdp.dto.ConventionForRSSDto(FUNCTION('to_char', c.conventionPK.dateConvention,'dd-mm-yyyy HH24:MI:SS'), c.dateDebut, c.dateFin, c.conventionPK.idEt, c.entrepriseAccueilConvention.pays.langueCode, c.traiter, c.pathConvention, c.entrepriseAccueilConvention) " +
+			"from Convention c, OptionStudentALT o " +
+			"where c.conventionPK.idEt = o.idOptStuALT.idEt " +
+			"and c.traiter = '01' " +
+			"and o.idOptStuALT.anneeDeb =?1 " +
+			"order by c.conventionPK.dateConvention desc")
+	List<ConventionForRSSDto> findStudentsALTWithNotTreatedConventionsByYear(String year);
+
+	@Query(value="SELECT new com.esprit.gdp.dto.ConventionForRSSDto(FUNCTION('to_char', c.conventionPK.dateConvention,'dd-mm-yyyy HH24:MI:SS'), c.dateDebut, c.dateFin, c.conventionPK.idEt, c.entrepriseAccueilConvention.pays.langueCode, c.traiter, c.pathConvention, c.entrepriseAccueilConvention) " +
+			"from Convention c, InscriptionCS y " +
+			"where c.conventionPK.idEt = y.id.idEt " +
+			"and y.saisonClasse.id.codeCl like '4%'" +
+			"and c.traiter = '01' " +
+			"and y.id.anneeDeb =?1 " +
+			"order by c.conventionPK.dateConvention desc")
+	List<ConventionForRSSDto> findStudentsCSWithNotTreatedConventionsByYear(String year);
 
 }

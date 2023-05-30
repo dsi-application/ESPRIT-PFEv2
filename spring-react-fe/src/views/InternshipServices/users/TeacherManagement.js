@@ -75,7 +75,7 @@ const TeacherManagement = () => {
   const [pika, setPika] = useState("INIT");
   const [successModifContactCoord, setSuccessModifContactCoord] = useState(false);
   const [loadTeacherBySelectedYear, setLoadTeacherBySelectedYear] = useState(false);
-  const [selectedYear, setSelectedYear] = useState("2021");
+  const [selectedYear, setSelectedYear] = useState("2022");
   const dispatch = useDispatch();
   const [responsive, setResponsive] = useState("vertical");
   const [tableBodyHeight, setTableBodyHeight] = useState("300");
@@ -381,7 +381,7 @@ const TeacherManagement = () => {
               <br/>
               <p className="greyMarkForSelectComp">Merci de choisir une Année pour consulter la résultante</p>
               <Select  placeholder="Please Select an Academic Year"
-                       defaultValue={{value: '2021', label: '2021', color: "#00B8D9"}}
+                       defaultValue={{value: '2022', label: '2022', color: "#00B8D9"}}
                        value={allSessionsLabel.value}
                        components={animatedComponents}
                        options={allSessionsLabel}

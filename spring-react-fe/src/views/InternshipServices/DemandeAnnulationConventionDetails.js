@@ -27,9 +27,12 @@ import {getBadge, getEtat} from "./ConventionsManage";
 import "moment/locale/fr";
 import Tour from "reactour";
 import LocalLibrary from "@material-ui/icons/LocalLibrary";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
+
 import Text from "antd/lib/typography/Text";
+
+import AuthService from "../services/auth.service";
+
+const currentResponsableServiceStage = AuthService.getCurrentResponsableServiceStage();
 
 const steps = [
   {
@@ -39,33 +42,33 @@ const steps = [
   {
     selector: '[data-tut="reactour__2"]',
     content: () => (
-        <Text>
-          Dans cette partie , vous allez trouver
-          <strong>les détails de la convention </strong>
-        </Text>
+      <Text>
+        Dans cette partie , vous allez trouver
+        <strong>les détails de la convention </strong>
+      </Text>
     ),
   },
 
   {
     selector: '[data-tut="reactour__3"]',
     content: () => (
-        <Text>
-          Içi, vous pouvez interpréter l'état de la convention :
-          <strong>DEPOSEE - TRAITEE - ANNULEE</strong>.
-        </Text>
+      <Text>
+        Içi, vous pouvez interpréter l'état de la convention :
+        <strong>DEPOSEE - TRAITEE - ANNULEE</strong>.
+      </Text>
     ),
   },
   {
     selector: '[data-tut="reactour__4"]',
     content: () => (
-        <Text>
-          Pour traiter la convention , cliquer sur ce bouton :
-          <strong>
+      <Text>
+        Pour traiter la convention , cliquer sur ce bouton :
+        <strong>
 
-            Valider la convention et l'envoyer à l'Étudiant par Email
-          </strong>
-          .
-        </Text>
+          Valider la convention et l'envoyer à l'Étudiant par Email
+        </strong>
+        .
+      </Text>
     ),
   },
 ];
@@ -82,14 +85,17 @@ const DemandeAnnulationConventionDetails = () => {
   const handleUpdateEvent = async () => {
     setShowLoader(true);
 
+    console.log('------------> A : ' + Convention.idEt);
+    console.log('------------> Z : ' + Convention.dateConvention);
+
     const [res, err] = await queryApi(
-        "serviceStage/updateDemandeAnnulationConventionState?idET=" +
-        Convention.conventionPK.idEt +
-        "&date=" +
-        Convention.conventionPK.dateConvention,
-        {},
-        "PUT",
-        false
+      "serviceStage/updateDemandeAnnulationConventionState?idEt=" +
+      Convention.idEt +
+      "&date=" +
+      Convention.dateConvention,
+      {},
+      "PUT",
+      false
     );
 
     if (err) {
@@ -114,41 +120,52 @@ const DemandeAnnulationConventionDetails = () => {
   const displayTraitementBtn = (c) => {
     if (c.traiter === "04") {
       return (
-          <CButton
-              size="sm"
-              className="float-left;"
-              style={{backgroundColor: "#ed1c24", color: "white"}}
-              onClick={() => openModal()}
-              data-tut="reactour__4"
-          >
-            Valider la demande Annulation Convention
-          </CButton>
+        <>
+          {
+            currentResponsableServiceStage.id.includes("IT") ? (
+              <CButton
+                size="sm"
+                className="float-left;"
+                style={{backgroundColor: "#ed1c24", color: "white"}}
+                onClick={() => openModal()}
+                data-tut="reactour__4"
+              >
+                Valider la demande Annulation Convention
+              </CButton>
+            ) : (
+              <CButton
+                size="sm"
+                className="float-left;"
+                style={{backgroundColor: "#ed1c24", color: "white"}}
+                disabled>
+                Valider la demande Annulation Convention
+              </CButton>
+            )
+          }
+        </>
       );
     }
     if (c.traiter === "03") {
       return (
-          <CButton
-              size="sm"
-              className="float-left;"
-              color="dark"
-              onClick={() => openModal()}
-              data-tut="reactour__4"
-              disabled
-          >
-            Demande Annulation Convention VALIDÉE
-          </CButton>
+        <CButton
+          size="sm"
+          className="float-left;"
+          color="dark"
+          disabled>
+          Demande Annulation Convention VALIDÉE
+        </CButton>
       );
     }
   };
 
   return (
-      <>
+    <>
       <Tour
-          steps={steps}
-          isOpen={isTourOpen}
-          onAfterOpen={(target) => (document.body.style.overflowY = "hidden")}
-          onBeforeClose={(target) => (document.body.style.overflowY = "auto")}
-          onRequestClose={() => setIsTourOpen(false)}
+        steps={steps}
+        isOpen={isTourOpen}
+        onAfterOpen={(target) => (document.body.style.overflowY = "hidden")}
+        onBeforeClose={(target) => (document.body.style.overflowY = "auto")}
+        onRequestClose={() => setIsTourOpen(false)}
       />
       <CRow>
         <CCol>
@@ -180,135 +197,138 @@ const DemandeAnnulationConventionDetails = () => {
                     <span style={{fontWeight: "bold"}}>
                       Identifiant Étudiant:
                     </span>&nbsp;
-                    {Convention.conventionPK.idEt}
+                    {Convention.idEt}
                     <br/>
                     <span style={{fontWeight: "bold"}}>
                       Date Dépôt Convention:
                     </span>&nbsp;
-                    {moment(Convention.conventionPK.dateConvention).format("LLLL")}
+                    <br/>
+                    {Convention.dateConvention}
+                    <br/>
+                    {moment(Convention.dateConvention).format("LLLL")}
                     <br/><br/>
                     {displayTraitementBtn(Convention)}
                     <br/><br/>
-                </CCardHeader>
-                <CCardBody>
-                  <b style={{color: "red"}}>Informations sur Entreprise</b>
-                  <br/>
+                  </CCardHeader>
+                  <CCardBody>
+                    <b style={{color: "red"}}>Informations sur Entreprise</b>
+                    <br/>
 
-                  <CRow>
-                    <CCol md="2">
-                      <b>Libellé:</b>
-                    </CCol>
-                    <CCol md="10">
-                      {Convention.entrepriseAccueilConvention.designation}
-                    </CCol>
-                  </CRow>
+                    <CRow>
+                      <CCol md="2">
+                        <b>Libellé:</b>
+                      </CCol>
+                      <CCol md="10">
+                        {Convention.entrepriseAccueilConvention.designation}
+                      </CCol>
+                    </CRow>
 
-                  <CRow>
-                    <CCol md="2">
-                      <b>Secteur Activité:</b>
-                    </CCol>
-                    <CCol md="10">
-                      {Convention.entrepriseAccueilConvention.secteurEntreprise ? Convention.entrepriseAccueilConvention.secteurEntreprise.libelleSecteur : "--"}
-                    </CCol>
-                  </CRow>
-                  <CRow>
-                    <CCol md="2">
-                      <b>Siège Social:</b>
-                    </CCol>
-                    <CCol md="10">
-                      {
-                        Convention.entrepriseAccueilConvention.siegeSocial === '---' ?
+                    <CRow>
+                      <CCol md="2">
+                        <b>Secteur Activité:</b>
+                      </CCol>
+                      <CCol md="10">
+                        {Convention.entrepriseAccueilConvention.secteurEntreprise ? Convention.entrepriseAccueilConvention.secteurEntreprise.libelleSecteur : "--"}
+                      </CCol>
+                    </CRow>
+                    <CRow>
+                      <CCol md="2">
+                        <b>Siège Social:</b>
+                      </CCol>
+                      <CCol md="10">
+                        {
+                          Convention.entrepriseAccueilConvention.siegeSocial === '---' ?
                             "--" : <>{Convention.entrepriseAccueilConvention.siegeSocial}</>}
-                    </CCol>
-                  </CRow>
+                      </CCol>
+                    </CRow>
 
-                  <br/>
+                    <br/>
 
-                  <CRow>
-                    <CCol md="2">
-                      <b>Adresse:</b>
-                    </CCol>
-                    <CCol md="10">
-                      {Convention.entrepriseAccueilConvention.address}
-                      {Convention.entrepriseAccueilConvention.pays ?
+                    <CRow>
+                      <CCol md="2">
+                        <b>Adresse:</b>
+                      </CCol>
+                      <CCol md="10">
+                        {Convention.entrepriseAccueilConvention.address}
+                        {Convention.entrepriseAccueilConvention.pays ?
                           <>{' ,' + Convention.entrepriseAccueilConvention.pays.nomPays}</> : ""}
-                    </CCol>
-                  </CRow>
+                      </CCol>
+                    </CRow>
 
-                  <CRow>
-                    <CCol md="2">
-                      <b>E-Mail:</b>
-                    </CCol>
-                    <CCol md="10">
-                      {Convention.entrepriseAccueilConvention.addressMail}
-                    </CCol>
-                  </CRow>
+                    <CRow>
+                      <CCol md="2">
+                        <b>E-Mail:</b>
+                      </CCol>
+                      <CCol md="10">
+                        {Convention.entrepriseAccueilConvention.addressMail}
+                      </CCol>
+                    </CRow>
 
-                  <CRow>
-                    <CCol md="2">
-                      <b>Numéro Téléphone:</b>
-                    </CCol>
-                    <CCol md="10">
-                      {Convention.entrepriseAccueilConvention.telephone === '--------' && <>--</>}
-                      {Convention.entrepriseAccueilConvention.telephone !== '--------' && <>{Convention.entrepriseAccueilConvention.telephone}</>}
-                    </CCol>
-                  </CRow>
+                    <CRow>
+                      <CCol md="2">
+                        <b>Numéro Téléphone:</b>
+                      </CCol>
+                      <CCol md="10">
+                        {Convention.entrepriseAccueilConvention.telephone === '--------' && <>--</>}
+                        {Convention.entrepriseAccueilConvention.telephone !== '--------' && <>{Convention.entrepriseAccueilConvention.telephone}</>}
+                      </CCol>
+                    </CRow>
 
-                  <CRow>
-                    <CCol md="2">
-                      <b>Numéro Fax:</b>
-                    </CCol>
-                    <CCol md="10">
-                      {Convention.entrepriseAccueilConvention.fax === '--------' && <>--</>}
-                      {Convention.entrepriseAccueilConvention.fax !== '--------' && <>{Convention.entrepriseAccueilConvention.fax}</>}
-                    </CCol>
-                  </CRow>
+                    <CRow>
+                      <CCol md="2">
+                        <b>Numéro Fax:</b>
+                      </CCol>
+                      <CCol md="10">
+                        {Convention.entrepriseAccueilConvention.fax === '--------' && <>--</>}
+                        {Convention.entrepriseAccueilConvention.fax !== '--------' && <>{Convention.entrepriseAccueilConvention.fax}</>}
+                      </CCol>
+                    </CRow>
 
-                </CCardBody>
+                  </CCardBody>
+                </CCard>
+              </CCol>
+            </CCardBody>
           </CCard>
         </CCol>
-      </CCardBody>
-      </CCard>
-</CCol>
-</CRow>
+      </CRow>
 
-  <CModal show={warning} onClose={() => setWarning(!warning)} color="warning">
-    <CModalHeader closeButton>
-      <CModalTitle>
+      <CModal show={warning} onClose={() => setWarning(!warning)} color="warning">
+        <CModalHeader closeButton>
+          <CModalTitle>
         <span style={{fontSize: "13px"}}>
           Confirmation
         </span>
-      </CModalTitle>
-    </CModalHeader>
-    <CModalBody>
-      <center>
-        <br/>
-        Êtes-vous sûre de vouloir valider cette demande Annulation Convention ?.
-        <br/><br/><br/><br/>
-          <CButton color="warning" onClick={() => handleUpdateEvent()}>
-            {showLoader && <CSpinner grow size="sm"/>}&nbsp;&nbsp;
-            Oui
-          </CButton>
-          &nbsp;&nbsp;
-          <CButton color="secondary" onClick={() => setWarning(!warning)}>
-            Non
-          </CButton>
+          </CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <center>
+            <br/>
+            Êtes-vous sûre de vouloir valider cette demande Annulation Convention ?.
+            <br/><br/><br/><br/>
+            <CButton color="warning" onClick={() => handleUpdateEvent()}>
+              {showLoader && <CSpinner grow size="sm"/>}&nbsp;&nbsp;
+              Oui
+            </CButton>
+            &nbsp;&nbsp;
+            <CButton color="secondary" onClick={() => setWarning(!warning)}>
+              Non
+            </CButton>
 
-          <br/><br/><br/>
+            <br/><br/><br/>
 
-          {showLoader && (
+            {showLoader && (
               <CAlert color="info">
                 Attendre un petit peu ... .
                 <br/>
                 Envoie du Mail en cours ... .
               </CAlert>
-          )}
-      </center>
-    </CModalBody>
-  </CModal>
-</>
-)
-  ;
+            )}
+          </center>
+        </CModalBody>
+      </CModal>
+    </>
+  )
+    ;
 };
 
 export default DemandeAnnulationConventionDetails;

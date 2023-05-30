@@ -112,8 +112,8 @@ public class ServiceStageController {
 	@GetMapping("/StudentPFEDepasseList")
 	public ResponseEntity<?> getStudentPFEDepasseList(@RequestParam("id") String id,
 			@RequestParam("nbrMois") int nbrMois) {
-		System.out.println("nbrMois" + nbrMois);
-		System.out.println("id" + id);
+		// System.out.println("nbrMois" + nbrMois);
+		// System.out.println("id" + id);
 		try {
 			List<StudentPFEDepasse> StudentPFEDepasseList = serviceStageService.getEtudiantPFEDepasse(id, nbrMois);
 			if (StudentPFEDepasseList.isEmpty()) {
@@ -122,7 +122,7 @@ public class ServiceStageController {
 
 			return new ResponseEntity<>(StudentPFEDepasseList, HttpStatus.OK);
 		} catch (Exception e) {
-			System.out.println(e);
+			// System.out.println(e);
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -221,10 +221,10 @@ public class ServiceStageController {
 	public ResponseEntity<ConventionForRSSDto> updateConventionState(@RequestParam("idET") String idEt,
 			@RequestParam("date") String dateOFF) throws Exception {
 
-		System.out.println("------THIS-1---------- idEt: " + idEt);
+		// System.out.println("------THIS-1---------- idEt: " + idEt);
 		String date = dateOFF.trim();
-		System.out.println("------THIS-2.1---------- date$" + dateOFF + "$");
-		System.out.println("------THIS-2.2---------- date$" + date + "$");
+		// System.out.println("------THIS-2.1---------- date$" + dateOFF + "$");
+		// System.out.println("------THIS-2.2---------- date$" + date + "$");
 
 		// System.out.println("------THIS-1---------- idEt: " + idEt);
 		// System.out.println("------THIS-2---------- date: " + date);
@@ -233,7 +233,7 @@ public class ServiceStageController {
 		// String convDt = date.substring(0, 19).replace("T", " ");
 
 		if (conventionRepository.getConventionByIdFormedDate(idEt, date).isPresent()) {
-			System.out.println("------THIS-3---------- date: " + date);
+			// System.out.println("------THIS-3---------- date: " + date);
 			Optional<Convention> conv = conventionRepository.getConventionByIdFormedDate(idEt, date);
 
 			Date dat = new Date();
@@ -257,12 +257,12 @@ public class ServiceStageController {
 			if (convCodePays.equalsIgnoreCase("TN")) {
 				ConventionTN_PDF convTN = new ConventionTN_PDF(conv, path, studentFullName, studentOption,
 						studentDepartment);
-				System.out.println("----------------- TN");
+				// System.out.println("----------------- TN");
 
 				/**********************************************
 				 * Notify Mail
 				 *******************************************************/
-				System.out.println("----------------- Current Convention: " + convCodePays);
+				// System.out.println("----------------- Current Convention: " + convCodePays);
 				conv.get().setPathConvention(path);
 				conventionRepository.save(conv.get());
 
@@ -282,7 +282,7 @@ public class ServiceStageController {
 				String studentMail = utilServices.findStudentMailById(idEt); // Server DEPLOY_SERVER
 				// String studentMail = "saria.essid@esprit.tn"; // Local
 
-				System.out.println("---------------------------> Start");
+				// System.out.println("---------------------------> Start");
 
 				utilServices.sendMail("Validation de Convention", studentMail, content);
 				// utilServices.sendMailWithAttachment(studentMail, "Validation de Convention",
@@ -292,12 +292,12 @@ public class ServiceStageController {
 			if (convCodePays.equalsIgnoreCase("EN") || convCodePays.equalsIgnoreCase("--")) {
 				ConventionEN_PDF convEN = new ConventionEN_PDF(conv, path, studentFullName, studentOption,
 						studentDepartment);
-				System.out.println("----------------- EN");
+				// System.out.println("----------------- EN");
 
 				/**********************************************
 				 * Notify Mail
 				 *******************************************************/
-				System.out.println("----------------- Current Convention: " + convCodePays);
+				// System.out.println("----------------- Current Convention: " + convCodePays);
 				conv.get().setPathConvention(path);
 				conventionRepository.save(conv.get());
 
@@ -318,7 +318,7 @@ public class ServiceStageController {
 				String studentMail = utilServices.findStudentMailById(idEt); // Server DEPLOY_SERVER
 				// String studentMail = "saria.essid@esprit.tn"; // Local
 
-				System.out.println("---------------------------> Start");
+				// System.out.println("---------------------------> Start");
 
 				utilServices.sendMail("Validation de Convention", studentMail, content);
 				// utilServices.sendMailWithAttachment(studentMail, "Validation de Convention",
@@ -328,12 +328,12 @@ public class ServiceStageController {
 				StudentConvFRDto scf = utilServices.findStudentConvFRDtoById(idEt);
 
 				ConventionFR_PDF convFR = new ConventionFR_PDF(conv, path, scf, studentOption, studentDepartment);
-				System.out.println("----------------- FR");
+				// System.out.println("----------------- FR");
 
 				/**********************************************
 				 * Notify Mail
 				 *******************************************************/
-				System.out.println("----------------- Current Convention: " + convCodePays);
+				// System.out.println("----------------- Current Convention: " + convCodePays);
 				conv.get().setPathConvention(path);
 				conventionRepository.save(conv.get());
 
@@ -682,7 +682,7 @@ public class ServiceStageController {
 
 	@PutMapping(value = "/updateDemandeAnnulationConventionState", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Convention> updateDemandeAnnulationConventionState(@RequestParam("idET") String idEt, @RequestParam("date") String date) throws Exception
+	public ResponseEntity<Convention> updateDemandeAnnulationConventionState(@RequestParam("idEt") String idEt, @RequestParam("date") String date) throws Exception
 	{
 
 		System.out.println("------THIS-1---------- idEt: " + idEt);
@@ -692,13 +692,17 @@ public class ServiceStageController {
 		System.out.println("------THIS-2.2---------- convDt: " + convDt);
 
 		// if (conventionRepository.getConventionById(idEt, convDt).isPresent())
-		if (conventionRepository.getConventionByIdFormedDateNew(idEt, convDt).isPresent())
+		if (conventionRepository.getConventionByIdFormedDate(idEt, convDt).isPresent())
 		{
-			System.out.println("------THIS-3---------- date: " + convDt);
+			System.out.println("------THIS-3----hhhhhhhh------ date: " + convDt);
 
 			/*********************************** STAR : ANNULL ESP File after ANNULL Convention /***********************************/
-			Optional<Convention> conv = conventionRepository.getConventionByIdFormedDateNew(idEt, convDt);
+			Optional<Convention> conv = conventionRepository.getConventionByIdFormedDate(idEt, convDt);
 			//Optional<Convention> conv = conventionRepository.getConventionById(idEt, convDt);
+
+			Convention convention = conv.get();
+			convention.setTraiter("03");
+			conventionRepository.save(convention);
 
 			DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
@@ -709,7 +713,7 @@ public class ServiceStageController {
 				fichePFE.setEtatFiche("05");
 				fichePFERepository.save(fichePFE);
 
-				//System.out.println("-----------------------------$$$$$----------------------------> SARS-0: " + conv.get().getDateSaisieDemande());
+				System.out.println("-----------------------------$$$$$-----------> SARS-0: " + conv.get().getDateSaisieDemande());
 				/*
 				// Save in Convention
 				if(typeTrtConvention.equalsIgnoreCase("Oui"))
@@ -753,22 +757,22 @@ public class ServiceStageController {
 					+ convValidationDate + " </font>.<br/>"
 					+ "Par conséquent, Votre Plan Travail a été annulé <font color=red> automatiquement</font> .";
 
-			String studentMail = utilServices.findStudentMailById(idEt);  // Server  DEPLOY_SERVER
-			// String studentMail = "student@esprit.tn";   // Local
+			//String studentMail = utilServices.findStudentMailById(idEt);  // Server  DEPLOY_SERVER
+			String studentMail = "student@esprit.tn";   // Local
 
-			String AEMail = utilServices.findMailPedagogicalEncadrant(idEt);     //DEPLOY_SERVER
-			// String AEMail = "saria.essid@esprit.tn";
+			//String AEMail = utilServices.findMailPedagogicalEncadrant(idEt);     //DEPLOY_SERVER
+			String AEMail = "saria.essid@esprit.tn";
 
-			String EEMail = conv.get().getEntrepriseAccueilConvention().getAddressMail();     //DEPLOY_SERVER
-			// String EEMail = "saria.essid@esprit.tn";
+			//String EEMail = conv.get().getEntrepriseAccueilConvention().getAddressMail();     //DEPLOY_SERVER
+			String EEMail = "saria.essid@esprit.tn";
 
-			String mailRSS = responsableServiceStageRepository.findRespServStgMailById("SR-STG-IT"); // Server  DEPLOY_SERVER
-			// String mailRSS = "raa@esprit.tn";// Local
+			//String mailRSS = responsableServiceStageRepository.findRespServStgMailById("SR-STG-IT"); // Server  DEPLOY_SERVER
+			String mailRSS = "raa@esprit.tn";// Local
 
 			System.out.println("START---------------------------------------------------> Mail SENT TO: " + AEMail);
 			System.out.println("==>StudentCJ Mail : " + utilServices.findStudentMailById(idEt));
 			System.out.println("==>AEMail : " + utilServices.findMailPedagogicalEncadrant(idEt));
-			// System.out.println("==>EEMail : " + conv.get().getEntrepriseAccueilConvention().getAddressMail());
+			System.out.println("==>EEMail : " + conv.get().getEntrepriseAccueilConvention().getAddressMail());
 			System.out.println("==>mailRSS : " + responsableServiceStageRepository.findRespServStgMailById("SR-STG-IT"));
 			System.out.println("END -----------------------------------------------------------------> *");
 
@@ -859,49 +863,51 @@ public class ServiceStageController {
 	 * return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR); } }
 	 */
 
+
 	@GetMapping("/FichesForDepot")
 	public ResponseEntity<?> FichesForDepot(@RequestParam("id") String idServiceStage) {
-
-		try {
-			System.out.println("---------------------------> AZERTY 1: " + idServiceStage);
+		try
+		{
+			// System.out.println("---------------------------> AZERTY 1: " + idServiceStage);
 
 			DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
 			List<FichePFE> FichePFEList = fichePFERepository.getFichesForDepot(idServiceStage);
-			System.out.println("---------------------------> AZERTY 2: " + FichePFEList.size());
+			// System.out.println("---------------------------> AZERTY 2: " + FichePFEList.size());
 			if (FichePFEList.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
-			System.out.println("---------------------------> AZERTY 3");
+			// System.out.println("---------------------------> AZERTY 3");
 			List<DepotRapport> FichePFEListFinale = new ArrayList<DepotRapport>();
-			System.out.println("---------------------------> AZERTY 4");
-			for (FichePFE F : FichePFEList) {
+			// System.out.println("---------------------------> AZERTY 4");
+			for (FichePFE F : FichePFEList )
+			{
 				StudentIdFullNameDto S = findStudentIdFullNameOFF(F.getIdFichePFE().getConventionPK().getIdEt());
-				System.out.println("-----------------------------------------------------------------> AZERTY 2: "
-						+ F.getIdFichePFE().getConventionPK().getIdEt());
+				// System.out.println("-----------------------------------------------------------------> AZERTY 2: " + F.getIdFichePFE().getConventionPK().getIdEt());
 
 				String dateConvention = dateFormata.format(F.getIdFichePFE().getConventionPK().getDateConvention());
-				Integer trainingDuration = conventionRepository.findDureeStageWeekByStudentAndDateConvention(
-						F.getIdFichePFE().getConventionPK().getIdEt(), dateConvention);
+				Integer trainingDuration = conventionRepository.findDureeStageWeekByStudentAndDateConvention(F.getIdFichePFE().getConventionPK().getIdEt(), dateConvention);
 
-				System.out.println("---------------------------> AZERTY 5: " + trainingDuration);
+				// System.out.println("---------------------------> AZERTY 5: " + trainingDuration);
 
-				DepotRapport D = new DepotRapport(F.getIdFichePFE().getConventionPK().getIdEt(), S.getFullName(),
-						F.getPathRapportVersion2(), F.getPathPlagiat(), F.getPathAttestationStage(),
-						F.getPathSupplement(), codeNomenclatureRepository.findEtatFiche(F.getEtatFiche()),
+				String timestampToString = dateFormata.format(F.getIdFichePFE().getDateDepotFiche());
+
+				DepotRapport D = new DepotRapport(F.getIdFichePFE().getConventionPK().getIdEt(),
+						S.getFullName(), F.getPathRapportVersion2(), F.getPathPlagiat(),
+						F.getPathAttestationStage(), F.getPathSupplement(), codeNomenclatureRepository.findEtatFiche(F.getEtatFiche()),
 						codeNomenclatureRepository.findEtatDepot(F.getValidDepot()),
-						F.getIdFichePFE().getDateDepotFiche(), trainingDuration,
-						// dateFormata.format(F.getDateDepotReports())
-						F.getDateDepotReports());
+						timestampToString,
+						trainingDuration,
+						//dateFormata.format(F.getDateDepotReports())
+						F.getDateDepotReports()
+				);
 
 				FichePFEListFinale.add(D);
-				System.out.println("================= lol 2 =============================> SIZE AZERTY: "
-						+ FichePFEListFinale.size());
+				// System.out.println("================= lol 2 =============================> SIZE AZERTY: " + FichePFEListFinale.size());
 
 			}
 
-			System.out.println("-----*************hi****lol1******END**ddd***************--> AZERTY - 2: "
-					+ FichePFEListFinale.size());
+			// System.out.println("-----*************hi****lol1******END**ddd***************--> AZERTY - 2: " + FichePFEListFinale.size());
 
 			// StudentList.sort(Comparator.comparing(StudentDetails::getAnneeDebInscription).reversed());
 			FichePFEListFinale.sort(Comparator.comparing(DepotRapport::getDateDepotReports).reversed());
@@ -911,13 +917,12 @@ public class ServiceStageController {
 
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
 	}
 
 	@GetMapping("/FichesForDepotVal")
 	public ResponseEntity<?> FichesForDepotVal(@RequestParam("id") String idServiceStageFULL) {
 		try {
-			
+
 			String idServiceStage = null;
 			if(idServiceStageFULL.equalsIgnoreCase("SR-STG-IT4") || idServiceStageFULL.equalsIgnoreCase("SR-STG-IT2") || idServiceStageFULL.equalsIgnoreCase("SR-STG-IT1"))
 			//if(idServiceStageFULL.startsWith("SR-STG-IT"))
@@ -928,8 +933,8 @@ public class ServiceStageController {
 			{
 				idServiceStage = idServiceStageFULL;
 			}
-			
-			
+
+
 			System.out.println("----------------------> PIKA 1: " + idServiceStage);
 			List<FichePFE> FichePFEList = fichePFERepository.getFichesForDepotVal(idServiceStage);
 			System.out.println("----------------------> PIKA 2: " + FichePFEList.size());
@@ -937,14 +942,20 @@ public class ServiceStageController {
 			if (FichePFEList.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
+
 			List<DepotRapport> FichePFEListFinale = new ArrayList<DepotRapport>();
-			for (FichePFE F : FichePFEList) {
+			for (FichePFE F : FichePFEList ) {
+
+				DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+				String timestampToString = dateFormata.format(F.getIdFichePFE().getDateDepotFiche());
+
 				StudentIdNomPrenomDto S = findStudentIdFullName(F.getIdFichePFE().getConventionPK().getIdEt());
-				DepotRapport D = new DepotRapport(F.getIdFichePFE().getConventionPK().getIdEt(), S.getNomet(),
-						S.getPrenomet(), F.getPathRapportVersion2(), F.getPathPlagiat(), F.getPathAttestationStage(),
-						F.getPathSupplement(), codeNomenclatureRepository.findEtatFiche(F.getEtatFiche()),
+				DepotRapport D = new DepotRapport(F.getIdFichePFE().getConventionPK().getIdEt(),
+						S.getNomet(), S.getPrenomet(), F.getPathRapportVersion2(), F.getPathPlagiat(),
+						F.getPathAttestationStage(), F.getPathSupplement(),
+						codeNomenclatureRepository.findEtatFiche(F.getEtatFiche()),
 						codeNomenclatureRepository.findEtatDepot(F.getValidDepot()),
-						F.getIdFichePFE().getDateDepotFiche());
+						timestampToString);
 
 				if(grilleAcademicEncadrantRepository.findGrilleByFiche(F.getIdFichePFE()) != null)
 				{
@@ -961,7 +972,7 @@ public class ServiceStageController {
 				{
 					D.setEtatGrilleEncadrement("NOTYET");
 				}
-				
+
 				FichePFEListFinale.add(D);
 			}
 			return new ResponseEntity<>(FichePFEListFinale, HttpStatus.OK);
@@ -972,9 +983,9 @@ public class ServiceStageController {
 	}
 
 	@GetMapping("/FichesDepotValALL")
-	public ResponseEntity<?> FichesForDepotVal() {
+	public ResponseEntity<?> FichesDepotValALL() {
 		try {
-			
+
 			List<FichePFE> FichePFEList = fichePFERepository.getFichesDepotValAll();
 			System.out.println("----------------------> PIKA 2: " + FichePFEList.size());
 
@@ -983,13 +994,17 @@ public class ServiceStageController {
 			}
 			List<DepotRapport> FichePFEListFinale = new ArrayList<DepotRapport>();
 			for (FichePFE F : FichePFEList) {
+
+				DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+				String timestampToString = dateFormata.format(F.getIdFichePFE().getDateDepotFiche());
+
 				StudentIdNomPrenomDto S = findStudentIdFullName(F.getIdFichePFE().getConventionPK().getIdEt());
 				DepotRapport D = new DepotRapport(F.getIdFichePFE().getConventionPK().getIdEt(), S.getNomet(),
 						S.getPrenomet(), F.getPathRapportVersion2(), F.getPathPlagiat(), F.getPathAttestationStage(),
 						F.getPathSupplement(), codeNomenclatureRepository.findEtatFiche(F.getEtatFiche()),
 						codeNomenclatureRepository.findEtatDepot(F.getValidDepot()),
-						F.getIdFichePFE().getDateDepotFiche());
-
+						timestampToString);
+				System.out.println("----------------------> PIKA 3: " + F.getEtatFiche());
 				if(grilleAcademicEncadrantRepository.findGrilleByFiche(F.getIdFichePFE()) != null)
 				{
 					if(grilleAcademicEncadrantRepository.findGrilleByFiche(F.getIdFichePFE()).getEtatGrille().equalsIgnoreCase("02"))
@@ -1005,16 +1020,17 @@ public class ServiceStageController {
 				{
 					D.setEtatGrilleEncadrement("NOTYET");
 				}
-				
+				System.out.println("----------------------> PIKA 4");
 				FichePFEListFinale.add(D);
+				System.out.println("----------------------> PIKA 5: " + FichePFEListFinale.size());
 			}
+			System.out.println("----------------------> PIKA 6");
 			return new ResponseEntity<>(FichePFEListFinale, HttpStatus.OK);
 		} catch (Exception e) {
 
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
 
 	@GetMapping("/FichesForDepotInc")
 	public ResponseEntity<?> FichesForDepotInc(@RequestParam("id") String idServiceStage) {
@@ -1024,13 +1040,18 @@ public class ServiceStageController {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
 			List<DepotRapport> FichePFEListFinale = new ArrayList<DepotRapport>();
-			for (FichePFE F : FichePFEList) {
+			for (FichePFE F : FichePFEList ) {
+
+				DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+				String timestampToString = dateFormata.format(F.getIdFichePFE().getDateDepotFiche());
+
 				StudentIdNomPrenomDto S = findStudentIdFullName(F.getIdFichePFE().getConventionPK().getIdEt());
-				DepotRapport D = new DepotRapport(F.getIdFichePFE().getConventionPK().getIdEt(), S.getNomet(),
-						S.getPrenomet(), F.getPathRapportVersion2(), F.getPathPlagiat(), F.getPathAttestationStage(),
-						F.getPathSupplement(), codeNomenclatureRepository.findEtatFiche(F.getEtatFiche()),
+				DepotRapport D = new DepotRapport(F.getIdFichePFE().getConventionPK().getIdEt(),
+						S.getNomet(), S.getPrenomet(), F.getPathRapportVersion2(), F.getPathPlagiat(),
+						F.getPathAttestationStage(), F.getPathSupplement(),
+						codeNomenclatureRepository.findEtatFiche(F.getEtatFiche()),
 						codeNomenclatureRepository.findEtatDepot(F.getValidDepot()),
-						F.getIdFichePFE().getDateDepotFiche());
+						timestampToString);
 				FichePFEListFinale.add(D);
 			}
 			return new ResponseEntity<>(FichePFEListFinale, HttpStatus.OK);
@@ -1043,113 +1064,128 @@ public class ServiceStageController {
 	@PutMapping(value = "/updateDepotToVALIDE", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<?> updateDepotToVALIDE(@RequestParam("idET") String idET,
-			@RequestParam("dateFiche") String dateFiche) {
+												 @RequestParam("dateDepotFiche") String dateDepotFiche)
+	{
 
+		System.out.println("===============================================================================> idET: " + idET);
+		System.out.println("===============================================================================> dateFiche: " + dateDepotFiche);
+
+		// Local
+		// String receiver = "saria.essid@esprit.tn";
+
+		// Server
 		String receiver = findStudentMailById(idET);
+		System.out.println("------------------------------------------> Student A: " + receiver);
 
-		String idPair = fichePFERepository.findBinomeIdByStudentId(idET).get(0); // Binome
+		String idPair = fichePFERepository.findBinomeIdByStudentId(idET).get(0);
 		String mailPair = findStudentMailById(idPair);
 
 		System.out.println("------------------------------------------> Pair A: " + mailPair);
-		if (mailPair != null) {
+		if(mailPair != null)
+		{
 			List<String> pairs = new ArrayList<String>();
-			pairs.add(receiver);
-			pairs.add(mailPair);
+			// pairs.add("no_reply@esprit.tn"); pairs.add("rosa.natali123@gmail.com");  // UPDATE
+			pairs.add(receiver); pairs.add(mailPair);
 			receiver = pairs.stream().collect(Collectors.joining(", "));
 			System.out.println("------------------------------------------> Pair B: " + mailPair);
 		}
-		String mailRSS = responsableServiceStageRepository
-				.findRespServStgMailById(conventionRepository.findResponsableServiceStageByIdEt(idET).get(0));
+
+		String mailRSS = responsableServiceStageRepository.findRespServStgMailById(conventionRepository.findResponsableServiceStageByIdEt(idET).get(0));
 
 		String studentClasse = utilServices.findCurrentClassByIdEt(idET);
 
-    	String studentOption = null;
+		String studentOption = null;
 		if(studentClasse.contains("4ALINFO"))
 		{
+			// MOCHKLA
 			studentOption = optionStudentALTRepository.findOptionByStudentALT(idET) + "_01";
 		}
 		else
 		{
 			studentOption = utilServices.findOptionByClass(studentClasse, optionRepository.listOptionsByYear("2021"));
-			// sd.setOption(utilServices.findOptionByClass(sd.getClasse(), optionRepository.listOptionsByYear("2021")).replace("_01", ""));	
+			// sd.setOption(utilServices.findOptionByClass(sd.getClasse(), optionRepository.listOptionsByYear("2021")).replace("_01", ""));
 		}
 
 		System.out.println("-----------> Student : " + studentClasse + " - " + studentOption.toLowerCase());
 
-		List<String> idCPSs = pedagogicalCoordinatorRepository
-				.gotIdPedagogicalCoordinatorByOptionNew(studentOption.toLowerCase());
+		List<String> idCPSs = pedagogicalCoordinatorRepository.gotIdPedagogicalCoordinatorByOptionNew(studentOption.toLowerCase());
 
 		String idCPS = null;
 		String mailCPS = "saria.essid@esprit.tn";
 		// List<String> idExistCPSs = new ArrayList<String>();
-		for (String s : idCPSs) {
-			// ********************** Exceptional Case where same CPS has 2 Units : just for
-			// Current University year
-			if (studentOption.toUpperCase().contains("SIM") || studentOption.toUpperCase().contains("GAMIX")
-					|| studentOption.toUpperCase().contains("WIN") || studentOption.toUpperCase().contains("IOSYS")) {
-				if (studentOption.toUpperCase().contains("SIM")) {
+		for(String s : idCPSs)
+		{
+			System.out.println("-----ccc------> idCPS : " + s);
+//    		if(pedagogicalCoordinatorRepository.gotIdPedagogicalCoordinatorByIdEns(s) != null)
+//    		{
+//    			idCPS = pedagogicalCoordinatorRepository.gotIdPedagogicalCoordinatorByIdEns(s);
+//    			// idExistCPSs
+//    		}
+
+			// ********************** Exceptional Case where same CPS has 2 Units : just for Current University year
+			if(
+					studentOption.toUpperCase().contains("SIM") || studentOption.toUpperCase().contains("GAMIX") ||
+							studentOption.toUpperCase().contains("WIN") || studentOption.toUpperCase().contains("IOSYS")
+			)
+			{
+				if(studentOption.toUpperCase().contains("SIM"))
+				{
 					mailCPS = "CPS_SIM@esprit.tn";
 				}
-				if (studentOption.toUpperCase().contains("GAMIX")) {
+				if(studentOption.toUpperCase().contains("GAMIX"))
+				{
 					mailCPS = "CPS_GAMIX@esprit.tn";
 				}
-				if (studentOption.toUpperCase().contains("WIN")) {
+				if(studentOption.toUpperCase().contains("WIN"))
+				{
 					mailCPS = "CPS_WIN@esprit.tn";
 				}
-				if (studentOption.toUpperCase().contains("IOSYS")) {
+				if(studentOption.toUpperCase().contains("IOSYS"))
+				{
 					mailCPS = "CPS_IOSYS@esprit.tn";
 				}
-			} else {
-				if (pedagogicalCoordinatorRepository.gotAllMAilsPedagogicalCoordinatorByIdNew(s) != null) {
+			}
+			else
+			{
+				if(pedagogicalCoordinatorRepository.gotAllMAilsPedagogicalCoordinatorByIdNew(s) != null)
+				{
 					mailCPS = pedagogicalCoordinatorRepository.gotAllMAilsPedagogicalCoordinatorByIdNew(s);
 				}
 			}
 			/***********************************************************************************************************/
-			// if(pedagogicalCoordinatorRepository.gotIdPedagogicalCoordinatorByIdEns(s) !=
-			// null)
-			// {
-			// idCPS =
-			// pedagogicalCoordinatorRepository.gotIdPedagogicalCoordinatorByIdEns(s);
-			// // idExistCPSs
-			// }
 		}
 
-		System.out.println("-----------> idCPS : " + idCPS);
+//    	System.out.println("-----------> idCPS : " + idCPS);
+//    	String mailCPS = pedagogicalCoordinatorRepository.gotAllMAilsPedagogicalCoordinatorById(idCPS).get(0);
 
-		System.out.println("-----------> mailCPS : " + mailCPS);
+		System.out.println("-----ddd------> mailCPS : " + mailCPS);
+
 		List<String> mailsCPSRSS = new ArrayList<String>();
-		mailsCPSRSS.add(utilServices.findMailPedagogicalEncadrant(idET));
-		mailsCPSRSS.add(mailCPS);
-		mailsCPSRSS.add(mailRSS);
-		String mailsCPSRSS_STR = mailsCPSRSS.stream().map(plain -> '"' + StringEscapeUtils.escapeJava(plain) + '"')
-				.collect(Collectors.joining(", "));
+		mailsCPSRSS.add(utilServices.findMailPedagogicalEncadrant(idET));mailsCPSRSS.add(mailCPS);mailsCPSRSS.add(mailRSS);
+		String mailsCPSRSS_STR = mailsCPSRSS.stream().map(plain -> '"' + StringEscapeUtils.escapeJava(plain) + '"').collect(Collectors.joining(", "));
 
 		/*
-		 * String mailPE = findMailAcademicEncadrantByStudent(idET);
-		 * 
-		 * String codeOption =
-		 * utilServices.findOptionByClass(findCurrentClassByIdEt(idET),
-		 * optionRepository.listOptionsByYear("2021"));
-		 * 
-		 * System.out.println("-------------> OPTION " + codeOption);
-		 * System.out.println("-------------> lol " + responsableStageRepository.lol());
-		 * 
-		 * String mailAcademicCoordinator =
-		 * teacherRepository.findMailTeacherById(responsableStageRepository.
-		 * findPedagogicalCoordinatorByCodeOption(codeOption));
-		 * 
-		 * List<String> receiversCC = new ArrayList<String>(); receiversCC.add(mailPE);
-		 * receiversCC.add(mailAcademicCoordinator); receiversCC.add(mailRSS); String
-		 * responsibles = receiversCC.stream().collect(Collectors.joining(", "));
-		 * 
-		 * System.out.
-		 * println("------------------------------------------> VALIDATE 1: HOSTS VDR - VALIDATE: "
-		 * + responsibles + "--->" + mailRSS + " - " + mailAcademicCoordinator + " - " +
-		 * mailPE + " *** " + receiver);
-		 */
+			String mailPE = findMailAcademicEncadrantByStudent(idET);
 
-		// ****************************************************************************
-		// Notification by mail
+			String codeOption = utilServices.findOptionByClass(findCurrentClassByIdEt(idET), optionRepository.listOptionsByYear("1988"));
+
+			System.out.println("-------------> OPTION " + codeOption);
+			System.out.println("-------------> lol " + responsableStageRepository.lol());
+
+			String mailAcademicCoordinator = teacherRepository.findMailTeacherById(responsableStageRepository.findPedagogicalCoordinatorByCodeOption(codeOption));
+
+			List<String> receiversCC = new ArrayList<String>();
+			// receiversCC.add("no_reply@esprit.tn"); receiversCC.add("saria.essid@esprit.tn"); // UPDATE
+		    receiversCC.add(mailPE); receiversCC.add(mailAcademicCoordinator); receiversCC.add(mailRSS);
+			String responsibles = receiversCC.stream().collect(Collectors.joining(", "));
+
+			// List<String> receiversCC = new ArrayList<String>();
+			// receiversCC.add(mailPE); receiversCC.add(mailAcademicCoordinator); receiversCC.add(mailRSS);
+			// String responsibles = receiversCC.stream().map(plain -> '"' + StringEscapeUtils.escapeJava(plain) + '"').collect(Collectors.joining(", "));
+	    	// System.out.println("------------------------------------------> VALIDATE 1: HOSTS VDR - VALIDATE: " + responsibles + "--->" + mailRSS + " - " + mailAcademicCoordinator + " - " + mailPE + " *** " + receiver);
+		*/
+
+		// **************************************************************************** Notification by mail
 		DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		String dateValidateDepot = dateFormata.format(new Date());
 
@@ -1163,37 +1199,40 @@ public class ServiceStageController {
 
 		utilServices.sendMailWithManyCC(subject, receiver, mailsCPSRSS_STR, content);
 
-		return new ResponseEntity<>(
-				serviceStageService.UpdateRepotToVALIDE(idET, dateFiche.substring(0, 19).replace("T", " ")),
-				HttpStatus.OK);
-
+		return new ResponseEntity<>(serviceStageService.UpdateRepotToVALIDE(idET, dateDepotFiche), HttpStatus.OK);
 	}
 
 	@PutMapping(value = "/updateDepotToREFUSE", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<?> updateDepotToREFUSE(@RequestParam("idET") String idET,
-			@RequestParam("dateFiche") String dateFiche, @RequestParam("cancelMotif") String encodedCancelMotif) {
+												 @RequestParam("dateDepotFiche") String dateDepotFiche,@RequestParam("cancelMotif") String encodedCancelMotif) {
 
 		String cancelMotif = utilServices.decodeEncodedValue(encodedCancelMotif);
+//		String receiver = "saria.essid@esprit.tn"; // UPDATE
+//		 String receiver = S.getAdressemailesp();
+
 		String receiver = findStudentMailById(idET);
 
+		//String mailPair = fichePFERepository.findBinomeMailByStudentId(idET).get(0);
 		String mailPair = utilServices.findStudentMailById(idET); // Binome
 
-		if (mailPair != null) {
+		System.out.println("------------------------------------------> Pair A: " + cancelMotif);
+		if(mailPair != null)
+		{
 			List<String> pairs = new ArrayList<String>();
-			pairs.add(receiver);
-			pairs.add(mailPair);
+//			pairs.add("no_reply@esprit.tn"); pairs.add("rosa.natali123@gmail.com");  // UPDATE
+			pairs.add(receiver); pairs.add(mailPair);
 			receiver = pairs.stream().collect(Collectors.joining(", "));
 		}
 
+
 		System.out.println("------------------------------------------> receiver: " + receiver);
 
-		String mailRSS = responsableServiceStageRepository
-				.findRespServStgMailById(conventionRepository.findResponsableServiceStageByIdEt(idET).get(0));
+		String mailRSS = responsableServiceStageRepository.findRespServStgMailById(conventionRepository.findResponsableServiceStageByIdEt(idET).get(0));
 
 		String studentClasse = utilServices.findCurrentClassByIdEt(idET);
 
-    	String studentOption = null;
+		String studentOption = null;
 		if(studentClasse.contains("4ALINFO"))
 		{
 			studentOption = optionStudentALTRepository.findOptionByStudentALT(idET) + "_01";
@@ -1201,103 +1240,87 @@ public class ServiceStageController {
 		else
 		{
 			studentOption = utilServices.findOptionByClass(studentClasse, optionRepository.listOptionsByYear("2021"));
-			// sd.setOption(utilServices.findOptionByClass(sd.getClasse(), optionRepository.listOptionsByYear("2021")).replace("_01", ""));	
+			// sd.setOption(utilServices.findOptionByClass(sd.getClasse(), optionRepository.listOptionsByYear("2021")).replace("_01", ""));
 		}
 
 		System.out.println("-----------> Student : " + studentClasse + " - " + studentOption.toLowerCase());
 
-		String idCPS = pedagogicalCoordinatorRepository.gotIdEnsPedagogicalCoordinatorByOption(studentOption.toLowerCase());
-    	System.out.println("--------------> idCPS: " + idCPS);
-    	// ********************** Exceptional Case where same CPS has 2 Units : just for Current University year
-    	String mailCPS = "saria.essid@esprit.tn";
-    	if(
-    			studentOption.toUpperCase().contains("SIM") || studentOption.toUpperCase().contains("GAMIX") ||
-    			studentOption.toUpperCase().contains("WIN") || studentOption.toUpperCase().contains("IOSYS")
-    	  )
-    	{
-    		if(studentOption.toUpperCase().contains("SIM"))
-        	{
-        		mailCPS = "CPS_SIM@esprit.tn";
-        	}
-        	if(studentOption.toUpperCase().contains("GAMIX"))
-        	{
-        		mailCPS = "CPS_GAMIX@esprit.tn";
-        	}
-        	if(studentOption.toUpperCase().contains("WIN"))
-        	{
-        		mailCPS = "CPS_WIN@esprit.tn";
-        	}
-        	if(studentOption.toUpperCase().contains("IOSYS"))
-        	{
-        		mailCPS = "CPS_IOSYS@esprit.tn";
-        	}
-    	}
-    	else
-    	{
-    		mailCPS = pedagogicalCoordinatorRepository.gotAllMAilsPedagogicalCoordinatorByIdNew(idCPS);
-    	}
-    	/***********************************************************************************************************/
-    	
-//		List<PedagogicalCoordinator> CPSs = pedagogicalCoordinatorRepository
-//				.gotAllIdsPedagogicalCoordinatorByOption(studentOption.toLowerCase());
-//		System.out.println("-----------> Size CPSs : " + CPSs.size());
-//		String mailCPS = null;
-//		for (PedagogicalCoordinator pc : CPSs) {
-//			if (pedagogicalCoordinatorRepository
-//					.gotMailPedagogicalCoordinatorByIdEns(pc.getTeacher().getIdEns()) != null) {
-//				mailCPS = pedagogicalCoordinatorRepository
-//						.gotMailPedagogicalCoordinatorByIdEns(pc.getTeacher().getIdEns());
-//			}
-//		}
-//		System.out.println("-----****************------> MAils : " + mailCPS + " - " + mailRSS);
+//    	List<PedagogicalCoordinator> CPSs = pedagogicalCoordinatorRepository.gotAllIdsPedagogicalCoordinatorByOption(studentOption.toLowerCase());
+//    	System.out.println("-----------> Size CPSs : " + CPSs.size());
 
-		// String mailRSS =
-		// responsableServiceStageRepository.findRespServStgMailById(conventionRepository.findResponsableServiceStageByIdEt(idET).get(0));
-		//
-		// String studentClasse = utilServices.findCurrentClassByIdEt(idET);
-		// String studentOption = utilServices.findOptionByClass(studentClasse,
-		// optionRepository.listOptionsByYear("2021"));
-		//
-		// System.out.println("-----------> Student : " + studentClasse + " - " +
-		// studentOption.toLowerCase());
-		//
-		// String idCPS =
-		// pedagogicalCoordinatorRepository.gotIdPedagogicalCoordinatorByOption(studentOption.toLowerCase());
-		// String mailCPS =
-		// pedagogicalCoordinatorRepository.gotAllMAilsPedagogicalCoordinatorById(idCPS).get(0);
+		String idCPS = pedagogicalCoordinatorRepository.gotIdEnsPedagogicalCoordinatorByOption(studentOption.toLowerCase());
+		System.out.println("--------------> idCPS: " + idCPS);
+		// ********************** Exceptional Case where same CPS has 2 Units : just for Current University year
+		String mailCPS = "saria.essid@esprit.tn";
+		if(
+				studentOption.toUpperCase().contains("SIM") || studentOption.toUpperCase().contains("GAMIX") ||
+						studentOption.toUpperCase().contains("WIN") || studentOption.toUpperCase().contains("IOSYS")
+		)
+		{
+			if(studentOption.toUpperCase().contains("SIM"))
+			{
+				mailCPS = "CPS_SIM@esprit.tn";
+			}
+			if(studentOption.toUpperCase().contains("GAMIX"))
+			{
+				mailCPS = "CPS_GAMIX@esprit.tn";
+			}
+			if(studentOption.toUpperCase().contains("WIN"))
+			{
+				mailCPS = "CPS_WIN@esprit.tn";
+			}
+			if(studentOption.toUpperCase().contains("IOSYS"))
+			{
+				mailCPS = "CPS_IOSYS@esprit.tn";
+			}
+		}
+		else
+		{
+			mailCPS = pedagogicalCoordinatorRepository.gotAllMAilsPedagogicalCoordinatorByIdNew(idCPS);
+		}
+		/***********************************************************************************************************/
+
+//    	for(PedagogicalCoordinator pc : CPSs)
+//    	{
+//    		if(pedagogicalCoordinatorRepository.gotMailPedagogicalCoordinatorByIdEns(pc.getTeacher().getIdEns()) != null)
+//    		{
+//    			mailCPS = pedagogicalCoordinatorRepository.gotMailPedagogicalCoordinatorByIdEns(pc.getTeacher().getIdEns());
+//    		}
+//    	}
+		System.out.println("-----**********c******------> MAils : " + mailCPS + " - " + mailRSS);
 
 		List<String> mailsCPSRSS = new ArrayList<String>();
-		mailsCPSRSS.add(utilServices.findMailPedagogicalEncadrant(idET));
-		mailsCPSRSS.add(mailCPS);
-		mailsCPSRSS.add(mailRSS);
-		String mailsCPSRSS_STR = mailsCPSRSS.stream().map(plain -> '"' + StringEscapeUtils.escapeJava(plain) + '"')
-				.collect(Collectors.joining(", "));
-		/*
-		 * String mailPE = findMailAcademicEncadrantByStudent(idET);
-		 * 
-		 * String codeOption =
-		 * utilServices.findOptionByClass(findCurrentClassByIdEt(idET),
-		 * optionRepository.listOptionsByYear("2021"));
-		 * 
-		 * String mailAcademicCoordinator =
-		 * teacherRepository.findMailTeacherById(responsableStageRepository.
-		 * findPedagogicalCoordinatorByCodeOption(codeOption));
-		 * 
-		 * List<String> receiversCC = new ArrayList<String>(); receiversCC.add(mailPE);
-		 * receiversCC.add(mailAcademicCoordinator); receiversCC.add(mailRSS); String
-		 * responsibles = receiversCC.stream().collect(Collectors.joining(", "));
-		 * 
-		 * System.out.println("------------------------------------------> REFUSE 2: " +
-		 * responsibles + "--->" + mailRSS + " - " + mailAcademicCoordinator + " - " +
-		 * mailPE + " *** " + receiver);
-		 */
+		mailsCPSRSS.add(utilServices.findMailPedagogicalEncadrant(idET));mailsCPSRSS.add(mailCPS);mailsCPSRSS.add(mailRSS);
+		String mailsCPSRSS_STR = mailsCPSRSS.stream().map(plain -> '"' + StringEscapeUtils.escapeJava(plain) + '"').collect(Collectors.joining(", "));
 
-		// ****************************************************************************
-		// Notification by mail
+		//		String mailPE = findMailAcademicEncadrantByStudent(idET);
+
+//		String codeOption = utilServices.findOptionByClass(findCurrentClassByIdEt(idET), optionRepository.listOptionsByYear("1988"));
+
+//		String mailAcademicCoordinator = teacherRepository.findMailTeacherById(responsableStageRepository.findPedagogicalCoordinatorByCodeOption(codeOption));
+
+//		List<String> receiversCC = new ArrayList<String>();
+////		receiversCC.add("no_reply@esprit.tn"); receiversCC.add("saria.essid@esprit.tn"); // UPDATE
+//		 receiversCC.add(mailPE); receiversCC.add(mailAcademicCoordinator); receiversCC.add(mailRSS);
+//		String responsibles = receiversCC.stream().collect(Collectors.joining(", "));
+//		System.out.println("------------------------------------------> REFUSE 2: " + responsibles + "--->" + mailRSS + " - " + mailAcademicCoordinator + " - " + mailPE + " *** " + receiver);
+
+
+//		utilServices.sendMailWithManyTOandManyCC("Traitement Dépot rappot", receiver, responsibles,
+//				"Votre Dépôt a été marqué comme Incomplet par le service des stages avec le motif : " + observation +".");
+
+
+		// **************************************************************************** Notification by mail
 		DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		String dateValidateDepot = dateFormata.format(new Date());
 
 		String subject = "Traitement Dépôt Rapport";
+
+		// Local
+		//String studentMail = "saria.essid@esprit.tn";
+
+		// Server
+		//String studentMail = utilServices.findStudentMailById(idET);
 
 		String content = "Nous voulons vous informer par le présent mail que votre "
 				+ "<strong><font color=grey>Dépôt</font></strong> a été marqué comme "
@@ -1307,9 +1330,7 @@ public class ServiceStageController {
 				+ "Veuillez consulter votre espace pour mettre à jour votre Dépôt.";
 
 		utilServices.sendMailWithManyCC(subject, receiver, mailsCPSRSS_STR, content);
-
-		return new ResponseEntity<>(serviceStageService.UpdateRepotToREFUSE(idET,
-				dateFiche.substring(0, 19).replace("T", " "), cancelMotif), HttpStatus.OK);
+		return new ResponseEntity<>(serviceStageService.UpdateRepotToREFUSE(idET, dateDepotFiche.substring(0, 19).replace("T", " "), cancelMotif), HttpStatus.OK);
 
 	}
 
