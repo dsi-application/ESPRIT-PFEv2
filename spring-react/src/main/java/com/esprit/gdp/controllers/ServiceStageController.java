@@ -863,49 +863,51 @@ public class ServiceStageController {
 	 * return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR); } }
 	 */
 
+
 	@GetMapping("/FichesForDepot")
 	public ResponseEntity<?> FichesForDepot(@RequestParam("id") String idServiceStage) {
-
-		try {
-			System.out.println("---------------------------> AZERTY 1: " + idServiceStage);
+		try
+		{
+			// System.out.println("---------------------------> AZERTY 1: " + idServiceStage);
 
 			DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
 			List<FichePFE> FichePFEList = fichePFERepository.getFichesForDepot(idServiceStage);
-			System.out.println("---------------------------> AZERTY 2: " + FichePFEList.size());
+			// System.out.println("---------------------------> AZERTY 2: " + FichePFEList.size());
 			if (FichePFEList.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
-			System.out.println("---------------------------> AZERTY 3");
+			// System.out.println("---------------------------> AZERTY 3");
 			List<DepotRapport> FichePFEListFinale = new ArrayList<DepotRapport>();
-			System.out.println("---------------------------> AZERTY 4");
-			for (FichePFE F : FichePFEList) {
+			// System.out.println("---------------------------> AZERTY 4");
+			for (FichePFE F : FichePFEList )
+			{
 				StudentIdFullNameDto S = findStudentIdFullNameOFF(F.getIdFichePFE().getConventionPK().getIdEt());
-				System.out.println("-----------------------------------------------------------------> AZERTY 2: "
-						+ F.getIdFichePFE().getConventionPK().getIdEt());
+				// System.out.println("-----------------------------------------------------------------> AZERTY 2: " + F.getIdFichePFE().getConventionPK().getIdEt());
 
 				String dateConvention = dateFormata.format(F.getIdFichePFE().getConventionPK().getDateConvention());
-				Integer trainingDuration = conventionRepository.findDureeStageWeekByStudentAndDateConvention(
-						F.getIdFichePFE().getConventionPK().getIdEt(), dateConvention);
+				Integer trainingDuration = conventionRepository.findDureeStageWeekByStudentAndDateConvention(F.getIdFichePFE().getConventionPK().getIdEt(), dateConvention);
 
-				System.out.println("---------------------------> AZERTY 5: " + trainingDuration);
+				// System.out.println("---------------------------> AZERTY 5: " + trainingDuration);
 
-				DepotRapport D = new DepotRapport(F.getIdFichePFE().getConventionPK().getIdEt(), S.getFullName(),
-						F.getPathRapportVersion2(), F.getPathPlagiat(), F.getPathAttestationStage(),
-						F.getPathSupplement(), codeNomenclatureRepository.findEtatFiche(F.getEtatFiche()),
+				String timestampToString = dateFormata.format(F.getIdFichePFE().getDateDepotFiche());
+
+				DepotRapport D = new DepotRapport(F.getIdFichePFE().getConventionPK().getIdEt(),
+						S.getFullName(), F.getPathRapportVersion2(), F.getPathPlagiat(),
+						F.getPathAttestationStage(), F.getPathSupplement(), codeNomenclatureRepository.findEtatFiche(F.getEtatFiche()),
 						codeNomenclatureRepository.findEtatDepot(F.getValidDepot()),
-						F.getIdFichePFE().getDateDepotFiche(), trainingDuration,
-						// dateFormata.format(F.getDateDepotReports())
-						F.getDateDepotReports());
+						timestampToString,
+						trainingDuration,
+						//dateFormata.format(F.getDateDepotReports())
+						F.getDateDepotReports()
+				);
 
 				FichePFEListFinale.add(D);
-				System.out.println("================= lol 2 =============================> SIZE AZERTY: "
-						+ FichePFEListFinale.size());
+				// System.out.println("================= lol 2 =============================> SIZE AZERTY: " + FichePFEListFinale.size());
 
 			}
 
-			System.out.println("-----*************hi****lol1******END**ddd***************--> AZERTY - 2: "
-					+ FichePFEListFinale.size());
+			// System.out.println("-----*************hi****lol1******END**ddd***************--> AZERTY - 2: " + FichePFEListFinale.size());
 
 			// StudentList.sort(Comparator.comparing(StudentDetails::getAnneeDebInscription).reversed());
 			FichePFEListFinale.sort(Comparator.comparing(DepotRapport::getDateDepotReports).reversed());
@@ -915,13 +917,12 @@ public class ServiceStageController {
 
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
 	}
 
 	@GetMapping("/FichesForDepotVal")
 	public ResponseEntity<?> FichesForDepotVal(@RequestParam("id") String idServiceStageFULL) {
 		try {
-			
+
 			String idServiceStage = null;
 			if(idServiceStageFULL.equalsIgnoreCase("SR-STG-IT4") || idServiceStageFULL.equalsIgnoreCase("SR-STG-IT2") || idServiceStageFULL.equalsIgnoreCase("SR-STG-IT1"))
 			//if(idServiceStageFULL.startsWith("SR-STG-IT"))
@@ -932,8 +933,8 @@ public class ServiceStageController {
 			{
 				idServiceStage = idServiceStageFULL;
 			}
-			
-			
+
+
 			System.out.println("----------------------> PIKA 1: " + idServiceStage);
 			List<FichePFE> FichePFEList = fichePFERepository.getFichesForDepotVal(idServiceStage);
 			System.out.println("----------------------> PIKA 2: " + FichePFEList.size());
@@ -941,14 +942,20 @@ public class ServiceStageController {
 			if (FichePFEList.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
+
 			List<DepotRapport> FichePFEListFinale = new ArrayList<DepotRapport>();
-			for (FichePFE F : FichePFEList) {
+			for (FichePFE F : FichePFEList ) {
+
+				DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+				String timestampToString = dateFormata.format(F.getIdFichePFE().getDateDepotFiche());
+
 				StudentIdNomPrenomDto S = findStudentIdFullName(F.getIdFichePFE().getConventionPK().getIdEt());
-				DepotRapport D = new DepotRapport(F.getIdFichePFE().getConventionPK().getIdEt(), S.getNomet(),
-						S.getPrenomet(), F.getPathRapportVersion2(), F.getPathPlagiat(), F.getPathAttestationStage(),
-						F.getPathSupplement(), codeNomenclatureRepository.findEtatFiche(F.getEtatFiche()),
+				DepotRapport D = new DepotRapport(F.getIdFichePFE().getConventionPK().getIdEt(),
+						S.getNomet(), S.getPrenomet(), F.getPathRapportVersion2(), F.getPathPlagiat(),
+						F.getPathAttestationStage(), F.getPathSupplement(),
+						codeNomenclatureRepository.findEtatFiche(F.getEtatFiche()),
 						codeNomenclatureRepository.findEtatDepot(F.getValidDepot()),
-						F.getIdFichePFE().getDateDepotFiche());
+						timestampToString);
 
 				if(grilleAcademicEncadrantRepository.findGrilleByFiche(F.getIdFichePFE()) != null)
 				{
@@ -965,7 +972,7 @@ public class ServiceStageController {
 				{
 					D.setEtatGrilleEncadrement("NOTYET");
 				}
-				
+
 				FichePFEListFinale.add(D);
 			}
 			return new ResponseEntity<>(FichePFEListFinale, HttpStatus.OK);
@@ -976,9 +983,9 @@ public class ServiceStageController {
 	}
 
 	@GetMapping("/FichesDepotValALL")
-	public ResponseEntity<?> FichesForDepotVal() {
+	public ResponseEntity<?> FichesDepotValALL() {
 		try {
-			
+
 			List<FichePFE> FichePFEList = fichePFERepository.getFichesDepotValAll();
 			System.out.println("----------------------> PIKA 2: " + FichePFEList.size());
 
@@ -987,13 +994,17 @@ public class ServiceStageController {
 			}
 			List<DepotRapport> FichePFEListFinale = new ArrayList<DepotRapport>();
 			for (FichePFE F : FichePFEList) {
+
+				DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+				String timestampToString = dateFormata.format(F.getIdFichePFE().getDateDepotFiche());
+
 				StudentIdNomPrenomDto S = findStudentIdFullName(F.getIdFichePFE().getConventionPK().getIdEt());
 				DepotRapport D = new DepotRapport(F.getIdFichePFE().getConventionPK().getIdEt(), S.getNomet(),
 						S.getPrenomet(), F.getPathRapportVersion2(), F.getPathPlagiat(), F.getPathAttestationStage(),
 						F.getPathSupplement(), codeNomenclatureRepository.findEtatFiche(F.getEtatFiche()),
 						codeNomenclatureRepository.findEtatDepot(F.getValidDepot()),
-						F.getIdFichePFE().getDateDepotFiche());
-
+						timestampToString);
+				System.out.println("----------------------> PIKA 3: " + F.getEtatFiche());
 				if(grilleAcademicEncadrantRepository.findGrilleByFiche(F.getIdFichePFE()) != null)
 				{
 					if(grilleAcademicEncadrantRepository.findGrilleByFiche(F.getIdFichePFE()).getEtatGrille().equalsIgnoreCase("02"))
@@ -1009,16 +1020,17 @@ public class ServiceStageController {
 				{
 					D.setEtatGrilleEncadrement("NOTYET");
 				}
-				
+				System.out.println("----------------------> PIKA 4");
 				FichePFEListFinale.add(D);
+				System.out.println("----------------------> PIKA 5: " + FichePFEListFinale.size());
 			}
+			System.out.println("----------------------> PIKA 6");
 			return new ResponseEntity<>(FichePFEListFinale, HttpStatus.OK);
 		} catch (Exception e) {
 
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
 
 	@GetMapping("/FichesForDepotInc")
 	public ResponseEntity<?> FichesForDepotInc(@RequestParam("id") String idServiceStage) {
@@ -1028,13 +1040,18 @@ public class ServiceStageController {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
 			List<DepotRapport> FichePFEListFinale = new ArrayList<DepotRapport>();
-			for (FichePFE F : FichePFEList) {
+			for (FichePFE F : FichePFEList ) {
+
+				DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+				String timestampToString = dateFormata.format(F.getIdFichePFE().getDateDepotFiche());
+
 				StudentIdNomPrenomDto S = findStudentIdFullName(F.getIdFichePFE().getConventionPK().getIdEt());
-				DepotRapport D = new DepotRapport(F.getIdFichePFE().getConventionPK().getIdEt(), S.getNomet(),
-						S.getPrenomet(), F.getPathRapportVersion2(), F.getPathPlagiat(), F.getPathAttestationStage(),
-						F.getPathSupplement(), codeNomenclatureRepository.findEtatFiche(F.getEtatFiche()),
+				DepotRapport D = new DepotRapport(F.getIdFichePFE().getConventionPK().getIdEt(),
+						S.getNomet(), S.getPrenomet(), F.getPathRapportVersion2(), F.getPathPlagiat(),
+						F.getPathAttestationStage(), F.getPathSupplement(),
+						codeNomenclatureRepository.findEtatFiche(F.getEtatFiche()),
 						codeNomenclatureRepository.findEtatDepot(F.getValidDepot()),
-						F.getIdFichePFE().getDateDepotFiche());
+						timestampToString);
 				FichePFEListFinale.add(D);
 			}
 			return new ResponseEntity<>(FichePFEListFinale, HttpStatus.OK);
