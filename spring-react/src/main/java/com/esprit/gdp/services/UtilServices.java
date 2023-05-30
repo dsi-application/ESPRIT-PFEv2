@@ -1225,8 +1225,18 @@ public class UtilServices {
 
 			c.setNomEt(findStudentFullNameById(idEt));
 			//c.setDepartEt(findDepartmentAbbByClassWithStat(classe));
-			List<String> los = optionRepository.listOptionsByYear("2021");
+			// List<String> los = optionRepository.listOptionsByYear("2021");
 			// c.setDepartEt(findOptionByStudent(idEt, los).replaceAll("_01", ""));
+
+			if(!classe.contains("4ALINFO"))
+			{
+				c.setOptionEt(findOptionByClass(classe, optionRepository.listOptionsByYear(year)).replace("_01", ""));
+			}
+			if(classe.contains("4ALINFO"))
+			{
+				c.setOptionEt(optionStudentALTRepository.findOptionByStudentALTAndYear(idEt, year));
+			}
+
 			c.setCurrentClasse(classe);
 		}
 
