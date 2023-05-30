@@ -145,7 +145,7 @@ const ValidatedReports = () => {
       },
     },
     {
-      name: "currentClasse",
+      name: "classeEt",
       label: "Classe",
       options: {
         filter: true,
@@ -461,7 +461,7 @@ const ValidatedReports = () => {
                     {error.visible && <p>{error.message}</p>}
                   </CFormGroup>
                   <center>
-                    Choisir une Promotion et une Option pour visualiser la liste correspondante :
+                    <span className="greyLabel_Dark_Cr_12">Merci de choisir une Promotion et une Option</span>
                   </center>
                   <br/>
                   <CFormGroup row>
@@ -524,23 +524,22 @@ const ValidatedReports = () => {
               <CCol md="3"/>
             </CRow>
 
-            <br/>
             <CCardBody>
-              {validatedDepots ? (
-                <MuiThemeProvider theme={theme}>
-                  <MUIDataTable
-                    title={""}
-                    data={validatedDepots}
-                    columns={columns}
-                    options={options}
-                  /></MuiThemeProvider>
-              ) : (
+              {validatedDepots.length === 0 ? (
                 <center>
                   <hr/>
                   <br/><br/>
-                  Sorry, no Data is available
+                  <span className="greyLabel_Dark_Cr_13">Sorry, no Data is available.</span>
                   <br/><br/><br/><br/>
                 </center>
+              ) : (
+                <MUIDataTable
+                  data={validatedDepots}
+                  columns={columns}
+                  options={{
+                    selectableRows: 'none' // <===== will turn off checkboxes in rows
+                  }}
+                />
               )}
             </CCardBody>
           </CCard>
