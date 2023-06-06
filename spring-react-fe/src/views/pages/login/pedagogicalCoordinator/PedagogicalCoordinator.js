@@ -356,7 +356,7 @@ export default class PedagogicalCoordinator extends Component {
                                             </p>
 
                                             <br/>
-                                            <Link to="/login">
+                                            <Link to="/">
                                                 <CButton shape="pill" color="danger" data-tut="step6">
                                                     <CTooltip content="Page d'Accueil" placement="top">
                                                         <CIcon content={freeSet.cilHome} />

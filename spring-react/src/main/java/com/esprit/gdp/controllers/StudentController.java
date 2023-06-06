@@ -2937,8 +2937,7 @@ public class StudentController {
 
 		System.out.println("----- libTRTFiche: " + libTRTFiche + " - " + utilServices.decodeEncodedValue(libTRTFiche));
 		System.out.println("----- libTRTConv: " + libTRTConv + " - " + utilServices.decodeEncodedValue(libTRTConv));
-		System.out.println("----- treatmentDescription: " + treatmentDescription + " - "
-				+ utilServices.decodeEncodedValue(treatmentDescription));
+		System.out.println("----- treatmentDescription: " + treatmentDescription + " - " + utilServices.decodeEncodedValue(treatmentDescription));
 		System.out.println("----- diagramGanttFullPath: " + diagramGanttFullPath);
 
 		// FichePFE fichePFE1 = fichePFERepository.sars(idEt).get(0);

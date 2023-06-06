@@ -32,7 +32,7 @@ public class TraitementFichePFE implements Serializable
 	@Column(name = "TYPE_TRT_FICHE", length = 2)
 	private String typeTrtFiche;
 	
-	@Column(name = "DESCRIPTION", length = 500)
+	@Column(name = "DESCRIPTION", length = 750)
 	private String description;
 	
 	@Column(name = "ETAT_TRT", length = 2)
