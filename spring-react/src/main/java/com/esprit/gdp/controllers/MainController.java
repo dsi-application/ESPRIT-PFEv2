@@ -2353,120 +2353,40 @@ public class MainController {
 		}
 	}
 
-	@GetMapping("/rapportStageING/{currentUserCode}")
-	public ResponseEntity<List<String>> getRapportStageING(@PathVariable String currentUserCode) {
 
-		Integer index = 1;
-		List<DepotRapportINGDto> files = storageService.getRapportStageINGDto(currentUserCode).map(report -> {
-			String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/rapportStageING/")
-					.path(index.toString()).toUriString();
+	@GetMapping("/journalStageING/{currentUserCode}")
+	public List<String> getJournalStageING(@PathVariable String currentUserCode)
+	{
 
-			System.out.println(
-					"---------------------***----------------------> SARS-rapportStageING: " + fileDownloadUri);
-
-			return report;
-		}).collect(Collectors.toList());
-
-		System.out.println("---------------------***----------------------> Size: " + files.size());
-
-		// fp.pathRapportVersion1, fp.pathRapportVersion2, fp.dateDepotRapportVersion1,
-		// fp.dateDepotRapportVersion2, fp.pathPlagiat, fp.dateDepotPlagiat,
-		// fp.confidentiel
 		List<String> lss = new ArrayList<>();
-		for (DepotRapportINGDto dbd : files) {
-			String esING = null;
 
-			String pathEvaluationStageING = dbd.getPathRapportStageING();
-			String nameEvaluationStageING = null;
-			String dateEvaluationStageING = dbd.getDateDepotRapportStageING();
-
-			if (dbd.getPathRapportStageING() != null) {
-				nameEvaluationStageING = pathEvaluationStageING.substring(pathEvaluationStageING.indexOf("uploads") + 8,
-						pathEvaluationStageING.indexOf("espdsi2020"));
-				esING = nameEvaluationStageING + "UNITR1" + dateEvaluationStageING;
-				lss.add(esING);
-				// // System.out.println("-------------------------------------------> Bilan NOT
-				// NULL 1");
-			}
-
-		}
-		//
-		for (String s : lss) {
-			System.out.println("---------------------***----------------------> UNIT: " + s);
-		}
-
-		return ResponseEntity.status(HttpStatus.OK).body(lss);
+		return lss;
 	}
 
 	@GetMapping("/attestationStageING/{currentUserCode}")
-	public ResponseEntity<List<String>> getAttestationStageING(@PathVariable String currentUserCode) {
+	public List<String> getJournalStageING1(@PathVariable String currentUserCode)
+	{
 
-		Integer index = 1;
-		List<DepotAttestationINGDto> files = storageService.getAttestationStageINGDto(currentUserCode).map(report -> {
-			String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/attestationStageING/")
-					.path(index.toString()).toUriString();
-
-			System.out.println(
-					"---------------------***----------------------> SARS-attestationStageING: " + fileDownloadUri);
-
-			return report;
-		}).collect(Collectors.toList());
-
-		System.out.println("---------------------***----------------------> Size: " + files.size());
-
-		// fp.pathRapportVersion1, fp.pathRapportVersion2, fp.dateDepotRapportVersion1,
-		// fp.dateDepotRapportVersion2, fp.pathPlagiat, fp.dateDepotPlagiat,
-		// fp.confidentiel
+		List<DepotJournalINGDto> files = evaluationEngTrRepository.findJournalStageINGByStudent(currentUserCode);
 		List<String> lss = new ArrayList<>();
-		for (DepotAttestationINGDto dbd : files) {
-			String esING = null;
 
-			String pathEvaluationStageING = dbd.getPathAttestationStageING();
-			String nameEvaluationStageING = null;
-			String dateEvaluationStageING = dbd.getDateDepotAttestationStageING();
-
-			if (dbd.getPathAttestationStageING() != null) {
-				nameEvaluationStageING = pathEvaluationStageING.substring(pathEvaluationStageING.indexOf("uploads") + 8,
-						pathEvaluationStageING.indexOf("espdsi2020"));
-				esING = nameEvaluationStageING + "UNITR1" + dateEvaluationStageING;
-				lss.add(esING);
-				// // System.out.println("-------------------------------------------> Bilan NOT
-				// NULL 1");
-			}
-
-		}
-		//
 		for (String s : lss) {
 			System.out.println("---------------------***----------------------> UNIT: " + s);
 		}
 
-		return ResponseEntity.status(HttpStatus.OK).body(lss);
+		return lss;
 	}
 
-	@GetMapping("/journalStageING/{currentUserCode}")
-	public List<String> getJournalStageING(@PathVariable String currentUserCode) {
+	@GetMapping("/rapportStageING/{currentUserCode}")
+	public List<String> getJournalStageING2(@PathVariable String currentUserCode)
+	{
 
-		// NEW VERSION
 		List<DepotJournalINGDto> files = evaluationEngTrRepository.findJournalStageINGByStudent(currentUserCode);
 
-		/*
-		// OLD VERSION
-		Integer index = 1;
-		List<DepotRapportINGDto> files = storageService.getRapportStageINGDto(currentUserCode).map(report -> {
-			String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/rapportStageING/")
-					.path(index.toString()).toUriString();
-
-			System.out.println(
-					"---------------------***----------------------> SARS-rapportStageING: " + fileDownloadUri);
-
-			return report;
-		}).collect(Collectors.toList());
-
-		System.out.println("---------------------***----------------------> Size: " + files.size());
-		*/
 
 		/****************************************************************************************************************************/
 		List<String> lss = new ArrayList<>();
+
 		for (DepotJournalINGDto dbd : files) {
 			String esING = null;
 
@@ -2484,7 +2404,7 @@ public class MainController {
 			}
 
 		}
-		//
+
 		for (String s : lss) {
 			System.out.println("---------------------***----------------------> UNIT: " + s);
 		}
