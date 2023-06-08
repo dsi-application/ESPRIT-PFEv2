@@ -4,10 +4,7 @@ public class TestMemory {
 
 	public static void main(String[] args) {
 
-		String lol = "  +3311  1111  ";
-		System.out.println("---->" + lol + "<----");
-		System.out.println("---->" + lol.trim() + "<----");
-		
+
 		int MB = 1024 * 1024;
 
 		// Getting the runtime reference from system
