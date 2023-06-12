@@ -2358,7 +2358,32 @@ public class MainController {
 	public List<String> getJournalStageING(@PathVariable String currentUserCode)
 	{
 
+		List<DepotJournalINGDto> files = evaluationEngTrRepository.findJournalStageINGByStudent(currentUserCode);
+
+		/****************************************************************************************************************************/
 		List<String> lss = new ArrayList<>();
+
+		for (DepotJournalINGDto dbd : files) {
+			String esING = null;
+
+			String pathEvaluationStageING = dbd.getPathJournalStageING();
+			String nameEvaluationStageING = null;
+			String dateEvaluationStageING = dbd.getDateDepotJournalStageING();
+
+			if (dbd.getPathJournalStageING() != null) {
+				nameEvaluationStageING = pathEvaluationStageING.substring(pathEvaluationStageING.indexOf("uploads") + 8,
+						pathEvaluationStageING.indexOf("espdsi2020"));
+				esING = "Journal de Stage - " + currentUserCode + "UNITR1" + dateEvaluationStageING;
+				lss.add(esING);
+				// // System.out.println("-------------------------------------------> Bilan NOT
+				// NULL 1");
+			}
+
+		}
+
+		for (String s : lss) {
+			System.out.println("---------------------***----------------------> UNIT: " + s);
+		}
 
 		return lss;
 	}
@@ -2383,7 +2408,6 @@ public class MainController {
 
 		List<DepotJournalINGDto> files = evaluationEngTrRepository.findJournalStageINGByStudent(currentUserCode);
 
-
 		/****************************************************************************************************************************/
 		List<String> lss = new ArrayList<>();
 
@@ -2397,7 +2421,7 @@ public class MainController {
 			if (dbd.getPathJournalStageING() != null) {
 				nameEvaluationStageING = pathEvaluationStageING.substring(pathEvaluationStageING.indexOf("uploads") + 8,
 						pathEvaluationStageING.indexOf("espdsi2020"));
-				esING = nameEvaluationStageING + "UNITR1" + dateEvaluationStageING;
+				esING = "Rapport de Stage - " + currentUserCode + "UNITR1" + dateEvaluationStageING;
 				lss.add(esING);
 				// // System.out.println("-------------------------------------------> Bilan NOT
 				// NULL 1");
