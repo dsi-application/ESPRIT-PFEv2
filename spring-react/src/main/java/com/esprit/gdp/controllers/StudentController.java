@@ -283,6 +283,45 @@ public class StudentController {
 
 	}
 
+	@GetMapping("/downloadAllFilesTypesPDF/{pathFile}")
+	public ResponseEntity downloadAllFilesTypesPDF(@PathVariable String pathFile) throws IOException
+	{
+
+		// System.out.println("---------------------> encoded path: " + pathFile);
+		String gdFullPath = utilServices.decodeEncodedValue(pathFile);
+
+		// System.out.println("---------------------> decoded path: " + gdFullPath);
+
+		String PTPath = gdFullPath.replace("/", "\\");
+
+		File file = new File(PTPath); //"C:\\ESP\\uploads\\sars essid.docx");
+
+		// String all = "C:\\ESP\\uploads\\sars essid.docx";
+		//String fileName = all.substring()
+
+		String fileName = PTPath.substring(PTPath.indexOf("uploads") + 8, PTPath.indexOf("espdsi2020"));
+		// String fileName = PTPath.substring(15, PTPath.length());
+
+		HttpHeaders header = new HttpHeaders();
+		header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
+		header.add("Cache-Control", "no-cache, no-store, must-revalidate");
+		header.add("Pragma", "no-cache");
+		header.add("Expires", "0");
+
+		// To Got Name Of File With Synchro
+		header.add(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
+
+		Path patha = Paths.get(file.getAbsolutePath());
+		ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(patha));
+
+		return ResponseEntity.ok()
+				.headers(header)
+				.contentLength(file.length())
+				.contentType(MediaType.parseMediaType("application/octet-stream"))
+				.body(resource);
+
+	}
+
 	@GetMapping("/downloadLettreAffectation/{idEt}")
 	public ResponseEntity downloadLettreAffectation(@PathVariable String idEt) throws IOException {
 
@@ -2937,8 +2976,7 @@ public class StudentController {
 
 		System.out.println("----- libTRTFiche: " + libTRTFiche + " - " + utilServices.decodeEncodedValue(libTRTFiche));
 		System.out.println("----- libTRTConv: " + libTRTConv + " - " + utilServices.decodeEncodedValue(libTRTConv));
-		System.out.println("----- treatmentDescription: " + treatmentDescription + " - "
-				+ utilServices.decodeEncodedValue(treatmentDescription));
+		System.out.println("----- treatmentDescription: " + treatmentDescription + " - " + utilServices.decodeEncodedValue(treatmentDescription));
 		System.out.println("----- diagramGanttFullPath: " + diagramGanttFullPath);
 
 		// FichePFE fichePFE1 = fichePFERepository.sars(idEt).get(0);

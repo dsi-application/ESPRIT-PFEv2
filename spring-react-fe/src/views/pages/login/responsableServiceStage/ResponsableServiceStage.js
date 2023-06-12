@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Form from "react-validation/build/form";
 import CheckButton from "react-validation/build/button";
 import { Link } from "react-router-dom";
-import esprit from "../../../images/esprit.gif";
+import esprit from "../../../images/esprit2022.png";
 import {
   CButton,
   CCard,

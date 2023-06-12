@@ -140,7 +140,7 @@ const CancelESPFile = () => {
             "student/treatFichePFE?idEt=" + currentStudent.id
                     + "&libTRTFiche=" + trtType
                     + "&libTRTConv=" + annulConvKind
-                    + "&treatmentDescription=" + descriptionFichePFE
+                    + "&treatmentDescription=" + encodeURIComponent(encodeURIComponent(descriptionFichePFE))
                     + "&diagramGanttFullPath=" + diagramGanttFullPath,
             {},
             "POST",
@@ -526,7 +526,7 @@ const CancelESPFile = () => {
                                                 &&
                                                 <button type="button"
                                                         className="btn btn-primary"
-                                                        disabled={descriptionFichePFE.length < 12}
+                                                        disabled={descriptionFichePFE.length < 12 || descriptionFichePFE.length > 750}
                                                         onClick={() => {treatFichePFE()}}>
                                                     Envoyer
                                                 </button>

@@ -108,7 +108,7 @@ class UploadReport extends Component {
     this.modifyMyDepot = this.modifyMyDepot.bind(this);
 
     this.modifyMyRFV = this.modifyMyRFV.bind(this);
-    
+
 
     this.state = {
       message: "",
@@ -125,7 +125,7 @@ class UploadReport extends Component {
       showPopupSuccessDepot: false,
       showSpinnerWaitingDepot: false,
       showPopupUpdateDepot: false,
-      
+
       showButtonRFV: true, showUploadIconRFV: true, showReloadRFV: false, labelRFV: "", dateRFV: "",
       progressRFV: 0, currentFileRFV: undefined, successUploadRFV: false, giveOKRFV:false,
 
@@ -150,9 +150,9 @@ class UploadReport extends Component {
       requestAODPF.send(null);
 
       this.state.allowOnlyDepotPDFFile= requestAODPF.responseText;
-      
+
     // console.log('------------ALLOW PDF--> ', this.state.allowOnlyDepotPDFFile);
-    
+
     var requestfp = new XMLHttpRequest();
     requestfp.open(
       "GET",
@@ -161,7 +161,7 @@ class UploadReport extends Component {
     );
     requestfp.send(null);
     let depSt = requestfp.responseText;
-    
+
 
     if(depSt.includes("timestamp"))
     {
@@ -276,8 +276,6 @@ class UploadReport extends Component {
         {
           this.setState({
             showReloadRFV: false, showButtonRFV: true, labelRFV: "", showUploadIconRFV: true, checked: false,
-            showReloadRAP: false, showButtonRAP: true, labelRAP: "", showUploadIconRAP: true, checked: false,
-            showReloadASP: false, showButtonASP: true, labelASP: "", showUploadIconASP: true, checked: false,
           });
           console.log("Check Disponibility ----df----cr----- SUCCESS");
             /*this.setState({ showPopupUpdateDepot: false });*/
@@ -311,7 +309,7 @@ class UploadReport extends Component {
       })
       .catch(() => {
         console.log('-------------------------> 3');
-        
+
       });
   }
 
@@ -338,7 +336,7 @@ class UploadReport extends Component {
       })
       .catch(() => {
         console.log('-------------------------> 3');
-        
+
       });
   }
 
@@ -365,7 +363,7 @@ class UploadReport extends Component {
       })
       .catch(() => {
         console.log('-------------------------> 3');
-        
+
       });
   }
 
@@ -421,7 +419,7 @@ class UploadReport extends Component {
         console.log(files);
         console.log('---------------RFV-4--------------> All files in DB-2: ' + files.length);
         /*if (files.length === 0) {
-          
+
         }*/
       },
       (error) => {
@@ -442,7 +440,7 @@ class UploadReport extends Component {
         "Vous avez choisi le fichier " + event.target.files[0].name + " .";
       return NotificationManager.success(notif, "Information", 6000);
     }
-    
+
 
   }
 
@@ -481,7 +479,7 @@ class UploadReport extends Component {
         console.log('---------------RAP-4--------------> All files in DB-2: ' + files.length);
         /*if (files.length === 0) {
           console.log('---------------RFV-5.1--hgvh------------> All files in DB: 0');
-          
+
         }*/
       },
       (error) => {
@@ -502,7 +500,7 @@ class UploadReport extends Component {
         "Vous avez choisi le fichier " + event.target.files[0].name + " .";
       return NotificationManager.success(notif, "Information", 6000);
     }
-    
+
 
   }
 
@@ -537,7 +535,7 @@ class UploadReport extends Component {
         console.log(files);
         console.log('---------------ASP-4--------------> All files in DB-2: ' + files.length);
         /*if (files.length === 0) {
-          
+
         }*/
       },
       (error) => {
@@ -558,7 +556,7 @@ class UploadReport extends Component {
         "Vous avez choisi le fichier " + event.target.files[0].name + " .";
       return NotificationManager.success(notif, "Information", 6000);
     }
-    
+
 
   }
 
@@ -773,7 +771,7 @@ class UploadReport extends Component {
       );
       requestAODPF.send(null);
 
-      this.setState({ 
+      this.setState({
         stepper: "Step3",
         allowOnlyDepotPDFFile: requestAODPF.responseText
       });
@@ -802,13 +800,11 @@ class UploadReport extends Component {
 
   updateMyDepotYES()
   {
-      this.setState({ 
-          fileInfos: [], 
-          depotStatus: "", 
+      this.setState({
+          fileInfos: [],
+          depotStatus: "",
           showPopupUpdateDepot: false,
           showReloadRFV: false, showButtonRFV: true, labelRFV: "", showUploadIconRFV: true, checked: false,
-          showReloadRAP: false, showButtonRAP: true, labelRAP: "", showUploadIconRAP: true, checked: false,
-          showReloadASP: false, showButtonASP: true, labelASP: "", showUploadIconASP: true, checked: false,
         });
       AuthService.updateMyDepot(currentStudent.id).then(
         (response) =>
@@ -882,9 +878,9 @@ class UploadReport extends Component {
             <CCol md="3"/>
             <CCol xs="12" sm="6" md="6">
               <CCard accentColor="danger">
-                
+
                 <CCardBody>
-                  Bonjour &nbsp; 
+                  Bonjour &nbsp;
                   <span className="text-danger" style={{fontSize: "15px"}}>
                       {studentFullName}
                   </span>&nbsp;,
@@ -916,7 +912,7 @@ class UploadReport extends Component {
             <CCol md="3"/>
             <CCol xs="12" sm="6" md="6">
               <CCard accentColor="primary">
-                
+
                 <CCardBody>
                   Vous passer votre Stage :
                             <br/><br/>
@@ -970,7 +966,7 @@ class UploadReport extends Component {
             <CCol md="2"/>
             <CCol md="8">
               <CCard accentColor="warning">
-                
+
                 <CCardBody>
                   <span>Merci de lire attentivements ces instructions avant déposer vos rapports:</span>
                   <br/><br/>
@@ -982,7 +978,7 @@ class UploadReport extends Component {
                   &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-warning" style={{fontSize: "15px"}}>2.</span><span className="leftNote"> Rapport Anti-Plagiat (URKUND)</span>
                   <br/>
                   &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-warning" style={{fontSize: "15px"}}>3.</span><span className="leftNote"> Attestation du Stage PFE</span>
-                  
+
                   <br/>
                   <span className="text-warning" style={{fontSize: "15px"}}>B.</span>&nbsp;
                   Les documents déposés doivent être <ins>sous format PDF</ins>.
@@ -998,7 +994,7 @@ class UploadReport extends Component {
 
                   <br/>
                   <span className="text-warning" style={{fontSize: "15px"}}>D.</span>&nbsp;
-                  Une fois cliquer sur le bouton 
+                  Une fois cliquer sur le bouton
                   &nbsp;<CButton size="sm" variant="outline" color="success" disabled>Je valide</CButton>&nbsp;
                   , vous <strong>envoyez</strong> votre dépôt pour traitement et vous <ins>ne pourrez pas le modifier</ins>.
                   <br/>
@@ -1021,7 +1017,7 @@ class UploadReport extends Component {
             <CCol md="2"/>
             <CCol md="8">
               <CCard accentColor="warning">
-                
+
                 <CCardBody>
                   <span>Merci de lire attentivements ces instructions avant déposer vos rapports:</span>
                   <br/><br/>
@@ -1033,7 +1029,7 @@ class UploadReport extends Component {
                   &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-warning" style={{fontSize: "15px"}}>2.</span><span className="leftNote"> Rapport Anti-Plagiat (URKUND)</span>
                   <br/>
                   &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-warning" style={{fontSize: "15px"}}>3.</span><span className="leftNote"> Attestation du Stage PFE</span>
-                  
+
                   <br/>
                   <span className="text-warning" style={{fontSize: "15px"}}>B.</span>&nbsp;
                   Le dépôt de vos rapports se fait via l'icône &nbsp;
@@ -1045,7 +1041,7 @@ class UploadReport extends Component {
 
                   <br/>
                   <span className="text-warning" style={{fontSize: "15px"}}>C.</span>&nbsp;
-                  Une fois cliquer sur le bouton 
+                  Une fois cliquer sur le bouton
                   &nbsp;<CButton size="sm" variant="outline" color="success" disabled>Je valide</CButton>&nbsp;
                   , vous <strong>envoyez</strong> votre dépôt pour traitement et vous <ins>ne pourrez pas le modifier</ins>.
                   <br/>
@@ -1066,12 +1062,12 @@ class UploadReport extends Component {
             <CCol md="2"/>
           </CRow>
         )}
-        
-        {( (stepper === "Step4" || stepper === "Step5" || fileInfos.length ===3 || fileInfos.length >0) && 
+
+        {( (stepper === "Step4" || stepper === "Step5" || fileInfos.length ===3 || fileInfos.length >0) &&
                 <CCard accentColor="info">
-                  
+
                   <CCardBody>
-                    
+
                 {fileInfos.length >= 0  &&(
                   <>
                       <CRow>
@@ -1202,7 +1198,7 @@ class UploadReport extends Component {
                                   </CButton>
                                 </center>
                             )}
-                            
+
 
                             </CCol>
 
@@ -1318,11 +1314,11 @@ class UploadReport extends Component {
                                   </CButton>
                                 </center>
                             )}
-                            
+
                             </CCol>
 
                             <CCol md="4" class="bg-warning py-2">
-                                                    
+
                             {(
                                 labelASP === "" && showUploadIconASP &&
                                   <center>
@@ -1434,18 +1430,18 @@ class UploadReport extends Component {
                                   </CButton>
                                 </center>
                             )}
-                            
+
 
                             </CCol>
-                          
+
                           <br/>
 
                     </CRow>
                     <br/>
-                    {(fileInfos.length > 0 && 
+                    {(fileInfos.length > 0 &&
                         <Divider />
                       )}
-                                  
+
               </>
                   )}
 
@@ -1483,7 +1479,7 @@ class UploadReport extends Component {
                   </Modal>
                 )}
 
-        
+
         {fileInfos.length >0 && (
             <div>
 
@@ -1548,7 +1544,7 @@ class UploadReport extends Component {
                                 depotStatus === "" &&
                                   <center>
                                     <br/><br/>
-                                   
+
                                     <span className="text-primary" style={{fontSize: "11px"}}>
                                       Cliquer sur ce bouton pour <ins>relancer</ins> votre Dépôt.
                                     </span>
@@ -1592,7 +1588,7 @@ class UploadReport extends Component {
                                     </p>
                                   </CAlert>
                             )}
- 
+
                             {( depotStatus.includes("INCOMPLET") &&
                                 <CAlert color="danger">
                                     <h5 className="alert-heading"><strong>Dépôt Incomplet</strong></h5>
@@ -1612,7 +1608,7 @@ class UploadReport extends Component {
                     </CContainer>
         </div>
 )}
-                
+
                   </CCardBody>
                   <CCardFooter>
                     <CRow>
@@ -1646,22 +1642,22 @@ class UploadReport extends Component {
                           )}
                           {(
                               (depotStatus === "" ) &&
-                                <CButton  color="success" 
+                                <CButton  color="success"
                                           disabled={fileInfos.length !== 3}
                                           enabled={fileInfos.length === 3}
                                           className="float-right"
                                           onClick={() => this.validateMyDepot()}>
-                                  Je valide 
+                                  Je valide
                                 </CButton>
                           )}
 
                           {(
-                            showSpinnerWaitingDepot && 
+                            showSpinnerWaitingDepot &&
                             <Backdrop className={classes.backdrop} open={showSpinnerWaitingDepot} >
                               <CircularProgress color="inherit" />
                             </Backdrop>
                             )}
-                          
+
 
 
                         </CCol>
@@ -1670,8 +1666,8 @@ class UploadReport extends Component {
                   </CCard>
           )}
 
-                            <CModal 
-                                show={showPopupSuccessDepot} 
+                            <CModal
+                                show={showPopupSuccessDepot}
                                 onClose={() => this.closeShowPopupSuccessDepot()}
                                 className={classes.backdrop1}
                                 color="primary"
@@ -1692,8 +1688,8 @@ class UploadReport extends Component {
                                 </CModalFooter>
                               </CModal>
 
-                              <CModal 
-                                show={showPopupUpdateDepot} 
+                              <CModal
+                                show={showPopupUpdateDepot}
                                 onClose={() => this.updateMyDepotNO()}
                                 className={classes.backdrop1}
                                 color="secondary"
@@ -1715,7 +1711,7 @@ class UploadReport extends Component {
                                   </CButton>
                                 </CModalFooter>
                               </CModal>
-            
+
       </div>
     );
   }

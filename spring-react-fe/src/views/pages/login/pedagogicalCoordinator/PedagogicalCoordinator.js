@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Form from "react-validation/build/form";
 import CheckButton from "react-validation/build/button";
 import { Link } from "react-router-dom";
-import esprit from "../../../images/esprit.png";
+import esprit from "../../../images/esprit2022.png";
 import {
     CButton,
     CCard,
@@ -356,7 +356,7 @@ export default class PedagogicalCoordinator extends Component {
                                             </p>
 
                                             <br/>
-                                            <Link to="/login">
+                                            <Link to="/">
                                                 <CButton shape="pill" color="danger" data-tut="step6">
                                                     <CTooltip content="Page d'Accueil" placement="top">
                                                         <CIcon content={freeSet.cilHome} />

@@ -1272,24 +1272,25 @@ function MyStudentTimeline(props) {
   };
 
   const downloadPDFFile = (filePath) => {
-    axios.get(
-      `${process.env.REACT_APP_API_URL}` + "student/downloadPDFFile?filePath=" + encodeURIComponent(filePath) ,
-      {responseType: 'blob'}
-    ).then((response) => {
 
-      // console.log('2910Response Headers:', response.headers);
-      const file = new Blob([response.data], {type: 'application/pdf'});
-      const fileURL = URL.createObjectURL(file);
+      let encodedURL = encodeURIComponent(encodeURIComponent(filePath));
 
-      const contentDispo = response.headers['content-disposition'];
-      const fileName = contentDispo.substring(21);
+      axios.get(`${process.env.REACT_APP_API_URL_STU}` + "downloadAllFilesTypesPDF/" + encodedURL, {responseType: "blob"})
+        .then((response) => {
 
-      let a = document.createElement('a');
-      a.href = fileURL;
-      a.download = fileName;
-      a.click();
-      window.open(fileURL);
-    });
+          // console.log('2910Response Headers:', response.headers);
+          const contentDispo = response.headers['content-disposition'];
+          const fileName = contentDispo.substring(21);
+
+          const file = new Blob([response.data], {type: 'application/pdf'});
+          const fileURL = URL.createObjectURL(file);
+
+          let a = document.createElement('a');
+          a.href = fileURL;
+          a.download = fileName;
+          a.click();
+        });
+
   };
 
   const journalUnitHistoric = (fPFE) =>
@@ -1494,7 +1495,7 @@ function MyStudentTimeline(props) {
                             </CCol>
                             <CCol md='3'>
                               <Tooltip title="Télécharger Bilan Version 1" placement="top">
-                                <span className="downloadGreyIcon" onClick={() => {downloadPDFFile(filePath);}}/>
+                                <span className="downloadGreyIcon" onClick={() => {downloadPDFFile(filePath);}}/>ff
                               </Tooltip>
                             </CCol>
                           </CRow>
