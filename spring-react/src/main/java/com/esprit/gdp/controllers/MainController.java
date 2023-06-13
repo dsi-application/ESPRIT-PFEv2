@@ -2353,9 +2353,8 @@ public class MainController {
 		}
 	}
 
-
-	@GetMapping("/journalStageING/{currentUserCode}")
-	public List<String> getJournalStageING(@PathVariable String currentUserCode)
+	@GetMapping("/loadEngineeringJournal/{currentUserCode}")
+	public List<String> loadEngineeringJournal(@PathVariable String currentUserCode)
 	{
 
 		List<DepotJournalINGDto> files = evaluationEngTrRepository.findJournalStageINGByStudent(currentUserCode);
@@ -2363,23 +2362,7 @@ public class MainController {
 		/****************************************************************************************************************************/
 		List<String> lss = new ArrayList<>();
 
-		for (DepotJournalINGDto dbd : files) {
-			String esING = null;
-
-			String pathEvaluationStageING = dbd.getPathJournalStageING();
-			String nameEvaluationStageING = null;
-			String dateEvaluationStageING = dbd.getDateDepotJournalStageING();
-
-			if (dbd.getPathJournalStageING() != null) {
-				nameEvaluationStageING = pathEvaluationStageING.substring(pathEvaluationStageING.indexOf("uploads") + 8,
-						pathEvaluationStageING.indexOf("espdsi2020"));
-				esING = "Journal de Stage - " + currentUserCode + "UNITR1" + dateEvaluationStageING;
-				lss.add(esING);
-				// // System.out.println("-------------------------------------------> Bilan NOT
-				// NULL 1");
-			}
-
-		}
+		lss.add("Hello World");
 
 		for (String s : lss) {
 			System.out.println("---------------------***----------------------> UNIT: " + s);
@@ -2388,8 +2371,8 @@ public class MainController {
 		return lss;
 	}
 
-	@GetMapping("/attestationStageING/{currentUserCode}")
-	public List<String> getJournalStageING1(@PathVariable String currentUserCode)
+	@GetMapping("/loadEngineeringAttestation/{currentUserCode}")
+	public List<String> loadEngineeringAttestation(@PathVariable String currentUserCode)
 	{
 
 		List<DepotJournalINGDto> files = evaluationEngTrRepository.findJournalStageINGByStudent(currentUserCode);
@@ -2402,31 +2385,17 @@ public class MainController {
 		return lss;
 	}
 
-	@GetMapping("/rapportStageING/{currentUserCode}")
-	public List<String> getJournalStageING2(@PathVariable String currentUserCode)
+	@GetMapping("/loadEngineeringReport/{currentUserCode}")
+	public List<String> loadEngineeringReport(@PathVariable String currentUserCode)
 	{
-
-		List<DepotJournalINGDto> files = evaluationEngTrRepository.findJournalStageINGByStudent(currentUserCode);
+		List<String> dates = evaluationEngTrRepository.findDateUploadJournalINGByStudent(currentUserCode);
 
 		/****************************************************************************************************************************/
 		List<String> lss = new ArrayList<>();
 
-		for (DepotJournalINGDto dbd : files) {
-			String esING = null;
-
-			String pathEvaluationStageING = dbd.getPathJournalStageING();
-			String nameEvaluationStageING = null;
-			String dateEvaluationStageING = dbd.getDateDepotJournalStageING();
-
-			if (dbd.getPathJournalStageING() != null) {
-				nameEvaluationStageING = pathEvaluationStageING.substring(pathEvaluationStageING.indexOf("uploads") + 8,
-						pathEvaluationStageING.indexOf("espdsi2020"));
-				esING = "Rapport de Stage - " + currentUserCode + "UNITR1" + dateEvaluationStageING;
-				lss.add(esING);
-				// // System.out.println("-------------------------------------------> Bilan NOT
-				// NULL 1");
-			}
-
+		if(!dates.isEmpty())
+		{
+			lss.add(dates.get(0));
 		}
 
 		for (String s : lss) {
