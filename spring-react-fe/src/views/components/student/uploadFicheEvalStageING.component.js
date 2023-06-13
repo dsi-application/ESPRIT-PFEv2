@@ -820,7 +820,7 @@ export default class UploadFicheEvalStageING extends Component
                                                                     </span>
                                 </CCol>
                                 <CCol md="8">
-                                  {fileInfosAttestation[0].substr(0, fileInfosAttestation[0].indexOf("UNITR1"))}.pdf
+                                  Attestation de Stage - {currentStudent.id}.pdf
                                 </CCol>
                               </CRow>
                             </CListGroupItem>
@@ -832,7 +832,7 @@ export default class UploadFicheEvalStageING extends Component
                                                                     </span>
                                 </CCol>
                                 <CCol md="8">
-                                  {fileInfosAttestation[0].substr(fileInfosAttestation[0].indexOf("UNITR1") + 6)}
+                                  {fileInfosAttestation[0]}
                                 </CCol>
                               </CRow>
                             </CListGroupItem>

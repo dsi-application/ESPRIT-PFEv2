@@ -2374,9 +2374,13 @@ public class MainController {
 	@GetMapping("/loadEngineeringAttestation/{currentUserCode}")
 	public List<String> loadEngineeringAttestation(@PathVariable String currentUserCode)
 	{
-
 		List<DepotJournalINGDto> files = evaluationEngTrRepository.findJournalStageINGByStudent(currentUserCode);
 		List<String> lss = new ArrayList<>();
+
+		DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		String dateValidDepot = dateFormata.format(new Date());
+
+		lss.add(dateValidDepot);
 
 		for (String s : lss) {
 			System.out.println("---------------------***----------------------> UNIT: " + s);
