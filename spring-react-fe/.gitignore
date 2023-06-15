@@ -2,7 +2,6 @@
 
 # dependencies
 /node_modules
-/node
 /src/coreui-new
 /src/coreui-icons
 /src/coreui-charts
