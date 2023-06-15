@@ -1272,25 +1272,25 @@ function MyStudentTimeline(props) {
   };
 
   const downloadPDFFile = (filePath) => {
+    let encodedURL = encodeURIComponent(encodeURIComponent(filePath));
 
-      let encodedURL = encodeURIComponent(encodeURIComponent(filePath));
+    axios.get(`${process.env.REACT_APP_API_URL_STU}` + "downloadAllFilesTypesPDF/" + encodedURL, {responseType: "blob"})
+      .then((response) => {
 
-      axios.get(`${process.env.REACT_APP_API_URL_STU}` + "downloadAllFilesTypesPDF/" + encodedURL, {responseType: "blob"})
-        .then((response) => {
+        // console.log('2910Response Headers:', response.headers);
+        const contentDispo = response.headers['content-disposition'];
+        const fileName = contentDispo.substring(21);
 
-          // console.log('2910Response Headers:', response.headers);
-          const contentDispo = response.headers['content-disposition'];
-          const fileName = contentDispo.substring(21);
+        //const file = new File([response.data], fileName);
+        //const fileURL = URL.createObjectURL(file);
+        const file = new Blob([response.data], {type: 'application/pdf'});
+        const fileURL = URL.createObjectURL(file);
 
-          const file = new Blob([response.data], {type: 'application/pdf'});
-          const fileURL = URL.createObjectURL(file);
-
-          let a = document.createElement('a');
-          a.href = fileURL;
-          a.download = fileName;
-          a.click();
-        });
-
+        let a = document.createElement('a');
+        a.href = fileURL;
+        a.download = fileName;
+        a.click();
+      });
   };
 
   const journalUnitHistoric = (fPFE) =>
@@ -1495,7 +1495,7 @@ function MyStudentTimeline(props) {
                             </CCol>
                             <CCol md='3'>
                               <Tooltip title="Télécharger Bilan Version 1" placement="top">
-                                <span className="downloadGreyIcon" onClick={() => {downloadPDFFile(filePath);}}/>ff
+                                <span className="downloadGreyIcon" onClick={() => {downloadPDFFile(filePath);}}/>
                               </Tooltip>
                             </CCol>
                           </CRow>

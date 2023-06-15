@@ -1274,17 +1274,17 @@ uploadSupplement(file, currentUserCode, checked, onUploadProgress) {
 
   getJournalStageINGFile(studentCode) {
 	// console.log('----------------24.08--------> Got File.');
-	return axios.get(API_URL + "/journalStageING/" + studentCode);
+	return axios.get(API_URL + "/loadEngineeringJournal/" + studentCode);
   }
 
   getAttestationStageINGFile(studentCode) {
 	// console.log('----------------24.08--------> Got File.');
-	return axios.get(API_URL + "/attestationStageING/" + studentCode);
+	return axios.get(API_URL + "/loadEngineeringAttestation/" + studentCode);
   }
 
   getRapportStageINGFile(studentCode) {
 	// console.log('----------------24.08--------> Got File.');
-	return axios.get(API_URL + "/rapportStageING/" + studentCode);
+	return axios.get(API_URL + "/loadEngineeringReport/" + studentCode);
   }
 
   applyForUpdatingMyDepot(idStudent) {
