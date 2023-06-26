@@ -319,7 +319,7 @@ const AvenantsManage = () => {
       // console.log('-----------------1-> 0908 id RSS: ' + currentResponsableServiceStage.id);
 
       const [res, err] = await queryApi(
-        "respServStg/allAvenantsList?idRSS=" + currentResponsableServiceStage.id +
+        "respServStg/allAvenantsList?idRSS=SR-STG-IT"+
         "&yearLabel=" + values.yearLabel,
         {},
         "PUT",
