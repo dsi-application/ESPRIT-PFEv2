@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import AuthService from "../../services/auth.service";
 
 import orangeUpload from "../../images/orangeUpload.jpg";
-
+import Jasypt from "jasypt";
 import Modal from "react-modal";
 
 import {NotificationContainer, NotificationManager} from 'react-notifications';
@@ -232,9 +232,22 @@ export default class UploadNewspaper extends Component {
   }
 
   componentDidMount() {
+    const fileInfosDecrypted = [];
+    const Jasypt = require('jasypt');
+    const jasypt = new Jasypt();
+    jasypt.setPassword('SALT');
+
     AuthService.getNewspaper(currentStudent.id).then((response) => {
+
+      const encryptedData = response.data;
+      encryptedData.forEach((encryptedItem) => {
+        const decryptedItem = jasypt.decrypt(encryptedItem);
+        fileInfosDecrypted.push(decryptedItem);
+      });
+
       this.setState({
-        fileInfos: response.data,
+
+        fileInfos: fileInfosDecrypted,
       });
 
       // console.log('-------------------------------------------------------> A');

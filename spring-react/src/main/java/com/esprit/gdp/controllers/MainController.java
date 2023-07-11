@@ -2612,6 +2612,10 @@ public class MainController {
 	@GetMapping("/newspaper/{currentUserCode}")
 	public ResponseEntity<List<String>> getJournal(@PathVariable String currentUserCode) {
 
+		String mpCryptoPassword = "SALT";
+		StandardPBEStringEncryptor decryptor = new StandardPBEStringEncryptor();
+		decryptor.setPassword(mpCryptoPassword);
+
 		Integer index = 1;
 		List<DepotJournalDto> files = storageService.getJournal(currentUserCode).map(report -> {
 			String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/newspaper/")
@@ -2641,7 +2645,9 @@ public class MainController {
 				nameJournal = pathJournal.substring(pathJournal.indexOf("uploads") + 8,
 						pathJournal.indexOf("espdsi2020"));
 				journal = nameJournal + "UNITR1" + dateJournal;
-				lss.add(journal);
+				String encodedJournal = decryptor.encrypt(journal);
+
+				lss.add(encodedJournal);
 				// // System.out.println("-------------------------------------------> Bilan NOT
 				// NULL 1");
 			}
