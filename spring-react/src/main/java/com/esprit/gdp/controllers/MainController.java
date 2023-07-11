@@ -2480,6 +2480,11 @@ public class MainController {
 	@GetMapping("/balanceSheets/{currentUserCode}")
 	public ResponseEntity<List<String>> getListBilans(@PathVariable String currentUserCode) {
 
+		String mpCryptoPassword = "SALT";
+		StandardPBEStringEncryptor decryptor = new StandardPBEStringEncryptor();
+		decryptor.setPassword(mpCryptoPassword);
+
+
 		Integer index = 1;
 		List<DepotBilanDto> files = storageService.getAllBilans(currentUserCode).map(report -> {
 			String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/balanceSheets/")
@@ -2518,7 +2523,8 @@ public class MainController {
 			if (dbd.getPathBilanVersion1() != null) {
 				nameBilanv1 = pathBv1.substring(pathBv1.indexOf("uploads") + 8, pathBv1.indexOf("espdsi2020"));
 				bilanVersion1 = nameBilanv1 + "UNITBV1" + dateBilanv1;
-				lss.add(bilanVersion1);
+				String encodedBilanV1 = decryptor.encrypt(bilanVersion1);
+				lss.add(encodedBilanV1);
 				// // System.out.println("-------------------------------------------> Bilan NOT
 				// NULL 1");
 			}
@@ -2526,7 +2532,8 @@ public class MainController {
 			if (dbd.getPathBilanVersion2() != null) {
 				nameBilanv2 = pathBv2.substring(pathBv2.indexOf("uploads") + 8, pathBv2.indexOf("espdsi2020"));
 				bilanVersion2 = nameBilanv2 + "UNITBV2" + dateBilanv2;
-				lss.add(bilanVersion2);
+				String encodedBilanV2 = decryptor.encrypt(bilanVersion2);
+				lss.add(encodedBilanV2);
 				// // System.out.println("-------------------------------------------> Bilan NOT
 				// NULL 2");
 			}
@@ -2534,7 +2541,8 @@ public class MainController {
 			if (dbd.getPathBilanVersion3() != null) {
 				nameBilanv3 = pathBv3.substring(pathBv3.indexOf("uploads") + 8, pathBv3.indexOf("espdsi2020"));
 				bilanVersion3 = nameBilanv3 + "UNITBV3" + dateBilanv3;
-				lss.add(bilanVersion3);
+				String encodedBilanV3 = decryptor.encrypt(bilanVersion3);
+				lss.add(encodedBilanV3);
 				// // System.out.println("-------------------------------------------> Bilan NOT
 				// NULL 3");
 			}
