@@ -9778,6 +9778,11 @@ public class MainController {
 	@GetMapping("/signedConvention/{currentUserCode}")
 	public ResponseEntity<List<String>> getSignedConvention(@PathVariable String currentUserCode)
 	{
+
+		String mpCryptoPassword = "SALT";
+		StandardPBEStringEncryptor decryptor = new StandardPBEStringEncryptor();
+		decryptor.setPassword(mpCryptoPassword);
+
 		Integer index = 1;
 		List<DepotSignedConvDto> files = storageService.getSignedConv(currentUserCode).map(report -> {
 			String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/signedConvention/").path(index.toString()).toUriString();
@@ -9797,7 +9802,9 @@ public class MainController {
 			{
 				nameSignedConv = pathSignedConv.substring(pathSignedConv.indexOf("uploads")+8, pathSignedConv.indexOf("espdsi2020"));
 				signedConv = nameSignedConv + "UNITR1" + dateSignedConv;
-				lss.add(signedConv);
+				String encodedConv = decryptor.encrypt(signedConv);
+
+				lss.add(encodedConv);
 			}
 
 		}

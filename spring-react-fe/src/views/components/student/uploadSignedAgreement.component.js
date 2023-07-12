@@ -35,6 +35,7 @@ import orangeUpload from "../../images/orangeUpload.jpg";
 
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import "react-notifications/lib/notifications.css";
+import Jasypt from "jasypt";
 
 const API_URL_MESP = process.env.REACT_APP_API_URL_MESP;
 const API_URL_STU = process.env.REACT_APP_API_URL_STU;
@@ -302,9 +303,21 @@ export default class SubmitAgreement extends Component {
 
 
   componentDidMount() {
+
+    const fileInfosDecrypted = [];
+    const Jasypt = require('jasypt');
+    const jasypt = new Jasypt();
+    jasypt.setPassword('SALT');
+
     AuthService.getSignedConvention(currentStudent.id).then((response) => {
+      const encryptedData = response.data;
+      encryptedData.forEach((encryptedItem) => {
+        const decryptedItem = jasypt.decrypt(encryptedItem);
+        fileInfosDecrypted.push(decryptedItem);
+      });
+
       this.setState({
-        fileInfos: response.data,
+        fileInfos: fileInfosDecrypted,
       });
 
     });
