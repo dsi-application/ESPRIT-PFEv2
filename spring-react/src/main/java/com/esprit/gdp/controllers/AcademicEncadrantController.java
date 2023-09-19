@@ -784,7 +784,12 @@ public class AcademicEncadrantController
         	{
         		mailCPS = "CPS_WIN@esprit.tn";
         	}
-        	if(studentOption.toUpperCase().contains("IOSYS"))
+			if(studentOption.toUpperCase().contains("TWIN"))
+			{
+				mailCPS = "CPS_TWIN@esprit.tn";
+			}
+
+			if(studentOption.toUpperCase().contains("IOSYS"))
         	{
         		mailCPS = "CPS_IOSYS@esprit.tn";
         	}
@@ -957,7 +962,12 @@ public class AcademicEncadrantController
         	{
         		mailCPS = "CPS_WIN@esprit.tn";
         	}
-        	if(studentOption.toUpperCase().contains("IOSYS"))
+			if(studentOption.toUpperCase().contains("TWIN"))
+			{
+				mailCPS = "CPS_TWIN@esprit.tn";
+			}
+
+			if(studentOption.toUpperCase().contains("IOSYS"))
         	{
         		mailCPS = "CPS_IOSYS@esprit.tn";
         	}
@@ -1198,7 +1208,11 @@ public class AcademicEncadrantController
     	        	{
     	        		mailCPS = "CPS_WIN@esprit.tn";
     	        	}
-    	        	if(studentOption.toUpperCase().contains("IOSYS"))
+					if(studentOption.toUpperCase().contains("TWIN"))
+					{
+						mailCPS = "CPS_TWIN@esprit.tn";
+					}
+					if(studentOption.toUpperCase().contains("IOSYS"))
     	        	{
     	        		mailCPS = "CPS_IOSYS@esprit.tn";
     	        	}
@@ -1345,7 +1359,11 @@ public class AcademicEncadrantController
     	        	{
     	        		mailCPS = "CPS_WIN@esprit.tn";
     	        	}
-    	        	if(studentOption.toUpperCase().contains("IOSYS"))
+					if(studentOption.toUpperCase().contains("TWIN"))
+					{
+						mailCPS = "CPS_TWIN@esprit.tn";
+					}
+					if(studentOption.toUpperCase().contains("IOSYS"))
     	        	{
     	        		mailCPS = "CPS_IOSYS@esprit.tn";
     	        	}
@@ -2320,7 +2338,11 @@ public class AcademicEncadrantController
 		        	{
 		        		mailCPS = "CPS_WIN@esprit.tn";
 		        	}
-		        	if(studentOption.toUpperCase().contains("IOSYS"))
+					if(studentOption.toUpperCase().contains("TWIN"))
+					{
+						mailCPS = "CPS_TWIN@esprit.tn";
+					}
+					if(studentOption.toUpperCase().contains("IOSYS"))
 		        	{
 		        		mailCPS = "CPS_IOSYS@esprit.tn";
 		        	}
@@ -2791,7 +2813,12 @@ public class AcademicEncadrantController
     	        	{
     	        		mailCPS = "CPS_WIN@esprit.tn";
     	        	}
-    	        	if(studentOption.toUpperCase().contains("IOSYS"))
+					if(studentOption.toUpperCase().contains("TWIN"))
+					{
+						mailCPS = "CPS_TWIN@esprit.tn";
+					}
+
+					if(studentOption.toUpperCase().contains("IOSYS"))
     	        	{
     	        		mailCPS = "CPS_IOSYS@esprit.tn";
     	        	}
@@ -2950,7 +2977,11 @@ public class AcademicEncadrantController
     	        	{
     	        		mailCPS = "CPS_WIN@esprit.tn";
     	        	}
-    	        	if(studentOption.toUpperCase().contains("IOSYS"))
+					if(studentOption.toUpperCase().contains("TWIN"))
+					{
+						mailCPS = "CPS_TWIN@esprit.tn";
+					}
+					if(studentOption.toUpperCase().contains("IOSYS"))
     	        	{
     	        		mailCPS = "CPS_IOSYS@esprit.tn";
     	        	}

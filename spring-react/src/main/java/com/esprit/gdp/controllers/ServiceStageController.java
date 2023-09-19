@@ -1140,6 +1140,11 @@ public class ServiceStageController {
 				{
 					mailCPS = "CPS_WIN@esprit.tn";
 				}
+				if(studentOption.toUpperCase().contains("TWIN"))
+				{
+					mailCPS = "CPS_TWIN@esprit.tn";
+				}
+
 				if(studentOption.toUpperCase().contains("IOSYS"))
 				{
 					mailCPS = "CPS_IOSYS@esprit.tn";
@@ -1268,6 +1273,10 @@ public class ServiceStageController {
 			if(studentOption.toUpperCase().contains("WIN"))
 			{
 				mailCPS = "CPS_WIN@esprit.tn";
+			}
+			if(studentOption.toUpperCase().contains("TWIN"))
+			{
+				mailCPS = "CPS_TWIN@esprit.tn";
 			}
 			if(studentOption.toUpperCase().contains("IOSYS"))
 			{
