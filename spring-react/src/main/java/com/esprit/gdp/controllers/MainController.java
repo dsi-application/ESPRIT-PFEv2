@@ -2357,12 +2357,15 @@ public class MainController {
 	public List<String> loadEngineeringJournal(@PathVariable String currentUserCode)
 	{
 
-		List<DepotJournalINGDto> files = evaluationEngTrRepository.findJournalStageINGByStudent(currentUserCode);
+		List<String> dates = evaluationEngTrRepository.findDateUploadJournalINGByStudent(currentUserCode);
 
 		/****************************************************************************************************************************/
 		List<String> lss = new ArrayList<>();
 
-		lss.add("Hello World");
+		if(!dates.isEmpty())
+		{
+			lss.add(dates.get(0));
+		}
 
 		for (String s : lss) {
 			System.out.println("---------------------***----------------------> UNIT: " + s);
@@ -2380,7 +2383,12 @@ public class MainController {
 		DateFormat dateFormata = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		String dateValidDepot = dateFormata.format(new Date());
 
-		lss.add(dateValidDepot);
+		List<String> dates = evaluationEngTrRepository.findDateUploadAttestationINGByStudent(currentUserCode);
+
+		if(!dates.isEmpty())
+		{
+			lss.add(dates.get(0));
+		}
 
 		for (String s : lss) {
 			System.out.println("---------------------***----------------------> UNIT: " + s);
@@ -2392,7 +2400,7 @@ public class MainController {
 	@GetMapping("/loadEngineeringReport/{currentUserCode}")
 	public List<String> loadEngineeringReport(@PathVariable String currentUserCode)
 	{
-		List<String> dates = evaluationEngTrRepository.findDateUploadJournalINGByStudent(currentUserCode);
+		List<String> dates = evaluationEngTrRepository.findDateUploadReportINGByStudent(currentUserCode);
 
 		/****************************************************************************************************************************/
 		List<String> lss = new ArrayList<>();
@@ -2895,7 +2903,7 @@ public class MainController {
 
 		System.out.println("------------------------------------------------------Treatment A: " + new Date());
 		List<String> allTeachers = new ArrayList<String>();
-		allTeachers = weekScheduleRepository.findAllTeachersFromPE("2022", Long.valueOf(2), idPE);
+		allTeachers = weekScheduleRepository.findAllTeachersFromPE("2023", Long.valueOf(2), idPE);
 		System.out.println("------------------------------------------------------Treatment B: " + new Date());
 
 		List<TeacherDtoSTN> teacherDtos = new ArrayList<TeacherDtoSTN>();

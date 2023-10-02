@@ -48,6 +48,16 @@ public interface EvaluationEngineeringTrainingRepository extends JpaRepository<E
 			+ "from EvaluationEngineeringTraining es where es.studentId=?1")
 	List<String> findDateUploadJournalINGByStudent(String idEt);
 
+	@Query(value = "select FUNCTION('to_char', es.dateUploadRapport, 'dd-mm-yyyy HH24:MI:SS') "
+			+ "from EvaluationEngineeringTraining es where es.studentId=?1")
+	List<String> findDateUploadReportINGByStudent(String idEt);
+
+	@Query(value = "select FUNCTION('to_char', es.dateUploadAttestation, 'dd-mm-yyyy HH24:MI:SS') "
+			+ "from EvaluationEngineeringTraining es where es.studentId=?1")
+	List<String> findDateUploadAttestationINGByStudent(String idEt);
+
+
+
 	@Query("select new com.esprit.gdp.dto.DepotRapportINGDto(es.pathRapport, FUNCTION('to_char', es.dateUploadRapport, 'dd-mm-yyyy HH24:MI:SS')) "
 			+ "from EvaluationEngineeringTraining es where es.studentId=?1")
 	List<DepotRapportINGDto> findRapportStageINGByStudent(String idEt);
