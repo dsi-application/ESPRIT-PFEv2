@@ -2364,7 +2364,9 @@ public class MainController {
 
 		if(!dates.isEmpty())
 		{
-			lss.add(dates.get(0));
+			if(dates.get(0).toString() !=  null) {
+				lss.add(dates.get(0));
+			}
 		}
 
 		for (String s : lss) {
@@ -2387,7 +2389,10 @@ public class MainController {
 
 		if(!dates.isEmpty())
 		{
-			lss.add(dates.get(0));
+			if(dates.get(0).toString() !=  null) {
+				lss.add(dates.get(0));
+
+			}
 		}
 
 		for (String s : lss) {
@@ -2407,7 +2412,9 @@ public class MainController {
 
 		if(!dates.isEmpty())
 		{
-			lss.add(dates.get(0));
+			if(dates.get(0).toString() !=  null) {
+				lss.add(dates.get(0));
+			}
 		}
 
 		for (String s : lss) {
