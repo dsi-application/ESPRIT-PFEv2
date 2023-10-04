@@ -81,7 +81,7 @@ const AvenantDetails = () => {
     setShowLoader(true);
     console.log('************ LOLI: ', Avenant)
     const [res, err] = await queryApi(
-      "respServStg.updateAvenantStatus?idET=" +
+      "respServStg/updateAvenantStatus?idET=" +
       Avenant.idEt +
       "&dateConvention=" +
       Avenant.dateDepotRelatedConvention +

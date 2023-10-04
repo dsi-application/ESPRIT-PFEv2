@@ -2910,7 +2910,7 @@ public class MainController {
 
 		System.out.println("------------------------------------------------------Treatment A: " + new Date());
 		List<String> allTeachers = new ArrayList<String>();
-		allTeachers = weekScheduleRepository.findAllTeachersFromPE("2023", Long.valueOf(2), idPE);
+		allTeachers = weekScheduleRepository.findAllTeachersFromPE("2023", Long.valueOf(1), idPE);
 		System.out.println("------------------------------------------------------Treatment B: " + new Date());
 
 		List<TeacherDtoSTN> teacherDtos = new ArrayList<TeacherDtoSTN>();
