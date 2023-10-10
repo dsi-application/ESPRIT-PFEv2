@@ -1609,8 +1609,8 @@ public class AcademicEncadrantController
 					   + "<font color=red> " + acadEncFullName + "</font>"
 					   + " a besoin d'un "
 				       + "<strong><font color=grey> Expert </font></strong> "
-				       + "pour son Étudiant à encadrer <font color=red> " + utilServices.findStudentFullNameById(idEt) + " </font> qui affecté(e) à l'option "
-				       + "<strong><font color=grey> " + studentOption.replace("_01", "") + "</font></strong>.<br/><br/>"
+				       + "pour son Étudiant à encadrer <font color=red> " + utilServices.findStudentFullNameById(idEt) + " </font> qui inscrit(e) à la classe "
+				       + "<strong><font color=grey> " + utilServices.findStudenClassById(idEt) + "</font></strong>. <br/><br/>"
 				       + "Ci-dessous quelques Tags qui peuvent vous aider :<br/>"
 				       + "- <strong><font color=grey> Thématique(s)</font></strong> : " + decThemTags.stream().map(Object::toString).collect(Collectors.joining(", ")) + "<br/>"
 				       + "- <strong><font color=grey> Technologie(s)</font></strong> : " + decTechTags.stream().map(Object::toString).collect(Collectors.joining(", ")) + "<br/>"
@@ -1698,8 +1698,8 @@ public class AcademicEncadrantController
 					   + "<font color=red> " + acadEncFullName + "</font>"
 					   + " a besoin d'un "
 				       + "<strong><font color=grey> Expert </font></strong> "
-				       + "pour son Étudiant à encadrer <font color=red> " + utilServices.findStudentFullNameById(idEt) + " </font> qui affecté(e) à l'option "
-				       + "<strong><font color=grey> " + studentOption.replace("_01", "") + "</font></strong>.";
+				       + "pour son Étudiant à encadrer <font color=red> " + utilServices.findStudentFullNameById(idEt) + " </font> qui inscrit(e) à la classe "
+				       + "<strong><font color=grey> " + utilServices.findStudenClassById(idEt) + "</font></strong>.";
         
 		// utilServices.sendMail(subject, "saria.essid@esprit.tn", content);  // LOCAL
 		utilServices.sendMailWithCC(subject, mailCPS, acadEncMail, content);  // SERVER

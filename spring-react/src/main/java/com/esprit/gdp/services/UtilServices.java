@@ -466,6 +466,30 @@ public class UtilServices {
 
 	}
 
+	public String findStudenClassById(@PathVariable String idEt) {
+
+		System.out.println("----------------------------------> StudentCJ ID CJ-ALT: " + idEt);
+
+		String studentClasse = null;
+		List<String> activatedYears = settingsRepository.findActivatedYears();
+		List<String> studentsCJandALT = studentRepository.findStudentClassCJandALT(idEt, activatedYears); // MIGRATE
+		List<String> studentsCS = studentRepository.findStudentClassCS(idEt, activatedYears); // MIGRATE
+
+		System.out.println("----------------------------------> StudentCJ FullName CJ-ALT: " + studentsCJandALT.size()
+				+ " --- CS: " + studentsCS.size());
+
+		if (!studentsCJandALT.isEmpty()) {
+			studentClasse = studentsCJandALT.get(0);
+		}
+		if (!studentsCS.isEmpty()) {
+			studentClasse = studentsCS.get(0);
+		}
+
+		return studentClasse;
+
+	}
+
+
 
 	public String findStudentFullNameByIdYear(String idEt, String year)
 	{

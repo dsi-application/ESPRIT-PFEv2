@@ -157,7 +157,23 @@ public interface StudentRepository extends JpaRepository<StudentCJ, String>
 			+ "and y.saisonClasse.id.anneeDeb IN (?2) "
 			+ "and (y.saisonClasse.id.codeCl like '5%' or y.saisonClasse.id.codeCl like '4ALINFO%')")
 	List<String> findStudentsFullNameCJandALT(String idEt, List<String> activatedYears);
-	
+
+	@Query("Select concat(y.saisonClasse.id.codeCl, ' (' , y.saisonClasse.id.anneeDeb ,') ')  "
+			+ "from StudentCJ u, InscriptionCJ y "
+			+ "where u.idEt = y.id.idEt and u.idEt=?1 "
+			+ "and y.saisonClasse.id.anneeDeb IN (?2) "
+			+ "and (y.saisonClasse.id.codeCl like '5%' or y.saisonClasse.id.codeCl like '4ALINFO%')")
+	List<String> findStudentClassCJandALT(String idEt, List<String> activatedYears);
+
+
+	@Query("Select concat(y.saisonClasse.id.codeCl, ' (' , y.saisonClasse.id.anneeDeb ,') ') "
+			+ "from StudentCS u, InscriptionCS y "
+			+ "where u.idEt = y.id.idEt and u.idEt=?1 "
+			+ "and y.saisonClasse.id.anneeDeb IN (?2) "
+			+ "and y.saisonClasse.id.codeCl like '4%'")
+	List<String> findStudentClassCS(String idEt, List<String> activatedYears);
+
+
 	@Query("Select CONCAT(trim(u.prenomet), ' ',  trim(u.nomet)) "
 			+ "from StudentCS u, InscriptionCS y "
 			+ "where u.idEt = y.id.idEt and u.idEt=?1 "
