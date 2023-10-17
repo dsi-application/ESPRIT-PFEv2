@@ -209,6 +209,7 @@ const TeacherManagement = () => {
       },
     },
   });
+
   const columns = [
     {
       name: "idTeacher",
@@ -263,6 +264,7 @@ const TeacherManagement = () => {
                   <CButton  variant="outline"
                             color="primary"
                             size="sm"
+                            hidden={currentResponsableServiceStage.id !== "SR-STG-IT"}
                             onClick={() => toggleModifModal(teacherConfigs[dataIndex])}>
                     <CIcon name="cil-pencil"></CIcon>
                   </CButton>
@@ -270,9 +272,10 @@ const TeacherManagement = () => {
                 &nbsp;
                 <CTooltip content="Initialiser Mot de Passe" placement="top">
                       <CButton  variant="outline"
-                              color="success"
-                              size="sm"
-                              onClick={() => toggleInitJWTPasswordModal(teacherConfigs[dataIndex])}>
+                                color="success"
+                                hidden={currentResponsableServiceStage.id !== "SR-STG-IT"}
+                                size="sm"
+                                onClick={() => toggleInitJWTPasswordModal(teacherConfigs[dataIndex])}>
                       <CIcon name="cil-paper-plane"></CIcon>
                     </CButton>
                 </CTooltip>
@@ -282,6 +285,7 @@ const TeacherManagement = () => {
       },
     },
   ];
+
   const formik = useFormik({
     initialValues: {
       libelleTeacherConfig: "",

@@ -946,7 +946,6 @@ const menuItemsTeacherPCUrgentVersion = [
       className: "text-warning",
     },
   },
-  
   {
     _tag: "CSidebarNavItem",
     name: "Mon Profil",
@@ -1129,7 +1128,7 @@ class SidebarChild extends Component {
       requestVC.open("GET", API_URL_STU + "nbrValidatedConvention", false);
       requestVC.send(null);
       this.state.nbValidatedConvs = requestVC.responseText;
-      
+
       var requestAS = new XMLHttpRequest();
       requestAS.open("GET", API_URL_MESP + "nbrAuthorizedStudentsToSTN/1/" + currentResponsableServiceStage.id, false);
       requestAS.send(null);
@@ -1588,6 +1587,24 @@ class SidebarChild extends Component {
         }
       },
       {
+        _tag: "CSidebarNavDropdown",
+        name: "Gérer Utilisateurs",
+        icon: "cil-magnifying-glass",
+        className: "text-danger",
+        _children: [
+          {
+            _tag: "CSidebarNavItem",
+            name: "Étudiants",
+            to: "/StudentManagement",
+          },
+          {
+            _tag: "CSidebarNavItem",
+            name: "Enseignants",
+            to: "/TeacherManagement",
+          },
+        ],
+      },
+      {
         _tag: "CSidebarNavItem",
         name: "Mon Profil",
         to: "/responsableServiceStageProfile",
@@ -1757,7 +1774,7 @@ class SidebarChild extends Component {
         },
       },*/
     ];
-    
+
 
     return (
         <div>

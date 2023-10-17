@@ -280,6 +280,7 @@ const StudentManagement = () => {
                   <CButton  variant="outline"
                             color="primary"
                             size="sm"
+                            hidden={currentResponsableServiceStage.id !== "SR-STG-IT"}
                             onClick={() => toggleModifModal(studentConfigs[dataIndex])}>
                     <CIcon name="cil-pencil"></CIcon>
                   </CButton>
@@ -289,7 +290,8 @@ const StudentManagement = () => {
                       <CButton  variant="outline"
                               color="success"
                               size="sm"
-                              onClick={() => toggleInitJWTPasswordModal(studentConfigs[dataIndex])}>
+                                hidden={currentResponsableServiceStage.id !== "SR-STG-IT"}
+                                onClick={() => toggleInitJWTPasswordModal(studentConfigs[dataIndex])}>
                       <CIcon name="cil-paper-plane"></CIcon>
                     </CButton>
                 </CTooltip>
